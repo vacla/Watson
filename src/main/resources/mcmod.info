@@ -1,0 +1,17 @@
+[
+    {
+        "modid": "watson",
+        "name": "Watson",
+        "description": "A re-creation of/substitute for Watson for Rift",
+        "version": "${mod_version}",
+        "mcversion": "${minecraft_version}",
+        "url": "",
+        "updateUrl": "",
+        "authorList": ["Arnevdl29"],
+        "credits": "totemo",
+        "logoFile": "",
+        "screenshots": [],
+        "requiredMods": ["malilib"],
+        "dependencies": ["malilib"]
+    }
+]

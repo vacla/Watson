@@ -1,0 +1,107 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url 'http://files.minecraftforge.net/maven' }
+        maven { url 'http://repo.spongepowered.org/maven' }
+        maven { url 'https://www.jitpack.io' }
+    }
+    dependencies {
+        classpath 'com.github.Chocohead:ForgeGradle:jitpack-SNAPSHOT'
+        classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle.tweaker-client'
+apply plugin: 'java'
+apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'maven-publish'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+    maven { url 'https://www.jitpack.io' }
+    maven { url 'https://www.dimdev.org/maven/' }
+    maven { url 'https://files.minecraftforge.net/maven' }
+    maven { url 'https://masa.dy.fi/maven' }
+}
+
+ext.configFile = file "build.properties"
+
+configFile.withReader {
+	def prop = new Properties()
+	prop.load(it)
+	project.ext.config = new ConfigSlurper().parse prop
+}
+
+minecraft {
+    version = config.minecraft_version
+    mappings = config.mappings_version
+    runDir = 'minecraft'
+    makeObfSourceJar = false
+    tweakClass = 'org.dimdev.riftloader.launch.RiftLoaderClientLoader'
+    
+    ext.mod_version = config.mod_version
+    
+    if(mod_version.endsWith('-dev')){
+    	mod_version = mod_version + "." + new Date().format('yyyyMMdd.HHmmss')
+    }
+    
+    replaceIn "Reference.java"
+    replace "@MOD_VERSION@", mod_version
+}
+
+dependencies {
+    //implementation 'fi.dy.masa.malilib:malilib-rift-' + config.minecraft_version_out + ':' + config.malilib_version + ':deobf'
+    implementation 'com.github.Chocohead:Rift:jitpack-aeee80c1fb-1:dev'
+}
+
+group = config.group + config.mod_id // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = config.mod_file_name + '-' + config.minecraft_version_out
+version = project.minecraft.mod_version
+
+/*
+litemod {
+    name = "Watson"
+    json {
+        name = "Watson"
+        mcversion = "1.12.2"
+        //mixinConfigs += "mixins.watson.json"
+        author = "totemo"
+        description = "A 3-D log visualisation tool."
+        classTransformerClasses += "watson.transformer.WatsonTransformer"
+    }
+}
+*/
+jar {
+	baseName = archivesBaseName
+}
+
+mixin {
+    defaultObfuscationEnv notch
+    add sourceSets.main, 'mixins.' + config.mod_id + '.refmap.json'
+}
+
+processResources {
+
+	exclude '**/*.xcf'
+	exclude '**/xcf'
+	
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "mod_version", project.minecraft.mod_version
+    inputs.property "minecraft_version", project.config.minecraft_version
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+                
+        // replace version and mcversion
+        expand 'mod_version': project.minecraft.mod_version, 'minecraft_version': project.config.minecraft_version
+    }
+      
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}

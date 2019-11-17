@@ -1,0 +1,62 @@
+{
+	"watson.hotkeys.category.generic_hotkeys": "Generic hotkeys",
+	
+	"watson.gui.title.configs": "Configs",
+	"watson.gui.title.watson_main_menu": "Watson Main Menu",
+	
+	"watson.gui.button.change_menu.configuration_menu": "Configuration Menu",
+	
+	"watson.gui.button.config_gui.generic": "Generic",
+	"watson.gui.button.config_gui.lists": "Lists",
+	"watson.gui.button.config_gui.lookup": "Lookup",
+	"watson.gui.button.config_gui.hotkeys": "Hotkeys",
+	
+	"watson.error.anno.out_range": "Annotation index out of range",
+	"watson.error.anno.position": "Use the LogBlock tool to set a position",
+	"watson.error.calc.calculation": "Invalid expression",
+	
+	"watson.message.anno.list.size": "%d annotation(s)",
+	"watson.message.anno.annot": "(%d) (%d,%d,%d) %s",
+	"watson.message.anno.clear": "%d annotation(s) cleared",
+	"watson.message.anno.remove": "Removed annotation #%d",
+	
+	"watson.message.calc.calculation": "%s = %d",
+	
+	"watson.message.config.display": "All Watson displays are %s",
+	"watson.message.config.outline": "Outline block display are %s",
+	"watson.message.config.anno": "Annotation display are %s",
+	"watson.message.config.vector": "Vector display are %s",
+	"watson.message.config.vector.creation": "Vectors between block creations are %s",
+	"watson.message.config.vector.destruction": "Vectors between block destructions are %s",
+	"watson.message.config.vector.length": "Minimum vector length set to %f",
+	"watson.message.config.label": "Label display are %s",
+	"watson.message.config.watson.enabled": "Watson is now enabled",
+	"watson.message.config.watson.disabled": "Watson is now disabled\nTo re-enable, use: /%s config watson on",
+	"watson.message.config.debug": "Debugging is set to %s",
+	"watson.message.config.auto_page": "Auto paging is set %s",
+	"watson.message.config.region_info_timeout": "Automatic region info timeout is set to %.2f seconds",
+	"watson.message.config.billb_background": "Billboard background is set to %d",
+	"watson.message.config.billb_foreground": "Billboard foreground is set to %d",
+	"watson.message.config.group_ores_creative": "Grouping of ores in creative mode are %s",
+	"watson.message.config.teleport_command": "Teleport command is set to %s",
+	"watson.message.config.chat_timeout": "Chat timeout set to %.2f seconds",
+	"watson.message.config.max_auto_page": "Up to %d pages of \"/lb coords\" results will be stepped through automatically",
+	"watson.message.config.pre_count": "By default, \"/w pre\" will return %d edits.",
+	"watson.message.config.post_count": "By default, \"/w post\" will return %d edits.",
+	"watson.message.config.watson_prefix": "Watson command prefix is set to %s",
+	"watson.message.config.ss_player_directory": "Per-player screenshot directories are %s",
+	"watson.message.config.ss_player_suffix": "Per-player screenshot suffix are %s",
+	"watson.message.config.ss_date_directory": "Anonymous screenshot subdirectory format specifier set to %s",
+	"watson.message.config.reformat_query_results": "Compact formatting of query results are %s",
+	"watson.message.config.recolor_query_results": "Recoloring of query results are %s",
+	"watson.message.config.time_ordered_deposits.enabled": "Ore deposits will be numbered according to their timestamps (only)",
+	"watson.message.config.time_ordered_deposits.disabled": "Ore deposits will be numbered in decreasing order of scarcity",
+	"watson.message.config.chat_highlights": "Custom highlights in chat are %s",
+	
+	"watson.message.highlight.added": "Added highlight #%d %s",
+	"watson.message.highlight.disabled": "Chat highlights are currently disabled",
+	"watson.message.highlight.empty": "No highlight set",
+	"watson.message.highlight.list_string": "(%d) Pattern: %s, Color: %s, Style: %s",
+	"watson.message.highlight.removed": "Removed highlight %s"
+	
+}

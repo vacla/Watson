@@ -1,0 +1,19 @@
+{
+    "required": true,
+    "package": "eu.minemania.watson.mixin",
+    "refmap": "mixins.watson.refmap.json",
+    "minVersion": "0.6",
+    "client": [
+    	"MixinCommandNode",
+    	"MixinEntityPlayer",
+    	"MixinEntityPlayerSP",
+    	"MixinGameRenderer",
+    	"MixinGuiChat",
+    	"MixinGuiNewChat",
+    	"MixinNetHandlerPlayClient",
+    	"MixinWorldRenderer"
+    ],
+    "injectors": {
+    	"defaultRequire": 1
+    }
+}

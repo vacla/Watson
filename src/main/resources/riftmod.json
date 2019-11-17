@@ -1,0 +1,6 @@
+{
+    "id": "watson",
+    "name": "Watson",
+    "authors": [ "Arnevdl29" ],
+    "listeners": [ "eu.minemania.watson.Watson" ]
+}
