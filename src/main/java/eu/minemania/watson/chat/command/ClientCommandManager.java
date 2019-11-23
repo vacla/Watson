@@ -9,7 +9,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.command.CommandException;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -49,9 +48,7 @@ public class ClientCommandManager {
     }
 
     public static void sendFeedback(ITextComponent message) {
-    	System.out.println("before");
         Minecraft.getInstance().ingameGUI.getChatGUI().printChatMessage(message);
-        System.out.println("after");
     }
 
     public static int executeCommand(StringReader reader, String command) {
@@ -84,23 +81,5 @@ public class ClientCommandManager {
             e.printStackTrace();
         }
         return 1;
-    }
-
-    public static ITextComponent getCoordsTextComponent(BlockPos pos) {
-        ITextComponent text = new TextComponentTranslation("commands.client.blockpos", pos.getX(), pos.getY(),
-                pos.getZ());
-        text.getStyle().setUnderlined(true);
-        text.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
-                String.format("/clook block %d %d %d", pos.getX(), pos.getY(), pos.getZ())));
-        text.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                new TextComponentString(String.format("/clook block %d %d %d", pos.getX(), pos.getY(), pos.getZ()))));
-        return text;
-    }
-
-    public static ITextComponent getCommandTextComponent(String translationKey, String command) {
-        ITextComponent text = new TextComponentTranslation(translationKey).applyTextStyle(style -> style.setUnderlined(true));
-        text.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
-        text.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString(command)));
-        return text;
     }
 }

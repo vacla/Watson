@@ -33,7 +33,6 @@ public class TeleportAnalysis extends Analysis {
 			BlockEdit edit = selection.getBlockEditSet().findEdit(x, y, z, player);
 			selection.selectBlockEdit(edit);
 		} catch (Exception e) {
-			// System.out.println(ex);
 		}
 	}
 }

@@ -47,50 +47,13 @@ public final class WatsonBlockRegistery {
 		}
     }
 	
-	/*public static ITextComponent highlightChatMessage(String key,ITextComponent message) {
-		String username = "";
-		String textChat = "";
-		int i = 0;
-		for (ITextComponent chatComponent : message) {
-			if(i == 1){
-				username = chatComponent.getString();
-			}
-			if(i>2) {
-				textChat += chatComponent.getFormattedText();
-			}
-			i++;
-		}
-		
-		ITextComponent endMessage = new TextComponentTranslation(key, new Object[] {Highlight.setName(username), BlockTypes(textChat)});
-
-		return endMessage;
-	}*/
-	
-	//FIXME remove later (private)
-	/*public WatsonBlock getBlockTypeByName(String blockinput) {
-		String endBlock = "";
-		System.out.println(blockinput);
-		for(Block block : block_types) {
-			Pattern pattern = Pattern.compile(block.getTranslationKey().replaceFirst("block.minecraft.", ""));
-			Matcher blockMatch = pattern.matcher(blockinput.toLowerCase());
-			if(blockMatch.find()) {
-				endBlock = blockinput;
-			} else {
-				endBlock = "unknown";
-			}
-		}
-		return _byName.get(endBlock);
-	}*/
-	
 	private void populateWatsonBlockList(List<String> names) {
-		//IMixinBlocks blocks = null;
 		for (String entry : names) {
 			try {
 				if(entry.isEmpty() == false) {
 					String[] watsonBlockData = entry.split(";");
 					if(watsonBlockData.length == 3) {
 						Block block = IRegistry.BLOCK.getOrDefault(new ResourceLocation(watsonBlockData[0]));
-						//Block tempBlocks = ((IMixinBlocks)blocks).invokegetRegisteredBlock(str);
 						if(block != null) {
 							WatsonBlock watsonBlock = new WatsonBlock();
 							String blockName = IRegistry.ITEM.getKey(new ItemStack(block).getItem()).toString();
@@ -111,11 +74,6 @@ public final class WatsonBlockRegistery {
 								watsonBlock.setColor(color);
 							}
 							addWatsonBlock(watsonBlock);
-							//WatsonBlock watsonBlock = new WatsonBlock();
-							//watsonBlock.setName(blockName);
-							//watsonBlock.setLineWidth(lineWidth);
-							//watsonBlock.setColor(color);
-							//watsonblocklist.add(tempBlocks);
 						}
 					}
 				}

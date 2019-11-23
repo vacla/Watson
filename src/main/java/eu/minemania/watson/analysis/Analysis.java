@@ -14,13 +14,9 @@ public class Analysis implements IChatHandler {
 	
 	public boolean dispatchMatchedChat(ITextComponent chat) {
 		String unformatted = chat.getString();
-		System.out.println("chat: " + chat);
-		System.out.println("unformatted: " + unformatted);
 		for(Entry<Pattern, IMatchedChatHandler> entry : _handlers.entrySet()) {
 			Matcher m = entry.getKey().matcher(unformatted);
-			System.out.println("entry: " + entry.getKey());
 			if(m.matches()) {
-				System.out.println("matches");
 				return entry.getValue().onMatchedChat(chat, m);
 			}
 		}

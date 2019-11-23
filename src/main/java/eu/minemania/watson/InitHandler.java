@@ -38,7 +38,6 @@ public class InitHandler implements IInitializationHandler{
 		KeyCallbacks.init(Minecraft.getInstance());
 		//StatusInfoRenderer.init();
 		
-		//DataManager.getEditSelectionsBaseDirectory();
         DataManager.getPlayereditsBaseDirectory();
 	}
 }

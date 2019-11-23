@@ -34,7 +34,6 @@ public class PrismAnalysis extends Analysis {
 		Matcher m = PLACE_BREAK.matcher(line1);
 		if(m.matches()) {
 			for(int i = 0; i <= m.groupCount(); ++i) {
-				System.out.println(i + ": " + m.group(i));
 			}
 		}
 	}

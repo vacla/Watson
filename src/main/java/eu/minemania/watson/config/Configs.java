@@ -10,10 +10,8 @@ import com.google.gson.JsonObject;
 
 import eu.minemania.watson.Reference;
 import eu.minemania.watson.chat.Highlight;
-//import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.WatsonBlockRegistery;
 import fi.dy.masa.malilib.config.ConfigUtils;
-//import fi.dy.masa.malilib.config.HudAlignment;
 import fi.dy.masa.malilib.config.IConfigBase;
 import fi.dy.masa.malilib.config.options.ConfigBoolean;
 import fi.dy.masa.malilib.config.options.ConfigColor;
@@ -32,7 +30,7 @@ public class Configs implements IConfigHandler {
 	private static final String CONFIG_FILE_NAME = Reference.MOD_ID + ".json";
 	
 	/**
-	 * Default Generic configuration. TODO pre-, pos count
+	 * Default Generic configuration.
 	 */
 	public static class Generic {
 		public static final ConfigBoolean ENABLED = new ConfigBoolean("enabled", true, "Enables watson fully");
@@ -102,25 +100,6 @@ public class Configs implements IConfigHandler {
 		);
 	}
 	
-	/*public static class Visuals {
-		
-		public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
-		);
-	}*/
-	
-	/*public static class InfoOverlays {
-        
-
-        public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
-        );
-    }*/
-	
-	/*public static class Colors {
-
-        public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
-        );
-    }*/
-	
 	/**
 	 * Default Lists configuration.
 	 */
@@ -133,17 +112,6 @@ public class Configs implements IConfigHandler {
 				WATSON_BLOCKS
 		);
 	}
-	
-	/**
-	 * Default Lookup configuration.
-	 */
-	/*public static class Lookup{
-		//public static final ConfigString USERNAME_LU = new ConfigString("username", "", "Put username for lookup");
-		
-		public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
-				//USERNAME_LU
-		); 
-	}*/
 	
 	/**
 	 * Loads configurations from configuration file.
@@ -160,16 +128,9 @@ public class Configs implements IConfigHandler {
 				ConfigUtils.readConfigBase(root, "Generic", Generic.OPTIONS);
 				ConfigUtils.readConfigBase(root, "Lists", Lists.OPTIONS);
 				ConfigUtils.readConfigBase(root, "Hotkeys", Hotkeys.HOTKEY_LIST);
-				//ConfigUtils.readConfigBase(root, "Colors", Colors.OPTIONS);
-				//ConfigUtils.readConfigBase(root, "InfoOverlays", InfoOverlays.OPTIONS);
-				//ConfigUtils.readConfigBase(root, "Visuals", Visuals.OPTIONS);
-				
-				//ConfigUtils.readConfigBase(root, "Lookup", Lookup.OPTIONS);
 			}
 		}
 		
-		//DataManager.setToolItem(Generic.TOOL_ITEM.getStringValue());
-		//InventoryUtils.setPickBlockableSlots(Generic.PICK_BLOCKABLE_SLOTS.getStringValue());
 		Highlight.setHighlightList(Lists.HIGHLIGHT.getStrings());
 		WatsonBlockRegistery.setWatsonBlockList(Lists.WATSON_BLOCKS.getStrings());
 	}
@@ -186,10 +147,6 @@ public class Configs implements IConfigHandler {
 			ConfigUtils.writeConfigBase(root, "Generic", Generic.OPTIONS);
 			ConfigUtils.writeConfigBase(root, "Lists", Lists.OPTIONS);
 			ConfigUtils.writeConfigBase(root, "Hotkeys", Hotkeys.HOTKEY_LIST);
-			//ConfigUtils.writeConfigBase(root, "Colors", Colors.OPTIONS);
-			//ConfigUtils.writeConfigBase(root, "InfoOverlays", InfoOverlays.OPTIONS);
-			//ConfigUtils.writeConfigBase(root, "Visuals", Visuals.OPTIONS);
-			//ConfigUtils.writeConfigBase(root, "Lookup", Lookup.OPTIONS);
 			
 			JsonUtils.writeJsonToFile(root, new File(dir, CONFIG_FILE_NAME));
 		}

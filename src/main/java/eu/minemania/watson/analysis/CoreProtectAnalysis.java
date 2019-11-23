@@ -96,18 +96,14 @@ public class CoreProtectAnalysis extends Analysis {
 		EditSelection selection = DataManager.getEditSelection();
 		selection.selectPosition(_x, _y, _z);
 		_firstInspectorResult = true;
-		System.out.println("inspect found");
 	}
 	
 	void details(ITextComponent chat, Matcher m) {
 		_lookupDetails = false;
-		System.out.println(m.groupCount());
 		if(m.group(3).equals("placed") || m.group(3).equals("removed")) {
 			_millis = parseTimeExpression(m.group(1));
 			_player = m.group(2);
 			_creation = m.group(3).equals("placed");
-			System.out.println("player: " + _player);
-			System.out.println("creation: " + _creation);
 			String block = m.group(4);
 			if(block.equals("minecraft:painting")) {
 				_block = WatsonBlockRegistery.getInstance().getWatsonBlockByName("paintings");
@@ -123,14 +119,6 @@ public class CoreProtectAnalysis extends Analysis {
 				_lookupDetails = true;
 			} else {
 				if(DataManager.getFilters().isAcceptedPlayer(_player)) {
-					System.out.println("block: " +block);
-					System.out.println("_block: " +_block);
-					System.out.println("_millis: " +_millis);
-					System.out.println("_player: " +_player);
-					System.out.println("_creation: " +_creation);
-					System.out.println("_x: " +_x);
-					System.out.println("_y: " +_y);
-					System.out.println("_z: " +_z);
 					BlockEdit edit = new BlockEdit(_millis, _player, _creation, _x, _y, _z, _block);
 					SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, _firstInspectorResult));
 					

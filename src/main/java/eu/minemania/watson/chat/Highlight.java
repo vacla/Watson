@@ -10,7 +10,6 @@ import org.apache.commons.lang3.tuple.MutablePair;
 
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
-import eu.minemania.watson.data.DataManager;
 import fi.dy.masa.malilib.gui.Message.MessageType;
 import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.client.Minecraft;
@@ -140,15 +139,6 @@ public class Highlight {
 					}
 				}
 			}
-			chatText = endString;
-			Pattern pattern2 = Pattern.compile("edit");
-			Matcher matcher2 = pattern2.matcher(chatText);
-			if(matcher2.find()) {
-				System.out.println("Edit found");
-				DataManager.getEditSelection().getBlockEditSet();
-			}
-			//System.out.println(i);
-			//i++;
 		}
 		return endString;
 	}

@@ -12,7 +12,6 @@ import fi.dy.masa.malilib.render.shader.ShaderProgram;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.entity.Entity;
 
 public class WatsonRenderer {
@@ -46,16 +45,6 @@ public class WatsonRenderer {
 	public void loadRenderers() {
         this.getWorldRenderer().loadRenderers();
     }
-	
-	/*public void piecewisePrepareAndUpdate(float partialTicks) {
-		this.renderPiecewise = Configs.Generic.DISPLAYED.getBooleanValue() && this.mc.getRenderViewEntity() != null;
-		this.renderPiecewiseBlocks = false;
-		if(this.renderPiecewise) {
-			this.renderPiecewiseBlocks = Configs.Generic.OUTLINE_SHOWN.getBooleanValue();
-			//Entity entity = this.mc.getRenderViewEntity();
-			//this.createCamera(entity, partialTicks);
-		}
-	}*/
 	
 	public void piecewiseRenderEntities(float partialTicks) {
 		if(Configs.Generic.DISPLAYED.getBooleanValue() && this.mc.getRenderViewEntity() != null && Configs.Generic.OUTLINE_SHOWN.getBooleanValue()) {

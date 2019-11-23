@@ -20,11 +20,10 @@ public class WorldLoadListener implements IWorldLoadListener {
         		OverlayRenderer.resetRenderTimeout();
         	}
         }
-	//TODO look _gameJoinTime
+    }
 	
     @Override
     public void onWorldLoadPost(@Nullable WorldClient worldBefore, @Nullable WorldClient worldAfter, Minecraft mc) {
-        //SchematicWorldHandler.recreateSchematicWorld(worldAfter == null);
     	if(worldBefore == null && worldAfter != null && Configs.Generic.ENABLED.getBooleanValue()) {
     		DataManager.onClientTickStart();
     		DataManager.configure(mc.world.getWorldInfo().getGameType());

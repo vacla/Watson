@@ -235,7 +235,6 @@ public class LbCoordsAnalysis extends Analysis {
 			}
 			requestNextPage();
 		} catch (Exception ex) {
-			// System.out.println(ex);
 	    }
 	}
 

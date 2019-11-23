@@ -20,6 +20,7 @@ public class PlayereditSet {
 	public PlayereditSet(String player) {
 		_player = player;
 	}
+	
 	public String getPlayer() {
 		return _player;
 	}
@@ -40,26 +41,28 @@ public class PlayereditSet {
 	public synchronized BlockEdit getEditAfter(BlockEdit edit) {
 		return _edits.higher(edit);
 	}
+	
 	public synchronized void addBlockEdit(BlockEdit edit) {
 		_edits.add(edit);
 		edit.playereditSet = this;
 	}
+	
 	public synchronized int getBlockEditCount() {
 		return _edits.size();
 	}
+	
 	public void setVisible(boolean visible) {
 		_visible = visible;
 	}
+	
 	public boolean isVisible() {
 		return _visible;
 	}
 	
-	//TODO DELETE LATER different with malilib/litematica
 	public synchronized void drawOutlines(BufferBuilder buffer) {
 		if(isVisible()) {
 			if(Configs.Generic.OUTLINE_SHOWN.getBooleanValue()) {
 				for(BlockEdit edit : _edits) {
-					System.out.println("something1: "+edit.player);
 					edit.drawOutline(buffer);
 				}
 			}

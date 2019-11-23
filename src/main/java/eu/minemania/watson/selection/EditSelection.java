@@ -63,17 +63,14 @@ public class EditSelection {
 	}
 	
 	public BlockEditSet getBlockEditSet() {
-		//System.out.println("getBlockEditSet");
 		Minecraft mc = Minecraft.getInstance();
 		StringBuilder idBuilder = new StringBuilder();
 		String serverIP = DataManager.getServerIP();
-		//System.out.println(serverIP);
 		if(serverIP != null) {
 			idBuilder.append(serverIP);
 		}
 		idBuilder.append('/');
 		idBuilder.append(mc.player.dimension);
-		//System.out.println(mc.player.dimension);
 		String id = idBuilder.toString();
 		
 		BlockEditSet edits = _edits.get(id);
@@ -81,8 +78,6 @@ public class EditSelection {
 			edits = new BlockEditSet();
 			_edits.put(id, edits);
 		}
-		//System.out.println("id:"+ id);
-		//System.out.println("edits:"+ _edits.entrySet());
 		return edits;
 	}
 	
