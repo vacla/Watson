@@ -7,13 +7,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.channels.SelectionKey;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Locale;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,7 +21,6 @@ import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.render.OverlayRenderer;
 import eu.minemania.watson.selection.EditSelection;
-import fi.dy.masa.malilib.util.Color4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
@@ -34,10 +30,6 @@ public class BlockEditSet {
 	protected LinkedHashMap<String, PlayereditSet> _playerEdits = new LinkedHashMap<>();
 	protected ArrayList<Annotation> _annotations = new ArrayList<>();
 	protected OreDB _oreDB = new OreDB();
-	private static final Set<Integer> USED_COLORS = new HashSet<>();
-	private static int nextColorIndex;
-	private int vectorColor;
-	private Color4f vectorColorVec = new Color4f(0xFF, 0xFF, 0xFF);
 	
 	public synchronized int load(File file) throws Exception {
 		BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -195,10 +187,6 @@ public class BlockEditSet {
 		player = player.toLowerCase();
 		PlayereditSet editsByPlayer = _playerEdits.get(player);
 		if(editsByPlayer != null) {
-			USED_COLORS.remove(this.vectorColor);
-			if(USED_COLORS.isEmpty()) {
-				nextColorIndex = 0;
-			}
 			_playerEdits.remove(player.toLowerCase());
 			getOreDB().removeDeposits(player);
 			ChatMessage.localOutput(String.format(Locale.US, "%d edits by %s were removed.", editsByPlayer.getBlockEditCount(), editsByPlayer.getPlayer()), true);
@@ -222,49 +210,22 @@ public class BlockEditSet {
 	//FIXME change getNextVectorColor, look litematica
 	public synchronized void drawVectors() {
 		if(Configs.Generic.VECTOR_SHOWN.getBooleanValue()) {
+			Tessellator tessellator = Tessellator.getInstance();
+			BufferBuilder buffer = tessellator.getBuffer();
+			buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+			int nextColorIndex1 = 0;
 			for(PlayereditSet editsForPlayer : _playerEdits.values()) {
-				editsForPlayer.drawVectors(getNextVectorColor());
-				setVectorColorNext();
+				editsForPlayer.drawVectors(OverlayRenderer.KELLY_COLORS[nextColorIndex1], buffer);
+				nextColorIndex1 = (nextColorIndex1 + 1) % OverlayRenderer.KELLY_COLORS.length;
 			}
+			tessellator.draw();
 		}
 	}
 	
-	private static int getNextVectorColor() {
-		int length = OverlayRenderer.KELLY_COLORS.length;
-		int color = OverlayRenderer.KELLY_COLORS[nextColorIndex];
-		nextColorIndex = (nextColorIndex + 1) % length;
-		
-		for(int i = 0; i < length; ++i) {
-			if(USED_COLORS.contains(color) == false) {
-				return color;
-			}
-			
-			color = OverlayRenderer.KELLY_COLORS[nextColorIndex];
-			nextColorIndex = (nextColorIndex + 1) % length;
-		}
-		
-		return color;
-	}
-	
-	private BlockEditSet setVectorColorNext() {
-		return this.setVectorColor(getNextVectorColor());
-	}
-	
-	public Color4f getVectorColor() {
-		return this.vectorColorVec;
-	}
-	
-	public BlockEditSet setVectorColor(int color) {
-		this.vectorColor = color;
-		this.vectorColorVec = Color4f.fromColor(color, 1f);
-		USED_COLORS.add(color);
-		return this;
-	}
-	
-	public synchronized void drawAnnotations() {
+	public synchronized void drawAnnotations(double dx, double dy, double dz) {
 		if(Configs.Generic.ANNOTATION_SHOWN.getBooleanValue() && _annotations.isEmpty() == false) {
 			for(Annotation annotation : _annotations) {
-				annotation.draw();
+				annotation.draw(dx, dy, dz);
 			}
 		}
 	}

@@ -86,7 +86,7 @@ public class EditSelection {
 		return edits;
 	}
 	
-	public void drawSelection() {
+	public void drawSelection(double dx, double dy, double dz) {
 		if(_selection != null && Configs.Generic.SELECTION_SHOWN.getBooleanValue()) {
 			Tessellator tesselator = Tessellator.getInstance();
 			BufferBuilder buffer = tesselator.getBuffer();

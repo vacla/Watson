@@ -21,6 +21,7 @@ public class BlockEdit {
 	public WatsonBlock block;
 	public PlayereditSet playereditSet;
 	private final BlockModelShapes blockModelShapes;
+	private Minecraft mc;
 	
 	public BlockEdit(long time, String player, boolean creation, int x, int y, int z, WatsonBlock block) {
 		this.time = time;
@@ -30,18 +31,14 @@ public class BlockEdit {
 		this.y = y;
 		this.z = z;
 		this.block = block;
-		Minecraft mc = Minecraft.getInstance();
-		this.blockModelShapes = mc.getBlockRendererDispatcher().getBlockModelShapes();
+		this.mc = Minecraft.getInstance();
+		this.blockModelShapes = this.mc.getBlockRendererDispatcher().getBlockModelShapes();
 	}
-	//TODO change render to litematica, litematica has block render already implemented
+	//TODO later add custom colors
 	public void drawOutline(BufferBuilder buffer) {
 		IBakedModel model;
 		IBlockState state = (IRegistry.BLOCK.get(new ResourceLocation(block.getName()))).getDefaultState();
-		System.out.println("state: "+ state);
 		model = this.blockModelShapes.getModel(state);
-		//System.out.println("model: "+model);
-		System.out.println("x: " + x + ", y: " + y + ", z: " + z);
-		RenderUtils.drawBlockModelQuadOverlayBatched(model, state, new BlockPos(x, y, z), new Color4f(255, 0, 0), 0, buffer);
-		//block.getBlockModel().render(block, x, y, z);
+		RenderUtils.drawBlockModelOutlinesBatched(model, state, new BlockPos(x, y, z), new Color4f(1f, 0.5f, 0.3f), 0, buffer);
 	}
 }

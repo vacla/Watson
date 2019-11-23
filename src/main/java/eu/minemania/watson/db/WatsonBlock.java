@@ -113,4 +113,22 @@ public final class WatsonBlock {
 		builder.append(')');
 		return builder.toString();
 	}
+	
+	@Override
+    public int hashCode() {
+        return this.name.hashCode();
+    }
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == this) {
+			return true;
+		}
+
+		if(obj instanceof WatsonBlock) {
+		   return ((WatsonBlock)obj).name.equals(this.name);
+		}
+
+		return false;
+	}
 }

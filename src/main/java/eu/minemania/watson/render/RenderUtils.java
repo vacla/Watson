@@ -17,40 +17,52 @@ public class RenderUtils {
 	/**
      * Assumes a BufferBuilder in the GL_LINES mode has been initialized
      */
-	public static void drawBlockModelQuadOverlayBatched(IBakedModel model, IBlockState state, BlockPos pos, Color4f color, double expand, BufferBuilder buffer) {
-        for (final EnumFacing side : FACING_ALL) {
-            renderModelQuadOverlayBatched(pos, buffer, color, model.getQuads(state, side, RAND));
+    public static void drawBlockModelOutlinesBatched(IBakedModel model, IBlockState state, BlockPos pos, Color4f color, double expand, BufferBuilder buffer)
+    {
+        for (final EnumFacing side : FACING_ALL)
+        {
+            renderModelQuadOutlines(pos, buffer, color, model.getQuads(state, side, RAND));
         }
 
-        renderModelQuadOverlayBatched(pos, buffer, color, model.getQuads(state, null, RAND));
+        renderModelQuadOutlines(pos, buffer, color, model.getQuads(state, null, RAND));
     }
 
-    public static void drawBlockModelQuadOverlayBatched(IBakedModel model, IBlockState state, BlockPos pos, EnumFacing side, Color4f color, double expand, BufferBuilder buffer) {
-        renderModelQuadOverlayBatched(pos, buffer, color, model.getQuads(state, side, RAND));
-    }
-
-    private static void renderModelQuadOverlayBatched(BlockPos pos, BufferBuilder buffer, Color4f color, List<BakedQuad> quads) {
+    private static void renderModelQuadOutlines(BlockPos pos, BufferBuilder buffer, Color4f color, List<BakedQuad> quads)
+    {
         final int size = quads.size();
 
         for (int i = 0; i < size; i++)
         {
-            renderModelQuadOverlayBatched(pos, buffer, color, quads.get(i).getVertexData());
+            renderQuadOutlinesBatched(pos, buffer, color, quads.get(i).getVertexData());
         }
     }
 
-    private static void renderModelQuadOverlayBatched(BlockPos pos, BufferBuilder buffer, Color4f color, int[] vertexData) {
+    private static void renderQuadOutlinesBatched(BlockPos pos, BufferBuilder buffer, Color4f color, int[] vertexData)
+    {
         final int x = pos.getX();
         final int y = pos.getY();
         final int z = pos.getZ();
-        float fx, fy, fz;
+        float fx[] = new float[4];
+        float fy[] = new float[4];
+        float fz[] = new float[4];
 
-        for (int index = 0; index < 4; ++index) {
-            fx = x + Float.intBitsToFloat(vertexData[index * 7 + 0]);
-            fy = y + Float.intBitsToFloat(vertexData[index * 7 + 1]);
-            fz = z + Float.intBitsToFloat(vertexData[index * 7 + 2]);
-            System.out.println("fx: " + fx + ", fy: " + fy + ", fz: " + fz);
-            System.out.println("r: "+ color.r + ", g:"+ color.g + ", b:"+ color.b + ", a:"+ color.a);
-            buffer.pos(fx, fy, fz).color(color.r, color.g, color.b, color.a).endVertex();
+        for (int index = 0; index < 4; ++index)
+        {
+            fx[index] = x + Float.intBitsToFloat(vertexData[index * 7 + 0]);
+            fy[index] = y + Float.intBitsToFloat(vertexData[index * 7 + 1]);
+            fz[index] = z + Float.intBitsToFloat(vertexData[index * 7 + 2]);
         }
+
+        buffer.pos(fx[0], fy[0], fz[0]).color(color.r, color.g, color.b, color.a).endVertex();
+        buffer.pos(fx[1], fy[1], fz[1]).color(color.r, color.g, color.b, color.a).endVertex();
+
+        buffer.pos(fx[1], fy[1], fz[1]).color(color.r, color.g, color.b, color.a).endVertex();
+        buffer.pos(fx[2], fy[2], fz[2]).color(color.r, color.g, color.b, color.a).endVertex();
+
+        buffer.pos(fx[2], fy[2], fz[2]).color(color.r, color.g, color.b, color.a).endVertex();
+        buffer.pos(fx[3], fy[3], fz[3]).color(color.r, color.g, color.b, color.a).endVertex();
+
+        buffer.pos(fx[3], fy[3], fz[3]).color(color.r, color.g, color.b, color.a).endVertex();
+        buffer.pos(fx[0], fy[0], fz[0]).color(color.r, color.g, color.b, color.a).endVertex();
     }
 }

@@ -42,7 +42,7 @@ public final class WatsonBlockRegistery {
 		WatsonBlock unknown = getInstance().getWatsonBlockByName("minecraft:bedrock");
 		if(unknown == null) {
 			unknown = new WatsonBlock();
-			unknown.setName("unknown");
+			unknown.setName("minecraft:bedrock");
 			getInstance().addWatsonBlock(unknown);
 		}
     }
@@ -230,7 +230,10 @@ public final class WatsonBlockRegistery {
 	}
 	
 	public WatsonBlock getWatsonBlockByName(String name) {
-	    WatsonBlock result = _byName.get("minecraft:" +name.toLowerCase());
+		WatsonBlock result = _byName.get("minecraft:" +name.toLowerCase());
+		if(name.contains("minecraft:")) {
+			result = _byName.get(name.toLowerCase());
+		}
 	    if (result == null) {
 	      // Return the "unknown" WatsonBlock.
 	    	return _byName.get("minecraft:bedrock");

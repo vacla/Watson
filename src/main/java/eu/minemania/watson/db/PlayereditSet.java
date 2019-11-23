@@ -5,13 +5,9 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-import org.lwjgl.opengl.GL11;
-
 import eu.minemania.watson.config.Configs;
 import fi.dy.masa.malilib.util.Color4f;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.Vec3d;
 
 public class PlayereditSet {
@@ -70,15 +66,9 @@ public class PlayereditSet {
 		}
 	}
 	
-	//TODO DELETE LATER
-	public synchronized void drawVectors(int intcolor) {
+	public synchronized void drawVectors(int intcolor, BufferBuilder buffer) {
 		if(Configs.Generic.VECTOR_SHOWN.getBooleanValue() && isVisible() && !_edits.isEmpty()) {
-			Color4f color = Color4f.fromColor(intcolor);
-			final Tessellator tessellator = Tessellator.getInstance();
-			final BufferBuilder buffer = tessellator.getBuffer();
-			buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
-			GL11.glColor4f(color.r, color.g, color.b, color.a);
-			GL11.glLineWidth(0.5f);
+			Color4f color = Color4f.fromColor(intcolor, 1f);
 			
 			Vec3d unitX = new Vec3d(1, 0, 0);
 			Vec3d unitY = new Vec3d(0, 1, 0);
@@ -91,16 +81,15 @@ public class PlayereditSet {
 					
 					boolean show = (next.creation && Configs.Generic.LINKED_CREATION.getBooleanValue()) || (!next.creation && Configs.Generic.LINKED_DESTRUCTION.getBooleanValue());
 					if(show) {
-						Vec3d pPos = new Vec3d(0.5 + prev.x, 0.5 + prev.y, 0.5 + prev.z);
-						Vec3d nPos = new Vec3d(0.5 + next.x, 0.5 + next.y, 0.5 + next.z);
+						Vec3d pPos = new Vec3d(prev.x + 0.5, prev.y + 0.5, prev.z + 0.5);
+						Vec3d nPos = new Vec3d(next.x + 0.5, next.y + 0.5, next.z + 0.5);
 						//vector difference, from prev to next
 						Vec3d diff = nPos.subtract(pPos);
-						
 						// Compute length. We want to scale the arrow heads by the length, so can't avoid the sqrt() here
 						double length = diff.length();
 						if (length >= (float) Configs.Generic.VECTOR_LENGTH.getDoubleValue()) {
-							buffer.pos(pPos.x, pPos.y, pPos.z).endVertex();
-							buffer.pos(nPos.x, nPos.y, nPos.z).endVertex();
+							buffer.pos(pPos.x, pPos.y, pPos.z).color(color.r, color.g, color.b, color.a).endVertex();
+							buffer.pos(nPos.x, nPos.y, nPos.z).color(color.r, color.g, color.b, color.a).endVertex();
 							
 							// Length from arrow tip to midpoint of vector as a fraction of
 				            // the total vector length. Scale the arrow in proportion to the
@@ -110,12 +99,10 @@ public class PlayereditSet {
 								arrowSize = MAX_ARROW_SIZE;
 							}
 							double arrowScale = arrowSize / length;
-							
 							// Position of the tip and tail of the arrow, sitting in the
 				            // middle of the vector.
 							Vec3d tip = new Vec3d(pPos.x * (0.5 - arrowScale) + nPos.x * (0.5 + arrowScale), pPos.y * (0.5 - arrowScale) + nPos.y * (0.5 + arrowScale), pPos.z * (0.5 - arrowScale) + nPos.z * (0.5 + arrowScale));
 							Vec3d tail = new Vec3d(pPos.x * (0.5 + arrowScale) + nPos.x * (0.5 - arrowScale), pPos.y * (0.5 + arrowScale) + nPos.y * (0.5 - arrowScale), pPos.z * (0.5 + arrowScale) + nPos.z * (0.5 - arrowScale));
-							
 							// Fin axes, perpendicular to vector. Scale by vector length.
 				            // If the vector is colinear with the Y axis, use the X axis for
 				            // the cross products to derive the fin directions.
@@ -127,24 +114,21 @@ public class PlayereditSet {
 							}
 							
 							Vec3d fin2 = fin1.crossProduct(diff).normalize();
-							
 							Vec3d draw1 = new Vec3d(fin1.x * arrowScale * length, fin1.y * arrowScale * length, fin1.z * arrowScale * length);
 							Vec3d draw2 = new Vec3d(fin2.x * arrowScale * length, fin2.y * arrowScale * length, fin2.z * arrowScale * length);
-							
 							// Draw four fins
-							buffer.pos(tip.x, tip.y, tip.z).endVertex();
-							buffer.pos(tail.x + draw1.x, tail.y + draw1.y, tail.z + draw1.z).endVertex();
-							buffer.pos(tip.x, tip.y, tip.z).endVertex();
-							buffer.pos(tail.x - draw1.x, tail.y - draw1.y, tail.z - draw1.z).endVertex();
-							buffer.pos(tip.x, tip.y, tip.z).endVertex();
-							buffer.pos(tail.x + draw2.x, tail.y + draw2.y, tail.z + draw2.z).endVertex();
-							buffer.pos(tip.x, tip.y, tip.z).endVertex();
-							buffer.pos(tail.x - draw2.x, tail.y - draw2.y, tail.z - draw2.z).endVertex();
+							buffer.pos(tip.x, tip.y, tip.z).color(color.r, color.g, color.b, color.a).endVertex();
+							buffer.pos(tail.x + draw1.x, tail.y + draw1.y, tail.z + draw1.z).color(color.r, color.g, color.b, color.a).endVertex();
+							buffer.pos(tip.x, tip.y, tip.z).color(color.r, color.g, color.b, color.a).endVertex();
+							buffer.pos(tail.x - draw1.x, tail.y - draw1.y, tail.z - draw1.z).color(color.r, color.g, color.b, color.a).endVertex();
+							buffer.pos(tip.x, tip.y, tip.z).color(color.r, color.g, color.b, color.a).endVertex();
+							buffer.pos(tail.x + draw2.x, tail.y + draw2.y, tail.z + draw2.z).color(color.r, color.g, color.b, color.a).endVertex();
+							buffer.pos(tip.x, tip.y, tip.z).color(color.r, color.g, color.b, color.a).endVertex();
+							buffer.pos(tail.x - draw2.x, tail.y - draw2.y, tail.z - draw2.z).color(color.r, color.g, color.b, color.a).endVertex();
 						}
 						prev = next;
 					}
 				}
-				tessellator.draw();
 			}
 		}
 	}

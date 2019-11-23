@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
+import eu.minemania.watson.render.OverlayRenderer;
 import fi.dy.masa.malilib.interfaces.IWorldLoadListener;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -14,9 +15,13 @@ public class WorldLoadListener implements IWorldLoadListener {
         // Save the settings before the integrated server gets shut down
 		if (worldBefore != null) {
             DataManager.save();
+        } else {
+        	if(worldAfter != null) {
+        		OverlayRenderer.resetRenderTimeout();
+        	}
         }
-    }
 	//TODO look _gameJoinTime
+	
     @Override
     public void onWorldLoadPost(@Nullable WorldClient worldBefore, @Nullable WorldClient worldAfter, Minecraft mc) {
         //SchematicWorldHandler.recreateSchematicWorld(worldAfter == null);

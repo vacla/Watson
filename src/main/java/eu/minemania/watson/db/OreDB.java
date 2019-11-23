@@ -215,7 +215,7 @@ public class OreDB {
 		}
 	}
 	
-	public void drawDepositLabels() {
+	public void drawDepositLabels(double dx, double dy, double dz) {
 		if(Configs.Generic.LABEL_SHOWN.getBooleanValue()) {
 			int id = 1;
 			StringBuilder label = new StringBuilder();
@@ -225,7 +225,7 @@ public class OreDB {
 					label.setLength(0);
 					label.ensureCapacity(4);
 					label.append(id);
-					Annotation.drawBillboard(block.getLocation().getX(), block.getLocation().getY(), block.getLocation().getZ(), 0.03, label.toString());
+					OverlayRenderer.drawBillboard(block.getLocation().getX() - dx + 0.5, block.getLocation().getY() - dy + 0.5, block.getLocation().getZ() - dz + 0.5, 0.03, label.toString());
 				}
 				++id;
 			}

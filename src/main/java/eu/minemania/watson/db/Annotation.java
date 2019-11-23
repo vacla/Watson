@@ -1,12 +1,6 @@
 package eu.minemania.watson.db;
 
-import java.util.Arrays;
-
-import eu.minemania.watson.config.Configs;
-import fi.dy.masa.malilib.render.RenderUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.MathHelper;
+import eu.minemania.watson.render.OverlayRenderer;
 
 public class Annotation {
 	protected String _text;
@@ -37,16 +31,7 @@ public class Annotation {
 		return _z;
 	}
 	
-	public void draw() {
-		drawBillboard(getX(), getY(), getZ(), 0.02, getText());
-	}
-	
-	public static void drawBillboard(double x, double y, double z, double scale, String text) {
-		final float scaled = MathHelper.clamp((float) scale, 0.01f, 1f);
-		Minecraft mc = Minecraft.getInstance();
-		Entity entity = mc.getRenderViewEntity();
-		if(entity != null) {
-			RenderUtils.drawTextPlate(Arrays.asList(text), x, y, z, entity.rotationYaw, entity.rotationPitch, scaled, Configs.Generic.BILLBOARD_FOREGROUND.getIntegerValue(), Configs.Generic.BILLBOARD_BACKGROUND.getIntegerValue(), true);
-		}
+	public void draw(double dx, double dy, double dz) {
+		OverlayRenderer.drawBillboard(getX() - dx, getY() - dy, getZ() - dz, 0.03, getText());
 	}
 }
