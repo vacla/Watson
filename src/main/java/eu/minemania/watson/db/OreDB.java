@@ -14,7 +14,9 @@ import eu.minemania.watson.chat.Color;
 import eu.minemania.watson.client.Teleport;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
+import eu.minemania.watson.render.OverlayRenderer;
 import eu.minemania.watson.selection.EditSelection;
+import net.minecraft.util.text.TextFormatting;
 
 public class OreDB {
 	protected LinkedHashMap<WatsonBlock, TypedOreDB> _db = new LinkedHashMap<WatsonBlock, TypedOreDB>();
@@ -94,13 +96,13 @@ public class OreDB {
 					BlockEdit edit = block.getEdit();
 					WatsonBlock watsonblock = edit.block;
 					String player = edit.player;
-					String strike = edit.playereditSet.isVisible() ? "" : "\247m";
-					String line = String.format(Locale.US, "\247%c%s(%3d) %s (% 5d % 3d % 5d) %s [%2d] %s",_chatColors.get(watsonblock).getColor(), strike, id, TimeStamp.formatMonthDayTime(time), block.getLocation().getX(), block.getLocation().getY(), block.getLocation().getZ(), watsonblock.getName(), deposit.getBlockCount(), player);
-					ChatMessage.sendToLocalChat(line, true);
+					TextFormatting strike = edit.playereditSet.isVisible() == true ? null : TextFormatting.STRIKETHROUGH;
+					String line = String.format(Locale.US, "(%3d) %s (% 5d % 3d % 5d) %s [%2d] %s", id, TimeStamp.formatMonthDayTime(time), block.getLocation().getX(), block.getLocation().getY(), block.getLocation().getZ(), watsonblock.getName(), deposit.getBlockCount(), player);
+					ChatMessage.sendToLocalChat(_chatColors.get(watsonblock).getColor(), strike, line, true);
 				}
 				if (page < pages) {
 					ChatMessage.localOutput(String.format(Locale.US, "Page %d of %d.", page, pages), true);
-					ChatMessage.localOutput(String.format(Locale.US, "Use \"/w ore %d\" to view the next page", (page+1)), true);
+					ChatMessage.localOutput(String.format(Locale.US, "Use \"/%s ore %d\" to view the next page", Configs.Generic.WATSON_PREFIX.getStringValue(), (page+1)), true);
 				}
 			}
 		}

@@ -140,7 +140,7 @@ public class LbCoordsAnalysis extends Analysis {
 				}
 			} else {
 				if (Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue()) {
-					ChatMessage.sendToLocalChat(colorFormat, chat.getUnformattedComponentText(), true);
+					ChatMessage.sendToLocalChat(colorFormat, null, chat.getUnformattedComponentText(), true);
 				} else {
 					ChatMessage.sendToLocalChat(chat, true);
 				}
@@ -185,7 +185,7 @@ public class LbCoordsAnalysis extends Analysis {
 		        }
 			} else {
 				if (Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue()) {
-					ChatMessage.sendToLocalChat(colorFormat, chat.getUnformattedComponentText(), true);
+					ChatMessage.sendToLocalChat(colorFormat, null, chat.getUnformattedComponentText(), true);
 				} else {
 					ChatMessage.sendToLocalChat(chat, true);
 				}
@@ -228,7 +228,7 @@ public class LbCoordsAnalysis extends Analysis {
 				}
 			} else {
 				if (Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue()) {
-					ChatMessage.sendToLocalChat(colorFormat, chat.getUnformattedComponentText(), true);
+					ChatMessage.sendToLocalChat(colorFormat, null, chat.getUnformattedComponentText(), true);
 				} else {
 					ChatMessage.sendToLocalChat(chat, true);
 				}

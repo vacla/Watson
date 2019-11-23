@@ -6,7 +6,6 @@ import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
@@ -21,7 +20,7 @@ public class ChatMessage {
 	}
 	
 	public static void localOutput(String message, boolean watsonMessage) {
-		sendToLocalChat(TextFormatting.AQUA, message, watsonMessage);
+		sendToLocalChat(TextFormatting.AQUA, null, message, watsonMessage);
 	}
 	
 	public static void localOutputT(String translationKey, Object... args) {
@@ -29,7 +28,7 @@ public class ChatMessage {
 	}
 	
 	public static void localError(String message, boolean watsonMessage) {
-		sendToLocalChat(TextFormatting.DARK_RED, message, watsonMessage);
+		sendToLocalChat(TextFormatting.DARK_RED, null, message, watsonMessage);
 	}
 	
 	public void serverChat(String message) {
@@ -46,23 +45,23 @@ public class ChatMessage {
 		sendToLocalChat(new TextComponentString(message), watsonMessage);
 	}
 	
-	public static void sendToLocalChat(ITextComponent message, boolean watsonMessage) {
-		ITextComponent highlight = Highlight.setHighlightChatMessage("chat.type.text", message, watsonMessage);
-		Minecraft.getInstance().ingameGUI.getChatGUI().printChatMessage(highlight);
+	public static void sendToLocalChat(ITextComponent inputmessage, boolean watsonMessage) {
+		ITextComponent message = Configs.Generic.USE_CHAT_HIGHLIGHTS.getBooleanValue() ? Highlight.setHighlightChatMessage("chat.type.text", inputmessage, watsonMessage) : inputmessage;
+		Minecraft.getInstance().ingameGUI.getChatGUI().printChatMessage(message);
 	}
 	
-	public static void sendToLocalChat(TextFormatting color, String message, boolean watsonMessage) {
+	public static void sendToLocalChat(TextFormatting color, TextFormatting style, String message, boolean watsonMessage) {
 		TextComponentString chat = new TextComponentString(message);
-		Style style = new Style();
-		style.setColor(color);
-		chat.setStyle(style);
+		if(style == null) {
+			chat.applyTextStyle(color);
+		} else {
+			chat.applyTextStyles(color, style);
+		}
 		sendToLocalChat(chat, watsonMessage);
 	}
 	
 	public static void sendToLocalChat(TextFormatting color, ITextComponent message, boolean watsonMessage) {
-		Style style = new Style();
-		style.setColor(color);
-		message.setStyle(style);
+		message.applyTextStyle(color);
 		sendToLocalChat(message, watsonMessage);
 	}
 	
