@@ -25,28 +25,19 @@ public class OreDB {
 	protected ArrayList<OreDeposit> _oreDepositSequence = new ArrayList<OreDeposit>();
 	protected boolean _oreDepositSequenceChanged = true;
 	protected boolean _lastTimeOrderedDeposits = true;
-	//private BlockTypeRegistery blockTypeRegistery = new BlockTypeRegistery();
-	//private ChatMessage chatMessage = ChatMessage.getInstance();
-	//private ServerTime serverTime = ServerTime.getInstance();
-	//private EditSelection edit = new EditSelection();
-	
-	/*private static OreDB getInstance() {
-		return INSTANCE;
-	}*/
 	
 	public OreDB() {
 		WatsonBlockRegistery types = WatsonBlockRegistery.getInstance();
 		
 		//TODO add list malilib custom color
-		_db.put(types.getWatsonBlockByName("minecraft:diamond_ore"), new TypedOreDB(200)); //56
-	    _db.put(types.getWatsonBlockByName("minecraft:emerald_ore"), new TypedOreDB(200)); //129
-	    _db.put(types.getWatsonBlockByName("minecraft:iron_ore"), new TypedOreDB(400)); //15
-	    _db.put(types.getWatsonBlockByName("minecraft:gold_ore"), new TypedOreDB(200)); //14
-	    _db.put(types.getWatsonBlockByName("minecraft:lapis_ore"), new TypedOreDB(200)); //21
-	    // Merge redstone ore (73) and glowing redstone ore (74) // is same for 1.13.x
-	    _db.put(types.getWatsonBlockByName("minecraft:redstone_ore"), new TypedOreDB(200)); //73
-	    _db.put(types.getWatsonBlockByName("minecraft:coal_ore"), new TypedOreDB(800)); //16
-	    _db.put(types.getWatsonBlockByName("minecraft:nether_quartz_ore"), new TypedOreDB(400)); //153
+		_db.put(types.getWatsonBlockByName("minecraft:diamond_ore"), new TypedOreDB(200));
+	    _db.put(types.getWatsonBlockByName("minecraft:emerald_ore"), new TypedOreDB(200));
+	    _db.put(types.getWatsonBlockByName("minecraft:iron_ore"), new TypedOreDB(400));
+	    _db.put(types.getWatsonBlockByName("minecraft:gold_ore"), new TypedOreDB(200));
+	    _db.put(types.getWatsonBlockByName("minecraft:lapis_ore"), new TypedOreDB(200));
+	    _db.put(types.getWatsonBlockByName("minecraft:redstone_ore"), new TypedOreDB(200));
+	    _db.put(types.getWatsonBlockByName("minecraft:coal_ore"), new TypedOreDB(800));
+	    _db.put(types.getWatsonBlockByName("minecraft:nether_quartz_ore"), new TypedOreDB(400));
 
 	    _chatColors.put(types.getWatsonBlockByName("minecraft:diamond_ore"), Color.aqua);
 	    _chatColors.put(types.getWatsonBlockByName("minecraft:emerald_ore"), Color.green);
