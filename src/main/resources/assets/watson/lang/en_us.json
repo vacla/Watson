@@ -11,6 +11,12 @@
 	"watson.gui.button.config_gui.lookup": "Lookup",
 	"watson.gui.button.config_gui.hotkeys": "Hotkeys",
 	
+	"watson.label.plugin.no_plugin": "No Plugin",
+	"watson.label.plugin.coreprotect": "CoreProtect",
+	"watson.label.plugin.logblock": "LogBlock",
+	"watson.label.plugin.modmode": "ModMode",
+	"watson.label.plugin.prism": "Prism",
+	
 	"watson.error.anno.out_range": "Annotation index out of range",
 	"watson.error.anno.position": "Use the LogBlock tool to set a position",
 	"watson.error.calc.calculation": "Invalid expression",
@@ -57,6 +63,9 @@
 	"watson.message.highlight.disabled": "Chat highlights are currently disabled",
 	"watson.message.highlight.empty": "No highlight set",
 	"watson.message.highlight.list_string": "(%d) Pattern: %s, Color: %s, Style: %s",
-	"watson.message.highlight.removed": "Removed highlight %s"
+	"watson.message.highlight.removed": "Removed highlight %s",
+	
+	"watson.message.join.watson": "Watson %s. Type /%s help, for help",
+	"watson.message.join.plugin": "Don't forget to set the plugin in config screen"
 	
 }

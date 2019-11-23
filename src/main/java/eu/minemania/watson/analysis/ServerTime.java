@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.chat.IMatchedChatHandler;
+import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.TimeStamp;
 import net.minecraft.util.text.ITextComponent;
@@ -39,10 +40,10 @@ public class ServerTime extends Analysis {
 	public void queryServerTime(boolean showServerTime) {
 		String serverIP = DataManager.getServerIP();
 		if(serverIP != null) {
-			if(_localMinusServerMinutes.get(serverIP) == null) {
+			if(_localMinusServerMinutes.get(serverIP) == null && Configs.Generic.PLUGIN.getOptionListValue().getStringValue().equals("LogBlock")) {
 				Calendar pastTime = getPastTime();
 				String date = String.format(Locale.US, "%d,%d,%d", pastTime.get(Calendar.DAY_OF_MONTH), pastTime.get(Calendar.MONTH) + 1, pastTime.get(Calendar.YEAR));
-				String query = String.format(Locale.US, "lb player watsonservertimecheck since %s 00:00:00 before %s 00:00:01 limit 1", date, date);
+				String query = String.format(Locale.US, "/lb player watsonservertimecheck since %s 00:00:00 before %s 00:00:01 limit 1", date, date);
 				Watson.logger.debug("Server time query for " + serverIP + ": " + query);
 				_showServerTime = showServerTime;
 				ChatMessage.sendToServerChat(query);

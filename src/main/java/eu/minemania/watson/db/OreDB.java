@@ -78,12 +78,12 @@ public class OreDB {
 		} else {
 			int pages = (depositCount + Configs.Generic.PAGE_LINES.getIntegerValue() - 1) / Configs.Generic.PAGE_LINES.getIntegerValue();
 			if(page > pages) {
-				ChatMessage.localError("The highest page number is pages.", true);
+				ChatMessage.localError(String.format(Locale.US, "The highest page number is %d.", pages), true);
 			} else {
 				if(depositCount == 1) {
 					ChatMessage.localOutput("There is 1 ore deposit", true);
 				} else {
-					ChatMessage.localOutput("There are depositCount ore deposits.", true);
+					ChatMessage.localOutput(String.format(Locale.US, "There are %d ore deposits.", depositCount), true);
 				}
 				
 				ArrayList<OreDeposit> deposits = getOreDepositSequence();

@@ -22,15 +22,17 @@ public abstract class MixinGuiNewChat {
 			}
 		}*/
 		boolean allowChat = ChatProcessor.getInstance().onChat(componentln);
-		if(allowChat && Configs.Generic.USE_CHAT_HIGHLIGHTS.getBooleanValue()) {
-			if(componentln instanceof TextComponentTranslation) {
-				if(((TextComponentTranslation)componentln).getKey().contains("chat.type.text")) {
-					ITextComponent newComponent = Highlight.setHighlightChatMessage(((TextComponentTranslation)componentln).getKey(),componentln, false);
+		if(allowChat) {
+			if(Configs.Generic.USE_CHAT_HIGHLIGHTS.getBooleanValue()) {
+				if(componentln instanceof TextComponentTranslation) {
+					if(((TextComponentTranslation)componentln).getKey().contains("chat.type.text")) {
+						ITextComponent newComponent = Highlight.setHighlightChatMessage(((TextComponentTranslation)componentln).getKey(),componentln, false);
+						return newComponent;
+					}
+				} else {
+					ITextComponent newComponent = Highlight.setHighlightChatMessage(componentln);
 					return newComponent;
 				}
-			} else {
-				ITextComponent newComponent = Highlight.setHighlightChatMessage(componentln);
-				return newComponent;
 			}
 		}
 		return componentln;

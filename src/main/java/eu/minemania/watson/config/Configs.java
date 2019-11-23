@@ -17,7 +17,7 @@ import fi.dy.masa.malilib.config.options.ConfigBoolean;
 import fi.dy.masa.malilib.config.options.ConfigColor;
 import fi.dy.masa.malilib.config.options.ConfigDouble;
 import fi.dy.masa.malilib.config.options.ConfigInteger;
-//import fi.dy.masa.malilib.config.options.ConfigOptionList;
+import fi.dy.masa.malilib.config.options.ConfigOptionList;
 import fi.dy.masa.malilib.config.options.ConfigString;
 import fi.dy.masa.malilib.config.options.ConfigStringList;
 import fi.dy.masa.malilib.util.FileUtils;
@@ -64,6 +64,7 @@ public class Configs implements IConfigHandler {
 		public static final ConfigBoolean LINKED_DESTRUCTION = new ConfigBoolean("linkeddestruction", false, "If true, block destruction will be linked by vectors");
 		public static final ConfigBoolean DISPLAYED = new ConfigBoolean("displayed", true, "If true, watson will draw stuff");
 		public static final ConfigBoolean SELECTION_SHOWN = new ConfigBoolean("selectionShown", true, "If enabled selection will be shown");
+		public static final ConfigOptionList PLUGIN = new ConfigOptionList("plugin", Plugins.NULL, "which plugin does the server use");
 		
 		public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
 				ENABLED,
@@ -96,7 +97,8 @@ public class Configs implements IConfigHandler {
 				LINKED_CREATION,
 				LINKED_DESTRUCTION,
 				DISPLAYED,
-				SELECTION_SHOWN
+				SELECTION_SHOWN,
+				PLUGIN
 		);
 	}
 	
