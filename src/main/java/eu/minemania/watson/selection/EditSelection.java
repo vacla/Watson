@@ -165,7 +165,7 @@ public class EditSelection {
 				Watson.logger.debug(query);
 				ChatMessage.sendToServerChat(query);
 			} else {
-				InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.info.no_log_block");
+				InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.info.no_logblock");
 			}
 		} else {
 			InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.info.post_edit");
