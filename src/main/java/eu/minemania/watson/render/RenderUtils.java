@@ -14,6 +14,52 @@ import net.minecraft.util.math.BlockPos;
 public class RenderUtils {
 	private static final Random RAND = new Random();
 	public static final EnumFacing[] FACING_ALL = new EnumFacing[] { EnumFacing.DOWN, EnumFacing.UP, EnumFacing.NORTH, EnumFacing.SOUTH, EnumFacing.WEST, EnumFacing.EAST };
+	
+	public static void drawItemFrameOutlinesBatched(double x, double y, double z, Color4f color, BufferBuilder buffer) {
+		double posX = x + 0.25D / 2;
+		double posY = y + 0.25D / 2;
+		double posZ = z + 0.5D - (double)EnumFacing.NORTH.getZOffset() * 0.46875D;
+		double widthX = (12 / 32.0D) * 2;
+		double heightY = (12 / 32.0D) * 2;
+		double widthZ = (1.0D / 32.0D) * 2;
+		
+		buffer.pos(posX, posY, posZ).color(color.r, color.g, color.b, color.a).endVertex();
+		buffer.pos(posX + widthX, posY, posZ).color(color.r, color.g, color.b, color.a).endVertex();
+		
+		buffer.pos(posX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).endVertex();
+		buffer.pos(posX + widthX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).endVertex();
+		
+		buffer.pos(posX, posY, posZ).color(color.r, color.g, color.b, color.a).endVertex();
+		buffer.pos(posX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).endVertex();
+		
+		buffer.pos(posX + widthX, posY, posZ).color(color.r, color.g, color.b, color.a).endVertex();
+		buffer.pos(posX + widthX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).endVertex();
+		
+		buffer.pos(posX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).endVertex();
+		buffer.pos(posX + widthX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).endVertex();
+		
+		buffer.pos(posX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).endVertex();
+		buffer.pos(posX + widthX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).endVertex();
+		
+		buffer.pos(posX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).endVertex();
+		buffer.pos(posX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).endVertex();
+		
+		buffer.pos(posX + widthX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).endVertex();
+		buffer.pos(posX + widthX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).endVertex();
+		
+		buffer.pos(posX + widthX, posY, posZ).color(color.r, color.g, color.b, color.a).endVertex();
+		buffer.pos(posX + widthX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).endVertex();
+		
+		buffer.pos(posX, posY, posZ).color(color.r, color.g, color.b, color.a).endVertex();
+		buffer.pos(posX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).endVertex();
+		
+		buffer.pos(posX + widthX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).endVertex();
+		buffer.pos(posX + widthX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).endVertex();
+		
+		buffer.pos(posX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).endVertex();
+		buffer.pos(posX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).endVertex();
+	}
+	
 	/**
      * Assumes a BufferBuilder in the GL_LINES mode has been initialized
      */

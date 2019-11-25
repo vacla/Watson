@@ -105,13 +105,7 @@ public class CoreProtectAnalysis extends Analysis {
 			_player = m.group(2);
 			_creation = m.group(3).equals("placed");
 			String block = m.group(4);
-			if(block.equals("minecraft:painting")) {
-				_block = WatsonBlockRegistery.getInstance().getWatsonBlockByName("paintings");
-			} else if(block.equals("minecraft:item_frame")){
-				_block = WatsonBlockRegistery.getInstance().getWatsonBlockByName("item frame");
-			} else {
-				_block = WatsonBlockRegistery.getInstance().getWatsonBlockByName(block);
-			}
+			_block = WatsonBlockRegistery.getInstance().getWatsonBlockByName(block);
 			
 			if(_isLookup) {
 				// Record that we can use these details at the next

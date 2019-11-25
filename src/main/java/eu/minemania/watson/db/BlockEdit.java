@@ -2,11 +2,13 @@ package eu.minemania.watson.db;
 
 import eu.minemania.watson.render.RenderUtils;
 import fi.dy.masa.malilib.util.Color4f;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockModelShapes;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.IRegistry;
@@ -37,8 +39,18 @@ public class BlockEdit {
 	//TODO later add custom colors
 	public void drawOutline(BufferBuilder buffer) {
 		IBakedModel model;
-		IBlockState state = (IRegistry.BLOCK.get(new ResourceLocation(block.getName()))).getDefaultState();
-		model = this.blockModelShapes.getModel(state);
-		RenderUtils.drawBlockModelOutlinesBatched(model, state, new BlockPos(x, y, z), new Color4f(1f, 0.5f, 0.3f), 0, buffer);
+		Block blocks = IRegistry.BLOCK.get(new ResourceLocation(block.getName()));
+		if(blocks != null) {
+			IBlockState state = blocks.getDefaultState();
+			model = this.blockModelShapes.getModel(state);
+			RenderUtils.drawBlockModelOutlinesBatched(model, state, new BlockPos(x, y, z), new Color4f(1f, 0.5f, 0.3f), 0, buffer);
+		} else {
+			EntityType<?> entity = EntityType.getById(block.getName());
+			if(entity != null) {
+				if(block.getName().equals("item_frame") || block.getName().equals("painting")) {
+					RenderUtils.drawItemFrameOutlinesBatched(x, y, z, new Color4f(1f, 0.5f, 0.3f), buffer);
+				}
+			}
+		}
 	}
 }
