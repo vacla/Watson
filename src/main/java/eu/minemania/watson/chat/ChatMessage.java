@@ -52,9 +52,9 @@ public class ChatMessage {
 	
 	public static void sendToLocalChat(TextFormatting color, TextFormatting style, String message, boolean watsonMessage) {
 		TextComponentString chat = new TextComponentString(message);
-		if(style == null) {
+		if(color != null && style == null) {
 			chat.applyTextStyle(color);
-		} else {
+		} else if(color != null && style != null) {
 			chat.applyTextStyles(color, style);
 		}
 		sendToLocalChat(chat, watsonMessage);
