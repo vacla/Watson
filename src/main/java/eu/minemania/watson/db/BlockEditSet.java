@@ -134,12 +134,10 @@ public class BlockEditSet {
 	}
 	
 	public synchronized boolean addBlockEdit(BlockEdit edit, boolean updateVariables) {
-		System.out.println("addblockedit");
 		if(DataManager.getFilters().isAcceptedPlayer(edit.player)) {
 			if(updateVariables) {
 				EditSelection selection = DataManager.getEditSelection();
 				selection.selectBlockEdit(edit);
-				System.out.println("blockeditset: "+selection.getBlockEditSet());
 			}
 			String lowerName = edit.player.toLowerCase();
 			PlayereditSet editsForPlayer = _playerEdits.get(lowerName);
@@ -149,7 +147,6 @@ public class BlockEditSet {
 			}
 			
 			editsForPlayer.addBlockEdit(edit);
-			System.out.println("editplayer: " + editsForPlayer.getBlockEditCount());
 			Minecraft mc = Minecraft.getInstance();
 			if(!mc.world.getWorldInfo().getGameType().isCreative() || Configs.Generic.GROUPING_ORES_IN_CREATIVE.getBooleanValue()) {
 				_oreDB.addBlockEdit(edit);
@@ -207,7 +204,6 @@ public class BlockEditSet {
 		}
 	}
 	
-	//FIXME change getNextVectorColor, look litematica
 	public synchronized void drawVectors() {
 		if(Configs.Generic.VECTOR_SHOWN.getBooleanValue()) {
 			Tessellator tessellator = Tessellator.getInstance();

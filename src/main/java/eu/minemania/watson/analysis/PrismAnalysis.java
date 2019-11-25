@@ -16,7 +16,6 @@ import eu.minemania.watson.db.WatsonBlock;
 import eu.minemania.watson.db.WatsonBlockRegistery;
 import eu.minemania.watson.scheduler.SyncTaskQueue;
 import eu.minemania.watson.scheduler.tasks.AddBlockEditTask;
-import eu.minemania.watson.selection.EditSelection;
 import net.minecraft.util.text.ITextComponent;
 
 public class PrismAnalysis extends Analysis {
@@ -122,8 +121,7 @@ public class PrismAnalysis extends Analysis {
 			int x = Integer.parseInt(m.group(8));
 			int y = Integer.parseInt(m.group(9));
 			int z = Integer.parseInt(m.group(10));
-			EditSelection selection = DataManager.getEditSelection();
-			selection.selectPosition(x, y, z);
+			DataManager.getEditSelection().selectPosition(x, y, z);
 			
 			if(_player != null && _type != null) {
 				if(DataManager.getFilters().isAcceptedPlayer(_player)) {
@@ -149,7 +147,6 @@ public class PrismAnalysis extends Analysis {
 		int x = Integer.parseInt(m.group(1));
 		int y = Integer.parseInt(m.group(2));
 		int z = Integer.parseInt(m.group(3));
-		EditSelection selection = DataManager.getEditSelection();
-		selection.selectPosition(x, y, z);
+		DataManager.getEditSelection().selectPosition(x, y, z);
 	}
 }

@@ -30,8 +30,6 @@ public class WorldLoadListener implements IWorldLoadListener {
     	}
         if (worldAfter != null) {
             DataManager.load();
-        } else {
-            DataManager.clear();
         }
     }
 }

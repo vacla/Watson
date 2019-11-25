@@ -81,7 +81,7 @@ public class WatsonCommand extends WatsonCommandBase {
 					.then(literal("remove")
 						.then(argument("player(s)", greedyString()).executes(WatsonCommand::filter_remove))))
 				.then(literal("file")
-					.then(literal("list").executes(WatsonCommand::file_list) //gives *
+					.then(literal("list").executes(WatsonCommand::file_list)
 						.then(literal("*").executes(WatsonCommand::file_list)
 							.then(argument("page", integer(1)).executes(WatsonCommand::file_list)))
 						.then(argument("player", word()).executes(WatsonCommand::file_list)

@@ -24,7 +24,6 @@ public class KeyCallbacks {
 	
 	public static void init(Minecraft mc) {	
 		IHotkeyCallback callbackHotkeys = new KeyCallbackHotkeys(mc);
-		//IHotkeyCallback callbackMessage = new KeyCallBackToggleMessage(mc);
         ValueChangeStringCallback valueChangeStringCallback = new ValueChangeStringCallback();
         ValueChangeStringListCallback valueChangeStringListCallback = new ValueChangeStringListCallback();
         
@@ -68,19 +67,6 @@ public class KeyCallbacks {
 			}
 		}
 	}
-	
-	/*private static class RenderToggle extends KeyCallbackToggleBooleanConfigWithMessage {
-		public RenderToggle(IConfigBoolean config) {
-			super(config);
-		}
-		
-		@Override
-		public boolean onKeyAction(KeyAction action, IKeybind key) {
-			super.onKeyAction(action, key);
-			
-			return true;
-		}
-	}*/
 	
 	private static class KeyCallbackHotkeys implements IHotkeyCallback {
 		private final Minecraft mc;

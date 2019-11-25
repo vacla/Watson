@@ -67,14 +67,12 @@ public class Highlight {
 	 * @return Highlighted TextComponent
 	 */
 	public static ITextComponent setHighlightChatMessage(ITextComponent message) {
-		//String username = "";
 		String textChat = "";
 		String chat = "";
 		ITextComponent endMessage;
 		ITextComponent prefix = new TextComponentString("");
 		int i = 0;
 		String serverBrand = mc.player.getServerBrand().toLowerCase();
-		//boolean prefix = false;
 		if(serverBrand.contains("spigot") || serverBrand.contains("paper")) {
 			for(ITextComponent chatComponent : message) {
 				if(i > 0) {
@@ -82,7 +80,6 @@ public class Highlight {
 				}
 				i++;
 			}
-			//prefix = chat.contains("[") && chat.contains("]");
 			if(chat.contains("<") && chat.contains(">")) {
 				int startUsername = chat.indexOf("<") + 1;
 				int endUsername = chat.indexOf(">");

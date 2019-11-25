@@ -33,7 +33,6 @@ public class Screenshot {
 	 */
 	public static void makeScreenshot() {
 		Date now = new Date();
-        //String player = Configs.Lookup.USERNAME_LU.getStringValue();
         String player2 = (String) getInstance().edit.getVariables().get("player");
         String subdirectoryName = (!player2.isEmpty() && Configs.Generic.SS_PLAYER_DIRECTORY.getBooleanValue()) ? player2 : new SimpleDateFormat(Configs.Generic.SS_DATE_DIRECTORY.getStringValue()).format(now).toString();
         Minecraft mc = Minecraft.getInstance();

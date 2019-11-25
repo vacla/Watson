@@ -37,24 +37,14 @@ import net.minecraft.world.GameType;
 public class DataManager implements IDirectoryCache {
 	private static final DataManager INSTANCE = new DataManager();
 	
-	//private static final Pattern PATTERN_ITEM_BASE = Pattern.compile("^(?<name>(?:[a-z0-9\\._-]+:)[a-z0-9\\._-]+)$");
 	protected static final Pattern DATE_PATTERN = Pattern.compile("^(\\d{4})-(\\d{1,2})-(\\d{1,2})$");
 	private static final Map<String, File> LAST_DIRECTORIES = new HashMap<>();
 	
-	//private static ItemStack toolItem = new ItemStack(Items.STICK);
 	private static ConfigGuiTab configGuiTab = ConfigGuiTab.GENERIC;
-	//private static boolean createPlacementOnLoad = true;
 	private static boolean canSave;
 	private static long clientTickStart;
 	
 	private final EditSelection editselection = new EditSelection();
-	/*private final PlayereditPlacementManager playereditPlacementManager = new PlayereditPlacementManager();
-	private final PlayereditProjectsManager playereditProjectsManager = new PlayereditProjectsManager();*/
-	//private LayerRange renderRange = new LayerRange(PlayereditWorldRefresher.INSTANCE);
-	/*private ToolMode operationMode = ToolMode.PLAYEREDIT_PLACEMENT;
-	private EditSelectionSimple editSimple = new EditSelectionSimple(true);
-	@Nullable
-	private MaterialListBase materialList;*/
 	
 	protected Filters filters = new Filters();
 	
@@ -111,15 +101,8 @@ public class DataManager implements IDirectoryCache {
 	
 	public static void load() {
 		File file = getCurrentStorageFile(true);
-		//File blockFile = getCurrentBlockStorageFile();
 		
 		JsonElement element = JsonUtils.parseJsonFile(file);
-		/*JsonElement elementBlock = JsonUtils.parseJsonFile(blockFile);
-		
-		if(elementBlock != null && elementBlock.isJsonObject()) {
-			JsonObject root = elementBlock.getAsJsonObject();
-			//WatsonBlockRegistery.loadWatsonBlocks(root);
-		}*/
 		
 		if(element != null && element.isJsonObject()) {
 			LAST_DIRECTORIES.clear();
@@ -152,8 +135,6 @@ public class DataManager implements IDirectoryCache {
                     configGuiTab = ConfigGuiTab.GENERIC;
                 }
             }
-
-            //createPlacementOnLoad = JsonUtils.getBooleanOrDefault(root, "create_placement_on_load", true);
 		}
 		
 		canSave = true;
@@ -161,7 +142,6 @@ public class DataManager implements IDirectoryCache {
 	
 	public static void save() {
 		save(false);
-		//MaterialCache.getInstance().writeToFile();
 	}
 	
 	public static void save(boolean forceSave) {
@@ -178,25 +158,12 @@ public class DataManager implements IDirectoryCache {
 		
 		root.add("last_directories", objDirs);
 		
-		//root.add("create_placement_on_load", new JsonPrimitive(createPlacementOnLoad));
 		root.add("config_gui_tab", new JsonPrimitive(configGuiTab.name()));
 		
 		File file = getCurrentStorageFile(true);
 		JsonUtils.writeJsonToFile(root, file);
 		
 		canSave = false;
-	}
-	
-	public static void clear() {
-		
-		//PlayereditVerifier.clearActiveVerifiers();
-		
-		//getPlayereditPlacementManager().clear();
-		//getPlayereditProjectsManager().clear();
-		//getSelectionManager().clear();
-		//setMaterialList(null);
-		
-		//InfoHud.getInstance().reset();
 	}
 	
 	public static File getCurrentConfigDirectory() {
@@ -212,21 +179,6 @@ public class DataManager implements IDirectoryCache {
 		
 		return dir;
 	}
-
-	
-	/*private static File getCurrentBlockStorageFile() {
-		File dir = getCurrentConfigDirectory();
-		
-		if(dir.exists() == false && dir.mkdirs() == false) {
-			Watson.logger.warn("Failed to create the config directory '{}'", dir.getAbsolutePath());
-		}
-		
-		return new File(dir, getBlockStorageFileName());
-	}
-	
-	private static String getBlockStorageFileName() {
-		return Reference.MOD_ID + "_blocks.json";
-	}*/
 	
 	private static File getCurrentStorageFile(boolean globalData) {
 		File dir = getCurrentConfigDirectory();
