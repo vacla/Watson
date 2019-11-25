@@ -128,19 +128,18 @@ public class LbCoordsAnalysis extends Analysis {
 			BlockEdit edit = new BlockEdit(millis, player, created, x, y, z, type);
 			SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, true));
 
-			TextFormatting colorFormat = getChatColorFormat(x, y, z);
-			String colour = Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue() ? colorFormat.toString() : "";
+			TextFormatting color = Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue() ? getChatColorFormat(x, y, z) : null;
 			if (Configs.Generic.REFORMAT_QUERY_RESULTS.getBooleanValue()) {
 				if (type.getName() != "minecraft:stone") {
 					String signText = (sign1 != null) ? String.format(Locale.US, " [%s] [%s] [%s] [%s]", sign1, sign2, sign3, sign4) : "";
 
 					String year = (ymd[0] != 0) ? String.format(Locale.US, "%02d-", ymd[0]) : "";
-					String output = String.format(Locale.US, "%s(%2d) %s%02d-%02d %02d:%02d:%02d (%d,%d,%d) %C%d %s%s", colour, index, year, ymd[1], ymd[2], hour, minute, second, x, y, z, (created ? '+' : '-'), type.getName(), player, signText);
-					ChatMessage.sendToLocalChat(output, true);
+					String output = String.format(Locale.US, "(%2d) %s%02d-%02d %02d:%02d:%02d (%d,%d,%d) %C%d %s%s", index, year, ymd[1], ymd[2], hour, minute, second, x, y, z, (created ? '+' : '-'), type.getName(), player, signText);
+					ChatMessage.sendToLocalChat(color, null, output, true);
 				}
 			} else {
 				if (Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue()) {
-					ChatMessage.sendToLocalChat(colorFormat, null, chat.getUnformattedComponentText(), true);
+					ChatMessage.sendToLocalChat(color, null, chat.getUnformattedComponentText(), true);
 				} else {
 					ChatMessage.sendToLocalChat(chat, true);
 				}
@@ -174,18 +173,17 @@ public class LbCoordsAnalysis extends Analysis {
 			BlockEdit edit = new BlockEdit(millis, player, false, x, y, z, type);
 			SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, true));
 
-			TextFormatting colorFormat = getChatColorFormat(x, y, z);
-			String colour = Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue() ? colorFormat.toString() : "";
+			TextFormatting color = Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue() ? getChatColorFormat(x, y, z) : null;
 			if (Configs.Generic.REFORMAT_QUERY_RESULTS.getBooleanValue()) {
 			
 		        if (type.getName() != "minecraft:stone") {
 		        	String year = (ymd[0] != 0) ? String.format(Locale.US, "%02d-", ymd[0]) : "";
-		        	String output = String.format(Locale.US, "%s(%2d) %s%02d-%02d %02d:%02d:%02d (%d,%d,%d) %s %s > %s", colour, index, year, ymd[1], ymd[2], hour, minute, second, x, y, z, player, weapon, victim);
+		        	String output = String.format(Locale.US, "(%2d) %s%02d-%02d %02d:%02d:%02d (%d,%d,%d) %s %s > %s", index, year, ymd[1], ymd[2], hour, minute, second, x, y, z, player, weapon, victim);
 		        	ChatMessage.sendToLocalChat(output, true);
 		        }
 			} else {
 				if (Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue()) {
-					ChatMessage.sendToLocalChat(colorFormat, null, chat.getUnformattedComponentText(), true);
+					ChatMessage.sendToLocalChat(color, null, chat.getUnformattedComponentText(), true);
 				} else {
 					ChatMessage.sendToLocalChat(chat, true);
 				}
@@ -217,18 +215,17 @@ public class LbCoordsAnalysis extends Analysis {
 			BlockEdit edit = new BlockEdit(millis, player, false, x, y, z, type);
 			SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, true));
 
-			TextFormatting colorFormat = getChatColorFormat(x, y, z);
-			String colour = Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue() ? colorFormat.toString() : "";
+			TextFormatting color = Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue() ? getChatColorFormat(x, y, z) : null;
 			if (Configs.Generic.REFORMAT_QUERY_RESULTS.getBooleanValue()) {
 				if (type.getName() != "minecraft:stone") {
 					String year = (ymd[0] != 0) ? String.format(Locale.US, "%02d-", ymd[0]) : "";
 
-					String output = String.format(Locale.US, "%s(%2d) %s%02d-%02d %02d:%02d:%02d (%d,%d,%d) %C%d %s", colour, index, year, ymd[1], ymd[2], hour, minute, second, x, y, z, '-', type.getName(), player);
+					String output = String.format(Locale.US, "(%2d) %s%02d-%02d %02d:%02d:%02d (%d,%d,%d) %C%d %s", index, year, ymd[1], ymd[2], hour, minute, second, x, y, z, '-', type.getName(), player);
 					ChatMessage.sendToLocalChat(output, true);
 				}
 			} else {
 				if (Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue()) {
-					ChatMessage.sendToLocalChat(colorFormat, null, chat.getUnformattedComponentText(), true);
+					ChatMessage.sendToLocalChat(color, null, chat.getUnformattedComponentText(), true);
 				} else {
 					ChatMessage.sendToLocalChat(chat, true);
 				}

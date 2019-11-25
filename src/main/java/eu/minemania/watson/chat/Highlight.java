@@ -38,21 +38,21 @@ public class Highlight {
 	 * @return Highlighted TextComponent
 	 */
 	public static ITextComponent setHighlightChatMessage(String key,ITextComponent message, boolean watsonMessage) {
-		//String user = "";
+		String user = "";
 		String textChat = "";
 		int i = 0;
 		ITextComponent endMessage;
 		if(!watsonMessage) {
 			for (ITextComponent chatComponent : message) {
 				if(i == 1){
-					//user = chatComponent.toString();
+					user = chatComponent.toString();
 				}
 				if(i>2) {
 					textChat += chatComponent.getFormattedText();
 				}
 				i++;
 			}
-			//setUsername(user);
+			setUsername(user);
 			endMessage = new TextComponentTranslation(key, new Object[] {mc.player.getDisplayName(), Configs.Generic.USE_CHAT_HIGHLIGHTS.getBooleanValue() ? highlight(textChat) : textChat});
 		} else {
 			endMessage = message;
@@ -120,27 +120,24 @@ public class Highlight {
 	 * @return Highlighted text
 	 */
 	private static String highlight(String chatText) {
-		String endString = "";
 		for(MutablePair<Pattern, MutablePair<TextFormatting, TextFormatting>> item_highlight : highlights) {
 			Matcher matcher = item_highlight.getLeft().matcher(chatText);
-			if(!matcher.find()) {
-				endString = chatText;
-			} else {
+			if(matcher.find()) {
 				matcher.reset();
 				while (matcher.find()) {
 					int start = matcher.start();
 					int stop = matcher.end();
 					if(item_highlight.getRight().getLeft() != null && item_highlight.getRight().getRight() == null) {
-						endString = matcher.replaceAll(item_highlight.getRight().getLeft() + chatText.substring(start, stop) + TextFormatting.RESET);
+						chatText = matcher.replaceAll(item_highlight.getRight().getLeft() + chatText.substring(start, stop) + TextFormatting.RESET);
 					} else if(item_highlight.getRight().getLeft() == null && item_highlight.getRight().getRight() != null){
-						endString = matcher.replaceAll(item_highlight.getRight().getRight() + chatText.substring(start, stop) + TextFormatting.RESET);
+						chatText = matcher.replaceAll(item_highlight.getRight().getRight() + chatText.substring(start, stop) + TextFormatting.RESET);
 					} else {
-						endString = matcher.replaceAll(item_highlight.getRight().getLeft() + "" + item_highlight.getRight().getRight() + chatText.substring(start, stop) + TextFormatting.RESET);
+						chatText = matcher.replaceAll(item_highlight.getRight().getLeft() + "" + item_highlight.getRight().getRight() + chatText.substring(start, stop) + TextFormatting.RESET);
 					}
 				}
 			}
 		}
-		return endString;
+		return chatText;
 	}
 	
 	private static void setUsername(String user) {

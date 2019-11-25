@@ -332,7 +332,7 @@ public class DataManager implements IDirectoryCache {
 				int end = Math.min(files.length, page * Configs.Generic.PAGE_LINES.getIntegerValue());
 				
 				for(int i = start; i < end; ++i) {
-					ChatMessage.localOutput("	" + files[i].getName(), true);
+					ChatMessage.localOutput("     " + files[i].getName(), true);
 				}
 				
 				ChatMessage.localOutput(String.format(Locale.US, "Page %d of %d.", page, pages), true);
