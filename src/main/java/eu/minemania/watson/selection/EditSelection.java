@@ -12,6 +12,8 @@ import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.BlockEdit;
 import eu.minemania.watson.db.BlockEditSet;
+import fi.dy.masa.malilib.gui.Message.MessageType;
+import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
@@ -126,35 +128,47 @@ public class EditSelection {
 	
 	public void queryPreEdits(int count) {
 		if(_variables.containsKey("player") && _variables.containsKey("time")) {
-			_calendar.setTimeInMillis((Long) _variables.get("time"));
-			int day = _calendar.get(Calendar.DAY_OF_MONTH);
-			int month = _calendar.get(Calendar.MONTH) + 1;
-			int year = _calendar.get(Calendar.YEAR);
-			int hour = _calendar.get(Calendar.HOUR_OF_DAY);
-			int minute = _calendar.get(Calendar.MINUTE);
-			int second = _calendar.get(Calendar.SECOND);
-			String player = (String) _variables.get("player");
-			
-			String query = String.format(Locale.US, "/lb before %d.%d.%d %02d:%02d:%02d player %s coords limit %d", day, month, year, hour, minute, second, player, count);
-			Watson.logger.debug(query);
-			ChatMessage.sendToServerChat(query);
+			if(Configs.Generic.PLUGIN.getStringValue().equals("LogBlock")) {
+				_calendar.setTimeInMillis((Long) _variables.get("time"));
+				int day = _calendar.get(Calendar.DAY_OF_MONTH);
+				int month = _calendar.get(Calendar.MONTH) + 1;
+				int year = _calendar.get(Calendar.YEAR);
+				int hour = _calendar.get(Calendar.HOUR_OF_DAY);
+				int minute = _calendar.get(Calendar.MINUTE);
+				int second = _calendar.get(Calendar.SECOND);
+				String player = (String) _variables.get("player");
+				
+				String query = String.format(Locale.US, "/lb before %d.%d.%d %02d:%02d:%02d player %s coords limit %d", day, month, year, hour, minute, second, player, count);
+				Watson.logger.debug(query);
+				ChatMessage.sendToServerChat(query);
+			} else {
+				InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.info.no_logblock");
+			}
+		} else {
+			InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.info.no_player_time");
 		}
 	}
 	
 	public void queryPostEdits(int count) {
 		if(_variables.containsKey("player") && _variables.containsKey("time")) {
-			_calendar.setTimeInMillis((Long) _variables.get("time"));
-			int day = _calendar.get(Calendar.DAY_OF_MONTH);
-			int month = _calendar.get(Calendar.MONTH) + 1;
-			int year = _calendar.get(Calendar.YEAR);
-			int hour = _calendar.get(Calendar.HOUR_OF_DAY);
-			int minute = _calendar.get(Calendar.MINUTE);
-			int second = _calendar.get(Calendar.SECOND);
-			String player = (String) _variables.get("player");
-			
-			String query = String.format(Locale.US, "/lb since %d.%d.%d %02d:%02d:%02d player %s coords limit %d asc", day, month, year, hour, minute, second, player, count);
-			Watson.logger.debug(query);
-			ChatMessage.sendToServerChat(query);
+			if(Configs.Generic.PLUGIN.getStringValue().equals("LogBlock")) {
+				_calendar.setTimeInMillis((Long) _variables.get("time"));
+				int day = _calendar.get(Calendar.DAY_OF_MONTH);
+				int month = _calendar.get(Calendar.MONTH) + 1;
+				int year = _calendar.get(Calendar.YEAR);
+				int hour = _calendar.get(Calendar.HOUR_OF_DAY);
+				int minute = _calendar.get(Calendar.MINUTE);
+				int second = _calendar.get(Calendar.SECOND);
+				String player = (String) _variables.get("player");
+				
+				String query = String.format(Locale.US, "/lb since %d.%d.%d %02d:%02d:%02d player %s coords limit %d asc", day, month, year, hour, minute, second, player, count);
+				Watson.logger.debug(query);
+				ChatMessage.sendToServerChat(query);
+			} else {
+				InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.info.no_log_block");
+			}
+		} else {
+			InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.info.post_edit");
 		}
 	}
 }

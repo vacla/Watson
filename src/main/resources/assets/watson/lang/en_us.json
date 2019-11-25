@@ -65,6 +65,9 @@
 	"watson.message.highlight.list_string": "(%d) Pattern: %s, Color: %s, Style: %s",
 	"watson.message.highlight.removed": "Removed highlight %s",
 	
+	"watson.message.info.no_player_time": "You might not have time or a player set yet",
+	"watson.message.info.no_logblock": "You haven't set or not using LogBlock as plugin",
+	
 	"watson.message.join.watson": "Watson %s. Type /%s help, for help",
 	"watson.message.join.plugin": "Don't forget to set the plugin in config screen"
 	
