@@ -3,10 +3,14 @@ package eu.minemania.watson.event;
 import eu.minemania.watson.chat.Highlight;
 import eu.minemania.watson.chat.command.Command;
 import eu.minemania.watson.client.Screenshot;
+import eu.minemania.watson.client.Teleport;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.config.Hotkeys;
+import eu.minemania.watson.data.DataManager;
+import eu.minemania.watson.db.BlockEdit;
 import eu.minemania.watson.gui.GuiConfigs;
 import eu.minemania.watson.gui.GuiMainMenu;
+import eu.minemania.watson.selection.EditSelection;
 import fi.dy.masa.malilib.config.options.ConfigString;
 import fi.dy.masa.malilib.config.options.ConfigStringList;
 import fi.dy.masa.malilib.gui.GuiBase;
@@ -90,7 +94,7 @@ public class KeyCallbacks {
 			if(this.mc.player == null || this.mc.world == null) {
 				return false;
 			}
-			
+			EditSelection edits = DataManager.getEditSelection();
 			if (key == Hotkeys.OPEN_GUI_MAIN_MENU.getKeybind()) {
 				GuiBase.openGui(new GuiMainMenu());
 				return true;
@@ -104,36 +108,44 @@ public class KeyCallbacks {
 				}
 				return true;
 			} else if(key == Hotkeys.KEYBIND_TP_NEXT.getKeybind()) {
-				
+				edits.getBlockEditSet().getOreDB().tpNext();
+				return true;
 			} else if(key == Hotkeys.KEYBIND_TP_PREV.getKeybind()) {
-				
+				edits.getBlockEditSet().getOreDB().tpPrev();
+				return true;
 			} else if(key == Hotkeys.KEYBIND_QUERY_BEFORE.getKeybind()) {
-				
+				System.out.println("test");
+				edits.queryPreEdits(Configs.Generic.PRE_COUNT.getIntegerValue());
+				return true;
 			} else if(key == Hotkeys.KEYBIND_QUERY_AFTER.getKeybind()) {
-				
+				edits.queryPostEdits(Configs.Generic.POST_COUNT.getIntegerValue());
+				return true;
 			} else if(key == Hotkeys.KEYBIND_CURSOR_NEXT.getKeybind()) {
-				
+				if (edits.getSelection() != null && edits.getSelection().playereditSet != null) {
+					BlockEdit edit = edits.getSelection().playereditSet.getEditAfter(edits.getSelection());
+					if (edit != null) {
+						edits.selectBlockEdit(edit);
+						return true;
+					}
+		        }
 			} else if(key == Hotkeys.KEYBIND_CURSOR_PREV.getKeybind()) {
-				
+				if (edits.getSelection() != null && edits.getSelection().playereditSet != null) {
+					BlockEdit edit = edits.getSelection().playereditSet.getEditBefore(edits.getSelection());
+					if (edit != null) {
+						edits.selectBlockEdit(edit);
+						return true;
+					}
+		        }
 			} else if(key == Hotkeys.KEYBIND_TP_CURSOR.getKeybind()) {
-				
+				if (edits.getSelection() != null) {
+					System.out.println("also?");
+					Teleport.teleport(edits.getSelection().x, edits.getSelection().y, edits.getSelection().z);
+					return true;
+		        }
 			}
 			
 			return false;
 		}
 	}
-	
-	/*private static class KeyCallBackToggleMessage implements IHotkeyCallback {
-		//private final Minecraft mc;
-		
-		public KeyCallBackToggleMessage(Minecraft mc) {
-			//this.mc = mc;
-		}
-		
-		@Override
-		public boolean onKeyAction(KeyAction action, IKeybind key) {
-			return false;
-		}
-	}*/
 }
 

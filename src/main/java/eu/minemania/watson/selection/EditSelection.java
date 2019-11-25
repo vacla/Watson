@@ -30,6 +30,10 @@ public class EditSelection {
 		return _variables;
 	}
 	
+	public BlockEdit getSelection() {
+		return _selection;
+	}
+	
 	public void selectBlockEdit(BlockEdit edit) {
 		if (edit != null) {
 			_selection = edit;
