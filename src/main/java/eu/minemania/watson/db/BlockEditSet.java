@@ -35,7 +35,7 @@ public class BlockEditSet {
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 		
 		try {
-			Pattern editPattern = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})\\|(\\d{2}):(\\d{2}):(\\d{2})\\|(\\w+)\\|([cd])\\|(\\d+)\\|(\\d+)\\|(-?\\d+)\\|(\\d+)\\|(-?\\d+)");
+			Pattern editPattern = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})\\|(\\d{2}):(\\d{2}):(\\d{2})\\|(\\w+)\\|([cd])\\|(minecraft:\\w+)\\|(-?\\d+)\\|(\\d+)\\|(-?\\d+)");
 			Pattern annoPattern = Pattern.compile("#(-?\\d+)\\|(\\d+)\\|(-?\\d+)\\|(.*)");
 			Calendar time = Calendar.getInstance();
 			String line;
@@ -55,10 +55,9 @@ public class BlockEditSet {
 					String player = edit.group(7);
 					boolean created = edit.group(8).equals("c");
 					String blockName = edit.group(9);
-					//int data = Integer.parseInt(edit.group(10));
-					int x = Integer.parseInt(edit.group(11));
-					int y = Integer.parseInt(edit.group(12));
-					int z = Integer.parseInt(edit.group(13));
+					int x = Integer.parseInt(edit.group(10));
+					int y = Integer.parseInt(edit.group(11));
+					int z = Integer.parseInt(edit.group(12));
 				
 					WatsonBlock watsonBlock = WatsonBlockRegistery.getInstance().getWatsonBlockByName(blockName);
 					blockEdit = new BlockEdit(time.getTimeInMillis(), player, created, x, y, z, watsonBlock);
@@ -68,8 +67,8 @@ public class BlockEditSet {
 					Matcher anno = annoPattern.matcher(line);
 					if(anno.matches()) {
 						int x = Integer.parseInt(anno.group(1));
-						int y = Integer.parseInt(edit.group(2));
-						int z = Integer.parseInt(edit.group(3));
+						int y = Integer.parseInt(anno.group(2));
+						int z = Integer.parseInt(anno.group(3));
 						String text = anno.group(4);
 						_annotations.add(new Annotation(x, y, z, text));
 					}
