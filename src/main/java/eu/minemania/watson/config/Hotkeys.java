@@ -14,8 +14,8 @@ public class Hotkeys
 	public static final ConfigHotkey KEYBIND_SCREENSHOT = new ConfigHotkey("screenshot", "F12", "Take a screenshot");
 	public static final ConfigHotkey KEYBIND_TP_NEXT = new ConfigHotkey("tpnext", "RIGHT", "TP to next ore");
 	public static final ConfigHotkey KEYBIND_TP_PREV = new ConfigHotkey("tpprev", "LEFT", "TP to previous ore");
-	public static final ConfigHotkey KEYBIND_QUERY_BEFORE = new ConfigHotkey("querybefore", "BUTTON_1", "Query edits before");
-	public static final ConfigHotkey KEYBIND_QUERY_AFTER = new ConfigHotkey("queryafter", "BUTTON_2", "Query edits after");
+	public static final ConfigHotkey KEYBIND_QUERY_BEFORE = new ConfigHotkey("querybefore", "BUTTON_1", "Query edits before\n(Set Plugin in Generic to LogBlock and only works with LogBlock)");
+	public static final ConfigHotkey KEYBIND_QUERY_AFTER = new ConfigHotkey("queryafter", "BUTTON_2", "Query edits after\n(Set Plugin in Generic to LogBlock and only works with LogBlock)");
 	public static final ConfigHotkey KEYBIND_CURSOR_NEXT = new ConfigHotkey("cursornext", "UP", "Cursor to next edit");
 	public static final ConfigHotkey KEYBIND_CURSOR_PREV = new ConfigHotkey("cursorprev", "DOWN", "Cursor to previous edit");
 	public static final ConfigHotkey KEYBIND_TP_CURSOR = new ConfigHotkey("tpcursor", "BUTTON_1", "TP to cursor");

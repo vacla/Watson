@@ -6,7 +6,6 @@ import eu.minemania.watson.analysis.CoreProtectAnalysis;
 import eu.minemania.watson.analysis.LbCoordsAnalysis;
 import eu.minemania.watson.analysis.LbToolBlockAnalysis;
 import eu.minemania.watson.analysis.ModModeAnalysis;
-import eu.minemania.watson.analysis.PrismAnalysis;
 import eu.minemania.watson.analysis.RatioAnalysis;
 import eu.minemania.watson.analysis.RegionInfoAnalysis;
 import eu.minemania.watson.analysis.ServerTime;
@@ -28,7 +27,6 @@ public class ChatProcessor {
 	    addChatHandler(new ModModeAnalysis());
 	    addChatHandler(new RegionInfoAnalysis());
 
-	    addChatHandler(new PrismAnalysis());
 	    addChatHandler(new CoreProtectAnalysis());
 	}
 	

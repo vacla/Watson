@@ -93,43 +93,42 @@ public class KeyCallbacks {
 					return true;
 				}
 				return true;
-			} else if(key == Hotkeys.KEYBIND_TP_NEXT.getKeybind()) {
-				edits.getBlockEditSet().getOreDB().tpNext();
-				return true;
-			} else if(key == Hotkeys.KEYBIND_TP_PREV.getKeybind()) {
-				edits.getBlockEditSet().getOreDB().tpPrev();
-				return true;
-			} else if(key == Hotkeys.KEYBIND_QUERY_BEFORE.getKeybind()) {
-				System.out.println("test");
-				edits.queryPreEdits(Configs.Generic.PRE_COUNT.getIntegerValue());
-				return true;
-			} else if(key == Hotkeys.KEYBIND_QUERY_AFTER.getKeybind()) {
-				edits.queryPostEdits(Configs.Generic.POST_COUNT.getIntegerValue());
-				return true;
-			} else if(key == Hotkeys.KEYBIND_CURSOR_NEXT.getKeybind()) {
-				if (edits.getSelection() != null && edits.getSelection().playereditSet != null) {
-					BlockEdit edit = edits.getSelection().playereditSet.getEditAfter(edits.getSelection());
-					if (edit != null) {
-						edits.selectBlockEdit(edit);
-						return true;
-					}
-		        }
-			} else if(key == Hotkeys.KEYBIND_CURSOR_PREV.getKeybind()) {
-				if (edits.getSelection() != null && edits.getSelection().playereditSet != null) {
-					BlockEdit edit = edits.getSelection().playereditSet.getEditBefore(edits.getSelection());
-					if (edit != null) {
-						edits.selectBlockEdit(edit);
-						return true;
-					}
-		        }
-			} else if(key == Hotkeys.KEYBIND_TP_CURSOR.getKeybind()) {
-				if (edits.getSelection() != null) {
-					System.out.println("also?");
-					Teleport.teleport(edits.getSelection().x, edits.getSelection().y, edits.getSelection().z);
+			} else if(Configs.Generic.ENABLED.getBooleanValue()) {
+				if(key == Hotkeys.KEYBIND_TP_NEXT.getKeybind()) {
+					edits.getBlockEditSet().getOreDB().tpNext();
 					return true;
-		        }
+				} else if(key == Hotkeys.KEYBIND_TP_PREV.getKeybind()) {
+					edits.getBlockEditSet().getOreDB().tpPrev();
+					return true;
+				} else if(key == Hotkeys.KEYBIND_QUERY_BEFORE.getKeybind() && Configs.Generic.PLUGIN.getStringValue().equals("LogBlock")) {
+					edits.queryPreEdits(Configs.Generic.PRE_COUNT.getIntegerValue());
+					return true;
+				} else if(key == Hotkeys.KEYBIND_QUERY_AFTER.getKeybind() && Configs.Generic.PLUGIN.getStringValue().equals("LogBlock")) {
+					edits.queryPostEdits(Configs.Generic.POST_COUNT.getIntegerValue());
+					return true;
+				} else if(key == Hotkeys.KEYBIND_CURSOR_NEXT.getKeybind()) {
+					if (edits.getSelection() != null && edits.getSelection().playereditSet != null) {
+						BlockEdit edit = edits.getSelection().playereditSet.getEditAfter(edits.getSelection());
+						if (edit != null) {
+							edits.selectBlockEdit(edit);
+							return true;
+						}
+			        }
+				} else if(key == Hotkeys.KEYBIND_CURSOR_PREV.getKeybind()) {
+					if (edits.getSelection() != null && edits.getSelection().playereditSet != null) {
+						BlockEdit edit = edits.getSelection().playereditSet.getEditBefore(edits.getSelection());
+						if (edit != null) {
+							edits.selectBlockEdit(edit);
+							return true;
+						}
+			        }
+				} else if(key == Hotkeys.KEYBIND_TP_CURSOR.getKeybind()) {
+					if (edits.getSelection() != null) {
+						Teleport.teleport(edits.getSelection().x, edits.getSelection().y, edits.getSelection().z);
+						return true;
+			        }
+				}
 			}
-			
 			return false;
 		}
 	}

@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 */
 public interface CoreProtectPatterns {
 	public static final Pattern INSPECTOR_COORDS = Pattern.compile("^----- CoreProtect ----- \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\)$");
-	public static final Pattern DETAILS          = Pattern.compile("^(\\d+\\,\\d+\\/h ago|\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}) - (#?\\w+) (\\w+) (\\w+).+");
+	public static final Pattern DETAILS          = Pattern.compile("^(\\d+[.,]\\d+\\/h ago|\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}) - (#?\\w+) (\\w+) (\\w+).+");
 	public static final Pattern LOOKUP_COORDS    = Pattern.compile("^ +\\^ \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\/(.+)\\)$");
 	public static final Pattern LOOKUP_HEADER    = Pattern.compile("^----- CoreProtect Lookup Results -----$");
 }

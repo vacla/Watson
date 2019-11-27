@@ -241,7 +241,7 @@ public class OreDB {
 		String sinceTime = TimeStamp.formatQueryTime(startTime.getTimeInMillis());
 		String beforeTime = TimeStamp.formatQueryTime(endTime.getTimeInMillis());
 		
-		String query = String.format(Locale.US, "/lb player %s since %s before %s sum b block 1 56", player, sinceTime, beforeTime);
+		String query = String.format(Locale.US, "/lb player %s since %s before %s sum b block stone diamond_ore", player, sinceTime, beforeTime);
 		Watson.logger.debug(query);
 		ChatMessage.getInstance().serverChat(query);
 	}

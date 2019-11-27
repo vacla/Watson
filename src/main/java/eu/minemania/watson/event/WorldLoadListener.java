@@ -15,6 +15,9 @@ public class WorldLoadListener implements IWorldLoadListener {
         // Save the settings before the integrated server gets shut down
 		if (worldBefore != null) {
             DataManager.save();
+            if(worldAfter == null && DataManager.getEditSelection().getSelection() != null) {
+            	DataManager.getEditSelection().clearBlockEditSet();
+            }
         } else {
         	if(worldAfter != null) {
         		OverlayRenderer.resetRenderTimeout();
@@ -31,5 +34,6 @@ public class WorldLoadListener implements IWorldLoadListener {
         if (worldAfter != null) {
             DataManager.load();
         }
+        
     }
 }

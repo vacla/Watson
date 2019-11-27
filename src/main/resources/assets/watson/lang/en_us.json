@@ -15,7 +15,6 @@
 	"watson.label.plugin.coreprotect": "CoreProtect",
 	"watson.label.plugin.logblock": "LogBlock",
 	"watson.label.plugin.modmode": "ModMode",
-	"watson.label.plugin.prism": "Prism",
 	
 	"watson.error.anno.out_range": "Annotation index out of range",
 	"watson.error.anno.position": "Use the LogBlock tool to set a position",
