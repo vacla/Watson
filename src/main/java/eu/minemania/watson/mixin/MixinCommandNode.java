@@ -13,11 +13,11 @@ import eu.minemania.watson.interfaces.ICommandRemover;
 
 @Mixin(CommandNode.class)
 public abstract class MixinCommandNode<S> implements Comparable<CommandNode<S>>, ICommandRemover {
-	@Shadow
+	@Shadow(remap = false)
 	private Map<String, CommandNode<S>> children;
-	@Shadow
+	@Shadow(remap = false)
 	private Map<String, LiteralCommandNode<S>> literals;
-	@Shadow
+	@Shadow(remap = false)
 	private Map<String, ArgumentCommandNode<S, ?>> arguments;
 	
 	@SuppressWarnings("unchecked")
