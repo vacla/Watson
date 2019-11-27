@@ -1,5 +1,6 @@
 package eu.minemania.watson.render;
 
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
 import eu.minemania.watson.config.Configs;
@@ -49,15 +50,17 @@ public class WatsonRenderer {
 	public void piecewiseRenderEntities(float partialTicks) {
 		if(Configs.Generic.DISPLAYED.getBooleanValue() && this.mc.getRenderViewEntity() != null && Configs.Generic.OUTLINE_SHOWN.getBooleanValue()) {
 			this.mc.profiler.startSection("watson_entities");
-			GlStateManager.depthMask(true);
 			GlStateManager.disableLighting();
-            GlStateManager.disableTexture2D();
-            GlStateManager.pushMatrix();
+			GlStateManager.disableCull();
+			GlStateManager.disableTexture2D();
+			GlStateManager.pushMatrix();
 			RenderUtils.setupBlend();
 			RenderUtils.color(1f, 1f, 1f, 1f);
-            OpenGlHelper.glMultiTexCoord2f(OpenGlHelper.GL_TEXTURE1, 240, 240);
-            GlStateManager.depthMask(false);
-            GlStateManager.disableDepthTest();
+			OpenGlHelper.glMultiTexCoord2f(OpenGlHelper.GL_TEXTURE1, 240, 240);
+			GlStateManager.depthMask(false);
+			boolean foggy = GL11.glIsEnabled(GL11.GL_FOG);
+			GlStateManager.disableFog();
+			GlStateManager.disableDepthTest();
 			EditSelection selection = DataManager.getEditSelection();
 			BlockEditSet edits = selection.getBlockEditSet();
 			Entity entity = mc.getRenderViewEntity();
@@ -66,19 +69,22 @@ public class WatsonRenderer {
 			}
 			
 			double dx = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks;
-	        double dy = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks;
-	        double dz = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks;
-	        GlStateManager.translated(-dx, -dy, -dz);
-	        edits.drawOutlines();
-	        edits.drawVectors();
-			selection.drawSelection(dx, dy, dz);
+			double dy = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks;
+			double dz = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks;
+			GlStateManager.translated(-dx, -dy, -dz);
+			edits.drawOutlines();
+			edits.drawVectors();
+			selection.drawSelection();
+			if(foggy) {
+				GlStateManager.enableFog();
+			}
 			GlStateManager.enableDepthTest();
 			GlStateManager.depthMask(true);
 			GlStateManager.popMatrix();
 			GlStateManager.disableBlend();
 			GlStateManager.enableTexture2D();
-            GlStateManager.enableCull();
-            GlStateManager.enableLighting();
+			GlStateManager.enableCull();
+			GlStateManager.enableLighting();
 			this.mc.profiler.endSection();
 		}
 	}

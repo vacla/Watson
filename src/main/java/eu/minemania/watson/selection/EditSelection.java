@@ -89,36 +89,34 @@ public class EditSelection {
 		return edits;
 	}
 	
-	public void drawSelection(double dx, double dy, double dz) {
+	public void drawSelection() {
 		if(_selection != null && Configs.Generic.SELECTION_SHOWN.getBooleanValue()) {
 			Tessellator tesselator = Tessellator.getInstance();
 			BufferBuilder buffer = tesselator.getBuffer();
-			buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
-			GL11.glColor4f(255/255f, 0/255f, 255/255f, 128);
+			buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
 			GL11.glLineWidth(4.0f);
 			
 			final float halfSize = 0.3f;
 			float x = _selection.x + 0.5f;
 			float y = _selection.y + 0.5f;
 			float z = _selection.z + 0.5f;
-			buffer.pos(x - halfSize, y, z).endVertex();
-			buffer.pos(x + halfSize, y, z).endVertex();
-			buffer.pos(x, y - halfSize, z).endVertex();
-			buffer.pos(x, y + halfSize, z).endVertex();
-			buffer.pos(x, y, z - halfSize).endVertex();
-			buffer.pos(x, y, z + halfSize).endVertex();
+			buffer.pos(x - halfSize, y, z).color(255/255f, 0/255f, 255/255f, 128).endVertex();
+			buffer.pos(x + halfSize, y, z).color(255/255f, 0/255f, 255/255f, 128).endVertex();
+			buffer.pos(x, y - halfSize, z).color(255/255f, 0/255f, 255/255f, 128).endVertex();
+			buffer.pos(x, y + halfSize, z).color(255/255f, 0/255f, 255/255f, 128).endVertex();
+			buffer.pos(x, y, z - halfSize).color(255/255f, 0/255f, 255/255f, 128).endVertex();
+			buffer.pos(x, y, z + halfSize).color(255/255f, 0/255f, 255/255f, 128).endVertex();
 			tesselator.draw();
 			
 			if(_selection.playereditSet != null) {
 				BlockEdit previous = _selection.playereditSet.getEditBefore(_selection);
 				if(previous != null) {
-					buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
-					GL11.glColor4f(255/255f, 0/255f, 255/255f, 128);
+					buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
 					GL11.glEnable(GL11.GL_LINE_STIPPLE);
 					GL11.glLineStipple(8, (short) 0xAAAA);
 					GL11.glLineWidth(3.0f);
-					buffer.pos(previous.x + 0.5f, previous.y + 0.5f, previous.z + 0.5f).endVertex();
-					buffer.pos(x, y, z).endVertex();
+					buffer.pos(previous.x + 0.5f, previous.y + 0.5f, previous.z + 0.5f).color(255/255f, 0/255f, 255/255f, 128).endVertex();
+					buffer.pos(x, y, z).color(255/255f, 0/255f, 255/255f, 128).endVertex();
 					tesselator.draw();
 					GL11.glDisable(GL11.GL_LINE_STIPPLE);
 				}
