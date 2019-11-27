@@ -7,12 +7,14 @@ public class Annotation {
 	protected int _x;
 	protected int _y;
 	protected int _z;
+	protected String _world;
 	
-	public Annotation(int x, int y, int z, String text) {
+	public Annotation(int x, int y, int z, String world, String text) {
 		_text = text;
 		_x = x;
 		_y = y;
 		_z = z;
+		_world = world;
 	}
 	
 	public String getText() {
@@ -29,6 +31,10 @@ public class Annotation {
 	
 	public int getZ() {
 		return _z;
+	}
+	
+	public String getWorld() {
+		return _world;
 	}
 	
 	public void draw(double dx, double dy, double dz) {

@@ -148,7 +148,7 @@ public class PlayereditSet {
 			int minute = calendar.get(Calendar.MINUTE);
 			int second = calendar.get(Calendar.SECOND);
 			char action = edit.creation ? 'c' : 'd';
-		    writer.format("%4d-%02d-%02d|%02d:%02d:%02d|%s|%c|%s|%d|%d|%d\n", year, month, day, hour, minute, second, edit.player, action, edit.block.getName(), edit.x, edit.y, edit.z);
+		    writer.format("%4d-%02d-%02d|%02d:%02d:%02d|%s|%c|%s|%d|%d|%d|%s\n", year, month, day, hour, minute, second, edit.player, action, edit.block.getName(), edit.x, edit.y, edit.z, edit.world);
 		    ++editCount;
 		}
 		return editCount;

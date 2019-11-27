@@ -2,6 +2,7 @@ package eu.minemania.watson.analysis;
 
 import static eu.minemania.watson.analysis.LogBlockPatterns.LB_COORD;
 import static eu.minemania.watson.analysis.LogBlockPatterns.LB_COORD_KILLS;
+import static eu.minemania.watson.analysis.LogBlockPatterns.LB_COORD_POSITION;
 import static eu.minemania.watson.analysis.LogBlockPatterns.LB_COORD_REPLACED;
 import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_BLOCK;
 import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_BLOCKS;
@@ -13,6 +14,7 @@ import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_SEARCHING;
 import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_SUM_BLOCKS;
 import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_SUM_PLAYERS;
 import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_TIME_CHECK;
+import static eu.minemania.watson.analysis.LogBlockPatterns.LB_KILLS;
 import static eu.minemania.watson.analysis.LogBlockPatterns.LB_PAGE;
 
 import java.util.Locale;
@@ -39,14 +41,31 @@ public class LbCoordsAnalysis extends Analysis {
 	protected int _lastX, _lastY, _lastZ;
 	protected int _currentPage = 0;
 	protected int _pageCount = 0;
+	protected String _world; 
 	
 	public LbCoordsAnalysis() {
+		addMatchedChatHandler(LB_COORD_POSITION, new IMatchedChatHandler() {
+			
+			@Override
+			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
+				lbCoordPosition(chat, m);
+				return false;
+			}
+		});
 		addMatchedChatHandler(LB_COORD, new IMatchedChatHandler() {
 			
 			@Override
 			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
 				lbCoord(chat, m);
 				return false;
+			}
+		});
+		addMatchedChatHandler(LB_KILLS, new IMatchedChatHandler() {
+			
+			@Override
+			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
+				lbKills(chat, m);
+				return true;
 			}
 		});
 		addMatchedChatHandler(LB_COORD_KILLS, new IMatchedChatHandler() {
@@ -122,19 +141,20 @@ public class LbCoordsAnalysis extends Analysis {
 				y = Integer.parseInt(m.group(10));
 				z = Integer.parseInt(m.group(11));
 			}
-
+			System.out.println(block);
 			WatsonBlock type = WatsonBlockRegistery.getInstance().getWatsonBlockByName(block);
+			System.out.println(type);
 			boolean created = action.equals("created");
-			BlockEdit edit = new BlockEdit(millis, player, created, x, y, z, type);
+			BlockEdit edit = new BlockEdit(millis, player, created, x, y, z, type, _world);
 			SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, true));
 
 			TextFormatting color = Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue() ? getChatColorFormat(x, y, z) : null;
 			if (Configs.Generic.REFORMAT_QUERY_RESULTS.getBooleanValue()) {
-				if (type.getName() != "minecraft:stone") {
+				if (!type.getName().equals("minecraft:stone")) {
 					String signText = (sign1 != null) ? String.format(Locale.US, " [%s] [%s] [%s] [%s]", sign1, sign2, sign3, sign4) : "";
 
 					String year = (ymd[0] != 0) ? String.format(Locale.US, "%02d-", ymd[0]) : "";
-					String output = String.format(Locale.US, "(%2d) %s%02d-%02d %02d:%02d:%02d (%d,%d,%d) %C%d %s%s", index, year, ymd[1], ymd[2], hour, minute, second, x, y, z, (created ? '+' : '-'), type.getName(), player, signText);
+					String output = String.format(Locale.US, "(%2d) %s%02d-%02d %02d:%02d:%02d (%d,%d,%d) %C%s %s%s", index, year, ymd[1], ymd[2], hour, minute, second, x, y, z, (created ? '+' : '-'), type.getName(), player, signText);
 					ChatMessage.sendToLocalChat(color, null, output, true);
 				}
 			} else {
@@ -149,6 +169,14 @@ public class LbCoordsAnalysis extends Analysis {
 		} catch (Exception ex) {
 			Watson.logger.info("error parsing lb coords", ex);
 		}
+	}
+	
+	void lbKills(ITextComponent chat, Matcher m) {
+		_world = m.group(1);
+	}
+	
+	void lbCoordPosition(ITextComponent chat, Matcher m) {
+		_world = m.group(1);
 	}
 
 	void lbCoordKills(ITextComponent chat, Matcher m) {
@@ -167,18 +195,17 @@ public class LbCoordsAnalysis extends Analysis {
 			int y = Integer.parseInt(m.group(9));
 			int z = Integer.parseInt(m.group(10));
 			String weapon = m.group(11);
-
+			
 			WatsonBlock type = WatsonBlockRegistery.getInstance().getBlockKillTypeByName(victim);
-
-			BlockEdit edit = new BlockEdit(millis, player, false, x, y, z, type);
+			BlockEdit edit = new BlockEdit(millis, player, false, x, y, z, type, _world);
 			SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, true));
 
 			TextFormatting color = Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue() ? getChatColorFormat(x, y, z) : null;
 			if (Configs.Generic.REFORMAT_QUERY_RESULTS.getBooleanValue()) {
 			
-		        if (type.getName() != "minecraft:stone") {
+		        if (!type.getName().equals("minecraft:stone")) {
 		        	String year = (ymd[0] != 0) ? String.format(Locale.US, "%02d-", ymd[0]) : "";
-		        	String output = String.format(Locale.US, "(%2d) %s%02d-%02d %02d:%02d:%02d (%d,%d,%d) %s %s > %s", index, year, ymd[1], ymd[2], hour, minute, second, x, y, z, player, weapon, victim);
+		        	String output = String.format(Locale.US, "(%2d) %s%02d-%02d %02d:%02d:%02d (%d,%d,%d) %s %s %s > %s", index, year, ymd[1], ymd[2], hour, minute, second, x, y, z, _world, player, weapon, victim);
 		        	ChatMessage.sendToLocalChat(output, true);
 		        }
 			} else {
@@ -206,21 +233,22 @@ public class LbCoordsAnalysis extends Analysis {
 
 			String player = m.group(6);
 			String oldBlock = m.group(7);
-			// UNUSED: String newBlock = m.group(8);
+			String newBlock = m.group(8);
 			int x = Integer.parseInt(m.group(9));
 			int y = Integer.parseInt(m.group(10));
 			int z = Integer.parseInt(m.group(11));
 			WatsonBlock type = WatsonBlockRegistery.getInstance().getWatsonBlockByName(oldBlock);
-
-			BlockEdit edit = new BlockEdit(millis, player, false, x, y, z, type);
+			WatsonBlock newtype = WatsonBlockRegistery.getInstance().getWatsonBlockByName(newBlock);
+			System.out.println("new: "+newtype);
+			BlockEdit edit = new BlockEdit(millis, player, false, x, y, z, type, _world);
 			SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, true));
 
 			TextFormatting color = Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue() ? getChatColorFormat(x, y, z) : null;
 			if (Configs.Generic.REFORMAT_QUERY_RESULTS.getBooleanValue()) {
-				if (type.getName() != "minecraft:stone") {
+				if (!type.getName().equals("minecraft:stone")) {
 					String year = (ymd[0] != 0) ? String.format(Locale.US, "%02d-", ymd[0]) : "";
 
-					String output = String.format(Locale.US, "(%2d) %s%02d-%02d %02d:%02d:%02d (%d,%d,%d) %C%d %s", index, year, ymd[1], ymd[2], hour, minute, second, x, y, z, '-', type.getName(), player);
+					String output = String.format(Locale.US, "(%2d) %s%02d-%02d %02d:%02d:%02d (%d,%d,%d) %C%s %C%s %s", index, year, ymd[1], ymd[2], hour, minute, second, x, y, z, '-', type.getName(), '+', newtype.getName(), player);
 					ChatMessage.sendToLocalChat(output, true);
 				}
 			} else {

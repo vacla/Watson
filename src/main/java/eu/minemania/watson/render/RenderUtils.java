@@ -15,7 +15,45 @@ public class RenderUtils {
 	private static final Random RAND = new Random();
 	public static final EnumFacing[] FACING_ALL = new EnumFacing[] { EnumFacing.DOWN, EnumFacing.UP, EnumFacing.NORTH, EnumFacing.SOUTH, EnumFacing.WEST, EnumFacing.EAST };
 	
-	public static void drawItemFrameOutlinesBatched(double x, double y, double z, Color4f color, BufferBuilder buffer) {
+	public static void drawGrassOutlinesBatched(double x, double y, double z, Color4f color, BufferBuilder buffer) {
+		buffer.pos(x, y, z).color(color.r, color.g, color.b, color.a).endVertex();
+		buffer.pos(x + 1D, y, z).color(color.r, color.g, color.b, color.a).endVertex();
+		
+		buffer.pos(x, y, z).color(color.r, color.g, color.b, color.a).endVertex();
+		buffer.pos(x, y, z + 1D).color(color.r, color.g, color.b, color.a).endVertex();
+		
+		buffer.pos(x, y, z + 1D).color(color.r, color.g, color.b, color.a).endVertex();
+		buffer.pos(x + 1D, y, z + 1D).color(color.r, color.g, color.b, color.a).endVertex();
+		
+		buffer.pos(x + 1D, y, z).color(color.r, color.g, color.b, color.a).endVertex();
+		buffer.pos(x + 1D, y, z + 1D).color(color.r, color.g, color.b, color.a).endVertex();
+		
+		buffer.pos(x, y + 1D, z).color(color.r, color.g, color.b, color.a).endVertex();
+		buffer.pos(x + 1D, y + 1D, z).color(color.r, color.g, color.b, color.a).endVertex();
+		
+		buffer.pos(x, y + 1D, z).color(color.r, color.g, color.b, color.a).endVertex();
+		buffer.pos(x, y + 1D, z + 1D).color(color.r, color.g, color.b, color.a).endVertex();
+		
+		buffer.pos(x, y + 1D, z + 1D).color(color.r, color.g, color.b, color.a).endVertex();
+		buffer.pos(x + 1D, y + 1D, z + 1D).color(color.r, color.g, color.b, color.a).endVertex();
+		
+		buffer.pos(x + 1D, y + 1D, z).color(color.r, color.g, color.b, color.a).endVertex();
+		buffer.pos(x + 1D, y + 1D, z + 1D).color(color.r, color.g, color.b, color.a).endVertex();
+		
+		buffer.pos(x, y, z).color(color.r, color.g, color.b, color.a).endVertex();
+		buffer.pos(x, y + 1, z).color(color.r, color.g, color.b, color.a).endVertex();
+		
+		buffer.pos(x + 1D, y, z).color(color.r, color.g, color.b, color.a).endVertex();
+		buffer.pos(x + 1D, y + 1, z).color(color.r, color.g, color.b, color.a).endVertex();
+		
+		buffer.pos(x, y, z + 1D).color(color.r, color.g, color.b, color.a).endVertex();
+		buffer.pos(x, y + 1, z + 1D).color(color.r, color.g, color.b, color.a).endVertex();
+		
+		buffer.pos(x + 1D, y, z + 1D).color(color.r, color.g, color.b, color.a).endVertex();
+		buffer.pos(x + 1D, y + 1, z + 1D).color(color.r, color.g, color.b, color.a).endVertex();
+	}
+	
+	public static void drawItemFramePaintingOutlinesBatched(double x, double y, double z, Color4f color, BufferBuilder buffer) {
 		double posX = x + 0.25D / 2;
 		double posY = y + 0.25D / 2;
 		double posZ = z + 0.5D - (double)EnumFacing.NORTH.getZOffset() * 0.46875D;

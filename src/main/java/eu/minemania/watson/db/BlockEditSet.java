@@ -35,8 +35,8 @@ public class BlockEditSet {
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 		
 		try {
-			Pattern editPattern = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})\\|(\\d{2}):(\\d{2}):(\\d{2})\\|(\\w+)\\|([cd])\\|(minecraft:\\w+)\\|(-?\\d+)\\|(\\d+)\\|(-?\\d+)");
-			Pattern annoPattern = Pattern.compile("#(-?\\d+)\\|(\\d+)\\|(-?\\d+)\\|(.*)");
+			Pattern editPattern = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})\\|(\\d{2}):(\\d{2}):(\\d{2})\\|(\\w+)\\|([cd])\\|(minecraft:\\w+)\\|(-?\\d+)\\|(\\d+)\\|(-?\\d+)\\|(\\w+)");
+			Pattern annoPattern = Pattern.compile("#(-?\\d+)\\|(\\d+)\\|(-?\\d+)\\|(\\w+)\\|(.*)");
 			Calendar time = Calendar.getInstance();
 			String line;
 			int edits = 0;
@@ -58,9 +58,10 @@ public class BlockEditSet {
 					int x = Integer.parseInt(edit.group(10));
 					int y = Integer.parseInt(edit.group(11));
 					int z = Integer.parseInt(edit.group(12));
+					String world = edit.group(13);
 				
 					WatsonBlock watsonBlock = WatsonBlockRegistery.getInstance().getWatsonBlockByName(blockName);
-					blockEdit = new BlockEdit(time.getTimeInMillis(), player, created, x, y, z, watsonBlock);
+					blockEdit = new BlockEdit(time.getTimeInMillis(), player, created, x, y, z, watsonBlock, world);
 					addBlockEdit(blockEdit);
 					++edits;
 				} else {
@@ -69,8 +70,9 @@ public class BlockEditSet {
 						int x = Integer.parseInt(anno.group(1));
 						int y = Integer.parseInt(anno.group(2));
 						int z = Integer.parseInt(anno.group(3));
-						String text = anno.group(4);
-						_annotations.add(new Annotation(x, y, z, text));
+						String world = anno.group(4);
+						String text = anno.group(5);
+						_annotations.add(new Annotation(x, y, z, world, text));
 					}
 				}
 			}
@@ -98,7 +100,7 @@ public class BlockEditSet {
 			}
 			
 			for(Annotation annotation : _annotations) {
-				writer.format("#%d|%d|%d|%s\n", annotation.getX(), annotation.getY(), annotation.getZ(), annotation.getText());
+				writer.format("#%d|%d|%d|%s|%s\n", annotation.getX(), annotation.getY(), annotation.getZ(), annotation.getWorld(), annotation.getText());
 			}
 			return editCount;
 		} finally {

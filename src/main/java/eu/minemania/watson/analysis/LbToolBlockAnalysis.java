@@ -21,6 +21,7 @@ public class LbToolBlockAnalysis extends Analysis {
 	protected int _x;
 	protected int _y;
 	protected int _z;
+	protected String _world;
 	protected long _lbPositionTime = 0;
 	protected boolean _expectingFirstEdit = false;
 	private static final long POSITION_TIMEOUT_MILLIS = 250;
@@ -56,8 +57,9 @@ public class LbToolBlockAnalysis extends Analysis {
 		_x = Integer.parseInt(m.group(1));
 		_y = Integer.parseInt(m.group(2));
 		_z = Integer.parseInt(m.group(3));
+		_world = m.group(4);
 		EditSelection selection = DataManager.getEditSelection();
-		selection.selectPosition(_x, _y, _z);
+		selection.selectPosition(_x, _y, _z, _world);
 		
 		_lbPositionTime = System.currentTimeMillis();
 		_expectingFirstEdit = true;
@@ -75,7 +77,7 @@ public class LbToolBlockAnalysis extends Analysis {
 			boolean created = action.equals("created");
 			String block = m.group(7);
 			WatsonBlock type = WatsonBlockRegistery.getInstance().getWatsonBlockByName(block);
-			addBlockEdit(millis, player, created, type);
+			addBlockEdit(millis, player, created, type, _world);
 		}
 	}
 	
@@ -90,13 +92,13 @@ public class LbToolBlockAnalysis extends Analysis {
 			String oldBlock = m.group(6);
 			WatsonBlock type = WatsonBlockRegistery.getInstance().getWatsonBlockByName(oldBlock);
 			
-			addBlockEdit(millis, player, false, type);
+			addBlockEdit(millis, player, false, type, _world);
 		}
 	}
 	
-	protected void addBlockEdit(long millis, String player, boolean created, WatsonBlock type) {
+	protected void addBlockEdit(long millis, String player, boolean created, WatsonBlock type, String world) {
 		if(DataManager.getFilters().isAcceptedPlayer(player)) {
-			BlockEdit edit = new BlockEdit(millis, player, created, _x, _y, _z, type);
+			BlockEdit edit = new BlockEdit(millis, player, created, _x, _y, _z, type, world);
 			SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, _expectingFirstEdit));
 			
 			if(_expectingFirstEdit) {

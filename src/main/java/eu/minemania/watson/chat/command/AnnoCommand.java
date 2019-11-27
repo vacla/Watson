@@ -68,7 +68,7 @@ public class AnnoCommand extends WatsonCommandBase {
 		localOutputT(context.getSource(), "watson.message.anno.list.size", annotations.size());
 		int index = 1;
 		for(Annotation annotation : annotations) {
-			localOutputT(context.getSource(), "watson.message.anno.annot", index, annotation.getX(), annotation.getY(), annotation.getZ(), annotation.getText());
+			localOutputT(context.getSource(), "watson.message.anno.annot", index, annotation.getX(), annotation.getY(), annotation.getZ(), annotation.getWorld(), annotation.getText());
 			++index;
 		}
 		return 1;
@@ -116,16 +116,17 @@ public class AnnoCommand extends WatsonCommandBase {
 		Integer x = (Integer) vars.get("x");
 		Integer y = (Integer) vars.get("y");
 		Integer z = (Integer) vars.get("z");
-		if(x == null || y == null || z == null) {
+		String world = (String) vars.get("world");
+		if(x == null || y == null || z == null || world == null) {
 			InfoUtils.showInGameMessage(MessageType.ERROR, "watson.error.anno.position");
 		} else {
 			BlockEditSet edits = DataManager.getEditSelection().getBlockEditSet();
 			ArrayList<Annotation> annotations = edits.getAnnotations();
 			
 			String text = getString(context, "text");
-			Annotation annotation = new Annotation(x, y, z, text);
+			Annotation annotation = new Annotation(x, y, z, world, text);
 			annotations.add(annotation);
-			localOutputT(context.getSource(), "watson.message.anno.annot", annotations.size(), annotation.getX(), annotation.getY(), annotation.getZ(), annotation.getText());
+			localOutputT(context.getSource(), "watson.message.anno.annot", annotations.size(), annotation.getX(), annotation.getY(), annotation.getZ(), annotation.getWorld(), annotation.getText());
 		}
 		return 1;
 	}

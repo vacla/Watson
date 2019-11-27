@@ -22,7 +22,7 @@
 	"watson.error.calc.calculation": "Invalid expression",
 	
 	"watson.message.anno.list.size": "%d annotation(s)",
-	"watson.message.anno.annot": "(%d) (%d,%d,%d) %s",
+	"watson.message.anno.annot": "(%d) (%d,%d,%d,%s) %s",
 	"watson.message.anno.clear": "%d annotation(s) cleared",
 	"watson.message.anno.remove": "Removed annotation #%d",
 	

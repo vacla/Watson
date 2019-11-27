@@ -53,6 +53,7 @@ public class CoreProtectAnalysis extends Analysis {
 	protected int _x;
 	protected int _y;
 	protected int _z;
+	protected String _world;
 	protected long _millis;
 	protected String _player;
 	protected WatsonBlock _block;
@@ -94,7 +95,7 @@ public class CoreProtectAnalysis extends Analysis {
 		_y = Integer.parseInt(m.group(2));
 		_z = Integer.parseInt(m.group(3));
 		EditSelection selection = DataManager.getEditSelection();
-		selection.selectPosition(_x, _y, _z);
+		selection.selectPosition(_x, _y, _z, _world);
 		_firstInspectorResult = true;
 	}
 	
@@ -113,7 +114,7 @@ public class CoreProtectAnalysis extends Analysis {
 				_lookupDetails = true;
 			} else {
 				if(DataManager.getFilters().isAcceptedPlayer(_player)) {
-					BlockEdit edit = new BlockEdit(_millis, _player, _creation, _x, _y, _z, _block);
+					BlockEdit edit = new BlockEdit(_millis, _player, _creation, _x, _y, _z, _block, _world);
 					SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, _firstInspectorResult));
 					
 					if(_firstInspectorResult) {
@@ -134,10 +135,10 @@ public class CoreProtectAnalysis extends Analysis {
 			_x = Integer.parseInt(m.group(1));
 			_y = Integer.parseInt(m.group(2));
 			_z = Integer.parseInt(m.group(3));
-			//TODO String world = m.group(4);
+			_world = m.group(4);
 			// https://github.com/totemo/watson/issues/23
 			
-			BlockEdit edit = new BlockEdit(_millis, _player, _creation, _x, _y, _z, _block);
+			BlockEdit edit = new BlockEdit(_millis, _player, _creation, _x, _y, _z, _block, _world);
 			SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, true));
 			_lookupDetails = false;
 		}
