@@ -3,11 +3,10 @@ package eu.minemania.watson.db;
 import java.util.LinkedHashSet;
 
 import eu.minemania.watson.chat.ChatMessage;
-import eu.minemania.watson.selection.EditSelection;
+import eu.minemania.watson.data.DataManager;
 
 public class Filters {
 	protected LinkedHashSet<String> _filters = new LinkedHashSet<String>();
-	private EditSelection edit = new EditSelection();
 	
 	public void list() {
 		if(_filters.size() == 0) {
@@ -32,7 +31,7 @@ public class Filters {
 		player = player.toLowerCase();
 		ChatMessage.localOutput("Added a filter to accept edits by " + player + ".", true);
 		_filters.add(player);
-		edit.getVariables().put("player", player);
+		DataManager.getEditSelection().getVariables().put("player", player);
 	}
 	
 	public void removePlayer(String player) {

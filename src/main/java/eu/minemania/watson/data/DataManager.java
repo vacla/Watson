@@ -44,7 +44,7 @@ public class DataManager implements IDirectoryCache {
 	private static boolean canSave;
 	private static long clientTickStart;
 	
-	private final EditSelection editselection = new EditSelection();
+	private EditSelection editselection = new EditSelection();
 	
 	protected Filters filters = new Filters();
 	

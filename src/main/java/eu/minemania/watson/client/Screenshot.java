@@ -13,7 +13,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
 import eu.minemania.watson.config.Configs;
-import eu.minemania.watson.selection.EditSelection;
+import eu.minemania.watson.data.DataManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.ITextComponent;
@@ -21,19 +21,15 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 
 public class Screenshot {
-	private static final Screenshot INSTANCE = new Screenshot();
-	private EditSelection edit = new EditSelection();
-	
-	private static Screenshot getInstance() {
-		return INSTANCE;
-	}
 	
 	/**
 	 * Makes screenshot and custom directory.
 	 */
 	public static void makeScreenshot() {
 		Date now = new Date();
-        String player2 = (String) getInstance().edit.getVariables().get("player");
+        String player2 = (String) DataManager.getEditSelection().getVariables().get("player");
+        System.out.println(player2);
+        System.out.println(new SimpleDateFormat(Configs.Generic.SS_DATE_DIRECTORY.getStringValue()).format(now).toString());
         String subdirectoryName = (!player2.isEmpty() && Configs.Generic.SS_PLAYER_DIRECTORY.getBooleanValue()) ? player2 : new SimpleDateFormat(Configs.Generic.SS_DATE_DIRECTORY.getStringValue()).format(now).toString();
         Minecraft mc = Minecraft.getInstance();
         File screenshotsDir = new File(mc.gameDir, "screenshots");

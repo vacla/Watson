@@ -172,7 +172,7 @@ public class EditSelection {
 				InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.info.no_logblock");
 			}
 		} else {
-			InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.info.post_edit");
+			InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.info.no_player_time");
 		}
 	}
 }
