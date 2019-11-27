@@ -2,7 +2,7 @@
 	"watson.hotkeys.category.generic_hotkeys": "Generic hotkeys",
 	
 	"watson.gui.title.configs": "Configs",
-	"watson.gui.title.watson_main_menu": "Watson Main Menu",
+	"watson.gui.title.watson_main_menu": "Watson %s",
 	
 	"watson.gui.button.change_menu.configuration_menu": "Configuration Menu",
 	
