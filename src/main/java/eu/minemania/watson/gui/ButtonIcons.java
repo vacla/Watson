@@ -6,9 +6,9 @@ import fi.dy.masa.malilib.render.RenderUtils;
 import net.minecraft.util.ResourceLocation;
 
 public enum ButtonIcons implements IGuiIcon {
-	CONFIGURATION (102, 84, 14, 14);
+	CONFIGURATION (0, 0, 14, 14);
 	
-	public static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "");
+	public static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/gui_widgets.png");
 	
 	private final int u;
 	private final int v;
