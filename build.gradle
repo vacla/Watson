@@ -53,7 +53,7 @@ minecraft {
 }
 
 dependencies {
-    //implementation 'fi.dy.masa.malilib:malilib-rift-' + config.minecraft_version_out + ':' + config.malilib_version + ':deobf'
+    implementation 'fi.dy.masa.malilib:malilib-rift-' + config.minecraft_version_out + ':' + config.malilib_version + ':deobf'
     implementation 'com.github.Chocohead:Rift:jitpack-aeee80c1fb-1:dev'
 }
 
@@ -61,19 +61,6 @@ group = config.group + config.mod_id // http://maven.apache.org/guides/mini/guid
 archivesBaseName = config.mod_file_name + '-' + config.minecraft_version_out
 version = project.minecraft.mod_version
 
-/*
-litemod {
-    name = "Watson"
-    json {
-        name = "Watson"
-        mcversion = "1.12.2"
-        //mixinConfigs += "mixins.watson.json"
-        author = "totemo"
-        description = "A 3-D log visualisation tool."
-        classTransformerClasses += "watson.transformer.WatsonTransformer"
-    }
-}
-*/
 jar {
 	baseName = archivesBaseName
 }
