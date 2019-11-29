@@ -5,6 +5,7 @@
 	"watson.gui.title.watson_main_menu": "Watson %s",
 	
 	"watson.gui.button.change_menu.configuration_menu": "Configuration Menu",
+	"watson.gui.button.change_menu.to_main_menu": "Watson menu",
 	
 	"watson.gui.button.config_gui.generic": "Generic",
 	"watson.gui.button.config_gui.lists": "Lists",
