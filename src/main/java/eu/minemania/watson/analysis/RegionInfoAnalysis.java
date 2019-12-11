@@ -13,10 +13,10 @@ import net.minecraft.util.text.ITextComponent;
 public class RegionInfoAnalysis extends Analysis {
 	protected long _lastCommandTime;
 	protected Pattern _regionNames = Pattern.compile("[a-zA-Z0-9_-]+");
-	
+
 	public RegionInfoAnalysis() {
 		addMatchedChatHandler(WG_REGIONS, new IMatchedChatHandler() {
-			
+
 			@Override
 			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
 				wgRegions(chat, m);
@@ -24,7 +24,7 @@ public class RegionInfoAnalysis extends Analysis {
 			}
 		});
 	}
-	
+
 	void wgRegions(ITextComponent chat, Matcher m) {
 		long now = System.currentTimeMillis();
 		if(now - _lastCommandTime > (long) (Configs.Generic.REGION_INFO_TIMEOUT.getDoubleValue() * 1000)) {
@@ -34,7 +34,7 @@ public class RegionInfoAnalysis extends Analysis {
 				ChatMessage.sendToServerChat("/region info " + names.group());
 				++regionCount;
 			}
-			
+
 			_lastCommandTime = now + (long) (1000 * Configs.Generic.REGION_INFO_TIMEOUT.getDefaultDoubleValue()) * Math.max(0, regionCount - 1);
 		}
 	}

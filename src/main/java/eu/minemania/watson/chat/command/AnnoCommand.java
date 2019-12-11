@@ -33,14 +33,14 @@ public class AnnoCommand extends WatsonCommandBase {
 				.then(literal("list").executes(AnnoCommand::list))
 				.then(literal("clear").executes(AnnoCommand::clear))
 				.then(literal("tp")
-					.then(argument("index", integer(1)).executes(AnnoCommand::teleport)))
+						.then(argument("index", integer(1)).executes(AnnoCommand::teleport)))
 				.then(literal("remove")
-					.then(argument("index", integer(1)).executes(AnnoCommand::remove)))
+						.then(argument("index", integer(1)).executes(AnnoCommand::remove)))
 				.then(literal("add")
-					.then(argument("text", greedyString()).executes(AnnoCommand::add)));
+						.then(argument("text", greedyString()).executes(AnnoCommand::add)));
 		dispatcher.register(anno);
 	}
-	
+
 	private static int help(CommandContext<CommandSource> context) {
 		int cmdCount = 0;
 		CommandDispatcher<CommandSource> dispatcher = Command.commandDispatcher;
@@ -60,11 +60,11 @@ public class AnnoCommand extends WatsonCommandBase {
 		}
 		return cmdCount;
 	}
-	
+
 	private static int list(CommandContext<CommandSource> context) {
 		BlockEditSet edits = DataManager.getEditSelection().getBlockEditSet();
 		ArrayList<Annotation> annotations = edits.getAnnotations();
-		
+
 		localOutputT(context.getSource(), "watson.message.anno.list.size", annotations.size());
 		int index = 1;
 		for(Annotation annotation : annotations) {
@@ -73,20 +73,20 @@ public class AnnoCommand extends WatsonCommandBase {
 		}
 		return 1;
 	}
-	
+
 	private static int clear(CommandContext<CommandSource> context) {
 		BlockEditSet edits = DataManager.getEditSelection().getBlockEditSet();
 		ArrayList<Annotation> annotations = edits.getAnnotations();
-		
+
 		InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.anno.clear", annotations.size());
 		annotations.clear();
 		return 1;
 	}
-	
+
 	private static int teleport(CommandContext<CommandSource> context) {
 		BlockEditSet edits = DataManager.getEditSelection().getBlockEditSet();
 		ArrayList<Annotation> annotations = edits.getAnnotations();
-		
+
 		int index = getInteger(context, "index");
 		if(index < annotations.size()) {
 			Annotation annotation = annotations.get(index);
@@ -96,11 +96,11 @@ public class AnnoCommand extends WatsonCommandBase {
 		}
 		return 1;
 	}
-	
+
 	private static int remove(CommandContext<CommandSource> context) {
 		BlockEditSet edits = DataManager.getEditSelection().getBlockEditSet();
 		ArrayList<Annotation> annotations = edits.getAnnotations();
-		
+
 		int index = getInteger(context, "index") - 1;
 		if(index < annotations.size()) {
 			annotations.remove(index);
@@ -110,7 +110,7 @@ public class AnnoCommand extends WatsonCommandBase {
 		}
 		return 1;
 	}
-	
+
 	private static int add(CommandContext<CommandSource> context) {
 		HashMap<String, Object> vars = DataManager.getEditSelection().getVariables();
 		Integer x = (Integer) vars.get("x");
@@ -122,7 +122,7 @@ public class AnnoCommand extends WatsonCommandBase {
 		} else {
 			BlockEditSet edits = DataManager.getEditSelection().getBlockEditSet();
 			ArrayList<Annotation> annotations = edits.getAnnotations();
-			
+
 			String text = getString(context, "text");
 			Annotation annotation = new Annotation(x, y, z, world, text);
 			annotations.add(annotation);

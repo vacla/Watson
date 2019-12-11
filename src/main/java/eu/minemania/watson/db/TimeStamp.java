@@ -35,7 +35,7 @@ public class TimeStamp {
 		_time.setTimeInMillis(millis);
 		return String.format(Locale.US, "%d.%d.%d %02d:%02d:%02d", _time.get(Calendar.DAY_OF_MONTH), _time.get(Calendar.MONTH) + 1, _time.get(Calendar.YEAR), _time.get(Calendar.HOUR_OF_DAY),	_time.get(Calendar.MINUTE), _time.get(Calendar.SECOND));
 	}
-	
+
 	public static int[] parseYMD(String date) {
 		int[] ymd = {0, 0, 0};
 		String[] parts = date.split("-");

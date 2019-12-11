@@ -21,7 +21,7 @@ public class Hotkeys
 	public static final ConfigHotkey KEYBIND_TP_CURSOR = new ConfigHotkey("tpcursor", "BUTTON_1", "TP to cursor");
 	public static final ConfigHotkey OPEN_GUI_SETTINGS = new ConfigHotkey("openGuiSettings", "L,C",  "Open the Config GUI");
 	public static final ConfigHotkey OPEN_GUI_MAIN_MENU = new ConfigHotkey("openGuiMainMenu", "L", KeybindSettings.RELEASE_EXCLUSIVE, "Open the Watson main menu");
-	
+
 	public static final List<ConfigHotkey> HOTKEY_LIST = ImmutableList.of(
 			KEYBIND_SCREENSHOT,
 			KEYBIND_TP_NEXT,
@@ -33,6 +33,6 @@ public class Hotkeys
 			KEYBIND_TP_CURSOR,
 			OPEN_GUI_SETTINGS,
 			OPEN_GUI_MAIN_MENU
-	);
+			);
 }
 

@@ -14,7 +14,7 @@ public class Teleport {
 		String format = Configs.Generic.TELEPORT_COMMAND.getStringValue();
 		Pattern specifier = Pattern.compile("%[dg]");
 		Matcher specifiers = specifier.matcher(format);
-		
+
 		BitSet isDouble = new BitSet();
 		int i = 0;
 		while (specifiers.find()) {

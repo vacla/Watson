@@ -8,7 +8,7 @@ import java.util.TreeSet;
 public class TypedOreDB {
 	protected HashMap<IntCoord, OreBlock> _oreBlocks;
 	protected TreeSet<OreDeposit> _oreDeposits = new TreeSet<OreDeposit>();
-	
+
 	public TypedOreDB(int initialCapacity) {
 		_oreBlocks = new HashMap<IntCoord, OreBlock>(initialCapacity);
 	}
@@ -19,11 +19,11 @@ public class TypedOreDB {
 	public TreeSet<OreDeposit> getOreDeposits(){
 		return _oreDeposits;
 	}
-	
+
 	public int getOreDepositCount() {
 		return _oreDeposits.size();
 	}
-	
+
 	public OreDeposit getOreDeposit(int index) {
 		if(index<1) {
 			index = getOreDepositCount();
@@ -61,7 +61,7 @@ public class TypedOreDB {
 		if (block == null) {
 			block = new OreBlock(coord, edit);
 			_oreBlocks.put(coord, block);
-			
+
 			TreeSet<OreDeposit> deposits = getAdjacentDeposits(coord);
 			if(deposits.size() == 0) {
 				OreDeposit deposit = new OreDeposit();
@@ -87,7 +87,7 @@ public class TypedOreDB {
 			}
 		}
 	}
-	
+
 	public void removeDeposits(String player) {
 		ArrayList<BlockEdit> retainedEdits = new ArrayList<BlockEdit>();
 		for (OreBlock block : _oreBlocks.values()) {
@@ -101,11 +101,11 @@ public class TypedOreDB {
 			addBlockEdit(edit);
 		}
 	}
-	
+
 	protected OreBlock getOreBlock(IntCoord location) {
 		return _oreBlocks.get(location);
 	}
-	
+
 	protected TreeSet<OreDeposit> getAdjacentDeposits(IntCoord location){
 		TreeSet<OreDeposit> deposits = new TreeSet<OreDeposit>();
 		IntCoord adjacent = new IntCoord();

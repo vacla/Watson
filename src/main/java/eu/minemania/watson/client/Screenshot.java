@@ -21,23 +21,23 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 
 public class Screenshot {
-	
+
 	/**
 	 * Makes screenshot and custom directory.
 	 */
 	public static void makeScreenshot() {
 		Date now = new Date();
-        String player2 = (String) DataManager.getEditSelection().getVariables().get("player");
-        System.out.println(player2);
-        System.out.println(new SimpleDateFormat(Configs.Generic.SS_DATE_DIRECTORY.getStringValue()).format(now).toString());
-        String subdirectoryName = (!player2.isEmpty() && Configs.Generic.SS_PLAYER_DIRECTORY.getBooleanValue()) ? player2 : new SimpleDateFormat(Configs.Generic.SS_DATE_DIRECTORY.getStringValue()).format(now).toString();
-        Minecraft mc = Minecraft.getInstance();
-        File screenshotsDir = new File(mc.gameDir, "screenshots");
-        File subdirectory = new File(screenshotsDir, subdirectoryName);
-        File file = Screenshot.getUniqueFilename(subdirectory, player2, now);
-        mc.ingameGUI.getChatGUI().printChatMessage(Screenshot.save(file, mc.mainWindow.getWidth(), mc.mainWindow.getHeight()));
+		String player2 = (String) DataManager.getEditSelection().getVariables().get("player");
+		System.out.println(player2);
+		System.out.println(new SimpleDateFormat(Configs.Generic.SS_DATE_DIRECTORY.getStringValue()).format(now).toString());
+		String subdirectoryName = (!player2.isEmpty() && Configs.Generic.SS_PLAYER_DIRECTORY.getBooleanValue()) ? player2 : new SimpleDateFormat(Configs.Generic.SS_DATE_DIRECTORY.getStringValue()).format(now).toString();
+		Minecraft mc = Minecraft.getInstance();
+		File screenshotsDir = new File(mc.gameDir, "screenshots");
+		File subdirectory = new File(screenshotsDir, subdirectoryName);
+		File file = Screenshot.getUniqueFilename(subdirectory, player2, now);
+		mc.ingameGUI.getChatGUI().printChatMessage(Screenshot.save(file, mc.mainWindow.getWidth(), mc.mainWindow.getHeight()));
 	}
-	
+
 	/**
 	 * Returns if screenshot is saved or not.
 	 * 
@@ -49,7 +49,7 @@ public class Screenshot {
 	public static ITextComponent save(File file, int width, int height) {
 		try {
 			file.getParentFile().mkdirs();
-			
+
 			ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4);
 			GL11.glReadBuffer(GL11.GL_FRONT);
 			// GL11.glReadBuffer() unexpectedly sets an error state (invalid enum).
@@ -73,8 +73,8 @@ public class Screenshot {
 			text.getStyle().setUnderlined(Boolean.valueOf(true));
 			return new TextComponentTranslation("screenshot.success", new Object[]{text});
 		} catch (Exception ex) {
-	      return new TextComponentTranslation("screenshot.failure", new Object[]{ex.getMessage()});
-	    }
+			return new TextComponentTranslation("screenshot.failure", new Object[]{ex.getMessage()});
+		}
 	}
 
 	/**
@@ -88,20 +88,20 @@ public class Screenshot {
 	public static File getUniqueFilename(File dir, String player, Date now){
 		String baseName = _DATE_FORMAT.format(now);
 
-	    int count = 1;
-	    String playerSuffix = (player.isEmpty() || !Configs.Generic.SS_PLAYER_SUFFIX.getBooleanValue()) ? "" : "-" + player;
-	    while (true){
-	    	File result = new File(dir, baseName + playerSuffix + (count == 1 ? "" : "-" + count) + ".png");
-	    	if (!result.exists()){
-	    		return result;
-	    	}
-	    	++count;
-	    }
+		int count = 1;
+		String playerSuffix = (player.isEmpty() || !Configs.Generic.SS_PLAYER_SUFFIX.getBooleanValue()) ? "" : "-" + player;
+		while (true){
+			File result = new File(dir, baseName + playerSuffix + (count == 1 ? "" : "-" + count) + ".png");
+			if (!result.exists()){
+				return result;
+			}
+			++count;
+		}
 	}
 
-	  // --------------------------------------------------------------------------
-	  /**
-	   * Used to format dates for making screenshot filenames.
-	   */
+	// --------------------------------------------------------------------------
+	/**
+	 * Used to format dates for making screenshot filenames.
+	 */
 	private static final DateFormat _DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
 }

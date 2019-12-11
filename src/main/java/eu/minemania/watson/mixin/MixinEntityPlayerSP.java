@@ -13,17 +13,17 @@ import net.minecraft.client.entity.EntityPlayerSP;
 @Mixin(EntityPlayerSP.class)
 public class MixinEntityPlayerSP {
 	@Inject(method = "sendChatMessage(Ljava/lang/String;)V", at = @At("HEAD"), cancellable = true)
-    private void onSendChatMessage(String message, CallbackInfo ci) {
-        if (message.startsWith("/")) {
-            StringReader reader = new StringReader(message);
-            reader.skip();
-            int cursor = reader.getCursor();
-            String commandName = reader.canRead() ? reader.readUnquotedString() : "";
-            reader.setCursor(cursor);
-            if (ClientCommandManager.isClientSideCommand(commandName)) {
-                ClientCommandManager.executeCommand(reader, message);
-                ci.cancel();
-            }
-        }
-    }
+	private void onSendChatMessage(String message, CallbackInfo ci) {
+		if (message.startsWith("/")) {
+			StringReader reader = new StringReader(message);
+			reader.skip();
+			int cursor = reader.getCursor();
+			String commandName = reader.canRead() ? reader.readUnquotedString() : "";
+			reader.setCursor(cursor);
+			if (ClientCommandManager.isClientSideCommand(commandName)) {
+				ClientCommandManager.executeCommand(reader, message);
+				ci.cancel();
+			}
+		}
+	}
 }

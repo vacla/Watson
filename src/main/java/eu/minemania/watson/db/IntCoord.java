@@ -4,15 +4,15 @@ public class IntCoord {
 	protected int _x;
 	protected int _y;
 	protected int _z;
-	
+
 	public IntCoord() {
-		
+
 	}
 	public IntCoord(IntCoord coord) {
 		setXYZ(coord._x, coord._y, coord._z);
 	}
 	public IntCoord(int x, int y, int z) {
-	    setXYZ(x, y, z);
+		setXYZ(x, y, z);
 	}
 	public void setXYZ(int x, int y, int z) {
 		_x = x;
@@ -37,7 +37,7 @@ public class IntCoord {
 	public int getZ() {
 		return _z;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == this) {
@@ -49,12 +49,12 @@ public class IntCoord {
 			return false;
 		}
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return (_y << 24) ^ _x ^ (_z << 15);
 	}
-	
+
 	@Override
 	public String toString() {
 		return "(" + _x + "," + _y + "," + _z + ")";

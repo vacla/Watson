@@ -26,7 +26,7 @@ public class CalcCommand extends WatsonCommandBase {
 				.then(argument("calculation", greedyString()).executes(CalcCommand::calc));
 		dispatcher.register(calc);
 	}
-	
+
 	private static int help(CommandContext<CommandSource> context) {
 		int cmdCount = 0;
 		CommandDispatcher<CommandSource> dispatcher = Command.commandDispatcher;
@@ -46,7 +46,7 @@ public class CalcCommand extends WatsonCommandBase {
 		}
 		return cmdCount;
 	}
-	
+
 	private static int calc(CommandContext<CommandSource> context) {
 		String commandLine = getString(context, "calculation");
 		StreamTokenizer tokenizer = makeTokenizer(commandLine);
@@ -57,22 +57,22 @@ public class CalcCommand extends WatsonCommandBase {
 		}
 		return 1;
 	}
-	
+
 	private static StreamTokenizer makeTokenizer(String args) {
 		// Currently not supporting variables, but define words for future use.
-	    StreamTokenizer tokenizer = new StreamTokenizer(new StringReader(args));
-	    tokenizer.slashSlashComments(false);
-	    tokenizer.slashStarComments(false);
-	    tokenizer.wordChars('A', 'Z');
-	    tokenizer.wordChars('a', 'z');
-	    tokenizer.wordChars('_', '_');
-	    // These need to be defined as ordinary or they will be parsed as comment
-	    // introducers. >.<
-	    tokenizer.ordinaryChar('*');
-	    tokenizer.ordinaryChar('/');
-	    return tokenizer;
+		StreamTokenizer tokenizer = new StreamTokenizer(new StringReader(args));
+		tokenizer.slashSlashComments(false);
+		tokenizer.slashStarComments(false);
+		tokenizer.wordChars('A', 'Z');
+		tokenizer.wordChars('a', 'z');
+		tokenizer.wordChars('_', '_');
+		// These need to be defined as ordinary or they will be parsed as comment
+		// introducers. >.<
+		tokenizer.ordinaryChar('*');
+		tokenizer.ordinaryChar('/');
+		return tokenizer;
 	}
-	
+
 	private static double calculation(StreamTokenizer tokenizer) throws IOException {
 		double result = expr(tokenizer);
 		if (tokenizer.nextToken() != StreamTokenizer.TT_EOF) {
@@ -80,53 +80,53 @@ public class CalcCommand extends WatsonCommandBase {
 		}
 		return result;
 	}
-	
+
 	private static double expr(StreamTokenizer tokenizer) throws IOException {
 		double result = term(tokenizer);
 		for (;;) {
 			int token = tokenizer.nextToken();
-		    if (token == '+') {
-		    	result += term(tokenizer);
-		    } else if (token == '-') {
-		        result -= term(tokenizer);
-		    } else {
-		        break;
-		    }
+			if (token == '+') {
+				result += term(tokenizer);
+			} else if (token == '-') {
+				result -= term(tokenizer);
+			} else {
+				break;
+			}
 		} // for
 		tokenizer.pushBack();
 		return result;
 	}
-	
+
 	private static double term(StreamTokenizer tokenizer) throws IOException {
 		double result = factor(tokenizer);
 		for (;;) {
 			int token = tokenizer.nextToken();
-		    if (token == '*') {
-		    	result *= factor(tokenizer);
-		    } else if (token == '/') {
-		    	result /= factor(tokenizer);
-		    } else {
-		        break;
-		    }
+			if (token == '*') {
+				result *= factor(tokenizer);
+			} else if (token == '/') {
+				result /= factor(tokenizer);
+			} else {
+				break;
+			}
 		} // for
 		tokenizer.pushBack();
 		return result;
 	}
-	
+
 	private static double factor(StreamTokenizer tokenizer) throws IOException {
 		int token = tokenizer.nextToken();
 		if (token == StreamTokenizer.TT_NUMBER) {
 			return tokenizer.nval;
 		} else if (token == '(') {
 			double result = expr(tokenizer);
-		    if (tokenizer.nextToken() != ')') {
-		    	throw new IOException();
-		    }
-		    return result;
+			if (tokenizer.nextToken() != ')') {
+				throw new IOException();
+			}
+			return result;
 		} else if (token == '-') {
-		    return -factor(tokenizer);
+			return -factor(tokenizer);
 		} else {
-		    throw new IOException();
+			throw new IOException();
 		}
 	}
 }

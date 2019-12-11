@@ -20,24 +20,24 @@ public class InitHandler implements IInitializationHandler{
 	@Override
 	public void registerModHandlers() {
 		ConfigManager.getInstance().registerConfigHandler(Reference.MOD_ID, new Configs());
-		
+
 		InputEventHandler.getKeybindManager().registerKeybindProvider(InputHandler.getInstance());
 		InputEventHandler.getInputManager().registerKeyboardInputHandler(InputHandler.getInstance());
 		InputEventHandler.getInputManager().registerMouseInputHandler(InputHandler.getInstance());
-		
+
 		TickHandler.getInstance().registerClientTickHandler(new ClientTickHandler());
-		
+
 		IRenderer renderer = new RenderHandler();
 		RenderEventHandler.getInstance().registerGameOverlayRenderer(renderer);
-        RenderEventHandler.getInstance().registerWorldLastRenderer(renderer);
-        
-        WorldLoadListener listener = new WorldLoadListener();
-        WorldLoadHandler.getInstance().registerWorldLoadPreHandler(listener);
-        WorldLoadHandler.getInstance().registerWorldLoadPostHandler(listener);
-		
+		RenderEventHandler.getInstance().registerWorldLastRenderer(renderer);
+
+		WorldLoadListener listener = new WorldLoadListener();
+		WorldLoadHandler.getInstance().registerWorldLoadPreHandler(listener);
+		WorldLoadHandler.getInstance().registerWorldLoadPostHandler(listener);
+
 		KeyCallbacks.init(Minecraft.getInstance());
 		//StatusInfoRenderer.init();
-		
-        DataManager.getPlayereditsBaseDirectory();
+
+		DataManager.getPlayereditsBaseDirectory();
 	}
 }

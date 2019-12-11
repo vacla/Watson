@@ -25,11 +25,11 @@ public class ServerTime extends Analysis {
 	protected boolean _echoNextNoResults = true;
 	protected boolean _showServerTime = false;
 	private static final ServerTime INSTANCE = new ServerTime();
-	
+
 	public static ServerTime getInstance() {
 		return INSTANCE;
 	}
-	
+
 	public int getLocalMinusServerMinutes() {
 		String serverIP = DataManager.getServerIP();
 		if (serverIP == null) {
@@ -39,7 +39,7 @@ public class ServerTime extends Analysis {
 			return offsetMinutes != null ? offsetMinutes : 0;
 		}
 	}
-	
+
 	public void queryServerTime(boolean showServerTime) {
 		String serverIP = DataManager.getServerIP();
 		if(serverIP != null) {
@@ -59,7 +59,7 @@ public class ServerTime extends Analysis {
 			}
 		}
 	}
-	
+
 	public ServerTime() {
 		addMatchedChatHandler(LB_HEADER_TIME_CHECK, new IMatchedChatHandler() {
 			@Override
@@ -75,7 +75,7 @@ public class ServerTime extends Analysis {
 			}
 		});
 	}
-	
+
 	void lbHeaderTimeCheck(ITextComponent chat, Matcher m) {
 		String serverIP = DataManager.getServerIP();
 		if(serverIP != null && _localMinusServerMinutes.get(serverIP) == null) {
@@ -94,20 +94,20 @@ public class ServerTime extends Analysis {
 			_echoNextNoResults = false;
 		}
 	}
-	
+
 	boolean lbHeaderNoResults(ITextComponent chat, Matcher m) {
 		boolean echo = _echoNextNoResults;
 		_echoNextNoResults = true;
 		return echo;
 	}
-	
+
 	private void showCurrentServerTime() {
 		String serverIP = DataManager.getServerIP();
 		Integer localMinusServerMinutes = _localMinusServerMinutes.get(serverIP);
 		long serverMillis = System.currentTimeMillis() - localMinusServerMinutes * MINUTES_TO_MILLISECONDS;
 		ChatMessage.localOutput(TimeStamp.formatMonthDayTime(serverMillis), true);
 	}
-	
+
 	private Calendar getPastTime() {
 		Calendar pastTime = Calendar.getInstance();
 		pastTime.add(Calendar.DAY_OF_MONTH, -2);

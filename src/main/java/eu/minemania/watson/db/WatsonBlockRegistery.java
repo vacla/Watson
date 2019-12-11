@@ -20,24 +20,24 @@ public final class WatsonBlockRegistery {
 	protected String blockname = "";
 	protected float lineWidth;
 	protected Color4f color;
-	
+
 	public static WatsonBlockRegistery getInstance() {
 		return INSTANCE;
 	}
-	
+
 	public static void setWatsonBlockList(List<String> list){
 		clear();
-		 
+
 		getInstance().populateWatsonBlockList(list);
-		 
+
 		WatsonBlock unknown = getInstance().getWatsonBlockByName("minecraft:bedrock");
 		if(unknown == null) {
 			unknown = new WatsonBlock();
 			unknown.setName("minecraft:bedrock");
 			getInstance().addWatsonBlock(unknown);
 		}
-    }
-	
+	}
+
 	private void populateWatsonBlockList(List<String> names) {
 		for (String entry : names) {
 			try {
@@ -92,20 +92,20 @@ public final class WatsonBlockRegistery {
 			} catch (Exception e) {
 				Watson.logger.warn("Invalid block: '{}'", entry);
 			}
-        }
+		}
 	}
-	
+
 	public static void clear() {
 		_byName.clear();
 	}
-	
+
 	private void addWatsonBlock(WatsonBlock watsonBlock) {
 		if(Configs.Generic.DEBUG.getBooleanValue()) {
 			Watson.logger.debug("watson block: '{}'", watsonBlock.toString());
 		}
 		String name = watsonBlock.getName();
 		addWatsonBlockName(name, watsonBlock);
-		
+
 		String noSpaces = name.replaceAll(" ", "");
 		if(!name.equals(noSpaces)) {
 			addWatsonBlockName(noSpaces, watsonBlock);
@@ -113,14 +113,14 @@ public final class WatsonBlockRegistery {
 		String underscores = name.replaceAll(" ", "_");
 		addWatsonBlockName(underscores, watsonBlock);
 	}
-	
+
 	private void addWatsonBlockName(String name, WatsonBlock watsonBlock) {
 		WatsonBlock oldWatsonBlock = _byName.get(name);
-	    if (oldWatsonBlock == null) {
-	    	_byName.put(name, watsonBlock);
-	    }
+		if (oldWatsonBlock == null) {
+			_byName.put(name, watsonBlock);
+		}
 	}
-	
+
 	public WatsonBlock getWatsonBlockByName(String name) {
 		WatsonBlock result = _byName.get("minecraft:" +name.toLowerCase());
 		if(result == null) {
@@ -129,14 +129,14 @@ public final class WatsonBlockRegistery {
 		if(name.contains("minecraft:")) {
 			result = _byName.get(name.toLowerCase());
 		}
-	    if (result == null) {
-	      // Return the "unknown" WatsonBlock.
-	    	return _byName.get("minecraft:bedrock");
-	    } else {
-	    	return result;
-	    }
+		if (result == null) {
+			// Return the "unknown" WatsonBlock.
+			return _byName.get("minecraft:bedrock");
+		} else {
+			return result;
+		}
 	}
-	
+
 	public WatsonBlock getBlockKillTypeByName(String name) {
 		WatsonBlock result = _byName.get(name.toLowerCase());
 		if(result == null) {

@@ -21,16 +21,16 @@ import fi.dy.masa.malilib.interfaces.IValueChangeCallback;
 import net.minecraft.client.Minecraft;
 
 public class KeyCallbacks {
-	
+
 	public static void init(Minecraft mc) {	
 		IHotkeyCallback callbackHotkeys = new KeyCallbackHotkeys(mc);
-        ValueChangeStringCallback valueChangeStringCallback = new ValueChangeStringCallback();
-        ValueChangeStringListCallback valueChangeStringListCallback = new ValueChangeStringListCallback();
-        
-        Configs.Generic.WATSON_PREFIX.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Lists.HIGHLIGHT.setValueChangeCallback(valueChangeStringListCallback);
-		
-        Hotkeys.OPEN_GUI_MAIN_MENU.getKeybind().setCallback(callbackHotkeys);
+		ValueChangeStringCallback valueChangeStringCallback = new ValueChangeStringCallback();
+		ValueChangeStringListCallback valueChangeStringListCallback = new ValueChangeStringListCallback();
+
+		Configs.Generic.WATSON_PREFIX.setValueChangeCallback(valueChangeStringCallback);
+		Configs.Lists.HIGHLIGHT.setValueChangeCallback(valueChangeStringListCallback);
+
+		Hotkeys.OPEN_GUI_MAIN_MENU.getKeybind().setCallback(callbackHotkeys);
 		Hotkeys.OPEN_GUI_SETTINGS.getKeybind().setCallback(callbackHotkeys);
 		Hotkeys.KEYBIND_SCREENSHOT.getKeybind().setCallback(callbackHotkeys);
 		Hotkeys.KEYBIND_TP_NEXT.getKeybind().setCallback(callbackHotkeys);
@@ -41,12 +41,12 @@ public class KeyCallbacks {
 		Hotkeys.KEYBIND_CURSOR_PREV.getKeybind().setCallback(callbackHotkeys);
 		Hotkeys.KEYBIND_TP_CURSOR.getKeybind().setCallback(callbackHotkeys);
 	}
-	
+
 	private static class ValueChangeStringCallback implements IValueChangeCallback<ConfigString> {
-		
+
 		public ValueChangeStringCallback() {
 		}
-		
+
 		@Override
 		public void onValueChanged(ConfigString config) {
 			if(config == Configs.Generic.WATSON_PREFIX) {
@@ -54,12 +54,12 @@ public class KeyCallbacks {
 			}
 		}
 	}
-	
+
 	private static class ValueChangeStringListCallback implements IValueChangeCallback<ConfigStringList> {
-		
+
 		public ValueChangeStringListCallback() {
 		}
-		
+
 		@Override
 		public void onValueChanged(ConfigStringList config) {
 			if(config == Configs.Lists.HIGHLIGHT) {
@@ -67,14 +67,14 @@ public class KeyCallbacks {
 			}
 		}
 	}
-	
+
 	private static class KeyCallbackHotkeys implements IHotkeyCallback {
 		private final Minecraft mc;
-		
+
 		public KeyCallbackHotkeys(Minecraft mc) {
 			this.mc = mc;
 		}
-		
+
 		@Override
 		public boolean onKeyAction(KeyAction action, IKeybind key) {
 			if(this.mc.player == null || this.mc.world == null) {
@@ -84,10 +84,10 @@ public class KeyCallbacks {
 			if (key == Hotkeys.OPEN_GUI_MAIN_MENU.getKeybind()) {
 				GuiBase.openGui(new GuiMainMenu());
 				return true;
-            } else if(key == Hotkeys.OPEN_GUI_SETTINGS.getKeybind()) {
-            	GuiBase.openGui(new GuiConfigs());
+			} else if(key == Hotkeys.OPEN_GUI_SETTINGS.getKeybind()) {
+				GuiBase.openGui(new GuiConfigs());
 				return true;
-            } else if(key == Hotkeys.KEYBIND_SCREENSHOT.getKeybind()) {
+			} else if(key == Hotkeys.KEYBIND_SCREENSHOT.getKeybind()) {
 				if(Configs.Generic.SS_KEY_CUSTOM.getBooleanValue()) {
 					Screenshot.makeScreenshot();
 					return true;
@@ -113,7 +113,7 @@ public class KeyCallbacks {
 							edits.selectBlockEdit(edit);
 							return true;
 						}
-			        }
+					}
 				} else if(key == Hotkeys.KEYBIND_CURSOR_PREV.getKeybind()) {
 					if (edits.getSelection() != null && edits.getSelection().playereditSet != null) {
 						BlockEdit edit = edits.getSelection().playereditSet.getEditBefore(edits.getSelection());
@@ -121,12 +121,12 @@ public class KeyCallbacks {
 							edits.selectBlockEdit(edit);
 							return true;
 						}
-			        }
+					}
 				} else if(key == Hotkeys.KEYBIND_TP_CURSOR.getKeybind()) {
 					if (edits.getSelection() != null) {
 						Teleport.teleport(edits.getSelection().x, edits.getSelection().y, edits.getSelection().z);
 						return true;
-			        }
+					}
 				}
 			}
 			return false;

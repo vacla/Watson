@@ -18,21 +18,21 @@ import net.minecraft.command.ISuggestionProvider;
 public class MixinGuiChat {
 	@Shadow
 	protected GuiTextField inputField;
-    @Shadow 
-    private ParseResults<ISuggestionProvider> currentParse;
- 
-    @Inject(method = "updateSuggestion", at = @At("RETURN"))
-    public void onUpdateCommand(CallbackInfo ci) {
-        boolean isClientCommand;
-        if (currentParse == null) {
-            isClientCommand = false;
-        } else {
-            StringReader reader = new StringReader(currentParse.getReader().getString());
-            reader.skip(); // /
-            String command = reader.canRead() ? reader.readUnquotedString() : "";
-            isClientCommand = ClientCommandManager.isClientSideCommand(command);
-        }
- 
-        inputField.setMaxStringLength(isClientCommand ? 32500 : 256);
-    }
+	@Shadow 
+	private ParseResults<ISuggestionProvider> currentParse;
+
+	@Inject(method = "updateSuggestion", at = @At("RETURN"))
+	public void onUpdateCommand(CallbackInfo ci) {
+		boolean isClientCommand;
+		if (currentParse == null) {
+			isClientCommand = false;
+		} else {
+			StringReader reader = new StringReader(currentParse.getReader().getString());
+			reader.skip(); // /
+			String command = reader.canRead() ? reader.readUnquotedString() : "";
+			isClientCommand = ClientCommandManager.isClientSideCommand(command);
+		}
+
+		inputField.setMaxStringLength(isClientCommand ? 32500 : 256);
+	}
 }

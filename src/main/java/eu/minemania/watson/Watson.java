@@ -15,8 +15,8 @@ public class Watson implements InitializationListener {
 	public void onInitialization() {
 		MixinBootstrap.init();
 		Mixins.addConfiguration("mixins.watson.json");
-		
+
 		InitializationHandler.getInstance().registerInitializationHandler(new InitHandler());
-		
+
 	}
 }

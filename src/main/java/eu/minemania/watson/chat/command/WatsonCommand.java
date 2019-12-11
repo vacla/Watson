@@ -31,7 +31,7 @@ import static com.mojang.brigadier.arguments.DoubleArgumentType.doubleArg;
 import static com.mojang.brigadier.arguments.DoubleArgumentType.getDouble;
 
 public class WatsonCommand extends WatsonCommandBase {
-	
+
 	public static void register(CommandDispatcher<CommandSource> dispatcher) {
 		ClientCommandManager.addClientSideCommand(Configs.Generic.WATSON_PREFIX.getStringValue());
 		LiteralArgumentBuilder<CommandSource> watson = literal(Configs.Generic.WATSON_PREFIX.getStringValue()).executes(WatsonCommand::help)
@@ -40,125 +40,125 @@ public class WatsonCommand extends WatsonCommandBase {
 				.then(literal("ratio").executes(WatsonCommand::ratio))
 				.then(literal("servertime").executes(WatsonCommand::servertime))
 				.then(literal("ore").executes(WatsonCommand::orePage)
-					.then(argument("page", integer(1)).executes(WatsonCommand::orePage)))
+						.then(argument("page", integer(1)).executes(WatsonCommand::orePage)))
 				.then(literal("pre").executes(WatsonCommand::preCount)
-					.then(argument("count", integer(1)).executes(WatsonCommand::preCount)))
+						.then(argument("count", integer(1)).executes(WatsonCommand::preCount)))
 				.then(literal("post").executes(WatsonCommand::postCount)
-					.then(argument("count", integer(1)).executes(WatsonCommand::postCount)))
+						.then(argument("count", integer(1)).executes(WatsonCommand::postCount)))
 				.then(literal("display").executes(WatsonCommand::display)
-					.then(argument("displayed", bool()).executes(WatsonCommand::display)))
+						.then(argument("displayed", bool()).executes(WatsonCommand::display)))
 				.then(literal("outline").executes(WatsonCommand::outline)
-					.then(argument("displayed", bool()).executes(WatsonCommand::outline)))
+						.then(argument("displayed", bool()).executes(WatsonCommand::outline)))
 				.then(literal("anno").executes(WatsonCommand::anno)
-					.then(argument("displayed", bool()).executes(WatsonCommand::anno)))
+						.then(argument("displayed", bool()).executes(WatsonCommand::anno)))
 				.then(literal("vector").executes(WatsonCommand::vector)
-					.then(argument("displayed", bool()).executes(WatsonCommand::vector))
-					.then(literal("creations").executes(WatsonCommand::vector_creat))
+						.then(argument("displayed", bool()).executes(WatsonCommand::vector))
+						.then(literal("creations").executes(WatsonCommand::vector_creat))
 						.then(argument("displayed", bool()).executes(WatsonCommand::vector_creat))
-					.then(literal("destructions").executes(WatsonCommand::vector_destruct)
-						.then(argument("displayed", bool()).executes(WatsonCommand::vector_destruct)))
-					.then(literal("length")
-						.then(argument("length", floatArg()).executes(WatsonCommand::vector_length))))
+						.then(literal("destructions").executes(WatsonCommand::vector_destruct)
+								.then(argument("displayed", bool()).executes(WatsonCommand::vector_destruct)))
+						.then(literal("length")
+								.then(argument("length", floatArg()).executes(WatsonCommand::vector_length))))
 				.then(literal("label").executes(WatsonCommand::label)
-					.then(argument("displayed", bool()).executes(WatsonCommand::label)))
+						.then(argument("displayed", bool()).executes(WatsonCommand::label)))
 				.then(literal("tp").executes(WatsonCommand::teleport_next)
-					.then(literal("next").executes(WatsonCommand::teleport_next))
-					.then(literal("previous").executes(WatsonCommand::teleport_prev))
-					.then(argument("index", integer()).executes(WatsonCommand::teleport)))
+						.then(literal("next").executes(WatsonCommand::teleport_next))
+						.then(literal("previous").executes(WatsonCommand::teleport_prev))
+						.then(argument("index", integer()).executes(WatsonCommand::teleport)))
 				.then(literal("edits").executes(WatsonCommand::edits_list)
-					.then(literal("list").executes(WatsonCommand::edits_list))
-					.then(literal("hide")
-						.then(argument("player(s)", greedyString()).executes(WatsonCommand::edits_hide)))
-					.then(literal("show")
-						.then(argument("player(s)", greedyString()).executes(WatsonCommand::edits_show)))
-					.then(literal("remove")
-						.then(argument("player(s)", greedyString()).executes(WatsonCommand::edits_remove))))
+						.then(literal("list").executes(WatsonCommand::edits_list))
+						.then(literal("hide")
+								.then(argument("player(s)", greedyString()).executes(WatsonCommand::edits_hide)))
+						.then(literal("show")
+								.then(argument("player(s)", greedyString()).executes(WatsonCommand::edits_show)))
+						.then(literal("remove")
+								.then(argument("player(s)", greedyString()).executes(WatsonCommand::edits_remove))))
 				.then(literal("filter").executes(WatsonCommand::filter_list)
-					.then(literal("list").executes(WatsonCommand::filter_list))
-					.then(literal("clear").executes(WatsonCommand::filter_clear))
-					.then(literal("add")
-						.then(argument("player(s)", greedyString()).executes(WatsonCommand::filter_add)))
-					.then(literal("remove")
-						.then(argument("player(s)", greedyString()).executes(WatsonCommand::filter_remove))))
+						.then(literal("list").executes(WatsonCommand::filter_list))
+						.then(literal("clear").executes(WatsonCommand::filter_clear))
+						.then(literal("add")
+								.then(argument("player(s)", greedyString()).executes(WatsonCommand::filter_add)))
+						.then(literal("remove")
+								.then(argument("player(s)", greedyString()).executes(WatsonCommand::filter_remove))))
 				.then(literal("file")
-					.then(literal("list").executes(WatsonCommand::file_list)
-						.then(literal("*").executes(WatsonCommand::file_list)
-							.then(argument("page", integer(1)).executes(WatsonCommand::file_list)))
-						.then(argument("player", word()).executes(WatsonCommand::file_list)
-							.then(argument("page", integer(1)).executes(WatsonCommand::file_list))))
-					.then(literal("delete")
-						.then(literal("*").executes(WatsonCommand::file_delete))
-						.then(argument("player", word()).executes(WatsonCommand::file_delete))
-						.then(argument("filename", greedyString()).executes(WatsonCommand::file_delete)))
-					.then(literal("expire")
-						.then(argument("YYYY-MM-DD", greedyString()).executes(WatsonCommand::file_expire)))
-					.then(literal("load")
-						.then(argument("player", word()).executes(WatsonCommand::file_load))
-						.then(argument("filename", greedyString()).executes(WatsonCommand::file_load)))
-					.then(literal("save").executes(WatsonCommand::file_save)
-						.then(argument("filename", greedyString()).executes(WatsonCommand::file_save))))
+						.then(literal("list").executes(WatsonCommand::file_list)
+								.then(literal("*").executes(WatsonCommand::file_list)
+										.then(argument("page", integer(1)).executes(WatsonCommand::file_list)))
+								.then(argument("player", word()).executes(WatsonCommand::file_list)
+										.then(argument("page", integer(1)).executes(WatsonCommand::file_list))))
+						.then(literal("delete")
+								.then(literal("*").executes(WatsonCommand::file_delete))
+								.then(argument("player", word()).executes(WatsonCommand::file_delete))
+								.then(argument("filename", greedyString()).executes(WatsonCommand::file_delete)))
+						.then(literal("expire")
+								.then(argument("YYYY-MM-DD", greedyString()).executes(WatsonCommand::file_expire)))
+						.then(literal("load")
+								.then(argument("player", word()).executes(WatsonCommand::file_load))
+								.then(argument("filename", greedyString()).executes(WatsonCommand::file_load)))
+						.then(literal("save").executes(WatsonCommand::file_save)
+								.then(argument("filename", greedyString()).executes(WatsonCommand::file_save))))
 				.then(literal("config").executes(WatsonCommand::help)
-					.then(literal("watson").executes(WatsonCommand::config_watson)
-						.then(argument("enabled", bool()).executes(WatsonCommand::config_watson)))
-					.then(literal("debug").executes(WatsonCommand::config_debug)
-						.then(argument("enabled", bool()).executes(WatsonCommand::config_debug)))
-					.then(literal("auto_page").executes(WatsonCommand::config_auto_page)
-						.then(argument("enabled", bool()).executes(WatsonCommand::config_auto_page)))
-					.then(literal("region_info_timeout").executes(WatsonCommand::config_region_info_timeout) //get
-						.then(argument("seconds", doubleArg()).executes(WatsonCommand::config_region_info_timeout))) //set
-					.then(literal("billboard_background").executes(WatsonCommand::config_billb_background) //get
-						.then(argument("argb", integer()).executes(WatsonCommand::config_billb_background))) //set
-					.then(literal("billboard_foreground").executes(WatsonCommand::config_billb_foreground) //get
-						.then(argument("argb", integer()).executes(WatsonCommand::config_billb_foreground))) //set
-					.then(literal("group_ores_in_creative").executes(WatsonCommand::config_group_ores_creative)
-						.then(argument("enabled", bool()).executes(WatsonCommand::config_group_ores_creative)))
-					.then(literal("teleport_command").executes(WatsonCommand::config_teleport_command)
-						.then(argument("command", greedyString()).executes(WatsonCommand::config_teleport_command)))
-					.then(literal("chat_timeout").executes(WatsonCommand::config_chat_timeout) //get
-						.then(argument("seconds", doubleArg()).executes(WatsonCommand::config_chat_timeout))) //set
-					.then(literal("max_auto_page").executes(WatsonCommand::config_max_auto_page)
-						.then(argument("pages", integer(1)).executes(WatsonCommand::config_max_auto_page)))
-					.then(literal("pre_count").executes(WatsonCommand::config_pre_count)
-						.then(argument("count", integer(1)).executes(WatsonCommand::config_pre_count)))
-					.then(literal("post_count").executes(WatsonCommand::config_post_count)
-						.then(argument("count", integer(1)).executes(WatsonCommand::config_post_count)))
-					.then(literal("watson_prefix").executes(WatsonCommand::config_watson_prefix)
-						.then(argument("prefix", word()).executes(WatsonCommand::config_watson_prefix)))
-					.then(literal("ss_player_directory").executes(WatsonCommand::config_ss_player_directory)
-						.then(argument("enabled", bool()).executes(WatsonCommand::config_ss_player_directory)))
-					.then(literal("ss_player_suffix").executes(WatsonCommand::config_ss_player_suffix)
-						.then(argument("enabled", bool()).executes(WatsonCommand::config_ss_player_suffix)))
-					.then(literal("ss_date_directory").executes(WatsonCommand::config_ss_date_directory)
-						.then(argument("format", greedyString()).executes(WatsonCommand::config_ss_date_directory)))
-					.then(literal("reformat_query_results").executes(WatsonCommand::config_reformat_query)
-						.then(argument("enabled", bool()).executes(WatsonCommand::config_reformat_query)))
-					.then(literal("recolor_query_results").executes(WatsonCommand::config_recolor_query)
-						.then(argument("enabled", bool()).executes(WatsonCommand::config_recolor_query)))
-					.then(literal("time_ordered_deposits").executes(WatsonCommand::config_time_ordered)
-						.then(argument("enabled", bool()).executes(WatsonCommand::config_time_ordered)))
-					.then(literal("vector_length").executes(WatsonCommand::config_vector_length)
-						.then(argument("length", floatArg(0)).executes(WatsonCommand::config_vector_length)))
-					.then(literal("chat_highlights").executes(WatsonCommand::config_chat_highlights)
-						.then(argument("enabled", bool()).executes(WatsonCommand::config_chat_highlights)))
-					.then(literal("help").executes(WatsonCommand::help)));
+						.then(literal("watson").executes(WatsonCommand::config_watson)
+								.then(argument("enabled", bool()).executes(WatsonCommand::config_watson)))
+						.then(literal("debug").executes(WatsonCommand::config_debug)
+								.then(argument("enabled", bool()).executes(WatsonCommand::config_debug)))
+						.then(literal("auto_page").executes(WatsonCommand::config_auto_page)
+								.then(argument("enabled", bool()).executes(WatsonCommand::config_auto_page)))
+						.then(literal("region_info_timeout").executes(WatsonCommand::config_region_info_timeout) //get
+								.then(argument("seconds", doubleArg()).executes(WatsonCommand::config_region_info_timeout))) //set
+						.then(literal("billboard_background").executes(WatsonCommand::config_billb_background) //get
+								.then(argument("argb", integer()).executes(WatsonCommand::config_billb_background))) //set
+						.then(literal("billboard_foreground").executes(WatsonCommand::config_billb_foreground) //get
+								.then(argument("argb", integer()).executes(WatsonCommand::config_billb_foreground))) //set
+						.then(literal("group_ores_in_creative").executes(WatsonCommand::config_group_ores_creative)
+								.then(argument("enabled", bool()).executes(WatsonCommand::config_group_ores_creative)))
+						.then(literal("teleport_command").executes(WatsonCommand::config_teleport_command)
+								.then(argument("command", greedyString()).executes(WatsonCommand::config_teleport_command)))
+						.then(literal("chat_timeout").executes(WatsonCommand::config_chat_timeout) //get
+								.then(argument("seconds", doubleArg()).executes(WatsonCommand::config_chat_timeout))) //set
+						.then(literal("max_auto_page").executes(WatsonCommand::config_max_auto_page)
+								.then(argument("pages", integer(1)).executes(WatsonCommand::config_max_auto_page)))
+						.then(literal("pre_count").executes(WatsonCommand::config_pre_count)
+								.then(argument("count", integer(1)).executes(WatsonCommand::config_pre_count)))
+						.then(literal("post_count").executes(WatsonCommand::config_post_count)
+								.then(argument("count", integer(1)).executes(WatsonCommand::config_post_count)))
+						.then(literal("watson_prefix").executes(WatsonCommand::config_watson_prefix)
+								.then(argument("prefix", word()).executes(WatsonCommand::config_watson_prefix)))
+						.then(literal("ss_player_directory").executes(WatsonCommand::config_ss_player_directory)
+								.then(argument("enabled", bool()).executes(WatsonCommand::config_ss_player_directory)))
+						.then(literal("ss_player_suffix").executes(WatsonCommand::config_ss_player_suffix)
+								.then(argument("enabled", bool()).executes(WatsonCommand::config_ss_player_suffix)))
+						.then(literal("ss_date_directory").executes(WatsonCommand::config_ss_date_directory)
+								.then(argument("format", greedyString()).executes(WatsonCommand::config_ss_date_directory)))
+						.then(literal("reformat_query_results").executes(WatsonCommand::config_reformat_query)
+								.then(argument("enabled", bool()).executes(WatsonCommand::config_reformat_query)))
+						.then(literal("recolor_query_results").executes(WatsonCommand::config_recolor_query)
+								.then(argument("enabled", bool()).executes(WatsonCommand::config_recolor_query)))
+						.then(literal("time_ordered_deposits").executes(WatsonCommand::config_time_ordered)
+								.then(argument("enabled", bool()).executes(WatsonCommand::config_time_ordered)))
+						.then(literal("vector_length").executes(WatsonCommand::config_vector_length)
+								.then(argument("length", floatArg(0)).executes(WatsonCommand::config_vector_length)))
+						.then(literal("chat_highlights").executes(WatsonCommand::config_chat_highlights)
+								.then(argument("enabled", bool()).executes(WatsonCommand::config_chat_highlights)))
+						.then(literal("help").executes(WatsonCommand::help)));
 		dispatcher.register(watson);
-    }
-	
+	}
+
 	private static int clear(CommandContext<CommandSource> context) {
 		DataManager.getEditSelection().clearBlockEditSet();
 		return 1;
 	}
-	
+
 	private static int ratio(CommandContext<CommandSource> context) {
 		DataManager.getEditSelection().getBlockEditSet().getOreDB().showRatios();
 		return 1;
 	}
-	
+
 	private static int servertime(CommandContext<CommandSource> context) {
 		ServerTime.getInstance().queryServerTime(true);
 		return 1;
 	}
-	
+
 	private static int orePage(CommandContext<CommandSource> context) {
 		Integer page;
 		try {
@@ -169,7 +169,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		DataManager.getEditSelection().getBlockEditSet().getOreDB().listDeposits(page);
 		return 1;
 	}
-	
+
 	private static int preCount(CommandContext<CommandSource> context) {
 		Integer count;
 		try {
@@ -180,7 +180,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		DataManager.getEditSelection().queryPreEdits(count);
 		return 1;
 	}
-	
+
 	private static int postCount(CommandContext<CommandSource> context) {
 		Integer count;
 		try {
@@ -191,7 +191,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		DataManager.getEditSelection().queryPostEdits(count);
 		return 1;
 	}
-	
+
 	private static int display(CommandContext<CommandSource> context) {
 		boolean displayed;
 		try {
@@ -204,7 +204,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.display", displayed);
 		return 1;
 	}
-	
+
 	private static int outline(CommandContext<CommandSource> context) {
 		boolean displayed;
 		try {
@@ -217,7 +217,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.outline", displayed);
 		return 1;
 	}
-	
+
 	private static int anno(CommandContext<CommandSource> context) {
 		boolean displayed;
 		try {
@@ -230,7 +230,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.anno", displayed);
 		return 1;
 	}
-	
+
 	private static int vector(CommandContext<CommandSource> context) {
 		boolean displayed;
 		try {
@@ -243,7 +243,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector", displayed);
 		return 1;
 	}
-	
+
 	private static int vector_creat(CommandContext<CommandSource> context) {
 		boolean displayed;
 		try {
@@ -256,7 +256,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector.creation", displayed);
 		return 1;
 	}
-	
+
 	private static int vector_destruct(CommandContext<CommandSource> context) {
 		boolean displayed;
 		try {
@@ -269,14 +269,14 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector.destruction", displayed);
 		return 1;
 	}
-	
+
 	private static int vector_length(CommandContext<CommandSource> context) {
 		float length = getFloat(context, "length");
 		Configs.Generic.VECTOR_LENGTH.setDoubleValue(length);
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector.length", length);
 		return 1;
 	}
-	
+
 	private static int label(CommandContext<CommandSource> context) {
 		boolean displayed;
 		try {
@@ -289,28 +289,28 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.label", displayed);
 		return 1;
 	}
-	
+
 	private static int teleport_next(CommandContext<CommandSource> context) {
 		DataManager.getEditSelection().getBlockEditSet().getOreDB().tpNext();
 		return 1;
 	}
-	
+
 	private static int teleport_prev(CommandContext<CommandSource> context) {
 		DataManager.getEditSelection().getBlockEditSet().getOreDB().tpNext();
 		return 1;
 	}
-	
+
 	private static int teleport(CommandContext<CommandSource> context) {
 		Integer index = getInteger(context, "index");
 		DataManager.getEditSelection().getBlockEditSet().getOreDB().tpIndex(index);
 		return 1;
 	}
-	
+
 	private static int edits_list(CommandContext<CommandSource> context) {
 		DataManager.getEditSelection().getBlockEditSet().listEdits();
 		return 1;
 	}
-	
+
 	private static int edits_hide(CommandContext<CommandSource> context) {
 		String players = getString(context, "player(s)");
 		String[] playerList = players.split(" ");
@@ -319,7 +319,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		}
 		return 1;
 	}
-	
+
 	private static int edits_show(CommandContext<CommandSource> context) {
 		String players = getString(context, "player(s)");
 		String[] playerList = players.split(" ");
@@ -328,7 +328,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		}
 		return 1;
 	}
-	
+
 	private static int edits_remove(CommandContext<CommandSource> context) {
 		String players = getString(context, "player(s)");
 		String[] playerList = players.split(" ");
@@ -337,17 +337,17 @@ public class WatsonCommand extends WatsonCommandBase {
 		}
 		return 1;
 	}
-	
+
 	private static int filter_list(CommandContext<CommandSource> context) {
 		DataManager.getFilters().list();
 		return 1;
 	}
-	
+
 	private static int filter_clear(CommandContext<CommandSource> context) {
 		DataManager.getFilters().clear();
 		return 1;
 	}
-	
+
 	private static int filter_add(CommandContext<CommandSource> context) {
 		String players = getString(context, "player(s)");
 		String[] playerList = players.split(" ");
@@ -356,7 +356,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		}
 		return 1;
 	}
-	
+
 	private static int filter_remove(CommandContext<CommandSource> context) {
 		String players = getString(context, "player(s)");
 		String[] playerList = players.split(" ");
@@ -365,7 +365,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		}
 		return 1;
 	}
-	
+
 	private static int file_list(CommandContext<CommandSource> context) {
 		String player;
 		int page;
@@ -386,7 +386,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		}
 		return 1;
 	}
-	
+
 	private static int file_delete(CommandContext<CommandSource> context) {
 		String player, filename;
 		try {
@@ -399,7 +399,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		} catch (Exception e) {
 			filename = null;
 		}
-		
+
 		if(player != null) {
 			DataManager.deleteBlockEditFiles(player);
 		} else if(filename != null) {
@@ -409,13 +409,13 @@ public class WatsonCommand extends WatsonCommandBase {
 		}
 		return 1;
 	}
-	
+
 	private static int file_expire(CommandContext<CommandSource> context) {
 		String date = getString(context, "YYYY-MM-DD");
 		DataManager.expireBlockEditFiles(date);
 		return 1;
 	}
-	
+
 	private static int file_load(CommandContext<CommandSource> context) {
 		String player, filename;
 		try {
@@ -428,7 +428,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		} catch (Exception e) {
 			filename = null;
 		}
-		
+
 		if(player != null) {
 			DataManager.loadBlockEditFile(player);
 		} else if(filename != null) {
@@ -436,7 +436,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		}
 		return 1;
 	}
-	
+
 	private static int file_save(CommandContext<CommandSource> context) {
 		String filename;
 		try {
@@ -444,11 +444,11 @@ public class WatsonCommand extends WatsonCommandBase {
 		} catch (Exception e) {
 			filename = null;
 		}
-		
+
 		DataManager.saveBlockEditFile(filename);
 		return 1;
 	}
-	
+
 	private static int config_watson(CommandContext<CommandSource> context) {
 		boolean displayed;
 		try {
@@ -465,7 +465,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		}
 		return 1;
 	}
-	
+
 	private static int config_debug(CommandContext<CommandSource> context) {
 		boolean displayed;
 		try {
@@ -478,7 +478,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.debug", displayed);
 		return 1;
 	}
-	
+
 	private static int config_auto_page(CommandContext<CommandSource> context) {
 		boolean displayed;
 		try {
@@ -491,7 +491,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.auto_page", displayed);
 		return 1;
 	}
-	
+
 	private static int config_region_info_timeout(CommandContext<CommandSource> context) {
 		double seconds;
 		try {
@@ -507,7 +507,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.region_info_timeout", seconds);
 		return 1;
 	}
-	
+
 	private static int config_billb_background(CommandContext<CommandSource> context) {
 		Integer color;
 		try {
@@ -519,7 +519,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.billb_background", color);
 		return 1;
 	}
-	
+
 	private static int config_billb_foreground(CommandContext<CommandSource> context) {
 		Integer color;
 		try {
@@ -531,7 +531,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.billb_foreground", color);
 		return 1;
 	}
-	
+
 	private static int config_group_ores_creative(CommandContext<CommandSource> context) {
 		boolean displayed;
 		try {
@@ -544,7 +544,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.group_ores_creative", displayed);
 		return 1;
 	}
-	
+
 	private static int config_teleport_command(CommandContext<CommandSource> context) {
 		String command;
 		try {
@@ -556,7 +556,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.teleport_command", command);
 		return 1;
 	}
-	
+
 	private static int config_chat_timeout(CommandContext<CommandSource> context) {
 		double seconds;
 		try {
@@ -572,7 +572,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.chat_timeout", seconds);
 		return 1;
 	}
-	
+
 	private static int config_max_auto_page(CommandContext<CommandSource> context) {
 		Integer pages;
 		try {
@@ -584,7 +584,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.max_auto_page", pages);
 		return 1;
 	}
-	
+
 	private static int config_pre_count(CommandContext<CommandSource> context) {
 		Integer count;
 		try {
@@ -596,7 +596,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.pre_count", count);
 		return 1;
 	}
-	
+
 	private static int config_post_count(CommandContext<CommandSource> context) {
 		Integer count;
 		try {
@@ -608,7 +608,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.post_count", count);
 		return 1;
 	}
-	
+
 	private static int config_watson_prefix(CommandContext<CommandSource> context) {
 		String prefix;
 		try {
@@ -620,7 +620,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.watson_prefix", prefix);
 		return 1;
 	}
-	
+
 	private static int config_ss_player_directory(CommandContext<CommandSource> context) {
 		boolean displayed;
 		try {
@@ -633,7 +633,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.ss_player_directory", displayed);
 		return 1;
 	}
-	
+
 	private static int config_ss_player_suffix(CommandContext<CommandSource> context) {
 		boolean displayed;
 		try {
@@ -646,7 +646,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.ss_player_suffix", displayed);
 		return 1;
 	}
-	
+
 	private static int config_ss_date_directory(CommandContext<CommandSource> context) {
 		String date_directory;
 		try {
@@ -658,7 +658,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.ss_date_directory", date_directory);
 		return 1;
 	}
-	
+
 	private static int config_reformat_query(CommandContext<CommandSource> context) {
 		boolean displayed;
 		try {
@@ -671,7 +671,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.reformat_query_results", displayed);
 		return 1;
 	}
-	
+
 	private static int config_recolor_query(CommandContext<CommandSource> context) {
 		boolean displayed;
 		try {
@@ -684,7 +684,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.recolor_query_results", displayed);
 		return 1;
 	}
-	
+
 	private static int config_time_ordered(CommandContext<CommandSource> context) {
 		boolean displayed;
 		try {
@@ -701,7 +701,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		}
 		return 1;
 	}
-	
+
 	private static int config_vector_length(CommandContext<CommandSource> context) {
 		float length;
 		try {
@@ -714,7 +714,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector.length", length);
 		return 1;
 	}
-	
+
 	private static int config_chat_highlights(CommandContext<CommandSource> context) {
 		boolean displayed;
 		try {
@@ -727,7 +727,7 @@ public class WatsonCommand extends WatsonCommandBase {
 		InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.chat_highlights", displayed);
 		return 1;
 	}
-	
+
 	private static int help(CommandContext<CommandSource> context) {
 		int cmdCount = 0;
 		CommandDispatcher<CommandSource> dispatcher = Command.commandDispatcher;

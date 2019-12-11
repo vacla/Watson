@@ -25,7 +25,7 @@ public class BlockEdit {
 	public PlayereditSet playereditSet;
 	private final BlockModelShapes blockModelShapes;
 	private Minecraft mc;
-	
+
 	public BlockEdit(long time, String player, boolean creation, int x, int y, int z, WatsonBlock block, String world) {
 		this.time = time;
 		this.player = player;
@@ -38,7 +38,7 @@ public class BlockEdit {
 		this.mc = Minecraft.getInstance();
 		this.blockModelShapes = this.mc.getBlockRendererDispatcher().getBlockModelShapes();
 	}
-	
+
 	//TODO later add custom colors
 	public void drawOutline(BufferBuilder buffer) {
 		IBakedModel model;

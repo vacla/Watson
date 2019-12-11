@@ -17,36 +17,36 @@ import net.minecraft.entity.Entity;
 
 public class WatsonRenderer {
 	private static final WatsonRenderer INSTANCE = new WatsonRenderer();
-	
+
 	private static final ShaderProgram SHADER_ALPHA = new ShaderProgram("watson", null, "shaders/alpha.frag");
-	
+
 	private Minecraft mc;
 	private WorldRendererPlayeredit worldRenderer;
-	
+
 	static {
 		int program = SHADER_ALPHA.getProgram();
 		GL20.glUseProgram(program);
 		GL20.glUniform1i(GL20.glGetUniformLocation(program, "texture"), 0);
 		GL20.glUseProgram(0);
 	}
-	
+
 	public static WatsonRenderer getInstance() {
 		return INSTANCE;
 	}
-	
+
 	public WorldRendererPlayeredit getWorldRenderer() {
 		if(this.worldRenderer == null) {
 			this.mc = Minecraft.getInstance();
 			this.worldRenderer = new WorldRendererPlayeredit(this.mc);
 		}
-		
+
 		return this.worldRenderer;
 	}
-	
+
 	public void loadRenderers() {
-        this.getWorldRenderer().loadRenderers();
-    }
-	
+		this.getWorldRenderer().loadRenderers();
+	}
+
 	public void piecewiseRenderEntities(float partialTicks) {
 		if(Configs.Generic.DISPLAYED.getBooleanValue() && this.mc.getRenderViewEntity() != null && Configs.Generic.OUTLINE_SHOWN.getBooleanValue()) {
 			this.mc.profiler.startSection("watson_entities");
@@ -67,7 +67,7 @@ public class WatsonRenderer {
 			if(entity == null) {
 				entity = mc.player;
 			}
-			
+
 			double dx = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks;
 			double dy = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks;
 			double dz = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks;

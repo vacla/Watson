@@ -25,15 +25,15 @@ public class EditSelection {
 	protected HashMap<String, Object> _variables = new HashMap<>();
 	protected static HashMap<String, BlockEditSet> _edits = new HashMap<String, BlockEditSet>();
 	protected Calendar _calendar = Calendar.getInstance();
-	
+
 	public HashMap<String, Object> getVariables(){
 		return _variables;
 	}
-	
+
 	public BlockEdit getSelection() {
 		return _selection;
 	}
-	
+
 	public void selectBlockEdit(BlockEdit edit) {
 		if (edit != null) {
 			_selection = edit;
@@ -48,7 +48,7 @@ public class EditSelection {
 			selectPosition(edit.x, edit.y, edit.z, edit.world);
 		}
 	}
-	
+
 	public void clearBlockEditSet() {
 		getBlockEditSet().clear();
 		_variables.clear();
@@ -57,19 +57,19 @@ public class EditSelection {
 		ChatMessage.localOutput("Watson edits cleared", true);
 		DataManager.getFilters().clear();
 	}
-	
+
 	public void selectPosition(int x, int y, int z, String world) {
 		if(_selection == null || _selection.x != x || _selection.y != y || _selection.z != z || _selection.world != world) {
 			_selection = new BlockEdit(0, "", false, x, y, z, null, world);
 		}
-		
+
 		_variables.put("x", x);
 		_variables.put("y", y);
 		_variables.put("z", z);
 		_variables.put("world", world);
 		_selectionChanged = true;
 	}
-	
+
 	public BlockEditSet getBlockEditSet() {
 		Minecraft mc = Minecraft.getInstance();
 		StringBuilder idBuilder = new StringBuilder();
@@ -80,7 +80,7 @@ public class EditSelection {
 		idBuilder.append('/');
 		idBuilder.append(mc.player.dimension);
 		String id = idBuilder.toString();
-		
+
 		BlockEditSet edits = _edits.get(id);
 		if(edits == null) {
 			edits = new BlockEditSet();
@@ -88,14 +88,14 @@ public class EditSelection {
 		}
 		return edits;
 	}
-	
+
 	public void drawSelection() {
 		if(_selection != null && Configs.Generic.SELECTION_SHOWN.getBooleanValue()) {
 			Tessellator tesselator = Tessellator.getInstance();
 			BufferBuilder buffer = tesselator.getBuffer();
 			buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
 			GL11.glLineWidth(4.0f);
-			
+
 			final float halfSize = 0.3f;
 			float x = _selection.x + 0.5f;
 			float y = _selection.y + 0.5f;
@@ -107,7 +107,7 @@ public class EditSelection {
 			buffer.pos(x, y, z - halfSize).color(255/255f, 0/255f, 255/255f, 128).endVertex();
 			buffer.pos(x, y, z + halfSize).color(255/255f, 0/255f, 255/255f, 128).endVertex();
 			tesselator.draw();
-			
+
 			if(_selection.playereditSet != null) {
 				BlockEdit previous = _selection.playereditSet.getEditBefore(_selection);
 				if(previous != null) {
@@ -123,13 +123,13 @@ public class EditSelection {
 			}
 		}
 	}
-	
+
 	public boolean isSelectionChanged() {
 		boolean result = _selectionChanged;
 		_selectionChanged = false;
 		return result;
 	}
-	
+
 	public void queryPreEdits(int count) {
 		if(_variables.containsKey("player") && _variables.containsKey("time")) {
 			if(Configs.Generic.PLUGIN.getStringValue().equals("LogBlock")) {
@@ -141,7 +141,7 @@ public class EditSelection {
 				int minute = _calendar.get(Calendar.MINUTE);
 				int second = _calendar.get(Calendar.SECOND);
 				String player = (String) _variables.get("player");
-				
+
 				String query = String.format(Locale.US, "/lb before %d.%d.%d %02d:%02d:%02d player %s coords limit %d", day, month, year, hour, minute, second, player, count);
 				Watson.logger.debug(query);
 				ChatMessage.sendToServerChat(query);
@@ -152,7 +152,7 @@ public class EditSelection {
 			InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.info.no_player_time");
 		}
 	}
-	
+
 	public void queryPostEdits(int count) {
 		if(_variables.containsKey("player") && _variables.containsKey("time")) {
 			if(Configs.Generic.PLUGIN.getStringValue().equals("LogBlock")) {
@@ -164,7 +164,7 @@ public class EditSelection {
 				int minute = _calendar.get(Calendar.MINUTE);
 				int second = _calendar.get(Calendar.SECOND);
 				String player = (String) _variables.get("player");
-				
+
 				String query = String.format(Locale.US, "/lb since %d.%d.%d %02d:%02d:%02d player %s coords limit %d asc", day, month, year, hour, minute, second, player, count);
 				Watson.logger.debug(query);
 				ChatMessage.sendToServerChat(query);

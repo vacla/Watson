@@ -8,7 +8,7 @@ public class Annotation {
 	protected int _y;
 	protected int _z;
 	protected String _world;
-	
+
 	public Annotation(int x, int y, int z, String world, String text) {
 		_text = text;
 		_x = x;
@@ -16,27 +16,27 @@ public class Annotation {
 		_z = z;
 		_world = world;
 	}
-	
+
 	public String getText() {
 		return _text;
 	}
-	
+
 	public int getX() {
 		return _x;
 	}
-	
+
 	public int getY() {
 		return _y;
 	}
-	
+
 	public int getZ() {
 		return _z;
 	}
-	
+
 	public String getWorld() {
 		return _world;
 	}
-	
+
 	public void draw(double dx, double dy, double dz) {
 		OverlayRenderer.drawBillboard(getX() - dx, getY() - dy, getZ() - dz, 0.03, getText());
 	}

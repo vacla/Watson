@@ -5,7 +5,7 @@ import java.util.HashMap;
 import net.minecraft.util.text.TextFormatting;
 
 public enum Color {
-	
+
 	black(TextFormatting.BLACK),
 	darkblue(TextFormatting.DARK_BLUE),
 	darkgreen(TextFormatting.DARK_GREEN),
@@ -24,10 +24,10 @@ public enum Color {
 	lightpurple(TextFormatting.LIGHT_PURPLE),
 	yellow(TextFormatting.YELLOW),
 	white(TextFormatting.WHITE);
-	
+
 	private TextFormatting _color;
 	private static HashMap<TextFormatting, Color> _byTextFormatColor = new HashMap<TextFormatting, Color>();
-	
+
 	static {
 		_byTextFormatColor.put(TextFormatting.BLACK, Color.black);
 		_byTextFormatColor.put(TextFormatting.DARK_BLUE, Color.darkblue);
@@ -46,11 +46,11 @@ public enum Color {
 		_byTextFormatColor.put(TextFormatting.YELLOW, Color.yellow);
 		_byTextFormatColor.put(TextFormatting.WHITE, Color.white);
 	};
-	
+
 	public TextFormatting getColor() {
 		return _color;
 	}
-	
+
 	public static Color getByTextFormatColor(TextFormatting colorTextFormat) {
 		Color color = _byTextFormatColor.get(colorTextFormat);
 		if(color == null) {
@@ -58,7 +58,7 @@ public enum Color {
 		}
 		return color;
 	}
-	
+
 	public static Color getByColorOrName(String colorOrName) {
 		if(colorOrName.contains("TextFormatting.")) {
 			return getByTextFormatColor((TextFormatting)(Object)colorOrName);
@@ -66,7 +66,7 @@ public enum Color {
 			return Color.valueOf(colorOrName.toLowerCase());
 		}
 	}
-	
+
 	private Color(TextFormatting formattingName) {
 		_color = formattingName;
 	}

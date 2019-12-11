@@ -14,42 +14,42 @@ public class ChatMessage {
 	private static ChatMessage INSTANCE = new ChatMessage();
 	protected ConcurrentLinkedQueue<String> _serverChatQueue = new ConcurrentLinkedQueue<String>();
 	protected long _lastServerChatTime;
-	
+
 	public static ChatMessage getInstance() {
 		return INSTANCE;
 	}
-	
+
 	public static void localOutput(String message, boolean watsonMessage) {
 		sendToLocalChat(TextFormatting.AQUA, null, message, watsonMessage);
 	}
-	
+
 	public static void localOutputT(String translationKey, Object... args) {
 		sendToLocalChat(TextFormatting.AQUA, new TextComponentTranslation(translationKey, args),true);
 	}
-	
+
 	public static void localError(String message, boolean watsonMessage) {
 		sendToLocalChat(TextFormatting.DARK_RED, null, message, watsonMessage);
 	}
-	
+
 	public void serverChat(String message) {
 		_serverChatQueue.add(message);
 	}
-	
+
 	public void immediateServerChat(String message) {
 		if(message != null) {
 			sendToServerChat(message);
 		}
 	}
-	
+
 	public static void sendToLocalChat(String message, boolean watsonMessage) {
 		sendToLocalChat(new TextComponentString(message), watsonMessage);
 	}
-	
+
 	public static void sendToLocalChat(ITextComponent inputmessage, boolean watsonMessage) {
 		ITextComponent message = Configs.Generic.USE_CHAT_HIGHLIGHTS.getBooleanValue() ? Highlight.setHighlightChatMessage("chat.type.text", inputmessage, watsonMessage) : inputmessage;
 		Minecraft.getInstance().ingameGUI.getChatGUI().printChatMessage(message);
 	}
-	
+
 	public static void sendToLocalChat(TextFormatting color, TextFormatting style, String message, boolean watsonMessage) {
 		TextComponentString chat = new TextComponentString(message);
 		if(color != null && style == null) {
@@ -59,12 +59,12 @@ public class ChatMessage {
 		}
 		sendToLocalChat(chat, watsonMessage);
 	}
-	
+
 	public static void sendToLocalChat(TextFormatting color, ITextComponent message, boolean watsonMessage) {
 		message.applyTextStyle(color);
 		sendToLocalChat(message, watsonMessage);
 	}
-	
+
 	public static void sendToServerChat(String message) {
 		try {
 			Minecraft mc = Minecraft.getInstance();
@@ -73,7 +73,7 @@ public class ChatMessage {
 			Watson.logger.error("Sending chat to the server.", e);
 		}
 	}
-	
+
 	public void processServerChatQueue() {
 		if(!_serverChatQueue.isEmpty()) {
 			long now = System.currentTimeMillis();

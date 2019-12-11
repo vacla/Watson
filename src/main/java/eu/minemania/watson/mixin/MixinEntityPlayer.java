@@ -15,26 +15,26 @@ import net.minecraft.world.World;
 
 @Mixin(EntityPlayer.class)
 public abstract class MixinEntityPlayer extends EntityLivingBase {
-	
+
 	@Shadow
 	public abstract ITextComponent getDisplayName();
-	
+
 	protected MixinEntityPlayer(EntityType<?> type, World world) {
 		super(type,world);
 	}
-	
+
 	@Redirect(method = "getDisplayName", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/entity/player/EntityPlayer;getName()Lnet/minecraft/util/text/ITextComponent;"))
-    private ITextComponent getCustomUsername(EntityPlayer player)
-    {
-        if (Highlight.changeUsername)
-        {
-        	Highlight.changeUsername = false;
-            return new TextComponentString(Highlight.getUsername());
-        }
-        else
-        {
-            return player.getName();
-        }
-    } 
+			target = "Lnet/minecraft/entity/player/EntityPlayer;getName()Lnet/minecraft/util/text/ITextComponent;"))
+	private ITextComponent getCustomUsername(EntityPlayer player)
+	{
+		if (Highlight.changeUsername)
+		{
+			Highlight.changeUsername = false;
+			return new TextComponentString(Highlight.getUsername());
+		}
+		else
+		{
+			return player.getName();
+		}
+	} 
 }

@@ -14,13 +14,13 @@ import net.minecraft.client.renderer.WorldRenderer;
 @Mixin(WorldRenderer.class)
 public abstract class MixinWorldRenderer {
 	@Shadow
-    private WorldClient world;
+	private WorldClient world;
 
-    @Inject(method = "loadRenderers()V", at = @At("RETURN"))
-    private void onLoadRenderers(CallbackInfo ci) {
-        // Also (re-)load our renderer when the vanilla renderer gets reloaded
-        if (this.world != null && this.world == Minecraft.getInstance().world) {
-            WatsonRenderer.getInstance().loadRenderers();
-        }
-    }
+	@Inject(method = "loadRenderers()V", at = @At("RETURN"))
+	private void onLoadRenderers(CallbackInfo ci) {
+		// Also (re-)load our renderer when the vanilla renderer gets reloaded
+		if (this.world != null && this.world == Minecraft.getInstance().world) {
+			WatsonRenderer.getInstance().loadRenderers();
+		}
+	}
 }

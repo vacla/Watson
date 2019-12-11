@@ -36,164 +36,164 @@ import net.minecraft.world.GameType;
 
 public class DataManager implements IDirectoryCache {
 	private static final DataManager INSTANCE = new DataManager();
-	
+
 	protected static final Pattern DATE_PATTERN = Pattern.compile("^(\\d{4})-(\\d{1,2})-(\\d{1,2})$");
 	private static final Map<String, File> LAST_DIRECTORIES = new HashMap<>();
-	
+
 	private static ConfigGuiTab configGuiTab = ConfigGuiTab.GENERIC;
 	private static boolean canSave;
 	private static long clientTickStart;
-	
+
 	private EditSelection editselection = new EditSelection();
-	
+
 	protected Filters filters = new Filters();
-	
+
 	private DataManager() {
-		
+
 	}
-	
+
 	private static DataManager getInstance() {
 		return INSTANCE;
 	}
-	
+
 	public static IDirectoryCache getDirectoryCache() {
 		return INSTANCE;
 	}
-	
+
 	public static void setClientTick(long time) {
 		clientTickStart = time;
 	}
-	
+
 	public static void onClientTickStart() {
 		clientTickStart = System.currentTimeMillis();
 	}
-	
+
 	public static long getClientTickStartTime() {
 		return clientTickStart;
 	}
-	
+
 	public static ConfigGuiTab getConfigGuiTab() {
 		return configGuiTab;
 	}
-	
+
 	public static void setConfigGuiTab(ConfigGuiTab tab) {
 		configGuiTab = tab;
 	}
-	
+
 	public static EditSelection getEditSelection() {
 		return getInstance().editselection;
 	}
-	
+
 	public static Filters getFilters() {
 		return getInstance().filters;
 	}
-	
+
 	@Override
 	@Nullable
 	public File getCurrentDirectoryForContext(String context) {
 		return LAST_DIRECTORIES.get(context);
 	}
-	
+
 	@Override
 	public void setCurrentDirectoryForContext(String context, File dir) {
 		LAST_DIRECTORIES.put(context, dir);
 	}
-	
+
 	public static void load() {
 		File file = getCurrentStorageFile(true);
-		
+
 		JsonElement element = JsonUtils.parseJsonFile(file);
-		
+
 		if(element != null && element.isJsonObject()) {
 			LAST_DIRECTORIES.clear();
 
-            JsonObject root = element.getAsJsonObject();
+			JsonObject root = element.getAsJsonObject();
 
-            if (JsonUtils.hasObject(root, "last_directories")) {
-                JsonObject obj = root.get("last_directories").getAsJsonObject();
+			if (JsonUtils.hasObject(root, "last_directories")) {
+				JsonObject obj = root.get("last_directories").getAsJsonObject();
 
-                for (Map.Entry<String, JsonElement> entry : obj.entrySet()) {
-                    String name = entry.getKey();
-                    JsonElement el = entry.getValue();
+				for (Map.Entry<String, JsonElement> entry : obj.entrySet()) {
+					String name = entry.getKey();
+					JsonElement el = entry.getValue();
 
-                    if (el.isJsonPrimitive()) {
-                        File dir = new File(el.getAsString());
+					if (el.isJsonPrimitive()) {
+						File dir = new File(el.getAsString());
 
-                        if (dir.exists() && dir.isDirectory()) {
-                            LAST_DIRECTORIES.put(name, dir);
-                        }
-                    }
-                }
-            }
+						if (dir.exists() && dir.isDirectory()) {
+							LAST_DIRECTORIES.put(name, dir);
+						}
+					}
+				}
+			}
 
-            if (JsonUtils.hasString(root, "config_gui_tab")) {
-                try {
-                    configGuiTab = ConfigGuiTab.valueOf(root.get("config_gui_tab").getAsString());
-                } catch (Exception e) {}
+			if (JsonUtils.hasString(root, "config_gui_tab")) {
+				try {
+					configGuiTab = ConfigGuiTab.valueOf(root.get("config_gui_tab").getAsString());
+				} catch (Exception e) {}
 
-                if (configGuiTab == null) {
-                    configGuiTab = ConfigGuiTab.GENERIC;
-                }
-            }
+				if (configGuiTab == null) {
+					configGuiTab = ConfigGuiTab.GENERIC;
+				}
+			}
 		}
-		
+
 		canSave = true;
 	}
-	
+
 	public static void save() {
 		save(false);
 	}
-	
+
 	public static void save(boolean forceSave) {
 		if(canSave == false && forceSave == false) {
 			return;
 		}
-		
+
 		JsonObject root = new JsonObject();
 		JsonObject objDirs = new JsonObject();
-		
+
 		for(Map.Entry<String, File> entry : LAST_DIRECTORIES.entrySet()) {
 			objDirs.add(entry.getKey(), new JsonPrimitive(entry.getValue().getAbsolutePath()));
 		}
-		
+
 		root.add("last_directories", objDirs);
-		
+
 		root.add("config_gui_tab", new JsonPrimitive(configGuiTab.name()));
-		
+
 		File file = getCurrentStorageFile(true);
 		JsonUtils.writeJsonToFile(root, file);
-		
+
 		canSave = false;
 	}
-	
+
 	public static File getCurrentConfigDirectory() {
 		return new File(FileUtils.getConfigDirectory(), Reference.MOD_ID);
 	}
-	
+
 	public static File getPlayereditsBaseDirectory() {
 		File dir = FileUtils.getCanonicalFileIfPossible(new File(FileUtils.getMinecraftDirectory(), "playeredits"));
-		
+
 		if(dir.exists() == false && dir.mkdirs() == false) {
 			Watson.logger.warn("Failed to create the playeredit directory '{}'", dir.getAbsolutePath());
 		}
-		
+
 		return dir;
 	}
-	
+
 	private static File getCurrentStorageFile(boolean globalData) {
 		File dir = getCurrentConfigDirectory();
-		
+
 		if(dir.exists() == false && dir.mkdirs() == false) {
 			Watson.logger.warn("Failed to create the config directory '{}'", dir.getAbsolutePath());
 		}
-		
+
 		return new File(dir, getStorageFileName(globalData));
 	}
-	
+
 	private static String getStorageFileName(boolean globalData) {
 		Minecraft mc = Minecraft.getInstance();
 		String name = StringUtils.getWorldOrServerName();
-		
+
 		if(name != null) {
 			if(globalData) {
 				return Reference.MOD_ID + "_" + name + ".json";
@@ -201,10 +201,10 @@ public class DataManager implements IDirectoryCache {
 				return Reference.MOD_ID + "_" + name + "_dim" + WorldUtils.getDimensionId(mc.world) + ".json";
 			}
 		}
-		
+
 		return Reference.MOD_ID + "_default.json";
 	}
-	
+
 	public static String getServerIP() {
 		Minecraft mc = Minecraft.getInstance();
 		ServerData serverData = mc.getCurrentServerData();
@@ -214,7 +214,7 @@ public class DataManager implements IDirectoryCache {
 			return null;
 		}
 	}
-	
+
 	public static void saveBlockEditFile(String fileName) {
 		if(fileName == null) {
 			String player = (String) getEditSelection().getVariables().get("player");
@@ -226,7 +226,7 @@ public class DataManager implements IDirectoryCache {
 				fileName = String.format(Locale.US, "%s-%4d-%02d-%02d-%02d.%02d.%02d", player, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
 			}
 		}
-		
+
 		File file = new File(getPlayereditsBaseDirectory(), fileName);
 		try {
 			BlockEditSet edits = DataManager.getEditSelection().getBlockEditSet();
@@ -238,7 +238,7 @@ public class DataManager implements IDirectoryCache {
 			ChatMessage.localError("The file " + fileName + " could not be saved.", true);
 		}
 	}
-	
+
 	public static void loadBlockEditFile(String fileName) {
 		File file = new File(getPlayereditsBaseDirectory(), fileName);
 		if(!file.canRead()) {
@@ -247,7 +247,7 @@ public class DataManager implements IDirectoryCache {
 				file = files[files.length - 1];
 			}
 		}
-		
+
 		if(file.canRead()) {
 			try {
 				BlockEditSet edits = DataManager.getEditSelection().getBlockEditSet();
@@ -262,7 +262,7 @@ public class DataManager implements IDirectoryCache {
 			ChatMessage.localError("Can't open " + fileName + " to read.", true);
 		}
 	}
-	
+
 	public static void listBlockEditFiles(String prefix, int page) {
 		File[] files = getInstance().getBlockEditFileList(prefix);
 		if(files.length == 0) {
@@ -273,20 +273,20 @@ public class DataManager implements IDirectoryCache {
 			} else {
 				ChatMessage.localOutput(files.length + " matching files:", true);
 			}
-			
+
 			int pages = (files.length + Configs.Generic.PAGE_LINES.getIntegerValue() - 1) / Configs.Generic.PAGE_LINES.getIntegerValue();
 			if(page > pages) {
 				ChatMessage.localError(String.format(Locale.US, "The highest page is %d.", page), true);
 			} else {
 				ChatMessage.localOutput(String.format(Locale.US, "Page %d of %d.", page, pages), true);
-				
+
 				int start = (page - 1) * Configs.Generic.PAGE_LINES.getIntegerValue();
 				int end = Math.min(files.length, page * Configs.Generic.PAGE_LINES.getIntegerValue());
-				
+
 				for(int i = start; i < end; ++i) {
 					ChatMessage.localOutput("     " + files[i].getName(), true);
 				}
-				
+
 				ChatMessage.localOutput(String.format(Locale.US, "Page %d of %d.", page, pages), true);
 				if(page < pages) {
 					ChatMessage.localOutput(String.format(Locale.US, "Use \"/%s file list %s %d\" to see the next page.", Configs.Generic.WATSON_PREFIX.getStringValue(), prefix, (page + 1)), true);
@@ -294,7 +294,7 @@ public class DataManager implements IDirectoryCache {
 			}
 		}
 	}
-	
+
 	public static void deleteBlockEditFiles(String prefix) {
 		File[] files = getInstance().getBlockEditFileList(prefix);
 		if(files.length > 0) {
@@ -316,7 +316,7 @@ public class DataManager implements IDirectoryCache {
 			ChatMessage.localOutput(String.format(Locale.US, "There are no save files matching \"%s\".", prefix), true);
 		}
 	}
-	
+
 	public static void expireBlockEditFiles(String date) {
 		Matcher m = DATE_PATTERN.matcher(date);
 		if(m.matches()) {
@@ -326,16 +326,16 @@ public class DataManager implements IDirectoryCache {
 				int year = Integer.parseInt(m.group(1));
 				int month = Integer.parseInt(m.group(2));
 				int day = Integer.parseInt(m.group(3));
-				
+
 				expiry.setLenient(false);
 				expiry.set(year, month - 1, day, 0, 0);
-				
+
 				expiryTime = expiry.getTimeInMillis();
 			} catch (Exception e) {
 				ChatMessage.localError(date + " is not a valid date of the form YYYY-MM-DD.", true);
 				return;
 			}
-			
+
 			int deleted = 0;
 			int failed = 0;
 			File[] files = getInstance().getBlockEditFileList("*");
@@ -364,20 +364,20 @@ public class DataManager implements IDirectoryCache {
 			ChatMessage.localError("The date must take the form YYYY-MM-DD.", true);
 		}
 	}
-	
+
 	public File[] getBlockEditFileList(String prefix) {
 		File[] files = getPlayereditsBaseDirectory().listFiles(new CaseInsensitivePrefixFileFilter(prefix));
 		Arrays.sort(files);
 		return files;
 	}
-	
+
 	public static void configure(GameType gameMode) {
 		Configs.Generic.DISPLAYED.setBooleanValue(gameMode.isCreative());
 	}
-	
+
 	public class CaseInsensitivePrefixFileFilter implements FileFilter {
 		protected String _lowerPrefix;
-		
+
 		public CaseInsensitivePrefixFileFilter(String prefix) {
 			_lowerPrefix = (prefix == null || prefix.equals("*")) ? "" : prefix.toLowerCase();
 		}

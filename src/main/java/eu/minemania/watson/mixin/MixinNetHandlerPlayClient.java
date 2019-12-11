@@ -22,17 +22,17 @@ import net.minecraft.network.play.server.SPacketCommandList;
 public abstract class MixinNetHandlerPlayClient {
 	@Shadow
 	@Final
-    private CommandDispatcher<CommandSource> commandDispatcher;
-	
+	private CommandDispatcher<CommandSource> commandDispatcher;
+
 	@SuppressWarnings("unchecked")
-    @Inject(method = "<init>", at = @At("RETURN"))
-    public void onInit(Minecraft mc, GuiScreen screen, NetworkManager connection, GameProfile profile, CallbackInfo ci) {
-        Command.registerCommands((CommandDispatcher<CommandSource>) (Object) commandDispatcher);
-    }
-	
-    @SuppressWarnings("unchecked")
-    @Inject(method = "handleCommandList", at = @At("TAIL"))
-    public void onOnCommandTree(SPacketCommandList packet, CallbackInfo ci) {
-        Command.registerCommands((CommandDispatcher<CommandSource>) (Object) commandDispatcher);
-    }
+	@Inject(method = "<init>", at = @At("RETURN"))
+	public void onInit(Minecraft mc, GuiScreen screen, NetworkManager connection, GameProfile profile, CallbackInfo ci) {
+		Command.registerCommands((CommandDispatcher<CommandSource>) (Object) commandDispatcher);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Inject(method = "handleCommandList", at = @At("TAIL"))
+	public void onOnCommandTree(SPacketCommandList packet, CallbackInfo ci) {
+		Command.registerCommands((CommandDispatcher<CommandSource>) (Object) commandDispatcher);
+	}
 }

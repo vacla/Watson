@@ -28,7 +28,7 @@ public class Configs implements IConfigHandler {
 	 * Config file for mod.
 	 */
 	private static final String CONFIG_FILE_NAME = Reference.MOD_ID + ".json";
-	
+
 	private static final ImmutableList<String> WATSON_LIST = ImmutableList.of(
 			"minecraft:acacia_button;1;14033081",
 			"minecraft:acacia_door;1;14033081",
@@ -715,11 +715,11 @@ public class Configs implements IConfigHandler {
 			"zombie_villager;1;14033081",
 			"phantom;1;14033081",
 			"lightning_bolt;1;14033081",
-		    "player;1;14033081",
-		    "fishing_bobber;1;14033081",
-		    "trident;1;14033081"
-	);
-	
+			"player;1;14033081",
+			"fishing_bobber;1;14033081",
+			"trident;1;14033081"
+			);
+
 	/**
 	 * Default Generic configuration.
 	 */
@@ -756,7 +756,7 @@ public class Configs implements IConfigHandler {
 		public static final ConfigBoolean DISPLAYED = new ConfigBoolean("displayed", true, "If true, watson will draw stuff");
 		public static final ConfigBoolean SELECTION_SHOWN = new ConfigBoolean("selectionShown", true, "If enabled selection will be shown");
 		public static final ConfigOptionList PLUGIN = new ConfigOptionList("plugin", Plugins.NULL, "which plugin does the server use");
-		
+
 		public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
 				ENABLED,
 				DEBUG,
@@ -790,70 +790,70 @@ public class Configs implements IConfigHandler {
 				DISPLAYED,
 				SELECTION_SHOWN,
 				PLUGIN
-		);
+				);
 	}
-	
+
 	/**
 	 * Default Lists configuration.
 	 */
 	public static class Lists{
 		public static final ConfigStringList HIGHLIGHT = new ConfigStringList("highlight", ImmutableList.of(), "What gets highlighted in chat");
 		public static final ConfigStringList WATSON_BLOCKS = new ConfigStringList("watson blocks", WATSON_LIST, "Watson blocks");
-		
+
 		public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
 				HIGHLIGHT,
 				WATSON_BLOCKS
-		);
+				);
 	}
-	
+
 	/**
 	 * Loads configurations from configuration file.
 	 */
 	public static void loadFromFile() {
 		File configFile = new File(FileUtils.getConfigDirectory(), CONFIG_FILE_NAME);
-		
+
 		if(configFile.exists() && configFile.isFile() && configFile.canRead()) {
 			JsonElement element = JsonUtils.parseJsonFile(configFile);
-			
+
 			if(element != null && element.isJsonObject()) {
 				JsonObject root = element.getAsJsonObject();
-				
+
 				ConfigUtils.readConfigBase(root, "Generic", Generic.OPTIONS);
 				ConfigUtils.readConfigBase(root, "Lists", Lists.OPTIONS);
 				ConfigUtils.readConfigBase(root, "Hotkeys", Hotkeys.HOTKEY_LIST);
 			}
 		}
-		
+
 		Highlight.setHighlightList(Lists.HIGHLIGHT.getStrings());
 		WatsonBlockRegistery.setWatsonBlockList(Lists.WATSON_BLOCKS.getStrings());
 	}
-	
+
 	/**
 	 * Saves configurations to configuration file.
 	 */
 	public static void saveToFile() {
 		File dir = FileUtils.getConfigDirectory();
-		
+
 		if((dir.exists() && dir.isDirectory()) || dir.mkdirs()) {
 			JsonObject root = new JsonObject();
-			
+
 			ConfigUtils.writeConfigBase(root, "Generic", Generic.OPTIONS);
 			ConfigUtils.writeConfigBase(root, "Lists", Lists.OPTIONS);
 			ConfigUtils.writeConfigBase(root, "Hotkeys", Hotkeys.HOTKEY_LIST);
-			
+
 			JsonUtils.writeJsonToFile(root, new File(dir, CONFIG_FILE_NAME));
 		}
 	}
 	@Override
 	public void load() {
 		loadFromFile();
-		
+
 	}
 
 	@Override
 	public void save() {
 		saveToFile();
-		
+
 	}
 
 }

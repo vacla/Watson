@@ -14,34 +14,34 @@ import net.minecraft.util.text.ITextComponent;
 public class ModModeAnalysis extends Analysis {
 	public ModModeAnalysis() {
 		IMatchedChatHandler modmodeHandler = new IMatchedChatHandler() {
-			
+
 			@Override
 			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
 				changeModMode(chat, m);
 				return true;
 			}
 		};
-		
+
 		addMatchedChatHandler(MODMODE_ENABLE, modmodeHandler);
 		addMatchedChatHandler(MODMODE_DISABLE, modmodeHandler);
-		
+
 		IMatchedChatHandler dutiesHandler = new IMatchedChatHandler() {
-			
+
 			@Override
 			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
 				changeDutyMode(chat, m);
 				return true;
 			}
 		};
-		
+
 		addMatchedChatHandler(DUTYMODE_ENABLE, dutiesHandler);
 		addMatchedChatHandler(DUTYMODE_DISABLE, dutiesHandler);
 	}
-	
+
 	void changeModMode(ITextComponent chat, Matcher m) {
 		Configs.Generic.DISPLAYED.setBooleanValue(m.pattern() == MODMODE_ENABLE);
 	}
-	
+
 	void changeDutyMode(ITextComponent chat, Matcher m) {
 		Configs.Generic.DISPLAYED.setBooleanValue(m.pattern() == DUTYMODE_ENABLE);
 	}

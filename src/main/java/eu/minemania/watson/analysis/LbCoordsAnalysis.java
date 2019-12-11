@@ -42,10 +42,10 @@ public class LbCoordsAnalysis extends Analysis {
 	protected int _currentPage = 0;
 	protected int _pageCount = 0;
 	protected String _world; 
-	
+
 	public LbCoordsAnalysis() {
 		addMatchedChatHandler(LB_COORD_POSITION, new IMatchedChatHandler() {
-			
+
 			@Override
 			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
 				lbCoordPosition(chat, m);
@@ -53,7 +53,7 @@ public class LbCoordsAnalysis extends Analysis {
 			}
 		});
 		addMatchedChatHandler(LB_COORD, new IMatchedChatHandler() {
-			
+
 			@Override
 			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
 				lbCoord(chat, m);
@@ -61,7 +61,7 @@ public class LbCoordsAnalysis extends Analysis {
 			}
 		});
 		addMatchedChatHandler(LB_KILLS, new IMatchedChatHandler() {
-			
+
 			@Override
 			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
 				lbKills(chat, m);
@@ -69,7 +69,7 @@ public class LbCoordsAnalysis extends Analysis {
 			}
 		});
 		addMatchedChatHandler(LB_COORD_KILLS, new IMatchedChatHandler() {
-			
+
 			@Override
 			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
 				lbCoordKills(chat, m);
@@ -77,7 +77,7 @@ public class LbCoordsAnalysis extends Analysis {
 			}
 		});
 		addMatchedChatHandler(LB_COORD_REPLACED, new IMatchedChatHandler() {
-			
+
 			@Override
 			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
 				lbCoordReplaced(chat, m);
@@ -85,7 +85,7 @@ public class LbCoordsAnalysis extends Analysis {
 			}
 		});
 		addMatchedChatHandler(LB_PAGE, new IMatchedChatHandler() {
-			
+
 			@Override
 			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
 				lbPage(chat, m);
@@ -93,14 +93,14 @@ public class LbCoordsAnalysis extends Analysis {
 			}
 		});
 		IMatchedChatHandler headerHandler = new IMatchedChatHandler() {
-			
+
 			@Override
 			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
 				lbHeader(chat, m);
 				return true;
 			}
 		};
-		
+
 		addMatchedChatHandler(LB_HEADER_NO_RESULTS, headerHandler);
 		addMatchedChatHandler(LB_HEADER_CHANGES, headerHandler);
 		addMatchedChatHandler(LB_HEADER_BLOCKS, headerHandler);
@@ -112,7 +112,7 @@ public class LbCoordsAnalysis extends Analysis {
 		addMatchedChatHandler(LB_HEADER_TIME_CHECK, headerHandler);
 		addMatchedChatHandler(LB_HEADER_BLOCK, headerHandler);
 	}
-	
+
 	void lbCoord(ITextComponent chat, Matcher m) {
 		try {
 			int index = Integer.parseInt(m.group(1));
@@ -170,11 +170,11 @@ public class LbCoordsAnalysis extends Analysis {
 			Watson.logger.info("error parsing lb coords", ex);
 		}
 	}
-	
+
 	void lbKills(ITextComponent chat, Matcher m) {
 		_world = m.group(1);
 	}
-	
+
 	void lbCoordPosition(ITextComponent chat, Matcher m) {
 		_world = m.group(1);
 	}
@@ -187,7 +187,7 @@ public class LbCoordsAnalysis extends Analysis {
 			int minute = Integer.parseInt(m.group(4));
 			int second = Integer.parseInt(m.group(5));
 			long millis = TimeStamp.toMillis(ymd, hour, minute, second);
-			
+
 			String player = m.group(6);
 			String victim = m.group(7);
 
@@ -195,19 +195,19 @@ public class LbCoordsAnalysis extends Analysis {
 			int y = Integer.parseInt(m.group(9));
 			int z = Integer.parseInt(m.group(10));
 			String weapon = m.group(11);
-			
+
 			WatsonBlock type = WatsonBlockRegistery.getInstance().getBlockKillTypeByName(victim);
 			BlockEdit edit = new BlockEdit(millis, player, false, x, y, z, type, _world);
 			SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, true));
 
 			TextFormatting color = Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue() ? getChatColorFormat(x, y, z) : null;
 			if (Configs.Generic.REFORMAT_QUERY_RESULTS.getBooleanValue()) {
-			
-		        if (!type.getName().equals("minecraft:stone")) {
-		        	String year = (ymd[0] != 0) ? String.format(Locale.US, "%02d-", ymd[0]) : "";
-		        	String output = String.format(Locale.US, "(%2d) %s%02d-%02d %02d:%02d:%02d (%d,%d,%d) %s %s %s > %s", index, year, ymd[1], ymd[2], hour, minute, second, x, y, z, _world, player, weapon, victim);
-		        	ChatMessage.sendToLocalChat(output, true);
-		        }
+
+				if (!type.getName().equals("minecraft:stone")) {
+					String year = (ymd[0] != 0) ? String.format(Locale.US, "%02d-", ymd[0]) : "";
+					String output = String.format(Locale.US, "(%2d) %s%02d-%02d %02d:%02d:%02d (%d,%d,%d) %s %s %s > %s", index, year, ymd[1], ymd[2], hour, minute, second, x, y, z, _world, player, weapon, victim);
+					ChatMessage.sendToLocalChat(output, true);
+				}
 			} else {
 				if (Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue()) {
 					ChatMessage.sendToLocalChat(color, null, chat.getUnformattedComponentText(), true);
@@ -221,7 +221,7 @@ public class LbCoordsAnalysis extends Analysis {
 			Watson.logger.info("error parsing lb kills coords", ex);
 		}
 	}
-	
+
 	void lbCoordReplaced(ITextComponent chat, Matcher m) {
 		try {
 			int index = Integer.parseInt(m.group(1));
@@ -260,21 +260,21 @@ public class LbCoordsAnalysis extends Analysis {
 			}
 			requestNextPage();
 		} catch (Exception ex) {
-	    }
+		}
 	}
 
 	void lbPage(ITextComponent chat, Matcher m) {
 		int currentPage = Integer.parseInt(m.group(1));
-	    int pageCount = Integer.parseInt(m.group(2));
+		int pageCount = Integer.parseInt(m.group(2));
 
-	    if (pageCount <= Configs.Generic.MAX_AUTO_PAGES.getIntegerValue()) {
-	    	_currentPage = currentPage;
-	    	_pageCount = pageCount;
-	    } else {
-	    	_currentPage = _pageCount = 0;
-	    }
+		if (pageCount <= Configs.Generic.MAX_AUTO_PAGES.getIntegerValue()) {
+			_currentPage = currentPage;
+			_pageCount = pageCount;
+		} else {
+			_currentPage = _pageCount = 0;
+		}
 	}
-	
+
 	void lbHeader(ITextComponent chat, Matcher m) {
 		_currentPage = _pageCount = 0;
 	}
@@ -286,22 +286,22 @@ public class LbCoordsAnalysis extends Analysis {
 
 				_currentPage = _pageCount = 0;
 			}
-	    }
+		}
 	}
 
 	private TextFormatting getChatColorFormat(int x, int y, int z) {
-	    int dx = x - _lastX;
-	    int dy = y - _lastY;
-	    int dz = z - _lastZ;
+		int dx = x - _lastX;
+		int dy = y - _lastY;
+		int dz = z - _lastZ;
 
-	    float distance = dx * dx + dy * dy + dz * dz;
-	    if (distance > _COLOUR_PROXIMITY_LIMIT * _COLOUR_PROXIMITY_LIMIT) {
-	    	_colourIndex = (_colourIndex + 1) % _COLOUR_CYCLE.length;
-	    }
-	    _lastX = x;
-	    _lastY = y;
-	    _lastZ = z;
+		float distance = dx * dx + dy * dy + dz * dz;
+		if (distance > _COLOUR_PROXIMITY_LIMIT * _COLOUR_PROXIMITY_LIMIT) {
+			_colourIndex = (_colourIndex + 1) % _COLOUR_CYCLE.length;
+		}
+		_lastX = x;
+		_lastY = y;
+		_lastZ = z;
 
-	    return _COLOUR_CYCLE[_colourIndex];
+		return _COLOUR_CYCLE[_colourIndex];
 	}
 }

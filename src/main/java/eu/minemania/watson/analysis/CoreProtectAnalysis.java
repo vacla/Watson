@@ -21,27 +21,27 @@ import net.minecraft.util.text.ITextComponent;
 
 //----------------------------------------------------------------------------
 /**
-* An {@link Analysis} implementation that recognises inspector and lookup
-* results from CoreProtect.
-* 
-* CoreProtect inspector results look like this:
-* 
-* <pre>
-* ----- CoreProtect ----- (x2/y63/z-6)
-* 0.00/h ago - totemo placed #4 (Cobblestone).
-* 1.36/h ago - totemo removed #4 (Cobblestone).
-* </pre>
-* 
-* Lookup results look like this:
-* 
-* <pre>
-* ----- CoreProtect Lookup Results -----
-* 0.01/h ago - §3totemo removed #4 (Cobblestone).
-*                 ^ (x3/y63/z-7/world)
-* 0.01/h ago - totemo placed #4 (Cobblestone).
-*                 ^ (x3/y63/z-6/world)
-* </pre>
-*/
+ * An {@link Analysis} implementation that recognises inspector and lookup
+ * results from CoreProtect.
+ * 
+ * CoreProtect inspector results look like this:
+ * 
+ * <pre>
+ * ----- CoreProtect ----- (x2/y63/z-6)
+ * 0.00/h ago - totemo placed #4 (Cobblestone).
+ * 1.36/h ago - totemo removed #4 (Cobblestone).
+ * </pre>
+ * 
+ * Lookup results look like this:
+ * 
+ * <pre>
+ * ----- CoreProtect Lookup Results -----
+ * 0.01/h ago - §3totemo removed #4 (Cobblestone).
+ *                 ^ (x3/y63/z-7/world)
+ * 0.01/h ago - totemo placed #4 (Cobblestone).
+ *                 ^ (x3/y63/z-6/world)
+ * </pre>
+ */
 public class CoreProtectAnalysis extends Analysis {
 	protected static final int MS_PER_HOUR = 60 * 60 * 1000;
 	protected static final Pattern ABSOLUTE_TIME = Pattern.compile("(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{2}):(\\d{2})");
@@ -57,7 +57,7 @@ public class CoreProtectAnalysis extends Analysis {
 	protected long _millis;
 	protected String _player;
 	protected WatsonBlock _block;
-	
+
 	public CoreProtectAnalysis() {
 		addMatchedChatHandler(INSPECTOR_COORDS, new IMatchedChatHandler() {
 			@Override
@@ -88,7 +88,7 @@ public class CoreProtectAnalysis extends Analysis {
 			}
 		});
 	}
-	
+
 	void inspectorCoords(ITextComponent chat, Matcher m) {
 		_isLookup = false;
 		_x = Integer.parseInt(m.group(1));
@@ -98,7 +98,7 @@ public class CoreProtectAnalysis extends Analysis {
 		selection.selectPosition(_x, _y, _z, _world);
 		_firstInspectorResult = true;
 	}
-	
+
 	void details(ITextComponent chat, Matcher m) {
 		_lookupDetails = false;
 		if(m.group(3).equals("placed") || m.group(3).equals("removed")) {
@@ -107,16 +107,16 @@ public class CoreProtectAnalysis extends Analysis {
 			_creation = m.group(3).equals("placed");
 			String block = m.group(4);
 			_block = WatsonBlockRegistery.getInstance().getWatsonBlockByName(block);
-			
+
 			if(_isLookup) {
 				// Record that we can use these details at the next
-		        // coreprotect.lookupcoords only.
+				// coreprotect.lookupcoords only.
 				_lookupDetails = true;
 			} else {
 				if(DataManager.getFilters().isAcceptedPlayer(_player)) {
 					BlockEdit edit = new BlockEdit(_millis, _player, _creation, _x, _y, _z, _block, _world);
 					SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, _firstInspectorResult));
-					
+
 					if(_firstInspectorResult) {
 						_firstInspectorResult = false;
 					}
@@ -124,11 +124,11 @@ public class CoreProtectAnalysis extends Analysis {
 			}
 		}
 	}
-	
+
 	void lookupHeader(ITextComponent chat, Matcher m) {
 		_isLookup = true;
 	}
-	
+
 	void lookupCoords(ITextComponent chat, Matcher m) {
 		_isLookup = true;
 		if(_lookupDetails) {
@@ -137,13 +137,13 @@ public class CoreProtectAnalysis extends Analysis {
 			_z = Integer.parseInt(m.group(3));
 			_world = m.group(4);
 			// https://github.com/totemo/watson/issues/23
-			
+
 			BlockEdit edit = new BlockEdit(_millis, _player, _creation, _x, _y, _z, _block, _world);
 			SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, true));
 			_lookupDetails = false;
 		}
 	}
-	
+
 	private long parseTimeExpression(String time) {
 		Matcher absolute = ABSOLUTE_TIME.matcher(time);
 		if(absolute.matches()) {
@@ -159,7 +159,7 @@ public class CoreProtectAnalysis extends Analysis {
 				String timed = relative.group(1).replace(",", ".");
 				float hours = Float.parseFloat(timed);
 				long millis = System.currentTimeMillis() - (long) (hours * MS_PER_HOUR);
-				
+
 				millis -= millis % (MS_PER_HOUR / 100);
 				return millis;
 			}

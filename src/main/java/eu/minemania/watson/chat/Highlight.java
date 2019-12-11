@@ -25,11 +25,11 @@ public class Highlight {
 	static protected String username;
 	private static final HashSet<MutablePair<Pattern, MutablePair<TextFormatting, TextFormatting>>> highlights = new HashSet<>();
 	private static final String tempkey = "chat.type.text";
-	
+
 	private static Highlight getInstance() {
 		return INSTANCE;
 	}
-	
+
 	/**
 	 * Highlights player chat message in vanilla.
 	 * 
@@ -59,7 +59,7 @@ public class Highlight {
 		}
 		return endMessage;
 	}
-	
+
 	/**
 	 * Highlights player chat message on modded server (Paper/Spigot).
 	 * 
@@ -94,7 +94,7 @@ public class Highlight {
 				textChat = chat.substring(endUsername + 2);
 				changeUsername = true;
 				setUsername(username);
-				
+
 				endMessage = new TextComponentTranslation(tempkey, new Object[] { mc.player.getDisplayName(), highlight(textChat)});
 				if(!prefix.equals(new TextComponentString(""))) {
 					prefix.appendSibling(endMessage);
@@ -108,7 +108,7 @@ public class Highlight {
 		}
 		return endMessage;
 	}
-	
+
 	//private static int i = 0;
 	/**
 	 * Highlights text of player chat message.
@@ -136,15 +136,15 @@ public class Highlight {
 		}
 		return chatText;
 	}
-	
+
 	private static void setUsername(String user) {
 		username = user;
 	}
-	
+
 	public static String getUsername() {
 		return username;
 	}
-	
+
 	/**
 	 * Converts character style to TextFormatting style.
 	 * 
@@ -174,18 +174,18 @@ public class Highlight {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Sets lists from where to get highlight list config.
 	 * 
 	 * @param list Config list of highlight items
 	 */
 	public static void setHighlightList(List<String> list){
-		 highlights.clear();
-		 
-		 getInstance().populateHighlightList(highlights, list);
-    }
-	
+		highlights.clear();
+
+		getInstance().populateHighlightList(highlights, list);
+	}
+
 	/**
 	 * Checks if style character.
 	 * 
@@ -194,17 +194,17 @@ public class Highlight {
 	 */
 	private boolean isStyle(String style) {
 		switch (style) {
-			case "+":
-			case "/":
-			case "_":
-			case "-":
-			case "?":
-				return true;
-			default:
-				return false;
+		case "+":
+		case "/":
+		case "_":
+		case "-":
+		case "?":
+			return true;
+		default:
+			return false;
 		}
 	}
-	
+
 	/**
 	 * Checks if color string.
 	 * 
@@ -213,30 +213,30 @@ public class Highlight {
 	 */
 	private boolean isColor(String color) {
 		switch (color) {
-			case "black":
-			case "darkblue":
-			case "darkgreen":
-			case "darkaqua":
-			case "darkred":
-			case "darkpurple":
-			case "gold":
-			case "grey":
-			case "gray":
-			case "darkgrey":
-			case "darkgray":
-			case "blue":
-			case "green":
-			case "aqua":
-			case "red":
-			case "lightpurple":
-			case "yellow":
-			case "white":
-				return true;
-			default:
-				return false;
+		case "black":
+		case "darkblue":
+		case "darkgreen":
+		case "darkaqua":
+		case "darkred":
+		case "darkpurple":
+		case "gold":
+		case "grey":
+		case "gray":
+		case "darkgrey":
+		case "darkgray":
+		case "blue":
+		case "green":
+		case "aqua":
+		case "red":
+		case "lightpurple":
+		case "yellow":
+		case "white":
+			return true;
+		default:
+			return false;
 		}
 	}
-	
+
 	public static void listHighlights() {
 		if(highlights.isEmpty()) {
 			InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.highlight.empty");
@@ -245,28 +245,28 @@ public class Highlight {
 			for(MutablePair<Pattern, MutablePair<TextFormatting, TextFormatting>> item_highlight : highlights) {
 				TextFormatting color = item_highlight.getRight().getLeft();
 				TextFormatting style = item_highlight.getRight().getRight();
-				
+
 				ChatMessage.localOutputT("watson.message.highlight.list_string", index + 1, item_highlight.getLeft(), color != null ? color.getFriendlyName() : color, style != null ? style.getFriendlyName() : style);
 				++index;
 			}
 		}
 	}
-	
+
 	public static void remove(String pattern) {
 		if(highlights.isEmpty()) {
 			InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.highlight.empty");
 			return;
 		}
-        List<String> orig = Configs.Lists.HIGHLIGHT.getStrings();
-        List<String> copy = new ArrayList<>(orig);
-        copy.removeIf((str) -> str.contains(pattern));
+		List<String> orig = Configs.Lists.HIGHLIGHT.getStrings();
+		List<String> copy = new ArrayList<>(orig);
+		copy.removeIf((str) -> str.contains(pattern));
 
-        if (copy.size() != orig.size()) {
-            Configs.Lists.HIGHLIGHT.setStrings(copy);
-            InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.highlight.removed", pattern);
-        }
-    }
-	
+		if (copy.size() != orig.size()) {
+			Configs.Lists.HIGHLIGHT.setStrings(copy);
+			InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.highlight.removed", pattern);
+		}
+	}
+
 	public static void add(String pattern, String color, String style) {
 		if(highlights.isEmpty()) {
 			InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.highlight.empty");
@@ -280,7 +280,7 @@ public class Highlight {
 			InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.highlight.added", copy.size(), pattern);
 		}
 	}
-	
+
 	/**
 	 * Populates highlight list with config highlight list.
 	 * 
@@ -292,41 +292,41 @@ public class Highlight {
 			try {
 				if(str.isEmpty() == false) {
 					int index = str.indexOf(";");
-		            if (index != -1){
-		                String format = str.substring(0, index);
-		                String pattern = str.substring(index+1);
-		                MutablePair<Pattern, MutablePair<TextFormatting, TextFormatting>> pr = new MutablePair<>();
-		                MutablePair<TextFormatting, TextFormatting> pr2 = new MutablePair<>();
-		                if (format.length() > 0) {
-		                	if(format.length() == 1) {
-		                		if(isStyle(format)) {
-		                			pr2.setRight(getStyle(format));
-		                		}
-		                	} else {
-		                		String style = format.substring(0, 1);
-		                		String color = format.substring(1);
-		                		if(isStyle(style)) {
-		                			pr2.setRight(getStyle(style));
-		                		}
-		                		if(isColor(format)) {
-		                			pr2.setLeft(Color.getByColorOrName(format).getColor());
-		                		} else if(isColor(color)) {
-		                			pr2.setLeft(Color.getByColorOrName(color).getColor());
-		                		}
-		                	}
-		                	pr.setRight(pr2);
-		                }
-		                if (pattern.length() > 0) {
-		                    pr.setLeft(Pattern.compile(pattern));
-		                }
-		                if(pr.getLeft() != null && pr.getRight() != null) {
-		                	highlightpair.add(pr);
-		                }
-		            }
+					if (index != -1){
+						String format = str.substring(0, index);
+						String pattern = str.substring(index+1);
+						MutablePair<Pattern, MutablePair<TextFormatting, TextFormatting>> pr = new MutablePair<>();
+						MutablePair<TextFormatting, TextFormatting> pr2 = new MutablePair<>();
+						if (format.length() > 0) {
+							if(format.length() == 1) {
+								if(isStyle(format)) {
+									pr2.setRight(getStyle(format));
+								}
+							} else {
+								String style = format.substring(0, 1);
+								String color = format.substring(1);
+								if(isStyle(style)) {
+									pr2.setRight(getStyle(style));
+								}
+								if(isColor(format)) {
+									pr2.setLeft(Color.getByColorOrName(format).getColor());
+								} else if(isColor(color)) {
+									pr2.setLeft(Color.getByColorOrName(color).getColor());
+								}
+							}
+							pr.setRight(pr2);
+						}
+						if (pattern.length() > 0) {
+							pr.setLeft(Pattern.compile(pattern));
+						}
+						if(pr.getLeft() != null && pr.getRight() != null) {
+							highlightpair.add(pr);
+						}
+					}
 				}
 			} catch (Exception e) {
 				Watson.logger.warn("Invalid highlight: '{}'", str);
 			}
-        }
+		}
 	}
 }

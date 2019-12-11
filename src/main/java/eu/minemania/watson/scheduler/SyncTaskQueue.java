@@ -9,7 +9,7 @@ public class SyncTaskQueue {
 	public static SyncTaskQueue getInstance() {
 		return INSTANCE;
 	}
-	
+
 	public void addTask(Runnable task) {
 		_taskQueue.add(task);
 	}

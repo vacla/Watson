@@ -19,7 +19,7 @@ public abstract class MixinCommandNode<S> implements Comparable<CommandNode<S>>,
 	private Map<String, LiteralCommandNode<S>> literals;
 	@Shadow(remap = false)
 	private Map<String, ArgumentCommandNode<S, ?>> arguments;
-	
+
 	@SuppressWarnings("unchecked")
 	public void removeChild(String command) {
 		final CommandNode<S> child = children.get(command);

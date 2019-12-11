@@ -4,32 +4,32 @@ public class OreBlock implements Comparable<OreBlock> {
 	protected IntCoord _location;
 	protected BlockEdit _edit;
 	protected OreDeposit _deposit;
-	
+
 	public OreBlock(IntCoord location, BlockEdit edit) {
 		_location = location;
 		setEdit(edit);
 	}
-	
+
 	public IntCoord getLocation() {
 		return _location;
 	}
-	
+
 	public void setEdit(BlockEdit edit) {
 		_edit = edit;
 	}
-	
+
 	public BlockEdit getEdit() {
 		return _edit;
 	}
-	
+
 	public void setDeposit(OreDeposit deposit) {
 		_deposit = deposit;
 	}
-	
+
 	public OreDeposit getDeposit() {
 		return _deposit;
 	}
-	
+
 	@Override
 	public int compareTo(OreBlock other) {
 		if(getLocation().getY() != other.getLocation().getY()) {

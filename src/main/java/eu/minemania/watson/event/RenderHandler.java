@@ -7,17 +7,17 @@ import net.minecraft.client.Minecraft;
 
 public class RenderHandler implements IRenderer {
 	private static final RenderHandler INSTANCE = new RenderHandler();
-	
-	public static RenderHandler getInstance() {
-        return INSTANCE;
-    }
-	
-	@Override
-    public void onRenderWorldLast(float partialTicks) {
-        Minecraft mc = Minecraft.getInstance();
 
-        if (Configs.Generic.ENABLED.getBooleanValue() && mc.world != null && mc.player != null) {
-            OverlayRenderer.renderOverlays(mc, partialTicks);
-        }
-    }
+	public static RenderHandler getInstance() {
+		return INSTANCE;
+	}
+
+	@Override
+	public void onRenderWorldLast(float partialTicks) {
+		Minecraft mc = Minecraft.getInstance();
+
+		if (Configs.Generic.ENABLED.getBooleanValue() && mc.world != null && mc.player != null) {
+			OverlayRenderer.renderOverlays(mc, partialTicks);
+		}
+	}
 }

@@ -11,7 +11,7 @@ import net.minecraft.util.text.ITextComponent;
 
 public class Analysis implements IChatHandler {
 	protected LinkedHashMap<Pattern, IMatchedChatHandler> _handlers = new LinkedHashMap<Pattern, IMatchedChatHandler>();
-	
+
 	public boolean dispatchMatchedChat(ITextComponent chat) {
 		String unformatted = chat.getString();
 		for(Entry<Pattern, IMatchedChatHandler> entry : _handlers.entrySet()) {
@@ -22,11 +22,11 @@ public class Analysis implements IChatHandler {
 		}
 		return true;
 	}
-	
+
 	public void addMatchedChatHandler(Pattern pattern, IMatchedChatHandler handler) {
 		_handlers.put(pattern, handler);
 	}
-	
+
 	@Override
 	public boolean onChat(ITextComponent chat) {
 		return dispatchMatchedChat(chat);

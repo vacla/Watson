@@ -9,15 +9,15 @@ import net.minecraft.client.Minecraft;
 
 public class ClientTickHandler implements IClientTickHandler {
 	@Override
-    public void onClientTick(Minecraft mc) {
-        if (mc.world != null && mc.player != null) {
-        	SyncTaskQueue.getInstance().runTasks();
-            ChatMessage.getInstance().processServerChatQueue();
-            if(DataManager.getClientTickStartTime() != 0 && System.currentTimeMillis() - DataManager.getClientTickStartTime() > 1000) {
-            	ChatMessage.localOutputT("watson.message.join.watson", Reference.MOD_VERSION, Configs.Generic.WATSON_PREFIX.getStringValue(), true);
-            	ChatMessage.localOutputT("watson.message.join.plugin");
-            	DataManager.setClientTick(0);
-            }
-        }
-    }
+	public void onClientTick(Minecraft mc) {
+		if (mc.world != null && mc.player != null) {
+			SyncTaskQueue.getInstance().runTasks();
+			ChatMessage.getInstance().processServerChatQueue();
+			if(DataManager.getClientTickStartTime() != 0 && System.currentTimeMillis() - DataManager.getClientTickStartTime() > 1000) {
+				ChatMessage.localOutputT("watson.message.join.watson", Reference.MOD_VERSION, Configs.Generic.WATSON_PREFIX.getStringValue(), true);
+				ChatMessage.localOutputT("watson.message.join.plugin");
+				DataManager.setClientTick(0);
+			}
+		}
+	}
 }
