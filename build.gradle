@@ -1,29 +1,12 @@
-buildscript {
-    repositories {
-        jcenter()
-        maven { url 'http://files.minecraftforge.net/maven' }
-        maven { url 'http://repo.spongepowered.org/maven' }
-        maven { url 'https://www.jitpack.io' }
-    }
-    dependencies {
-        classpath 'com.github.Chocohead:ForgeGradle:jitpack-SNAPSHOT'
-        classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
-    }
+plugins {
+	id 'fabric-loom' version '0.2.4-SNAPSHOT'
 }
 
-apply plugin: 'net.minecraftforge.gradle.tweaker-client'
-apply plugin: 'java'
-apply plugin: 'org.spongepowered.mixin'
-apply plugin: 'maven-publish'
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
 	mavenCentral()
-    maven { url 'https://www.jitpack.io' }
-    maven { url 'https://www.dimdev.org/maven/' }
-    maven { url 'https://files.minecraftforge.net/maven' }
     maven { url 'https://masa.dy.fi/maven' }
 }
 
@@ -36,38 +19,31 @@ configFile.withReader {
 }
 
 minecraft {
-    version = config.minecraft_version
-    mappings = config.mappings_version
-    runDir = 'minecraft'
-    makeObfSourceJar = false
-    tweakClass = 'org.dimdev.riftloader.launch.RiftLoaderClientLoader'
-    
     ext.mod_version = config.mod_version
     
     if(mod_version.endsWith('-dev')){
     	mod_version = mod_version + "." + new Date().format('yyyyMMdd.HHmmss')
     }
-    
-    replaceIn "Reference.java"
-    replace "@MOD_VERSION@", mod_version
 }
 
 dependencies {
-    implementation 'fi.dy.masa.malilib:malilib-rift-' + config.minecraft_version_out + ':' + config.malilib_version + ':deobf'
-    implementation 'com.github.Chocohead:Rift:jitpack-aeee80c1fb-1:dev'
+	minecraft "com.mojang:minecraft:" + config.minecraft_version
+	mappings "net.fabricmc:yarn:" + config.mappings_version
+	modCompile "net.fabricmc:fabric-loader:" + config.fabric_loader_version
+	compile "com.google.code.findbugs:jsr305:3.0.2"
+	
+    modCompile "fi.dy.masa.malilib:malilib-fabric-" + config.minecraft_version_out + ":" + config.malilib_version
+    modCompile "io.github.prospector:modmenu:" + config.mod_menu_version
 }
 
-group = config.group + config.mod_id // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = config.group + "." +config.mod_id // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = config.mod_file_name + '-' + config.minecraft_version_out
 version = project.minecraft.mod_version
 
-jar {
-	baseName = archivesBaseName
-}
-
-mixin {
-    defaultObfuscationEnv notch
-    add sourceSets.main, 'mixins.' + config.mod_id + '.refmap.json'
+compileJava {
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
+	options.encoding = 'UTF-8'
 }
 
 processResources {
@@ -77,18 +53,17 @@ processResources {
 	
     // this will ensure that this task is redone when the versions change.
     inputs.property "mod_version", project.minecraft.mod_version
-    inputs.property "minecraft_version", project.config.minecraft_version
 
-    // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
-        // replace version and mcversion
-        expand 'mod_version': project.minecraft.mod_version, 'minecraft_version': project.config.minecraft_version
+        include "fabric.mod.json"
+        expand "mod_version": project.minecraft.mod_version
     }
-      
-    // copy everything else, thats not the mcmod.info
+
     from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
+        exclude "fabric.mod.json"
     }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
 }

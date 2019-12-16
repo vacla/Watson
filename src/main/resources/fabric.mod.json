@@ -1,0 +1,42 @@
+{
+    "schemaVersion": 1,
+    "id": "watson",
+    "name": "Watson",
+    "version": "${mod_version}",
+
+    "description": "Updated Watson that displays LogBlock and CoreProtect query results in 3D.",
+    "authors": [
+        "Arnevdl29"
+    ],
+    "contact": {
+        "homepage": "",
+        "issues": "https://github.com/vacla/watson1132/issues",
+        "sources": "https://github.com/maruohon/watson1132",
+        "twitter": "https://twitter.com/ArneLangenbergh",
+        "discord": ""
+    },
+
+    "license": "MIT",
+
+    "environment": "client",
+    "entrypoints": {
+        "main": [
+            "eu.minemania.watson.Watson"
+        ],
+        "modmenu": [
+            "eu.minemania.watson.compat.modmenu.ModMenuImpl"
+        ]
+    },
+
+    "mixins": [
+        "mixins.watson.json"
+    ],
+
+    "depends": {
+        "malilib": ">=0.10.0-dev.20"
+    },
+
+    "custom": {
+        "modmenu:clientsideOnly": true
+    }
+}
