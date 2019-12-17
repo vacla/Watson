@@ -3,12 +3,12 @@ package eu.minemania.watson.gui;
 import eu.minemania.watson.Reference;
 import fi.dy.masa.malilib.gui.interfaces.IGuiIcon;
 import fi.dy.masa.malilib.render.RenderUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Identifier;
 
 public enum ButtonIcons implements IGuiIcon {
 	CONFIGURATION (0, 0, 14, 14);
 
-	public static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/gui_widgets.png");
+	public static final Identifier TEXTURE = new Identifier(Reference.MOD_ID, "textures/gui/gui_widgets.png");
 
 	private final int u;
 	private final int v;
@@ -58,7 +58,7 @@ public enum ButtonIcons implements IGuiIcon {
 	}
 
 	@Override
-	public ResourceLocation getTexture() {
+	public Identifier getTexture() {
 		return TEXTURE;
 	}
 }

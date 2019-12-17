@@ -5,11 +5,11 @@ import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import fi.dy.masa.malilib.interfaces.IClientTickHandler;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 
 public class ClientTickHandler implements IClientTickHandler {
 	@Override
-	public void onClientTick(Minecraft mc) {
+	public void onClientTick(MinecraftClient mc) {
 		if (mc.world != null && mc.player != null) {
 			SyncTaskQueue.getInstance().runTasks();
 			ChatMessage.getInstance().processServerChatQueue();

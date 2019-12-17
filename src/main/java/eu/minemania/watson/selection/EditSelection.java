@@ -14,10 +14,10 @@ import eu.minemania.watson.db.BlockEdit;
 import eu.minemania.watson.db.BlockEditSet;
 import fi.dy.masa.malilib.gui.Message.MessageType;
 import fi.dy.masa.malilib.util.InfoUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormats;
 
 public class EditSelection {
 	protected boolean _selectionChanged;
@@ -71,7 +71,7 @@ public class EditSelection {
 	}
 
 	public BlockEditSet getBlockEditSet() {
-		Minecraft mc = Minecraft.getInstance();
+		MinecraftClient mc = MinecraftClient.getInstance();
 		StringBuilder idBuilder = new StringBuilder();
 		String serverIP = DataManager.getServerIP();
 		if(serverIP != null) {
@@ -92,31 +92,31 @@ public class EditSelection {
 	public void drawSelection() {
 		if(_selection != null && Configs.Generic.SELECTION_SHOWN.getBooleanValue()) {
 			Tessellator tesselator = Tessellator.getInstance();
-			BufferBuilder buffer = tesselator.getBuffer();
-			buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+			BufferBuilder buffer = tesselator.getBufferBuilder();
+			buffer.begin(GL11.GL_LINES, VertexFormats.POSITION_COLOR);
 			GL11.glLineWidth(4.0f);
 
 			final float halfSize = 0.3f;
 			float x = _selection.x + 0.5f;
 			float y = _selection.y + 0.5f;
 			float z = _selection.z + 0.5f;
-			buffer.pos(x - halfSize, y, z).color(255/255f, 0/255f, 255/255f, 128).endVertex();
-			buffer.pos(x + halfSize, y, z).color(255/255f, 0/255f, 255/255f, 128).endVertex();
-			buffer.pos(x, y - halfSize, z).color(255/255f, 0/255f, 255/255f, 128).endVertex();
-			buffer.pos(x, y + halfSize, z).color(255/255f, 0/255f, 255/255f, 128).endVertex();
-			buffer.pos(x, y, z - halfSize).color(255/255f, 0/255f, 255/255f, 128).endVertex();
-			buffer.pos(x, y, z + halfSize).color(255/255f, 0/255f, 255/255f, 128).endVertex();
+			buffer.vertex(x - halfSize, y, z).color(255/255f, 0/255f, 255/255f, 128).next();
+			buffer.vertex(x + halfSize, y, z).color(255/255f, 0/255f, 255/255f, 128).next();
+			buffer.vertex(x, y - halfSize, z).color(255/255f, 0/255f, 255/255f, 128).next();
+			buffer.vertex(x, y + halfSize, z).color(255/255f, 0/255f, 255/255f, 128).next();
+			buffer.vertex(x, y, z - halfSize).color(255/255f, 0/255f, 255/255f, 128).next();
+			buffer.vertex(x, y, z + halfSize).color(255/255f, 0/255f, 255/255f, 128).next();
 			tesselator.draw();
 
 			if(_selection.playereditSet != null) {
 				BlockEdit previous = _selection.playereditSet.getEditBefore(_selection);
 				if(previous != null) {
-					buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+					buffer.begin(GL11.GL_LINES, VertexFormats.POSITION_COLOR);
 					GL11.glEnable(GL11.GL_LINE_STIPPLE);
 					GL11.glLineStipple(8, (short) 0xAAAA);
 					GL11.glLineWidth(3.0f);
-					buffer.pos(previous.x + 0.5f, previous.y + 0.5f, previous.z + 0.5f).color(255/255f, 0/255f, 255/255f, 128).endVertex();
-					buffer.pos(x, y, z).color(255/255f, 0/255f, 255/255f, 128).endVertex();
+					buffer.vertex(previous.x + 0.5f, previous.y + 0.5f, previous.z + 0.5f).color(255/255f, 0/255f, 255/255f, 128).next();
+					buffer.vertex(x, y, z).color(255/255f, 0/255f, 255/255f, 128).next();
 					tesselator.draw();
 					GL11.glDisable(GL11.GL_LINE_STIPPLE);
 				}

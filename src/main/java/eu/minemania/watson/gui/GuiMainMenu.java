@@ -8,7 +8,7 @@ import fi.dy.masa.malilib.gui.button.ButtonBase;
 import fi.dy.masa.malilib.gui.button.ButtonGeneric;
 import fi.dy.masa.malilib.gui.button.IButtonActionListener;
 import fi.dy.masa.malilib.util.StringUtils;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.screen.Screen;
 
 public class GuiMainMenu extends GuiBase {
 	public GuiMainMenu() {
@@ -46,9 +46,9 @@ public class GuiMainMenu extends GuiBase {
 	public static class ButtonListenerChangeMenu implements IButtonActionListener {
 		private final ButtonType type;
 		@Nullable
-		private final GuiScreen parent;
+		private final Screen parent;
 
-		public ButtonListenerChangeMenu(ButtonType type, @Nullable GuiScreen parent) {
+		public ButtonListenerChangeMenu(ButtonType type, @Nullable Screen parent) {
 			this.type = type;
 			this.parent = parent;
 		}

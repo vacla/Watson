@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.chat.IMatchedChatHandler;
 import eu.minemania.watson.config.Configs;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.text.Text;
 
 public class RegionInfoAnalysis extends Analysis {
 	protected long _lastCommandTime;
@@ -18,14 +18,14 @@ public class RegionInfoAnalysis extends Analysis {
 		addMatchedChatHandler(WG_REGIONS, new IMatchedChatHandler() {
 
 			@Override
-			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
+			public boolean onMatchedChat(Text chat, Matcher m) {
 				wgRegions(chat, m);
 				return true;
 			}
 		});
 	}
 
-	void wgRegions(ITextComponent chat, Matcher m) {
+	void wgRegions(Text chat, Matcher m) {
 		long now = System.currentTimeMillis();
 		if(now - _lastCommandTime > (long) (Configs.Generic.REGION_INFO_TIMEOUT.getDoubleValue() * 1000)) {
 			int regionCount = 0;

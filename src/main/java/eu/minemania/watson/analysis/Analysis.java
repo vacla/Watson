@@ -7,12 +7,12 @@ import java.util.regex.Pattern;
 
 import eu.minemania.watson.chat.IChatHandler;
 import eu.minemania.watson.chat.IMatchedChatHandler;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.text.Text;
 
 public class Analysis implements IChatHandler {
 	protected LinkedHashMap<Pattern, IMatchedChatHandler> _handlers = new LinkedHashMap<Pattern, IMatchedChatHandler>();
 
-	public boolean dispatchMatchedChat(ITextComponent chat) {
+	public boolean dispatchMatchedChat(Text chat) {
 		String unformatted = chat.getString();
 		for(Entry<Pattern, IMatchedChatHandler> entry : _handlers.entrySet()) {
 			Matcher m = entry.getKey().matcher(unformatted);
@@ -28,7 +28,7 @@ public class Analysis implements IChatHandler {
 	}
 
 	@Override
-	public boolean onChat(ITextComponent chat) {
+	public boolean onChat(Text chat) {
 		return dispatchMatchedChat(chat);
 	}
 }

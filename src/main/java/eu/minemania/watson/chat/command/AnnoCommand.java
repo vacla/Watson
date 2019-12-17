@@ -4,8 +4,8 @@ import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
-import static net.minecraft.command.Commands.argument;
-import static net.minecraft.command.Commands.literal;
+import static net.minecraft.server.command.CommandManager.argument;
+import static net.minecraft.server.command.CommandManager.literal;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,13 +22,13 @@ import eu.minemania.watson.db.Annotation;
 import eu.minemania.watson.db.BlockEditSet;
 import fi.dy.masa.malilib.gui.Message.MessageType;
 import fi.dy.masa.malilib.util.InfoUtils;
-import net.minecraft.command.CommandSource;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.LiteralText;
 
 public class AnnoCommand extends WatsonCommandBase {
-	public static void register(CommandDispatcher<CommandSource> dispatcher) {
+	public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
 		ClientCommandManager.addClientSideCommand("anno");
-		LiteralArgumentBuilder<CommandSource> anno = literal("anno").executes(AnnoCommand::help)
+		LiteralArgumentBuilder<ServerCommandSource> anno = literal("anno").executes(AnnoCommand::help)
 				.then(literal("help").executes(AnnoCommand::help))
 				.then(literal("list").executes(AnnoCommand::list))
 				.then(literal("clear").executes(AnnoCommand::clear))
@@ -41,19 +41,19 @@ public class AnnoCommand extends WatsonCommandBase {
 		dispatcher.register(anno);
 	}
 
-	private static int help(CommandContext<CommandSource> context) {
+	private static int help(CommandContext<ServerCommandSource> context) {
 		int cmdCount = 0;
-		CommandDispatcher<CommandSource> dispatcher = Command.commandDispatcher;
-		for(CommandNode<CommandSource> command : dispatcher.getRoot().getChildren()) {
+		CommandDispatcher<ServerCommandSource> dispatcher = Command.commandDispatcher;
+		for(CommandNode<ServerCommandSource> command : dispatcher.getRoot().getChildren()) {
 			String cmdName = command.getName();
 			if(ClientCommandManager.isClientSideCommand(cmdName)) {
-				Map<CommandNode<CommandSource>, String> usage = dispatcher.getSmartUsage(command, context.getSource());
+				Map<CommandNode<ServerCommandSource>, String> usage = dispatcher.getSmartUsage(command, context.getSource());
 				for(String u : usage.values()) {
-					ClientCommandManager.sendFeedback(new TextComponentString("/" + cmdName + " " + u));
+					ClientCommandManager.sendFeedback(new LiteralText("/" + cmdName + " " + u));
 				}
 				cmdCount += usage.size();
 				if(usage.size() == 0) {
-					ClientCommandManager.sendFeedback(new TextComponentString("/" + cmdName));
+					ClientCommandManager.sendFeedback(new LiteralText("/" + cmdName));
 					cmdCount++;
 				}
 			}
@@ -61,7 +61,7 @@ public class AnnoCommand extends WatsonCommandBase {
 		return cmdCount;
 	}
 
-	private static int list(CommandContext<CommandSource> context) {
+	private static int list(CommandContext<ServerCommandSource> context) {
 		BlockEditSet edits = DataManager.getEditSelection().getBlockEditSet();
 		ArrayList<Annotation> annotations = edits.getAnnotations();
 
@@ -74,7 +74,7 @@ public class AnnoCommand extends WatsonCommandBase {
 		return 1;
 	}
 
-	private static int clear(CommandContext<CommandSource> context) {
+	private static int clear(CommandContext<ServerCommandSource> context) {
 		BlockEditSet edits = DataManager.getEditSelection().getBlockEditSet();
 		ArrayList<Annotation> annotations = edits.getAnnotations();
 
@@ -83,7 +83,7 @@ public class AnnoCommand extends WatsonCommandBase {
 		return 1;
 	}
 
-	private static int teleport(CommandContext<CommandSource> context) {
+	private static int teleport(CommandContext<ServerCommandSource> context) {
 		BlockEditSet edits = DataManager.getEditSelection().getBlockEditSet();
 		ArrayList<Annotation> annotations = edits.getAnnotations();
 
@@ -97,7 +97,7 @@ public class AnnoCommand extends WatsonCommandBase {
 		return 1;
 	}
 
-	private static int remove(CommandContext<CommandSource> context) {
+	private static int remove(CommandContext<ServerCommandSource> context) {
 		BlockEditSet edits = DataManager.getEditSelection().getBlockEditSet();
 		ArrayList<Annotation> annotations = edits.getAnnotations();
 
@@ -111,7 +111,7 @@ public class AnnoCommand extends WatsonCommandBase {
 		return 1;
 	}
 
-	private static int add(CommandContext<CommandSource> context) {
+	private static int add(CommandContext<ServerCommandSource> context) {
 		HashMap<String, Object> vars = DataManager.getEditSelection().getVariables();
 		Integer x = (Integer) vars.get("x");
 		Integer y = (Integer) vars.get("y");

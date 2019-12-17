@@ -3,16 +3,17 @@ package eu.minemania.watson.db;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
 import fi.dy.masa.malilib.util.Color4f;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.IRegistry;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public final class WatsonBlockRegistery {
 	private static final WatsonBlockRegistery INSTANCE = new WatsonBlockRegistery();
@@ -44,10 +45,10 @@ public final class WatsonBlockRegistery {
 				if(entry.isEmpty() == false) {
 					String[] watsonBlockData = entry.split(";");
 					if(watsonBlockData.length == 3) {
-						Block block = IRegistry.BLOCK.getOrDefault(new ResourceLocation(watsonBlockData[0]));
+						Block block = Registry.BLOCK.get(Identifier.tryParse(watsonBlockData[0]));
 						WatsonBlock watsonBlock = new WatsonBlock();
 						if(block != Blocks.AIR) {
-							String blockName = IRegistry.ITEM.getKey(new ItemStack(block).getItem()).toString();
+							String blockName = Registry.ITEM.getId(new ItemStack(block).getItem()).toString();
 							watsonBlock.setName(blockName);
 							float lineWidth = Float.parseFloat(watsonBlockData[1]);
 							if(lineWidth != 0) {
@@ -66,7 +67,7 @@ public final class WatsonBlockRegistery {
 							}
 							addWatsonBlock(watsonBlock);
 						} else {
-							EntityType<?> entity = EntityType.getById(watsonBlockData[0]);
+							Optional<EntityType<?>> entity = EntityType.get(watsonBlockData[0]);
 							if(entity != null) {
 								watsonBlock.setName(watsonBlockData[0]);
 								float lineWidth = Float.parseFloat(watsonBlockData[1]);

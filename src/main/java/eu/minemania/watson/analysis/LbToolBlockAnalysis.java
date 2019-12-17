@@ -15,7 +15,7 @@ import eu.minemania.watson.db.WatsonBlockRegistery;
 import eu.minemania.watson.scheduler.SyncTaskQueue;
 import eu.minemania.watson.scheduler.tasks.AddBlockEditTask;
 import eu.minemania.watson.selection.EditSelection;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.text.Text;
 
 public class LbToolBlockAnalysis extends Analysis {
 	protected int _x;
@@ -30,7 +30,7 @@ public class LbToolBlockAnalysis extends Analysis {
 		addMatchedChatHandler(LB_POSITION, new IMatchedChatHandler() {
 
 			@Override
-			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
+			public boolean onMatchedChat(Text chat, Matcher m) {
 				lbPosition(chat, m);
 				return true;
 			}
@@ -38,7 +38,7 @@ public class LbToolBlockAnalysis extends Analysis {
 		addMatchedChatHandler(LB_EDIT, new IMatchedChatHandler() {
 
 			@Override
-			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
+			public boolean onMatchedChat(Text chat, Matcher m) {
 				lbEdit(chat, m);
 				return true;
 			}
@@ -46,14 +46,14 @@ public class LbToolBlockAnalysis extends Analysis {
 		addMatchedChatHandler(LB_EDIT_REPLACED, new IMatchedChatHandler() {
 
 			@Override
-			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
+			public boolean onMatchedChat(Text chat, Matcher m) {
 				lbEditReplaced(chat, m);
 				return true;
 			}
 		});
 	}
 
-	void lbPosition(ITextComponent chat, Matcher m) {
+	void lbPosition(Text chat, Matcher m) {
 		_x = Integer.parseInt(m.group(1));
 		_y = Integer.parseInt(m.group(2));
 		_z = Integer.parseInt(m.group(3));
@@ -65,7 +65,7 @@ public class LbToolBlockAnalysis extends Analysis {
 		_expectingFirstEdit = true;
 	}
 
-	void lbEdit(ITextComponent chat, Matcher m) {
+	void lbEdit(Text chat, Matcher m) {
 		if((System.currentTimeMillis() - _lbPositionTime) < POSITION_TIMEOUT_MILLIS) {
 			int[] ymd = TimeStamp.parseYMD(m.group(1));
 			int hour = Integer.parseInt(m.group(2));
@@ -81,7 +81,7 @@ public class LbToolBlockAnalysis extends Analysis {
 		}
 	}
 
-	void lbEditReplaced(ITextComponent chat, Matcher m) {
+	void lbEditReplaced(Text chat, Matcher m) {
 		if((System.currentTimeMillis() - _lbPositionTime) < POSITION_TIMEOUT_MILLIS) {
 			int[] ymd = TimeStamp.parseYMD(m.group(1));
 			int hour = Integer.parseInt(m.group(2));

@@ -18,7 +18,7 @@ import eu.minemania.watson.Watson;
 import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.chat.IMatchedChatHandler;
 import eu.minemania.watson.db.TimeStamp;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.text.Text;
 
 public class RatioAnalysis extends Analysis {
 	protected static long STONE_DIAMOND_TIMEOUT_MILLIS = 250;
@@ -36,7 +36,7 @@ public class RatioAnalysis extends Analysis {
 		addMatchedChatHandler(LB_HEADER_RATIO, new IMatchedChatHandler() {
 
 			@Override
-			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
+			public boolean onMatchedChat(Text chat, Matcher m) {
 				lbHeaderRatio(chat, m);
 				return true;
 			}
@@ -44,7 +44,7 @@ public class RatioAnalysis extends Analysis {
 		addMatchedChatHandler(LB_HEADER_RATIO_CURRENT, new IMatchedChatHandler() {
 
 			@Override
-			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
+			public boolean onMatchedChat(Text chat, Matcher m) {
 				lbHeaderRatioCurrent(chat, m);
 				return true;
 			}
@@ -52,7 +52,7 @@ public class RatioAnalysis extends Analysis {
 		IMatchedChatHandler headerHandler = new IMatchedChatHandler() {
 
 			@Override
-			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
+			public boolean onMatchedChat(Text chat, Matcher m) {
 				lbHeader(chat, m);
 				return true;
 			}
@@ -68,31 +68,31 @@ public class RatioAnalysis extends Analysis {
 		addMatchedChatHandler(LB_SUM, new IMatchedChatHandler() {
 
 			@Override
-			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
+			public boolean onMatchedChat(Text chat, Matcher m) {
 				return lbSum(chat, m);
 			}
 		});
 	}
 
-	void lbHeader(ITextComponent chat, Matcher m) {
+	void lbHeader(Text chat, Matcher m) {
 		reset();
 	}
 
-	void lbHeaderRatio(ITextComponent chat, Matcher m) {
+	void lbHeaderRatio(Text chat, Matcher m) {
 		reset();
 		_parsing = true;
 		_sinceMinutes = Integer.parseInt(m.group(1));
 		_beforeMinutes = Integer.parseInt(m.group(2));
 	}
 
-	void lbHeaderRatioCurrent(ITextComponent chat, Matcher m) {
+	void lbHeaderRatioCurrent(Text chat, Matcher m) {
 		reset();
 		_parsing = true;
 		_sinceMinutes = Integer.parseInt(m.group(1));
 		_beforeMinutes = 0;
 	}
 
-	boolean lbSum(ITextComponent chat, Matcher m) {
+	boolean lbSum(Text chat, Matcher m) {
 		if(_parsing) {
 			int created = Integer.parseInt(m.group(1));
 			int destroyed = Integer .parseInt(m.group(2));

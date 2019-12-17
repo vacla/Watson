@@ -30,9 +30,9 @@ import fi.dy.masa.malilib.util.FileUtils;
 import fi.dy.masa.malilib.util.JsonUtils;
 import fi.dy.masa.malilib.util.StringUtils;
 import fi.dy.masa.malilib.util.WorldUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ServerData;
-import net.minecraft.world.GameType;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.options.ServerEntry;
+import net.minecraft.world.GameMode;
 
 public class DataManager implements IDirectoryCache {
 	private static final DataManager INSTANCE = new DataManager();
@@ -191,7 +191,7 @@ public class DataManager implements IDirectoryCache {
 	}
 
 	private static String getStorageFileName(boolean globalData) {
-		Minecraft mc = Minecraft.getInstance();
+		MinecraftClient mc = MinecraftClient.getInstance();
 		String name = StringUtils.getWorldOrServerName();
 
 		if(name != null) {
@@ -206,10 +206,10 @@ public class DataManager implements IDirectoryCache {
 	}
 
 	public static String getServerIP() {
-		Minecraft mc = Minecraft.getInstance();
-		ServerData serverData = mc.getCurrentServerData();
-		if(!mc.isSingleplayer() && serverData != null) {
-			return serverData.serverIP;
+		MinecraftClient mc = MinecraftClient.getInstance();
+		ServerEntry serverData = mc.getCurrentServerEntry();
+		if(!mc.isInSingleplayer() && serverData != null) {
+			return serverData.address;
 		} else {
 			return null;
 		}
@@ -371,7 +371,7 @@ public class DataManager implements IDirectoryCache {
 		return files;
 	}
 
-	public static void configure(GameType gameMode) {
+	public static void configure(GameMode gameMode) {
 		Configs.Generic.DISPLAYED.setBooleanValue(gameMode.isCreative());
 	}
 

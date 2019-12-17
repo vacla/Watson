@@ -16,7 +16,7 @@ import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.render.OverlayRenderer;
 import eu.minemania.watson.selection.EditSelection;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.Formatting;
 
 public class OreDB {
 	protected LinkedHashMap<WatsonBlock, TypedOreDB> _db = new LinkedHashMap<WatsonBlock, TypedOreDB>();
@@ -87,7 +87,7 @@ public class OreDB {
 					BlockEdit edit = block.getEdit();
 					WatsonBlock watsonblock = edit.block;
 					String player = edit.player;
-					TextFormatting strike = edit.playereditSet.isVisible() == true ? null : TextFormatting.STRIKETHROUGH;
+					Formatting strike = edit.playereditSet.isVisible() == true ? null : Formatting.STRIKETHROUGH;
 					String line = String.format(Locale.US, "(%3d) %s (% 5d % 3d % 5d) %s [%2d] %s", id, TimeStamp.formatMonthDayTime(time), block.getLocation().getX(), block.getLocation().getY(), block.getLocation().getZ(), watsonblock.getName(), deposit.getBlockCount(), player);
 					ChatMessage.sendToLocalChat(_chatColors.get(watsonblock).getColor(), strike, line, true);
 				}

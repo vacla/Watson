@@ -8,21 +8,21 @@ import eu.minemania.watson.chat.IMatchedChatHandler;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.BlockEdit;
 import eu.minemania.watson.selection.EditSelection;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.text.Text;
 
 public class TeleportAnalysis extends Analysis {
 	public TeleportAnalysis() {
 		addMatchedChatHandler(LB_TP, new IMatchedChatHandler() {
 
 			@Override
-			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
+			public boolean onMatchedChat(Text chat, Matcher m) {
 				lbTp(chat, m);
 				return true;
 			}
 		});
 	}
 
-	void lbTp(ITextComponent chat, Matcher m) {
+	void lbTp(Text chat, Matcher m) {
 		try {
 			int x = Integer.parseInt(m.group(1));
 			int y = Integer.parseInt(m.group(2));

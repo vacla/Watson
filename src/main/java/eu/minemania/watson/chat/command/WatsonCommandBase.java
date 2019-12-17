@@ -1,38 +1,38 @@
 package eu.minemania.watson.chat.command;
 
-import net.minecraft.command.CommandSource;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.Text;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
 
 public class WatsonCommandBase {
 
-	public static void localOutput(CommandSource sender, String message) {
-		sendColoredText(sender, TextFormatting.AQUA, message);
+	public static void localOutput(ServerCommandSource sender, String message) {
+		sendColoredText(sender, Formatting.AQUA, message);
 	}
 
-	public static void localOutputT(CommandSource sender, String translationKey, Object... args) {
+	public static void localOutputT(ServerCommandSource sender, String translationKey, Object... args) {
 
-		sendColoredText(sender, TextFormatting.AQUA, new TextComponentTranslation(translationKey, args));
+		sendColoredText(sender, Formatting.AQUA, new TranslatableText(translationKey, args));
 	}
 
-	public static void localError(CommandSource sender, String message) {
-		sendColoredText(sender, TextFormatting.DARK_RED, message);
+	public static void localError(ServerCommandSource sender, String message) {
+		sendColoredText(sender, Formatting.DARK_RED, message);
 	}
 
-	public static void localErrorT(CommandSource sender, String translationKey, Object... args) {
-		sendColoredText(sender, TextFormatting.DARK_RED, new TextComponentTranslation(translationKey, args));
+	public static void localErrorT(ServerCommandSource sender, String translationKey, Object... args) {
+		sendColoredText(sender, Formatting.DARK_RED, new TranslatableText(translationKey, args));
 	}
 
-	public static void sendColoredText(CommandSource sender, TextFormatting color, String message) {
-		TextComponentString chat = new TextComponentString(message);
-		chat.applyTextStyle(color);
+	public static void sendColoredText(ServerCommandSource sender, Formatting color, String message) {
+		LiteralText chat = new LiteralText(message);
+		chat.formatted(color);
 		sender.getEntity().sendMessage(chat);
 	}
 
-	public static void sendColoredText(CommandSource sender, TextFormatting color, ITextComponent component) {
-		component.applyTextStyle(color);
+	public static void sendColoredText(ServerCommandSource sender, Formatting color, Text component) {
+		component.formatted(color);
 		sender.getEntity().sendMessage(component);
 	}
 }

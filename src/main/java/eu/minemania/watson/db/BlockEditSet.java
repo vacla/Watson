@@ -21,10 +21,10 @@ import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.render.OverlayRenderer;
 import eu.minemania.watson.selection.EditSelection;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexFormats;
 
 public class BlockEditSet {
 	protected LinkedHashMap<String, PlayereditSet> _playerEdits = new LinkedHashMap<>();
@@ -148,8 +148,8 @@ public class BlockEditSet {
 			}
 
 			editsForPlayer.addBlockEdit(edit);
-			Minecraft mc = Minecraft.getInstance();
-			if(!mc.world.getWorldInfo().getGameType().isCreative() || Configs.Generic.GROUPING_ORES_IN_CREATIVE.getBooleanValue()) {
+			MinecraftClient mc = MinecraftClient.getInstance();
+			if(!mc.world.getLevelProperties().getGameMode().isCreative() || Configs.Generic.GROUPING_ORES_IN_CREATIVE.getBooleanValue()) {
 				_oreDB.addBlockEdit(edit);
 			}
 
@@ -196,8 +196,8 @@ public class BlockEditSet {
 	public synchronized void drawOutlines() {
 		if(Configs.Generic.OUTLINE_SHOWN.getBooleanValue()) {
 			Tessellator tessellator = Tessellator.getInstance();
-			BufferBuilder buffer = tessellator.getBuffer();
-			buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+			BufferBuilder buffer = tessellator.getBufferBuilder();
+			buffer.begin(GL11.GL_LINES, VertexFormats.POSITION_COLOR);
 			for(PlayereditSet editsForPlayer : _playerEdits.values()) {
 				editsForPlayer.drawOutlines(buffer);
 			}
@@ -208,8 +208,8 @@ public class BlockEditSet {
 	public synchronized void drawVectors() {
 		if(Configs.Generic.VECTOR_SHOWN.getBooleanValue()) {
 			Tessellator tessellator = Tessellator.getInstance();
-			BufferBuilder buffer = tessellator.getBuffer();
-			buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+			BufferBuilder buffer = tessellator.getBufferBuilder();
+			buffer.begin(GL11.GL_LINES, VertexFormats.POSITION_COLOR);
 			int nextColorIndex1 = 0;
 			for(PlayereditSet editsForPlayer : _playerEdits.values()) {
 				editsForPlayer.drawVectors(OverlayRenderer.KELLY_COLORS[nextColorIndex1], buffer);

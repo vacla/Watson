@@ -14,11 +14,11 @@ import org.lwjgl.opengl.GL11;
 
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.event.ClickEvent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.text.ClickEvent;
 
 public class Screenshot {
 
@@ -31,11 +31,11 @@ public class Screenshot {
 		System.out.println(player2);
 		System.out.println(new SimpleDateFormat(Configs.Generic.SS_DATE_DIRECTORY.getStringValue()).format(now).toString());
 		String subdirectoryName = (!player2.isEmpty() && Configs.Generic.SS_PLAYER_DIRECTORY.getBooleanValue()) ? player2 : new SimpleDateFormat(Configs.Generic.SS_DATE_DIRECTORY.getStringValue()).format(now).toString();
-		Minecraft mc = Minecraft.getInstance();
-		File screenshotsDir = new File(mc.gameDir, "screenshots");
+		MinecraftClient mc = MinecraftClient.getInstance();
+		File screenshotsDir = new File(mc.runDirectory, "screenshots");
 		File subdirectory = new File(screenshotsDir, subdirectoryName);
 		File file = Screenshot.getUniqueFilename(subdirectory, player2, now);
-		mc.ingameGUI.getChatGUI().printChatMessage(Screenshot.save(file, mc.mainWindow.getWidth(), mc.mainWindow.getHeight()));
+		mc.inGameHud.getChatHud().addMessage(Screenshot.save(file, mc.window.getWidth(), mc.window.getHeight()));
 	}
 
 	/**
@@ -46,7 +46,7 @@ public class Screenshot {
 	 * @param height Sets height
 	 * @return TextComponentTranslation of screenshot save
 	 */
-	public static ITextComponent save(File file, int width, int height) {
+	public static Text save(File file, int width, int height) {
 		try {
 			file.getParentFile().mkdirs();
 
@@ -68,12 +68,12 @@ public class Screenshot {
 			}
 
 			ImageIO.write(image, "png", file);
-			TextComponentString text = new TextComponentString(file.getName());
+			LiteralText text = new LiteralText(file.getName());
 			text.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, file.getAbsolutePath()));
-			text.getStyle().setUnderlined(Boolean.valueOf(true));
-			return new TextComponentTranslation("screenshot.success", new Object[]{text});
+			text.getStyle().setUnderline(Boolean.valueOf(true));
+			return new TranslatableText("screenshot.success", new Object[]{text});
 		} catch (Exception ex) {
-			return new TextComponentTranslation("screenshot.failure", new Object[]{ex.getMessage()});
+			return new TranslatableText("screenshot.failure", new Object[]{ex.getMessage()});
 		}
 	}
 

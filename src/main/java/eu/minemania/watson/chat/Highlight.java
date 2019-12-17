@@ -12,18 +12,18 @@ import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
 import fi.dy.masa.malilib.gui.Message.MessageType;
 import fi.dy.masa.malilib.util.InfoUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
 
 public class Highlight {
-	private static Minecraft mc = Minecraft.getInstance();
+	private static MinecraftClient mc = MinecraftClient.getInstance();
 	private static final Highlight INSTANCE = new Highlight();
 	public static boolean changeUsername;
 	static protected String username;
-	private static final HashSet<MutablePair<Pattern, MutablePair<TextFormatting, TextFormatting>>> highlights = new HashSet<>();
+	private static final HashSet<MutablePair<Pattern, MutablePair<Formatting, Formatting>>> highlights = new HashSet<>();
 	private static final String tempkey = "chat.type.text";
 
 	private static Highlight getInstance() {
@@ -37,23 +37,23 @@ public class Highlight {
 	 * @param message Chat message to highlight
 	 * @return Highlighted TextComponent
 	 */
-	public static ITextComponent setHighlightChatMessage(String key,ITextComponent message, boolean watsonMessage) {
+	public static Text setHighlightChatMessage(String key,Text message, boolean watsonMessage) {
 		String user = "";
 		String textChat = "";
 		int i = 0;
-		ITextComponent endMessage;
+		Text endMessage;
 		if(!watsonMessage) {
-			for (ITextComponent chatComponent : message) {
+			for (Text chatComponent : message) {
 				if(i == 1){
 					user = chatComponent.toString();
 				}
 				if(i>2) {
-					textChat += chatComponent.getFormattedText();
+					textChat += chatComponent.asFormattedString();
 				}
 				i++;
 			}
 			setUsername(user);
-			endMessage = new TextComponentTranslation(key, new Object[] {mc.player.getDisplayName(), Configs.Generic.USE_CHAT_HIGHLIGHTS.getBooleanValue() ? highlight(textChat) : textChat});
+			endMessage = new TranslatableText(key, new Object[] {mc.player.getDisplayName(), Configs.Generic.USE_CHAT_HIGHLIGHTS.getBooleanValue() ? highlight(textChat) : textChat});
 		} else {
 			endMessage = message;
 		}
@@ -66,15 +66,15 @@ public class Highlight {
 	 * @param message Chat message to highlight
 	 * @return Highlighted TextComponent
 	 */
-	public static ITextComponent setHighlightChatMessage(ITextComponent message) {
+	public static Text setHighlightChatMessage(Text message) {
 		String textChat = "";
 		String chat = "";
-		ITextComponent endMessage;
-		ITextComponent prefix = new TextComponentString("");
+		Text endMessage;
+		Text prefix = new LiteralText("");
 		int i = 0;
 		String serverBrand = mc.player.getServerBrand().toLowerCase();
 		if(serverBrand.contains("spigot") || serverBrand.contains("paper")) {
-			for(ITextComponent chatComponent : message) {
+			for(Text chatComponent : message) {
 				if(i > 0) {
 					chat += chatComponent.getString();
 				}
@@ -84,9 +84,9 @@ public class Highlight {
 				int startUsername = chat.indexOf("<") + 1;
 				int endUsername = chat.indexOf(">");
 				if((chat.contains("[") && chat.contains("]")) && chat.indexOf("]") < startUsername - 1) {
-					prefix = new TextComponentString(chat.substring(chat.indexOf("["), chat.indexOf("]") + 1)); 
+					prefix = new LiteralText(chat.substring(chat.indexOf("["), chat.indexOf("]") + 1)); 
 				}
-				if(!prefix.equals(new TextComponentString("")) || chat.startsWith("<")) {
+				if(!prefix.equals(new LiteralText("")) || chat.startsWith("<")) {
 					username = chat.substring(startUsername, endUsername);
 				} else {
 					return endMessage = message;
@@ -95,9 +95,9 @@ public class Highlight {
 				changeUsername = true;
 				setUsername(username);
 
-				endMessage = new TextComponentTranslation(tempkey, new Object[] { mc.player.getDisplayName(), highlight(textChat)});
-				if(!prefix.equals(new TextComponentString(""))) {
-					prefix.appendSibling(endMessage);
+				endMessage = new TranslatableText(tempkey, new Object[] { mc.player.getDisplayName(), highlight(textChat)});
+				if(!prefix.equals(new LiteralText(""))) {
+					prefix.append(endMessage);
 					endMessage = prefix;
 				}
 			} else {
@@ -117,7 +117,7 @@ public class Highlight {
 	 * @return Highlighted text
 	 */
 	private static String highlight(String chatText) {
-		for(MutablePair<Pattern, MutablePair<TextFormatting, TextFormatting>> item_highlight : highlights) {
+		for(MutablePair<Pattern, MutablePair<Formatting, Formatting>> item_highlight : highlights) {
 			Matcher matcher = item_highlight.getLeft().matcher(chatText);
 			if(matcher.find()) {
 				matcher.reset();
@@ -125,11 +125,11 @@ public class Highlight {
 					int start = matcher.start();
 					int stop = matcher.end();
 					if(item_highlight.getRight().getLeft() != null && item_highlight.getRight().getRight() == null) {
-						chatText = matcher.replaceAll(item_highlight.getRight().getLeft() + chatText.substring(start, stop) + TextFormatting.RESET);
+						chatText = matcher.replaceAll(item_highlight.getRight().getLeft() + chatText.substring(start, stop) + Formatting.RESET);
 					} else if(item_highlight.getRight().getLeft() == null && item_highlight.getRight().getRight() != null){
-						chatText = matcher.replaceAll(item_highlight.getRight().getRight() + chatText.substring(start, stop) + TextFormatting.RESET);
+						chatText = matcher.replaceAll(item_highlight.getRight().getRight() + chatText.substring(start, stop) + Formatting.RESET);
 					} else {
-						chatText = matcher.replaceAll(item_highlight.getRight().getLeft() + "" + item_highlight.getRight().getRight() + chatText.substring(start, stop) + TextFormatting.RESET);
+						chatText = matcher.replaceAll(item_highlight.getRight().getLeft() + "" + item_highlight.getRight().getRight() + chatText.substring(start, stop) + Formatting.RESET);
 					}
 				}
 			}
@@ -146,28 +146,28 @@ public class Highlight {
 	}
 
 	/**
-	 * Converts character style to TextFormatting style.
+	 * Converts character style to Formatting style.
 	 * 
 	 * @param charac Character of style
-	 * @return Style in TextFormatting
+	 * @return Style in Formatting
 	 */
-	private TextFormatting getStyle(String charac) {
-		TextFormatting result = TextFormatting.RESET;
+	private Formatting getStyle(String charac) {
+		Formatting result = Formatting.RESET;
 		switch (charac) {
 		case "+":
-			result = TextFormatting.BOLD;
+			result = Formatting.BOLD;
 			break;
 		case "/":
-			result = TextFormatting.ITALIC;
+			result = Formatting.ITALIC;
 			break;
 		case "_":
-			result = TextFormatting.UNDERLINE;
+			result = Formatting.UNDERLINE;
 			break;
 		case "-":
-			result = TextFormatting.STRIKETHROUGH;
+			result = Formatting.STRIKETHROUGH;
 			break;
 		case "?":
-			result = TextFormatting.OBFUSCATED;
+			result = Formatting.OBFUSCATED;
 			break;
 		default:
 			break;
@@ -242,11 +242,11 @@ public class Highlight {
 			InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.highlight.empty");
 		} else {
 			int index = 0;
-			for(MutablePair<Pattern, MutablePair<TextFormatting, TextFormatting>> item_highlight : highlights) {
-				TextFormatting color = item_highlight.getRight().getLeft();
-				TextFormatting style = item_highlight.getRight().getRight();
+			for(MutablePair<Pattern, MutablePair<Formatting, Formatting>> item_highlight : highlights) {
+				Formatting color = item_highlight.getRight().getLeft();
+				Formatting style = item_highlight.getRight().getRight();
 
-				ChatMessage.localOutputT("watson.message.highlight.list_string", index + 1, item_highlight.getLeft(), color != null ? color.getFriendlyName() : color, style != null ? style.getFriendlyName() : style);
+				ChatMessage.localOutputT("watson.message.highlight.list_string", index + 1, item_highlight.getLeft(), color != null ? color.getName() : color, style != null ? style.getName() : style);
 				++index;
 			}
 		}
@@ -287,7 +287,7 @@ public class Highlight {
 	 * @param highlightpair List for highlight
 	 * @param names Config highlight list items
 	 */
-	private void populateHighlightList(HashSet<MutablePair<Pattern, MutablePair<TextFormatting, TextFormatting>>> highlightpair, List<String> names) {
+	private void populateHighlightList(HashSet<MutablePair<Pattern, MutablePair<Formatting, Formatting>>> highlightpair, List<String> names) {
 		for (String str : names) {
 			try {
 				if(str.isEmpty() == false) {
@@ -295,8 +295,8 @@ public class Highlight {
 					if (index != -1){
 						String format = str.substring(0, index);
 						String pattern = str.substring(index+1);
-						MutablePair<Pattern, MutablePair<TextFormatting, TextFormatting>> pr = new MutablePair<>();
-						MutablePair<TextFormatting, TextFormatting> pr2 = new MutablePair<>();
+						MutablePair<Pattern, MutablePair<Formatting, Formatting>> pr = new MutablePair<>();
+						MutablePair<Formatting, Formatting> pr2 = new MutablePair<>();
 						if (format.length() > 0) {
 							if(format.length() == 1) {
 								if(isStyle(format)) {

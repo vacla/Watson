@@ -9,14 +9,14 @@ import java.util.regex.Matcher;
 
 import eu.minemania.watson.chat.IMatchedChatHandler;
 import eu.minemania.watson.config.Configs;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.text.Text;
 
 public class ModModeAnalysis extends Analysis {
 	public ModModeAnalysis() {
 		IMatchedChatHandler modmodeHandler = new IMatchedChatHandler() {
 
 			@Override
-			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
+			public boolean onMatchedChat(Text chat, Matcher m) {
 				changeModMode(chat, m);
 				return true;
 			}
@@ -28,7 +28,7 @@ public class ModModeAnalysis extends Analysis {
 		IMatchedChatHandler dutiesHandler = new IMatchedChatHandler() {
 
 			@Override
-			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
+			public boolean onMatchedChat(Text chat, Matcher m) {
 				changeDutyMode(chat, m);
 				return true;
 			}
@@ -38,11 +38,11 @@ public class ModModeAnalysis extends Analysis {
 		addMatchedChatHandler(DUTYMODE_DISABLE, dutiesHandler);
 	}
 
-	void changeModMode(ITextComponent chat, Matcher m) {
+	void changeModMode(Text chat, Matcher m) {
 		Configs.Generic.DISPLAYED.setBooleanValue(m.pattern() == MODMODE_ENABLE);
 	}
 
-	void changeDutyMode(ITextComponent chat, Matcher m) {
+	void changeDutyMode(Text chat, Matcher m) {
 		Configs.Generic.DISPLAYED.setBooleanValue(m.pattern() == DUTYMODE_ENABLE);
 	}
 }

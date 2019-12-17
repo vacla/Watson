@@ -17,7 +17,7 @@ import eu.minemania.watson.db.WatsonBlockRegistery;
 import eu.minemania.watson.scheduler.SyncTaskQueue;
 import eu.minemania.watson.scheduler.tasks.AddBlockEditTask;
 import eu.minemania.watson.selection.EditSelection;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.text.Text;
 
 //----------------------------------------------------------------------------
 /**
@@ -61,35 +61,35 @@ public class CoreProtectAnalysis extends Analysis {
 	public CoreProtectAnalysis() {
 		addMatchedChatHandler(INSPECTOR_COORDS, new IMatchedChatHandler() {
 			@Override
-			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
+			public boolean onMatchedChat(Text chat, Matcher m) {
 				inspectorCoords(chat, m);
 				return true;
 			}
 		});
 		addMatchedChatHandler(DETAILS, new IMatchedChatHandler() {
 			@Override
-			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
+			public boolean onMatchedChat(Text chat, Matcher m) {
 				details(chat, m);
 				return true;
 			}
 		});
 		addMatchedChatHandler(LOOKUP_COORDS, new IMatchedChatHandler() {
 			@Override
-			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
+			public boolean onMatchedChat(Text chat, Matcher m) {
 				lookupCoords(chat, m);
 				return true;
 			}
 		});
 		addMatchedChatHandler(LOOKUP_HEADER, new IMatchedChatHandler() {
 			@Override
-			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
+			public boolean onMatchedChat(Text chat, Matcher m) {
 				lookupHeader(chat, m);
 				return true;
 			}
 		});
 	}
 
-	void inspectorCoords(ITextComponent chat, Matcher m) {
+	void inspectorCoords(Text chat, Matcher m) {
 		_isLookup = false;
 		_x = Integer.parseInt(m.group(1));
 		_y = Integer.parseInt(m.group(2));
@@ -99,7 +99,7 @@ public class CoreProtectAnalysis extends Analysis {
 		_firstInspectorResult = true;
 	}
 
-	void details(ITextComponent chat, Matcher m) {
+	void details(Text chat, Matcher m) {
 		_lookupDetails = false;
 		if(m.group(3).equals("placed") || m.group(3).equals("removed")) {
 			_millis = parseTimeExpression(m.group(1));
@@ -125,11 +125,11 @@ public class CoreProtectAnalysis extends Analysis {
 		}
 	}
 
-	void lookupHeader(ITextComponent chat, Matcher m) {
+	void lookupHeader(Text chat, Matcher m) {
 		_isLookup = true;
 	}
 
-	void lookupCoords(ITextComponent chat, Matcher m) {
+	void lookupCoords(Text chat, Matcher m) {
 		_isLookup = true;
 		if(_lookupDetails) {
 			_x = Integer.parseInt(m.group(1));

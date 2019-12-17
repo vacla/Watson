@@ -4,11 +4,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
 
 public class ChatMessage {
 	private static ChatMessage INSTANCE = new ChatMessage();
@@ -20,15 +20,15 @@ public class ChatMessage {
 	}
 
 	public static void localOutput(String message, boolean watsonMessage) {
-		sendToLocalChat(TextFormatting.AQUA, null, message, watsonMessage);
+		sendToLocalChat(Formatting.AQUA, null, message, watsonMessage);
 	}
 
 	public static void localOutputT(String translationKey, Object... args) {
-		sendToLocalChat(TextFormatting.AQUA, new TextComponentTranslation(translationKey, args),true);
+		sendToLocalChat(Formatting.AQUA, new TranslatableText(translationKey, args),true);
 	}
 
 	public static void localError(String message, boolean watsonMessage) {
-		sendToLocalChat(TextFormatting.DARK_RED, null, message, watsonMessage);
+		sendToLocalChat(Formatting.DARK_RED, null, message, watsonMessage);
 	}
 
 	public void serverChat(String message) {
@@ -42,32 +42,32 @@ public class ChatMessage {
 	}
 
 	public static void sendToLocalChat(String message, boolean watsonMessage) {
-		sendToLocalChat(new TextComponentString(message), watsonMessage);
+		sendToLocalChat(new LiteralText(message), watsonMessage);
 	}
 
-	public static void sendToLocalChat(ITextComponent inputmessage, boolean watsonMessage) {
-		ITextComponent message = Configs.Generic.USE_CHAT_HIGHLIGHTS.getBooleanValue() ? Highlight.setHighlightChatMessage("chat.type.text", inputmessage, watsonMessage) : inputmessage;
-		Minecraft.getInstance().ingameGUI.getChatGUI().printChatMessage(message);
+	public static void sendToLocalChat(Text inputmessage, boolean watsonMessage) {
+		Text message = Configs.Generic.USE_CHAT_HIGHLIGHTS.getBooleanValue() ? Highlight.setHighlightChatMessage("chat.type.text", inputmessage, watsonMessage) : inputmessage;
+		MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(message);
 	}
 
-	public static void sendToLocalChat(TextFormatting color, TextFormatting style, String message, boolean watsonMessage) {
-		TextComponentString chat = new TextComponentString(message);
+	public static void sendToLocalChat(Formatting color, Formatting style, String message, boolean watsonMessage) {
+		LiteralText chat = new LiteralText(message);
 		if(color != null && style == null) {
-			chat.applyTextStyle(color);
+			chat.formatted(color);
 		} else if(color != null && style != null) {
-			chat.applyTextStyles(color, style);
+			chat.formatted(color, style);
 		}
 		sendToLocalChat(chat, watsonMessage);
 	}
 
-	public static void sendToLocalChat(TextFormatting color, ITextComponent message, boolean watsonMessage) {
-		message.applyTextStyle(color);
+	public static void sendToLocalChat(Formatting color, Text message, boolean watsonMessage) {
+		message.formatted(color);
 		sendToLocalChat(message, watsonMessage);
 	}
 
 	public static void sendToServerChat(String message) {
 		try {
-			Minecraft mc = Minecraft.getInstance();
+			MinecraftClient mc = MinecraftClient.getInstance();
 			mc.player.sendChatMessage(message);
 		} catch (Exception e) {
 			Watson.logger.error("Sending chat to the server.", e);

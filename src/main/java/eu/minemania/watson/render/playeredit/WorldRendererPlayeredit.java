@@ -1,12 +1,11 @@
 package eu.minemania.watson.render.playeredit;
 
-import net.minecraft.client.Minecraft;
-//import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.WorldRenderer;
 
 public class WorldRendererPlayeredit extends WorldRenderer {
 
-	public WorldRendererPlayeredit(Minecraft mc) {
+	public WorldRendererPlayeredit(MinecraftClient mc) {
 		super(mc);
 	}
 }

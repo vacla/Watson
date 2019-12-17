@@ -3,7 +3,7 @@ package eu.minemania.watson.event;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.render.OverlayRenderer;
 import fi.dy.masa.malilib.interfaces.IRenderer;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 
 public class RenderHandler implements IRenderer {
 	private static final RenderHandler INSTANCE = new RenderHandler();
@@ -14,7 +14,7 @@ public class RenderHandler implements IRenderer {
 
 	@Override
 	public void onRenderWorldLast(float partialTicks) {
-		Minecraft mc = Minecraft.getInstance();
+		MinecraftClient mc = MinecraftClient.getInstance();
 
 		if (Configs.Generic.ENABLED.getBooleanValue() && mc.world != null && mc.player != null) {
 			OverlayRenderer.renderOverlays(mc, partialTicks);

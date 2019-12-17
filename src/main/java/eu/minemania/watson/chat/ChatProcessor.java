@@ -11,7 +11,7 @@ import eu.minemania.watson.analysis.RegionInfoAnalysis;
 import eu.minemania.watson.analysis.ServerTime;
 import eu.minemania.watson.analysis.TeleportAnalysis;
 import eu.minemania.watson.config.Configs;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.text.Text;
 
 public class ChatProcessor {
 	private static ChatProcessor INSTANCE = new ChatProcessor();
@@ -38,7 +38,7 @@ public class ChatProcessor {
 		_handlers.add(handler);
 	}
 
-	public boolean onChat(ITextComponent chat) {
+	public boolean onChat(Text chat) {
 		if (Configs.Generic.ENABLED.getBooleanValue()) {
 			boolean allow = true;
 			for (IChatHandler handler : _handlers) {

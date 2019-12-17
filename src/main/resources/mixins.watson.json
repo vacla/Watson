@@ -4,13 +4,13 @@
     "refmap": "mixins.watson.refmap.json",
     "minVersion": "0.6",
     "client": [
+    	"MixinChatHud",
+    	"MixinChatScreen",
+    	"MixinClientPlayerEntity",
+    	"MixinClientPlayNetworkHandler",
     	"MixinCommandNode",
-    	"MixinEntityPlayer",
-    	"MixinEntityPlayerSP",
     	"MixinGameRenderer",
-    	"MixinGuiChat",
-    	"MixinGuiNewChat",
-    	"MixinNetHandlerPlayClient",
+    	"MixinPlayerEntity",
     	"MixinWorldRenderer"
     ],
     "injectors": {
