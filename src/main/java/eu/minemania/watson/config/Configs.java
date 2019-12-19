@@ -695,7 +695,9 @@ public class Configs implements IConfigHandler {
 			"spectral_arrow;1;14033081",
 			"spider;1;14033081",
 			"squid;1;14033081",
+			"stray;1;14033081",
 			"tropical_fish;1;14033081",
+			"trident;1;14033081",
 			"turtle;1;14033081",
 			"egg;1;14033081",
 			"ender_pearl;1;14033081",
@@ -716,8 +718,7 @@ public class Configs implements IConfigHandler {
 			"phantom;1;14033081",
 			"lightning_bolt;1;14033081",
 			"player;1;14033081",
-			"fishing_bobber;1;14033081",
-			"trident;1;14033081"
+			"fishing_bobber;1;14033081"
 			);
 
 	/**
