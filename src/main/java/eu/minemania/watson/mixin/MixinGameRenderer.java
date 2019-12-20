@@ -10,7 +10,7 @@ import net.minecraft.client.render.GameRenderer;
 
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer {
-	@Inject(method = "renderCenter(FJ)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;renderEntities(Lnet/minecraft/entity/Entity;Lnet/minecraft/client/renderer/culling/ICamera;F)V"))
+	@Inject(method = "renderCenter(FJ)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;renderEntities(Lnet/minecraft/client/render/Camera;Lnet/minecraft/client/render/VisibleRegion;F)V"))
 	private void renderEntities(float partialTicks, long finishTimeNano, CallbackInfo ci) {
 		WatsonRenderer.getInstance().piecewiseRenderEntities(partialTicks);
 	}
