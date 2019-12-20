@@ -138,9 +138,9 @@ public final class WatsonBlockRegistery {
 	}
 
 	public WatsonBlock getBlockKillTypeByName(String name) {
-		WatsonBlock result = _byName.get(name.toLowerCase());
+		WatsonBlock result = _byName.get("minecraft:" +name.toLowerCase());
 		if(result == null) {
-			return _byName.get("player");
+			return _byName.get("minecraft:player");
 		} else {
 			return result;
 		}
