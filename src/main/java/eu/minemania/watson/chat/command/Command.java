@@ -1,8 +1,6 @@
 package eu.minemania.watson.chat.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-
-import eu.minemania.watson.interfaces.ICommandRemover;
 import fi.dy.masa.malilib.config.options.ConfigString;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.server.command.ServerCommandSource;
@@ -27,7 +25,7 @@ public class Command {
 
 	public static void reregisterWatsonCommand(CommandDispatcher<ServerCommandSource> dispatcher, ConfigString command) {
 		ClientCommandManager.getClientSideCommands().remove(command.getOldStringValue());
-		((ICommandRemover) dispatcher.getRoot()).removeChild(command.getOldStringValue());
+		CommandRemoval.removeCommand(dispatcher.getRoot(), command.getOldStringValue());
 		WatsonCommand.register(dispatcher);
 
 		if (MinecraftClient.getInstance().isIntegratedServerRunning()) {
