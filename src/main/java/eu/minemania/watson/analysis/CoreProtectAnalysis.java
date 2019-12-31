@@ -107,7 +107,6 @@ public class CoreProtectAnalysis extends Analysis {
 			_creation = m.group(3).equals("placed");
 			String block = m.group(4);
 			_block = WatsonBlockRegistery.getInstance().getWatsonBlockByName(block);
-
 			if(_isLookup) {
 				// Record that we can use these details at the next
 				// coreprotect.lookupcoords only.

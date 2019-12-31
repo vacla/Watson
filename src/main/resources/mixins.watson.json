@@ -8,7 +8,6 @@
     	"MixinChatScreen",
     	"MixinClientPlayerEntity",
     	"MixinClientPlayNetworkHandler",
-    	"MixinGameRenderer",
     	"MixinPlayerEntity",
     	"MixinWorldRenderer"
     ],

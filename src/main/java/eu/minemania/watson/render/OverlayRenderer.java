@@ -8,6 +8,7 @@ import fi.dy.masa.malilib.render.RenderUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 
 public class OverlayRenderer {
 	private static long loginTime;
@@ -56,12 +57,11 @@ public class OverlayRenderer {
 				return;
 			}
 		}
-		double dx = MathHelper.lerp(partialTicks, entity.prevX, entity.x);
-		double dy = MathHelper.lerp(partialTicks, entity.prevX, entity.x);
-		double dz = MathHelper.lerp(partialTicks, entity.prevX, entity.x);
+		
+		Vec3d cameraPos = mc.gameRenderer.getCamera().getPos();
 
-		DataManager.getEditSelection().getBlockEditSet().getOreDB().drawDepositLabels(dx, dy, dz);
-		DataManager.getEditSelection().getBlockEditSet().drawAnnotations(dx, dy, dz);
+		DataManager.getEditSelection().getBlockEditSet().getOreDB().drawDepositLabels(cameraPos.x, cameraPos.y, cameraPos.z);
+		DataManager.getEditSelection().getBlockEditSet().drawAnnotations(cameraPos.x, cameraPos.y, cameraPos.z);
 	}
 
 	public static void drawBillboard(double x, double y, double z, double scale, String text) {

@@ -14,8 +14,9 @@ import eu.minemania.watson.selection.EditSelection;
 import fi.dy.masa.malilib.render.RenderUtils;
 import fi.dy.masa.malilib.render.shader.ShaderProgram;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.VisibleRegion;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 
 public class WatsonRenderer {
 	private static final WatsonRenderer INSTANCE = new WatsonRenderer();
@@ -49,7 +50,7 @@ public class WatsonRenderer {
 		this.getWorldRenderer().reload();
 	}
 
-	public void piecewiseRenderEntities(float partialTicks) {
+	public void piecewiseRenderEntities(VisibleRegion visibleRegion, float partialTicks) {
 		if(Configs.Generic.DISPLAYED.getBooleanValue() && this.mc.getCameraEntity() != null && Configs.Generic.OUTLINE_SHOWN.getBooleanValue()) {
 			this.mc.getProfiler().push("watson_entities");
 			GlStateManager.disableLighting();
@@ -69,8 +70,9 @@ public class WatsonRenderer {
 			if(entity == null) {
 				entity = mc.player;
 			}
-			
-			GlStateManager.translated(-MathHelper.lerp(partialTicks, entity.prevX, entity.x), -MathHelper.lerp(partialTicks, entity.prevX, entity.x), -MathHelper.lerp(partialTicks, entity.prevX, entity.x));
+
+			Vec3d cameraPos = mc.gameRenderer.getCamera().getPos();
+			GlStateManager.translated(-cameraPos.x, -cameraPos.y, -cameraPos.z);
 			edits.drawOutlines();
 			edits.drawVectors();
 			selection.drawSelection();

@@ -45,7 +45,7 @@ public class BlockEdit {
 	public void drawOutline(BufferBuilder buffer) {
 		BakedModel model;
 		Block blocks = Registry.BLOCK.get(Identifier.tryParse(block.getName()));
-		if(blocks != null) {
+		if(blocks != null && !blocks.getName().asString().equals("Air")) {
 			if(!block.getName().equals("minecraft:grass")) {
 				BlockState state = blocks.getDefaultState();
 				model = this.blockModelShapes.getModel(state);
@@ -56,7 +56,7 @@ public class BlockEdit {
 		} else {
 			Optional<EntityType<?>> entity = EntityType.get(block.getName());
 			if(entity != null) {
-				if(block.getName().equals("item_frame") || block.getName().equals("painting")) {
+				if(block.getName().equals("minecraft:item_frame") || block.getName().equals("minecraft:painting")) {
 					RenderUtils.drawItemFramePaintingOutlinesBatched(x, y, z, new Color4f(1f, 0.5f, 0.3f), buffer);
 				}
 			}
