@@ -54,7 +54,7 @@ public class BlockEdit {
 		} else {
 			EntityType<?> entity = EntityType.getById(block.getName());
 			if(entity != null) {
-				if(block.getName().equals("item_frame") || block.getName().equals("painting")) {
+				if(block.getName().equals("minecraft:item_frame") || block.getName().equals("minecraft:painting")) {
 					RenderUtils.drawItemFramePaintingOutlinesBatched(x, y, z, new Color4f(1f, 0.5f, 0.3f), buffer);
 				}
 			}
