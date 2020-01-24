@@ -5,10 +5,11 @@
     "minVersion": "0.6",
     "client": [
     	"MixinChatHud",
-    	"MixinChatScreen",
     	"MixinClientPlayerEntity",
     	"MixinClientPlayNetworkHandler",
+    	"MixinCommandSuggestor",
     	"MixinPlayerEntity",
+    	"MixinTextFieldWidget",
     	"MixinWorldRenderer"
     ],
     "injectors": {

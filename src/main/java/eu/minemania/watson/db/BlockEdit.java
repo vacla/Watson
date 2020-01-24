@@ -9,7 +9,9 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -27,6 +29,7 @@ public class BlockEdit {
 	public PlayereditSet playereditSet;
 	private final BlockRenderManager blockModelShapes;
 	private MinecraftClient mc;
+	protected final BlockPos.Mutable chunkRelativePos;
 
 	public BlockEdit(long time, String player, boolean creation, int x, int y, int z, WatsonBlock block, String world) {
 		this.time = time;
@@ -39,6 +42,7 @@ public class BlockEdit {
 		this.world = world;
 		this.mc = MinecraftClient.getInstance();
 		this.blockModelShapes = this.mc.getBlockRenderManager();
+		this.chunkRelativePos = new BlockPos.Mutable();
 	}
 
 	//TODO later add custom colors
@@ -61,5 +65,9 @@ public class BlockEdit {
 				}
 			}
 		}
+	}
+	
+	protected BlockPos.Mutable getChunkRelativePosition(BlockPos pos) {
+		return this.chunkRelativePos.set(x & 0xF, y & 0xF, z & 0xF);
 	}
 }

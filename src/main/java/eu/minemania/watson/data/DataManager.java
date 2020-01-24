@@ -31,7 +31,7 @@ import fi.dy.masa.malilib.util.JsonUtils;
 import fi.dy.masa.malilib.util.StringUtils;
 import fi.dy.masa.malilib.util.WorldUtils;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.options.ServerEntry;
+import net.minecraft.client.network.ServerInfo;
 import net.minecraft.world.GameMode;
 
 public class DataManager implements IDirectoryCache {
@@ -207,7 +207,7 @@ public class DataManager implements IDirectoryCache {
 
 	public static String getServerIP() {
 		MinecraftClient mc = MinecraftClient.getInstance();
-		ServerEntry serverData = mc.getCurrentServerEntry();
+		ServerInfo serverData = mc.getCurrentServerEntry();
 		if(!mc.isInSingleplayer() && serverData != null) {
 			return serverData.address;
 		} else {

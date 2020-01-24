@@ -92,7 +92,7 @@ public class EditSelection {
 	public void drawSelection() {
 		if(_selection != null && Configs.Generic.SELECTION_SHOWN.getBooleanValue()) {
 			Tessellator tesselator = Tessellator.getInstance();
-			BufferBuilder buffer = tesselator.getBufferBuilder();
+			BufferBuilder buffer = tesselator.getBuffer();
 			buffer.begin(GL11.GL_LINES, VertexFormats.POSITION_COLOR);
 			GL11.glLineWidth(4.0f);
 

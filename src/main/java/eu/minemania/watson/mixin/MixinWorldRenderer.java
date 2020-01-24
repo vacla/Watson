@@ -1,33 +1,38 @@
 package eu.minemania.watson.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import eu.minemania.watson.config.Configs;
+import eu.minemania.watson.render.OverlayRenderer;
 import eu.minemania.watson.render.WatsonRenderer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.VisibleRegion;
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.LightmapTextureManager;
+import net.minecraft.client.render.OutlineVertexConsumerProvider;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.WorldRenderer;
-import net.minecraft.client.world.ClientWorld;
+import net.minecraft.client.util.math.Matrix4f;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.Entity;
 
 @Mixin(WorldRenderer.class)
 public abstract class MixinWorldRenderer {
-	@Shadow
-	private ClientWorld world;
+	//@Inject(method = "renderEntity", at = @At("TAIL"))
+	//private <E extends Entity> void onPostRenderEntities(E entity, double cameraX, double cameraY, double cameraZ, float tickDelta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumer, CallbackInfo ci) {
+		//WatsonRenderer.getInstance().piecewiseRenderEntities(entity, cameraX, cameraY, cameraZ, matrixStack, tickDelta, vertexConsumer);
+	//}
+	@Inject(method = "render", at = @At(value = "INVOKE_STRING", target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V", args = "ldc=weather"))
+	private void render(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo ci) {
+		MinecraftClient mc = MinecraftClient.getInstance();
 
-	@Inject(method = "reload()V", at = @At("RETURN"))
-	private void onLoadRenderers(CallbackInfo ci) {
-		// Also (re-)load our renderer when the vanilla renderer gets reloaded
-		if (this.world != null && this.world == MinecraftClient.getInstance().world) {
-			WatsonRenderer.getInstance().loadRenderers();
+		if (Configs.Generic.ENABLED.getBooleanValue() && mc.world != null && mc.player != null) {
+			OutlineVertexConsumerProvider vertexProvider = mc.getBufferBuilders().getOutlineVertexConsumers();
+			OverlayRenderer.renderOverlays(mc, tickDelta);
+			WatsonRenderer.getInstance().piecewiseRenderEntities(mc, matrices, vertexProvider);
 		}
-	}
-	
-	@Inject(method = "renderEntities", at = @At("TAIL"))
-	private void onPostRenderEntities(Camera camera, VisibleRegion visibleRegion, float partialTicks, CallbackInfo ci) {
-		WatsonRenderer.getInstance().piecewiseRenderEntities(visibleRegion, partialTicks);
 	}
 }

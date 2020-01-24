@@ -24,7 +24,10 @@ import eu.minemania.watson.selection.EditSelection;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.util.math.MatrixStack;
 
 public class BlockEditSet {
 	protected LinkedHashMap<String, PlayereditSet> _playerEdits = new LinkedHashMap<>();
@@ -196,7 +199,8 @@ public class BlockEditSet {
 	public synchronized void drawOutlines() {
 		if(Configs.Generic.OUTLINE_SHOWN.getBooleanValue()) {
 			Tessellator tessellator = Tessellator.getInstance();
-			BufferBuilder buffer = tessellator.getBufferBuilder();
+			BufferBuilder buffer = tessellator.getBuffer();
+			
 			buffer.begin(GL11.GL_LINES, VertexFormats.POSITION_COLOR);
 			for(PlayereditSet editsForPlayer : _playerEdits.values()) {
 				editsForPlayer.drawOutlines(buffer);
@@ -208,7 +212,7 @@ public class BlockEditSet {
 	public synchronized void drawVectors() {
 		if(Configs.Generic.VECTOR_SHOWN.getBooleanValue()) {
 			Tessellator tessellator = Tessellator.getInstance();
-			BufferBuilder buffer = tessellator.getBufferBuilder();
+			BufferBuilder buffer = tessellator.getBuffer();
 			buffer.begin(GL11.GL_LINES, VertexFormats.POSITION_COLOR);
 			int nextColorIndex1 = 0;
 			for(PlayereditSet editsForPlayer : _playerEdits.values()) {

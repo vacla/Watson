@@ -2,10 +2,15 @@ package eu.minemania.watson.render;
 
 import java.util.Arrays;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import fi.dy.masa.malilib.render.RenderUtils;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.util.math.Rotation3;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -51,7 +56,7 @@ public class OverlayRenderer {
 			// Don't render before the player has been placed in the actual proper position,
 			// otherwise some of the renderers mess up.
 			// The magic 8.5, 65, 8.5 comes from the WorldClient constructor
-			if (System.currentTimeMillis() - loginTime >= 5000 || entity.x != 8.5 || entity.y != 65 || entity.z != 8.5) {
+			if (System.currentTimeMillis() - loginTime >= 5000 || entity.getX() != 8.5 || entity.getY() != 65 || entity.getZ() != 8.5) {
 				canRender = true;
 			} else {
 				return;
@@ -72,4 +77,9 @@ public class OverlayRenderer {
 			RenderUtils.drawTextPlate(Arrays.asList(text), x, y, z, entity.yaw, entity.pitch, scaled, Configs.Generic.BILLBOARD_FOREGROUND.getIntegerValue(), Configs.Generic.BILLBOARD_BACKGROUND.getIntegerValue(), true);
 		}
 	}
+	
+	/*RenderSystem.enableAlphaTest();
+    VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
+    textRenderer.draw(string, g, 0.0F, color, false, Rotation3.identity().getMatrix(), immediate, visibleThroughObjects, 0, 15728880);
+    immediate.draw();*/
 }

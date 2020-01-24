@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.2.4-SNAPSHOT'
+	id 'fabric-loom' version '0.2.6-SNAPSHOT'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -19,16 +19,16 @@ configFile.withReader {
 }
 
 minecraft {
-    ext.mod_version = config.mod_version
-    
-    if(mod_version.endsWith('-dev')){
-    	mod_version = mod_version + "." + new Date().format('yyyyMMdd.HHmmss')
-    }
+	ext.mod_version = config.mod_version
+
+	if(mod_version.endsWith('-dev')){
+		mod_version = mod_version + "." + new Date().format('yyyyMMdd.HHmmss')
+	}
 }
 
 dependencies {
 	minecraft "com.mojang:minecraft:" + config.minecraft_version
-	mappings "net.fabricmc:yarn:" + config.mappings_version
+	mappings "net.fabricmc:yarn:" + config.mappings_version + ":v2"
 	modCompile "net.fabricmc:fabric-loader:" + config.fabric_loader_version
 	compile "com.google.code.findbugs:jsr305:3.0.2"
 	
@@ -47,23 +47,22 @@ compileJava {
 }
 
 processResources {
-
 	exclude '**/*.xcf'
 	exclude '**/xcf'
 	
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "mod_version", project.minecraft.mod_version
+	// this will ensure that this task is redone when the versions change.
+	inputs.property "mod_version", project.minecraft.mod_version
 
-    from(sourceSets.main.resources.srcDirs) {
-        include "fabric.mod.json"
-        expand "mod_version": project.minecraft.mod_version
-    }
+	from(sourceSets.main.resources.srcDirs) {
+		include "fabric.mod.json"
+		expand "mod_version": project.minecraft.mod_version
+	}
 
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "fabric.mod.json"
-    }
+	from(sourceSets.main.resources.srcDirs) {
+		exclude "fabric.mod.json"
+	}
 }
 
 tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
+	options.encoding = "UTF-8"
 }

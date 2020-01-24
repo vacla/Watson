@@ -35,7 +35,7 @@ public class Screenshot {
 		File screenshotsDir = new File(mc.runDirectory, "screenshots");
 		File subdirectory = new File(screenshotsDir, subdirectoryName);
 		File file = Screenshot.getUniqueFilename(subdirectory, player2, now);
-		mc.inGameHud.getChatHud().addMessage(Screenshot.save(file, mc.window.getWidth(), mc.window.getHeight()));
+		mc.inGameHud.getChatHud().addMessage(Screenshot.save(file, mc.getWindow().getWidth(), mc.getWindow().getHeight()));
 	}
 
 	/**
