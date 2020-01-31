@@ -7,10 +7,7 @@ import fi.dy.masa.malilib.util.Color4f;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.model.BakedQuad;
-import net.minecraft.client.util.math.Matrix4f;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.BlockPos;
 
@@ -19,8 +16,6 @@ public class RenderUtils {
 	public static final Direction[] FACING_ALL = new Direction[] { Direction.DOWN, Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST };
 
 	public static void drawGrassOutlinesBatched(float x, float y, float z, Color4f color, BufferBuilder buffer) {
-		//Matrix4f matrix4f = matrices.peek().getModel();
-		
 		buffer.vertex(x, y, z).color(color.r, color.g, color.b, color.a).next();
 		buffer.vertex(x + 1F, y, z).color(color.r, color.g, color.b, color.a).next();
 
@@ -141,7 +136,6 @@ public class RenderUtils {
 			fy[index] = y + Float.intBitsToFloat(vertexData[index * 8 + 1]);
 			fz[index] = z + Float.intBitsToFloat(vertexData[index * 8 + 2]);
 		}
-		//System.out.println(fx[0] + " " + fy[0] + " " + fz[0] + " " + fx[1] + " " + fy[1] + " " + fz[1] + " " + fx[2] + " " + fy[2] + " " + fz[2]);
 
 		buffer.vertex(fx[0], fy[0], fz[0]).color(color.r, color.g, color.b, color.a).next();
 		buffer.vertex(fx[1], fy[1], fz[1]).color(color.r, color.g, color.b, color.a).next();

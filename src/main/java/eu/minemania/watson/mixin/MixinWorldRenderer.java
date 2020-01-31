@@ -13,18 +13,12 @@ import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.OutlineVertexConsumerProvider;
-import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.util.math.Matrix4f;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
 
 @Mixin(WorldRenderer.class)
 public abstract class MixinWorldRenderer {
-	//@Inject(method = "renderEntity", at = @At("TAIL"))
-	//private <E extends Entity> void onPostRenderEntities(E entity, double cameraX, double cameraY, double cameraZ, float tickDelta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumer, CallbackInfo ci) {
-		//WatsonRenderer.getInstance().piecewiseRenderEntities(entity, cameraX, cameraY, cameraZ, matrixStack, tickDelta, vertexConsumer);
-	//}
 	@Inject(method = "render", at = @At(value = "INVOKE_STRING", target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V", args = "ldc=weather"))
 	private void render(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, CallbackInfo ci) {
 		MinecraftClient mc = MinecraftClient.getInstance();

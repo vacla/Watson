@@ -8,8 +8,6 @@ import java.util.TreeSet;
 import eu.minemania.watson.config.Configs;
 import fi.dy.masa.malilib.util.Color4f;
 import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Vec3d;
 
 public class PlayereditSet {

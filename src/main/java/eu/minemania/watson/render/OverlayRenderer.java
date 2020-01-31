@@ -2,15 +2,10 @@ package eu.minemania.watson.render;
 
 import java.util.Arrays;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import fi.dy.masa.malilib.render.RenderUtils;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.util.math.Rotation3;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -77,9 +72,4 @@ public class OverlayRenderer {
 			RenderUtils.drawTextPlate(Arrays.asList(text), x, y, z, entity.yaw, entity.pitch, scaled, Configs.Generic.BILLBOARD_FOREGROUND.getIntegerValue(), Configs.Generic.BILLBOARD_BACKGROUND.getIntegerValue(), true);
 		}
 	}
-	
-	/*RenderSystem.enableAlphaTest();
-    VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
-    textRenderer.draw(string, g, 0.0F, color, false, Rotation3.identity().getMatrix(), immediate, visibleThroughObjects, 0, 15728880);
-    immediate.draw();*/
 }

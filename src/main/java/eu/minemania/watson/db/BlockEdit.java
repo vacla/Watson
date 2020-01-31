@@ -9,9 +9,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -65,9 +63,5 @@ public class BlockEdit {
 				}
 			}
 		}
-	}
-	
-	protected BlockPos.Mutable getChunkRelativePosition(BlockPos pos) {
-		return this.chunkRelativePos.set(x & 0xF, y & 0xF, z & 0xF);
 	}
 }
