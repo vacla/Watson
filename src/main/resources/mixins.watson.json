@@ -1,8 +1,7 @@
 {
     "required": true,
     "package": "eu.minemania.watson.mixin",
-    "refmap": "mixins.watson.refmap.json",
-    "minVersion": "0.6",
+    "minVersion": "0.7",
     "client": [
     	"MixinChatHud",
     	"MixinClientPlayerEntity",
