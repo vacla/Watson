@@ -8,8 +8,7 @@
     	"MixinClientPlayNetworkHandler",
     	"MixinCommandSuggestor",
     	"MixinPlayerEntity",
-    	"MixinTextFieldWidget",
-    	"MixinWorldRenderer"
+    	"MixinTextFieldWidget"
     ],
     "injectors": {
     	"defaultRequire": 1

@@ -5,47 +5,60 @@ import java.util.LinkedHashSet;
 import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.data.DataManager;
 
-public class Filters {
-	protected LinkedHashSet<String> _filters = new LinkedHashSet<String>();
+public class Filters
+{
+    protected LinkedHashSet<String> _filters = new LinkedHashSet<String>();
 
-	public void list() {
-		if(_filters.size() == 0) {
-			ChatMessage.localOutput("No filters are set. All edits are accepted", true);
-		} else {
-			ChatMessage.localOutput("Edits by the following players will be accepted", true);
-			StringBuilder message = new StringBuilder(' ');
-			for(String player : _filters) {
-				message.append(' ');
-				message.append(player);
-			}
-			ChatMessage.localOutput(message.toString(), true);
-		}
-	}
+    public void list()
+    {
+        if(_filters.size() == 0)
+        {
+            ChatMessage.localOutput("No filters are set. All edits are accepted", true);
+        }
+        else
+        {
+            ChatMessage.localOutput("Edits by the following players will be accepted", true);
+            StringBuilder message = new StringBuilder(' ');
+            for(String player : _filters)
+            {
+                message.append(' ');
+                message.append(player);
+            }
+            ChatMessage.localOutput(message.toString(), true);
+        }
+    }
 
-	public void clear() {
-		ChatMessage.localOutput("Watson filters cleared", true);
-		_filters.clear();
-	}
+    public void clear()
+    {
+        ChatMessage.localOutput("Watson filters cleared", true);
+        _filters.clear();
+    }
 
-	public void addPlayer(String player) {
-		player = player.toLowerCase();
-		ChatMessage.localOutput("Added a filter to accept edits by " + player + ".", true);
-		_filters.add(player);
-		DataManager.getEditSelection().getVariables().put("player", player);
-	}
+    public void addPlayer(String player)
+    {
+        player = player.toLowerCase();
+        ChatMessage.localOutput("Added a filter to accept edits by " + player + ".", true);
+        _filters.add(player);
+        DataManager.getEditSelection().getVariables().put("player", player);
+    }
 
-	public void removePlayer(String player) {
-		player = player.toLowerCase();
-		if(_filters.contains(player)) {
-			ChatMessage.localOutput("Removed the filter for " + player + ".", true);
-			_filters.remove(player);
-		} else {
-			ChatMessage.localError("The is no filter for " + player + ".", true);
-		}
-	}
+    public void removePlayer(String player)
+    {
+        player = player.toLowerCase();
+        if(_filters.contains(player))
+        {
+            ChatMessage.localOutput("Removed the filter for " + player + ".", true);
+            _filters.remove(player);
+        }
+        else
+        {
+            ChatMessage.localError("The is no filter for " + player + ".", true);
+        }
+    }
 
-	public boolean isAcceptedPlayer(String player) {
-		player = player.toLowerCase();
-		return _filters.size() == 0 || _filters.contains(player);
-	}
+    public boolean isAcceptedPlayer(String player)
+    {
+        player = player.toLowerCase();
+        return _filters.size() == 0 || _filters.contains(player);
+    }
 }

@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 
 import net.minecraft.text.Text;
 
-public interface IMatchedChatHandler {
-	public boolean onMatchedChat(Text chat, Matcher m);
+public interface IMatchedChatHandler
+{
+    public boolean onMatchedChat(Text chat, Matcher m);
 }

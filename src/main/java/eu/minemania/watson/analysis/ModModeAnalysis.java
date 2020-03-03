@@ -1,48 +1,49 @@
 package eu.minemania.watson.analysis;
 
-import static eu.minemania.watson.analysis.MiscPatterns.DUTYMODE_DISABLE;
-import static eu.minemania.watson.analysis.MiscPatterns.DUTYMODE_ENABLE;
-import static eu.minemania.watson.analysis.MiscPatterns.MODMODE_DISABLE;
-import static eu.minemania.watson.analysis.MiscPatterns.MODMODE_ENABLE;
-
 import java.util.regex.Matcher;
-
+import java.util.regex.Pattern;
 import eu.minemania.watson.chat.IMatchedChatHandler;
 import eu.minemania.watson.config.Configs;
 import net.minecraft.text.Text;
 
-public class ModModeAnalysis extends Analysis {
-	public ModModeAnalysis() {
-		IMatchedChatHandler modmodeHandler = new IMatchedChatHandler() {
+public class ModModeAnalysis extends Analysis
+{
+    public ModModeAnalysis()
+    {
+        IMatchedChatHandler modmodeHandler = new IMatchedChatHandler()
+        {
+            @Override
+            public boolean onMatchedChat(Text chat, Matcher m)
+            {
+                changeModMode(chat, m);
+                return true;
+            }
+        };
 
-			@Override
-			public boolean onMatchedChat(Text chat, Matcher m) {
-				changeModMode(chat, m);
-				return true;
-			}
-		};
+        addMatchedChatHandler(Configs.Analysis.MODMODE_ENABLE, modmodeHandler);
+        addMatchedChatHandler(Configs.Analysis.MODMODE_DISABLE, modmodeHandler);
 
-		addMatchedChatHandler(MODMODE_ENABLE, modmodeHandler);
-		addMatchedChatHandler(MODMODE_DISABLE, modmodeHandler);
+        IMatchedChatHandler dutiesHandler = new IMatchedChatHandler()
+        {
+            @Override
+            public boolean onMatchedChat(Text chat, Matcher m)
+            {
+                changeDutyMode(chat, m);
+                return true;
+            }
+        };
 
-		IMatchedChatHandler dutiesHandler = new IMatchedChatHandler() {
+        addMatchedChatHandler(Configs.Analysis.DUTYMODE_ENABLE, dutiesHandler);
+        addMatchedChatHandler(Configs.Analysis.DUTYMODE_DISABLE, dutiesHandler);
+    }
 
-			@Override
-			public boolean onMatchedChat(Text chat, Matcher m) {
-				changeDutyMode(chat, m);
-				return true;
-			}
-		};
+    void changeModMode(Text chat, Matcher m)
+    {
+        Configs.Generic.DISPLAYED.setBooleanValue(m.pattern() == Pattern.compile(Configs.Analysis.MODMODE_ENABLE.getStringValue()));
+    }
 
-		addMatchedChatHandler(DUTYMODE_ENABLE, dutiesHandler);
-		addMatchedChatHandler(DUTYMODE_DISABLE, dutiesHandler);
-	}
-
-	void changeModMode(Text chat, Matcher m) {
-		Configs.Generic.DISPLAYED.setBooleanValue(m.pattern() == MODMODE_ENABLE);
-	}
-
-	void changeDutyMode(Text chat, Matcher m) {
-		Configs.Generic.DISPLAYED.setBooleanValue(m.pattern() == DUTYMODE_ENABLE);
-	}
+    void changeDutyMode(Text chat, Matcher m)
+    {
+        Configs.Generic.DISPLAYED.setBooleanValue(m.pattern() == Pattern.compile(Configs.Analysis.DUTYMODE_ENABLE.getStringValue()));
+    }
 }
