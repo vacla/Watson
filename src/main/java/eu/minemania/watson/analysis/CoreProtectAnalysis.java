@@ -42,128 +42,157 @@ import net.minecraft.util.text.ITextComponent;
  *                 ^ (x3/y63/z-6/world)
  * </pre>
  */
-public class CoreProtectAnalysis extends Analysis {
-	protected static final int MS_PER_HOUR = 60 * 60 * 1000;
-	protected static final Pattern ABSOLUTE_TIME = Pattern.compile("(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{2}):(\\d{2})");
-	protected static final Pattern HOURS_AGO_TIME = Pattern.compile("(\\d+.\\d+)/h ago");
-	protected boolean _isLookup = false;
-	protected boolean _firstInspectorResult = false;
-	protected boolean _lookupDetails = false;
-	protected boolean _creation;
-	protected int _x;
-	protected int _y;
-	protected int _z;
-	protected String _world;
-	protected long _millis;
-	protected String _player;
-	protected WatsonBlock _block;
+public class CoreProtectAnalysis extends Analysis
+{
+    protected static final int MS_PER_HOUR = 60 * 60 * 1000;
+    protected static final Pattern ABSOLUTE_TIME = Pattern.compile("(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{2}):(\\d{2})");
+    protected static final Pattern HOURS_AGO_TIME = Pattern.compile("(\\d+.\\d+)/h ago");
+    protected boolean _isLookup = false;
+    protected boolean _firstInspectorResult = false;
+    protected boolean _lookupDetails = false;
+    protected boolean _creation;
+    protected int _x;
+    protected int _y;
+    protected int _z;
+    protected String _world;
+    protected long _millis;
+    protected String _player;
+    protected WatsonBlock _block;
 
-	public CoreProtectAnalysis() {
-		addMatchedChatHandler(INSPECTOR_COORDS, new IMatchedChatHandler() {
-			@Override
-			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
-				inspectorCoords(chat, m);
-				return true;
-			}
-		});
-		addMatchedChatHandler(DETAILS, new IMatchedChatHandler() {
-			@Override
-			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
-				details(chat, m);
-				return true;
-			}
-		});
-		addMatchedChatHandler(LOOKUP_COORDS, new IMatchedChatHandler() {
-			@Override
-			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
-				lookupCoords(chat, m);
-				return true;
-			}
-		});
-		addMatchedChatHandler(LOOKUP_HEADER, new IMatchedChatHandler() {
-			@Override
-			public boolean onMatchedChat(ITextComponent chat, Matcher m) {
-				lookupHeader(chat, m);
-				return true;
-			}
-		});
-	}
+    public CoreProtectAnalysis()
+    {
+        addMatchedChatHandler(INSPECTOR_COORDS, new IMatchedChatHandler()
+        {
+            @Override
+            public boolean onMatchedChat(ITextComponent chat, Matcher m)
+            {
+                inspectorCoords(chat, m);
+                return true;
+            }
+        });
 
-	void inspectorCoords(ITextComponent chat, Matcher m) {
-		_isLookup = false;
-		_x = Integer.parseInt(m.group(1));
-		_y = Integer.parseInt(m.group(2));
-		_z = Integer.parseInt(m.group(3));
-		EditSelection selection = DataManager.getEditSelection();
-		selection.selectPosition(_x, _y, _z, _world);
-		_firstInspectorResult = true;
-	}
+        addMatchedChatHandler(DETAILS, new IMatchedChatHandler()
+        {
+            @Override
+            public boolean onMatchedChat(ITextComponent chat, Matcher m)
+            {
+                details(chat, m);
+                return true;
+            }
+        });
 
-	void details(ITextComponent chat, Matcher m) {
-		_lookupDetails = false;
-		if(m.group(3).equals("placed") || m.group(3).equals("removed")) {
-			_millis = parseTimeExpression(m.group(1));
-			_player = m.group(2);
-			_creation = m.group(3).equals("placed");
-			String block = m.group(4);
-			_block = WatsonBlockRegistery.getInstance().getWatsonBlockByName(block);
+        addMatchedChatHandler(LOOKUP_COORDS, new IMatchedChatHandler()
+        {
+            @Override
+            public boolean onMatchedChat(ITextComponent chat, Matcher m)
+            {
+                lookupCoords(chat, m);
+                return true;
+            }
+        });
 
-			if(_isLookup) {
-				// Record that we can use these details at the next
-				// coreprotect.lookupcoords only.
-				_lookupDetails = true;
-			} else {
-				if(DataManager.getFilters().isAcceptedPlayer(_player)) {
-					BlockEdit edit = new BlockEdit(_millis, _player, _creation, _x, _y, _z, _block, _world);
-					SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, _firstInspectorResult));
+        addMatchedChatHandler(LOOKUP_HEADER, new IMatchedChatHandler()
+        {
+            @Override
+            public boolean onMatchedChat(ITextComponent chat, Matcher m)
+            {
+                lookupHeader(chat, m);
+                return true;
+            }
+        });
+    }
 
-					if(_firstInspectorResult) {
-						_firstInspectorResult = false;
-					}
-				}
-			}
-		}
-	}
+    void inspectorCoords(ITextComponent chat, Matcher m)
+    {
+        _isLookup = false;
+        _x = Integer.parseInt(m.group(1));
+        _y = Integer.parseInt(m.group(2));
+        _z = Integer.parseInt(m.group(3));
+        EditSelection selection = DataManager.getEditSelection();
+        selection.selectPosition(_x, _y, _z, _world);
+        _firstInspectorResult = true;
+    }
 
-	void lookupHeader(ITextComponent chat, Matcher m) {
-		_isLookup = true;
-	}
+    void details(ITextComponent chat, Matcher m)
+    {
+        _lookupDetails = false;
+        if(m.group(3).equals("placed") || m.group(3).equals("removed"))
+        {
+            _millis = parseTimeExpression(m.group(1));
+            _player = m.group(2);
+            _creation = m.group(3).equals("placed");
+            String block = m.group(4);
+            _block = WatsonBlockRegistery.getInstance().getWatsonBlockByName(block);
 
-	void lookupCoords(ITextComponent chat, Matcher m) {
-		_isLookup = true;
-		if(_lookupDetails) {
-			_x = Integer.parseInt(m.group(1));
-			_y = Integer.parseInt(m.group(2));
-			_z = Integer.parseInt(m.group(3));
-			_world = m.group(4);
-			// https://github.com/totemo/watson/issues/23
+            if(_isLookup)
+            {
+                // Record that we can use these details at the next
+                // coreprotect.lookupcoords only.
+                _lookupDetails = true;
+            }
+            else
+            {
+                if(DataManager.getFilters().isAcceptedPlayer(_player))
+                {
+                    BlockEdit edit = new BlockEdit(_millis, _player, _creation, _x, _y, _z, _block, _world);
+                    SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, _firstInspectorResult));
 
-			BlockEdit edit = new BlockEdit(_millis, _player, _creation, _x, _y, _z, _block, _world);
-			SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, true));
-			_lookupDetails = false;
-		}
-	}
+                    if(_firstInspectorResult)
+                    {
+                        _firstInspectorResult = false;
+                    }
+                }
+            }
+        }
+    }
 
-	private long parseTimeExpression(String time) {
-		Matcher absolute = ABSOLUTE_TIME.matcher(time);
-		if(absolute.matches()) {
-			int month = Integer.parseInt(absolute.group(1));
-			int day = Integer.parseInt(absolute.group(2));
-			int hour = Integer.parseInt(absolute.group(3));
-			int minute = Integer.parseInt(absolute.group(4));
-			int second = Integer.parseInt(absolute.group(5));
-			return TimeStamp.toMillis(month, day, hour, minute, second);
-		} else {
-			Matcher relative = HOURS_AGO_TIME.matcher(time);
-			if(relative.matches()) {
-				String timed = relative.group(1).replace(",", ".");
-				float hours = Float.parseFloat(timed);
-				long millis = System.currentTimeMillis() - (long) (hours * MS_PER_HOUR);
+    void lookupHeader(ITextComponent chat, Matcher m)
+    {
+        _isLookup = true;
+    }
 
-				millis -= millis % (MS_PER_HOUR / 100);
-				return millis;
-			}
-		}
-		return 0;
-	}
+    void lookupCoords(ITextComponent chat, Matcher m)
+    {
+        _isLookup = true;
+        if(_lookupDetails)
+        {
+            _x = Integer.parseInt(m.group(1));
+            _y = Integer.parseInt(m.group(2));
+            _z = Integer.parseInt(m.group(3));
+            _world = m.group(4);
+            // https://github.com/totemo/watson/issues/23
+
+            BlockEdit edit = new BlockEdit(_millis, _player, _creation, _x, _y, _z, _block, _world);
+            SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, true));
+            _lookupDetails = false;
+        }
+    }
+
+    private long parseTimeExpression(String time)
+    {
+        Matcher absolute = ABSOLUTE_TIME.matcher(time);
+        if(absolute.matches())
+        {
+            int month = Integer.parseInt(absolute.group(1));
+            int day = Integer.parseInt(absolute.group(2));
+            int hour = Integer.parseInt(absolute.group(3));
+            int minute = Integer.parseInt(absolute.group(4));
+            int second = Integer.parseInt(absolute.group(5));
+            return TimeStamp.toMillis(month, day, hour, minute, second);
+        }
+        else
+        {
+            Matcher relative = HOURS_AGO_TIME.matcher(time);
+            if(relative.matches())
+            {
+                String timed = relative.group(1).replace(",", ".");
+                float hours = Float.parseFloat(timed);
+                long millis = System.currentTimeMillis() - (long) (hours * MS_PER_HOUR);
+
+                millis -= millis % (MS_PER_HOUR / 100);
+                return millis;
+            }
+        }
+        return 0;
+    }
 }

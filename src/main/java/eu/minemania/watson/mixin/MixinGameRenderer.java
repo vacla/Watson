@@ -9,9 +9,11 @@ import eu.minemania.watson.render.WatsonRenderer;
 import net.minecraft.client.renderer.GameRenderer;
 
 @Mixin(GameRenderer.class)
-public class MixinGameRenderer {
-	@Inject(method = "updateCameraAndRender(FJ)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/WorldRenderer;renderEntities(Lnet/minecraft/entity/Entity;Lnet/minecraft/client/renderer/culling/ICamera;F)V"))
-	private void renderEntities(float partialTicks, long finishTimeNano, CallbackInfo ci) {
-		WatsonRenderer.getInstance().piecewiseRenderEntities(partialTicks);
-	}
+public class MixinGameRenderer
+{
+    @Inject(method = "updateCameraAndRender(FJ)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/WorldRenderer;renderEntities(Lnet/minecraft/entity/Entity;Lnet/minecraft/client/renderer/culling/ICamera;F)V"))
+    private void renderEntities(float partialTicks, long finishTimeNano, CallbackInfo ci)
+    {
+        WatsonRenderer.getInstance().piecewiseRenderEntities(partialTicks);
+    }
 }
