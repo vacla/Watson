@@ -9,26 +9,32 @@ import eu.minemania.watson.chat.IChatHandler;
 import eu.minemania.watson.chat.IMatchedChatHandler;
 import net.minecraft.text.Text;
 
-public class Analysis implements IChatHandler {
-	protected LinkedHashMap<Pattern, IMatchedChatHandler> _handlers = new LinkedHashMap<Pattern, IMatchedChatHandler>();
+public class Analysis implements IChatHandler
+{
+    protected LinkedHashMap<Pattern, IMatchedChatHandler> _handlers = new LinkedHashMap<Pattern, IMatchedChatHandler>();
 
-	public boolean dispatchMatchedChat(Text chat) {
-		String unformatted = chat.getString();
-		for(Entry<Pattern, IMatchedChatHandler> entry : _handlers.entrySet()) {
-			Matcher m = entry.getKey().matcher(unformatted);
-			if(m.matches()) {
-				return entry.getValue().onMatchedChat(chat, m);
-			}
-		}
-		return true;
-	}
+    public boolean dispatchMatchedChat(Text chat)
+    {
+        String unformatted = chat.getString();
+        for(Entry<Pattern, IMatchedChatHandler> entry : _handlers.entrySet())
+        {
+            Matcher m = entry.getKey().matcher(unformatted);
+            if(m.matches())
+            {
+                return entry.getValue().onMatchedChat(chat, m);
+            }
+        }
+        return true;
+    }
 
-	public void addMatchedChatHandler(Pattern pattern, IMatchedChatHandler handler) {
-		_handlers.put(pattern, handler);
-	}
+    public void addMatchedChatHandler(Pattern pattern, IMatchedChatHandler handler)
+    {
+        _handlers.put(pattern, handler);
+    }
 
-	@Override
-	public boolean onChat(Text chat) {
-		return dispatchMatchedChat(chat);
-	}
+    @Override
+    public boolean onChat(Text chat)
+    {
+        return dispatchMatchedChat(chat);
+    }
 }

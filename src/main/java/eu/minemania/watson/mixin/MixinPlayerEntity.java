@@ -16,22 +16,28 @@ import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
 @Mixin(PlayerEntity.class)
-public abstract class MixinPlayerEntity extends LivingEntity {
+public abstract class MixinPlayerEntity extends LivingEntity
+{
 
-	@Shadow
-	public abstract Text getDisplayName();
+    @Shadow
+    public abstract Text getDisplayName();
 
-	protected MixinPlayerEntity(World world, GameProfile gameprofile) {
-		super(EntityType.PLAYER, world);
-	}
+    protected MixinPlayerEntity(World world, GameProfile gameprofile)
+    {
+        super(EntityType.PLAYER, world);
+    }
 
-	@Redirect(method = "getDisplayName", at = @At(value = "INVOKE",	target = "Lnet/minecraft/entity/player/PlayerEntity;getName()Lnet/minecraft/text/Text;"))
-	private Text getCustomUsername(PlayerEntity player)	{
-		if (Highlight.changeUsername) {
-			Highlight.changeUsername = false;
-			return new LiteralText(Highlight.getUsername());
-		} else {
-			return player.getName();
-		}
-	} 
+    @Redirect(method = "getDisplayName", at = @At(value = "INVOKE",	target = "Lnet/minecraft/entity/player/PlayerEntity;getName()Lnet/minecraft/text/Text;"))
+    private Text getCustomUsername(PlayerEntity player)
+    {
+        if (Highlight.changeUsername)
+        {
+            Highlight.changeUsername = false;
+            return new LiteralText(Highlight.getUsername());
+        }
+        else
+        {
+            return player.getName();
+        }
+    }
 }

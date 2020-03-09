@@ -18,75 +18,85 @@ import net.minecraft.client.render.VisibleRegion;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 
-public class WatsonRenderer {
-	private static final WatsonRenderer INSTANCE = new WatsonRenderer();
+public class WatsonRenderer
+{
+    private static final WatsonRenderer INSTANCE = new WatsonRenderer();
 
-	private static final ShaderProgram SHADER_ALPHA = new ShaderProgram("watson", null, "shaders/alpha.frag");
+    private static final ShaderProgram SHADER_ALPHA = new ShaderProgram("watson", null, "shaders/alpha.frag");
 
-	private MinecraftClient mc;
-	private WorldRendererPlayeredit worldRenderer;
+    private MinecraftClient mc;
+    private WorldRendererPlayeredit worldRenderer;
 
-	static {
-		int program = SHADER_ALPHA.getProgram();
-		GL20.glUseProgram(program);
-		GL20.glUniform1i(GL20.glGetUniformLocation(program, "texture"), 0);
-		GL20.glUseProgram(0);
-	}
+    static
+    {
+        int program = SHADER_ALPHA.getProgram();
+        GL20.glUseProgram(program);
+        GL20.glUniform1i(GL20.glGetUniformLocation(program, "texture"), 0);
+        GL20.glUseProgram(0);
+    }
 
-	public static WatsonRenderer getInstance() {
-		return INSTANCE;
-	}
+    public static WatsonRenderer getInstance()
+    {
+        return INSTANCE;
+    }
 
-	public WorldRendererPlayeredit getWorldRenderer() {
-		if(this.worldRenderer == null) {
-			this.mc = MinecraftClient.getInstance();
-			this.worldRenderer = new WorldRendererPlayeredit(this.mc);
-		}
+    public WorldRendererPlayeredit getWorldRenderer()
+    {
+        if(this.worldRenderer == null)
+        {
+            this.mc = MinecraftClient.getInstance();
+            this.worldRenderer = new WorldRendererPlayeredit(this.mc);
+        }
 
-		return this.worldRenderer;
-	}
+        return this.worldRenderer;
+    }
 
-	public void loadRenderers() {
-		this.getWorldRenderer().reload();
-	}
+    public void loadRenderers()
+    {
+        this.getWorldRenderer().reload();
+    }
 
-	public void piecewiseRenderEntities(VisibleRegion visibleRegion, float partialTicks) {
-		if(Configs.Generic.DISPLAYED.getBooleanValue() && this.mc.getCameraEntity() != null && Configs.Generic.OUTLINE_SHOWN.getBooleanValue()) {
-			this.mc.getProfiler().push("watson_entities");
-			GlStateManager.disableLighting();
-			GlStateManager.disableCull();
-			GlStateManager.disableTexture();
-			GlStateManager.pushMatrix();
-			RenderUtils.setupBlend();
-			RenderUtils.color(1f, 1f, 1f, 1f);
-			GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, 240, 240);
-			GlStateManager.depthMask(false);
-			boolean foggy = GL11.glIsEnabled(GL11.GL_FOG);
-			GlStateManager.disableFog();
-			GlStateManager.disableDepthTest();
-			EditSelection selection = DataManager.getEditSelection();
-			BlockEditSet edits = selection.getBlockEditSet();
-			Entity entity = mc.getCameraEntity();
-			if(entity == null) {
-				entity = mc.player;
-			}
+    public void piecewiseRenderEntities(VisibleRegion visibleRegion, float partialTicks)
+    {
+        if(Configs.Generic.DISPLAYED.getBooleanValue() && this.mc.getCameraEntity() != null && Configs.Generic.OUTLINE_SHOWN.getBooleanValue())
+        {
+            this.mc.getProfiler().push("watson_entities");
+            GlStateManager.disableLighting();
+            GlStateManager.disableCull();
+            GlStateManager.disableTexture();
+            GlStateManager.pushMatrix();
+            RenderUtils.setupBlend();
+            RenderUtils.color(1f, 1f, 1f, 1f);
+            GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, 240, 240);
+            GlStateManager.depthMask(false);
+            boolean foggy = GL11.glIsEnabled(GL11.GL_FOG);
+            GlStateManager.disableFog();
+            GlStateManager.disableDepthTest();
+            EditSelection selection = DataManager.getEditSelection();
+            BlockEditSet edits = selection.getBlockEditSet();
+            Entity entity = mc.getCameraEntity();
+            if(entity == null)
+            {
+                entity = mc.player;
+            }
 
-			Vec3d cameraPos = mc.gameRenderer.getCamera().getPos();
-			GlStateManager.translated(-cameraPos.x, -cameraPos.y, -cameraPos.z);
-			edits.drawOutlines();
-			edits.drawVectors();
-			selection.drawSelection();
-			if(foggy) {
-				GlStateManager.enableFog();
-			}
-			GlStateManager.enableDepthTest();
-			GlStateManager.depthMask(true);
-			GlStateManager.popMatrix();
-			GlStateManager.disableBlend();
-			GlStateManager.enableTexture();
-			GlStateManager.enableCull();
-			GlStateManager.enableLighting();
-			this.mc.getProfiler().pop();
-		}
-	}
+            Vec3d cameraPos = mc.gameRenderer.getCamera().getPos();
+            GlStateManager.translated(-cameraPos.x, -cameraPos.y, -cameraPos.z);
+            edits.drawOutlines();
+            edits.drawVectors();
+            selection.drawSelection();
+            if(foggy)
+            {
+                GlStateManager.enableFog();
+            }
+            GlStateManager.enableDepthTest();
+            GlStateManager.depthMask(true);
+            GlStateManager.popMatrix();
+            GlStateManager.disableBlend();
+            GlStateManager.enableTexture();
+            GlStateManager.enableCull();
+            GlStateManager.enableLighting();
+            this.mc.getProfiler().pop();
+        }
+    }
 }

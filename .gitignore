@@ -1,17 +1,5 @@
 .eclipse-pmd
-
-fix
-
-naming_difference_litematica
-
-watson1132_Client.launch
-
 .gradle/
-
 .settings/
-
 bin/
-
 build/
-
-minecraft/

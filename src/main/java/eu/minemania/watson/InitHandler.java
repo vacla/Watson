@@ -16,28 +16,30 @@ import fi.dy.masa.malilib.interfaces.IInitializationHandler;
 import fi.dy.masa.malilib.interfaces.IRenderer;
 import net.minecraft.client.MinecraftClient;
 
-public class InitHandler implements IInitializationHandler{
-	@Override
-	public void registerModHandlers() {
-		ConfigManager.getInstance().registerConfigHandler(Reference.MOD_ID, new Configs());
+public class InitHandler implements IInitializationHandler
+{
+    @Override
+    public void registerModHandlers()
+    {
+        ConfigManager.getInstance().registerConfigHandler(Reference.MOD_ID, new Configs());
 
-		InputEventHandler.getKeybindManager().registerKeybindProvider(InputHandler.getInstance());
-		InputEventHandler.getInputManager().registerKeyboardInputHandler(InputHandler.getInstance());
-		InputEventHandler.getInputManager().registerMouseInputHandler(InputHandler.getInstance());
+        InputEventHandler.getKeybindManager().registerKeybindProvider(InputHandler.getInstance());
+        InputEventHandler.getInputManager().registerKeyboardInputHandler(InputHandler.getInstance());
+        InputEventHandler.getInputManager().registerMouseInputHandler(InputHandler.getInstance());
 
-		TickHandler.getInstance().registerClientTickHandler(new ClientTickHandler());
+        TickHandler.getInstance().registerClientTickHandler(new ClientTickHandler());
 
-		IRenderer renderer = new RenderHandler();
-		RenderEventHandler.getInstance().registerGameOverlayRenderer(renderer);
-		RenderEventHandler.getInstance().registerWorldLastRenderer(renderer);
+        IRenderer renderer = new RenderHandler();
+        RenderEventHandler.getInstance().registerGameOverlayRenderer(renderer);
+        RenderEventHandler.getInstance().registerWorldLastRenderer(renderer);
 
-		WorldLoadListener listener = new WorldLoadListener();
-		WorldLoadHandler.getInstance().registerWorldLoadPreHandler(listener);
-		WorldLoadHandler.getInstance().registerWorldLoadPostHandler(listener);
+        WorldLoadListener listener = new WorldLoadListener();
+        WorldLoadHandler.getInstance().registerWorldLoadPreHandler(listener);
+        WorldLoadHandler.getInstance().registerWorldLoadPostHandler(listener);
 
-		KeyCallbacks.init(MinecraftClient.getInstance());
-		//StatusInfoRenderer.init();
+        KeyCallbacks.init(MinecraftClient.getInstance());
+        //StatusInfoRenderer.init();
 
-		DataManager.getPlayereditsBaseDirectory();
-	}
+        DataManager.getPlayereditsBaseDirectory();
+    }
 }

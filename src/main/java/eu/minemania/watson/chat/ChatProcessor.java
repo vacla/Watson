@@ -13,40 +13,49 @@ import eu.minemania.watson.analysis.TeleportAnalysis;
 import eu.minemania.watson.config.Configs;
 import net.minecraft.text.Text;
 
-public class ChatProcessor {
-	private static ChatProcessor INSTANCE = new ChatProcessor();
-	protected ArrayList<IChatHandler> _handlers = new ArrayList<IChatHandler>();
+public class ChatProcessor
+{
+    private static ChatProcessor INSTANCE = new ChatProcessor();
+    protected ArrayList<IChatHandler> _handlers = new ArrayList<IChatHandler>();
 
-	private ChatProcessor() {
-		addChatHandler(new LbCoordsAnalysis());
-		addChatHandler(new LbToolBlockAnalysis());
-		addChatHandler(new TeleportAnalysis());
-		addChatHandler(new RatioAnalysis());
-		addChatHandler(ServerTime.getInstance());
+    private ChatProcessor()
+    {
+        addChatHandler(new LbCoordsAnalysis());
+        addChatHandler(new LbToolBlockAnalysis());
+        addChatHandler(new TeleportAnalysis());
+        addChatHandler(new RatioAnalysis());
+        addChatHandler(ServerTime.getInstance());
 
-		addChatHandler(new ModModeAnalysis());
-		addChatHandler(new RegionInfoAnalysis());
+        addChatHandler(new ModModeAnalysis());
+        addChatHandler(new RegionInfoAnalysis());
 
-		addChatHandler(new CoreProtectAnalysis());
-	}
+        addChatHandler(new CoreProtectAnalysis());
+    }
 
-	public static ChatProcessor getInstance() {
-		return INSTANCE;
-	}
+    public static ChatProcessor getInstance()
+    {
+        return INSTANCE;
+    }
 
-	public void addChatHandler(IChatHandler handler) {
-		_handlers.add(handler);
-	}
+    public void addChatHandler(IChatHandler handler)
+    {
+        _handlers.add(handler);
+    }
 
-	public boolean onChat(Text chat) {
-		if (Configs.Generic.ENABLED.getBooleanValue()) {
-			boolean allow = true;
-			for (IChatHandler handler : _handlers) {
-				allow &= handler.onChat(chat);
-			}
-			return allow;
-		} else {
-			return true;
-		}
-	}
+    public boolean onChat(Text chat)
+    {
+        if (Configs.Generic.ENABLED.getBooleanValue())
+        {
+            boolean allow = true;
+            for (IChatHandler handler : _handlers)
+            {
+                allow &= handler.onChat(chat);
+            }
+            return allow;
+        }
+        else
+        {
+            return true;
+        }
+    }
 }

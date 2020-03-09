@@ -6,14 +6,17 @@ import eu.minemania.watson.gui.GuiMainMenu;
 import io.github.prospector.modmenu.api.ModMenuApi;
 import net.minecraft.client.gui.screen.Screen;
 
-public class ModMenuImpl implements ModMenuApi {
+public class ModMenuImpl implements ModMenuApi
+{
 	@Override
-	public String getModId() {
+	public String getModId()
+	{
 		return Reference.MOD_ID;
 	}
 
 	@Override
-	public Function<Screen, ? extends Screen> getConfigScreenFactory() {
+	public Function<Screen, ? extends Screen> getConfigScreenFactory()
+	{
 		return (screen) -> {
 			GuiMainMenu gui = new GuiMainMenu();
 			gui.setParent(screen);

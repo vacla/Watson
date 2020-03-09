@@ -14,20 +14,24 @@ import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.world.ClientWorld;
 
 @Mixin(WorldRenderer.class)
-public abstract class MixinWorldRenderer {
-	@Shadow
-	private ClientWorld world;
+public abstract class MixinWorldRenderer
+{
+    @Shadow
+    private ClientWorld world;
 
-	@Inject(method = "reload()V", at = @At("RETURN"))
-	private void onLoadRenderers(CallbackInfo ci) {
-		// Also (re-)load our renderer when the vanilla renderer gets reloaded
-		if (this.world != null && this.world == MinecraftClient.getInstance().world) {
-			WatsonRenderer.getInstance().loadRenderers();
-		}
-	}
-	
-	@Inject(method = "renderEntities", at = @At("TAIL"))
-	private void onPostRenderEntities(Camera camera, VisibleRegion visibleRegion, float partialTicks, CallbackInfo ci) {
-		WatsonRenderer.getInstance().piecewiseRenderEntities(visibleRegion, partialTicks);
-	}
+    @Inject(method = "reload()V", at = @At("RETURN"))
+    private void onLoadRenderers(CallbackInfo ci)
+    {
+        // Also (re-)load our renderer when the vanilla renderer gets reloaded
+        if (this.world != null && this.world == MinecraftClient.getInstance().world)
+        {
+            WatsonRenderer.getInstance().loadRenderers();
+        }
+    }
+
+    @Inject(method = "renderEntities", at = @At("TAIL"))
+    private void onPostRenderEntities(Camera camera, VisibleRegion visibleRegion, float partialTicks, CallbackInfo ci)
+    {
+        WatsonRenderer.getInstance().piecewiseRenderEntities(visibleRegion, partialTicks);
+    }
 }

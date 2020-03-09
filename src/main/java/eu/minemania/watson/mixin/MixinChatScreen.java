@@ -15,24 +15,29 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.server.command.CommandSource;
 
 @Mixin(ChatScreen.class)
-public class MixinChatScreen {
-	@Shadow
-	protected TextFieldWidget chatField;
-	@Shadow 
-	private ParseResults<CommandSource> parseResults;
+public class MixinChatScreen
+{
+    @Shadow
+    protected TextFieldWidget chatField;
+    @Shadow 
+    private ParseResults<CommandSource> parseResults;
 
-	@Inject(method = "updateCommand", at = @At("RETURN"))
-	public void onUpdateCommand(CallbackInfo ci) {
-		boolean isClientCommand;
-		if (parseResults == null) {
-			isClientCommand = false;
-		} else {
-			StringReader reader = new StringReader(parseResults.getReader().getString());
-			reader.skip(); // /
-			String command = reader.canRead() ? reader.readUnquotedString() : "";
-			isClientCommand = ClientCommandManager.isClientSideCommand(command);
-		}
+    @Inject(method = "updateCommand", at = @At("RETURN"))
+    public void onUpdateCommand(CallbackInfo ci)
+    {
+        boolean isClientCommand;
+        if (parseResults == null)
+        {
+            isClientCommand = false;
+        }
+        else
+        {
+            StringReader reader = new StringReader(parseResults.getReader().getString());
+            reader.skip(); // /
+            String command = reader.canRead() ? reader.readUnquotedString() : "";
+            isClientCommand = ClientCommandManager.isClientSideCommand(command);
+        }
 
-		chatField.setMaxLength(isClientCommand ? 32500 : 256);
-	}
+        chatField.setMaxLength(isClientCommand ? 32500 : 256);
+    }
 }

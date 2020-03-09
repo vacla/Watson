@@ -9,15 +9,18 @@ import com.mojang.brigadier.context.CommandContext;
 import eu.minemania.watson.config.Configs;
 import net.minecraft.server.command.ServerCommandSource;
 
-public class RefreshCommand {
-	public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
-		ClientCommandManager.addClientSideCommand("refresh");
-		LiteralArgumentBuilder<ServerCommandSource> refresh = literal("refresh").executes(RefreshCommand::refresh);
-		dispatcher.register(refresh);
-	}
+public class RefreshCommand
+{
+    public static void register(CommandDispatcher<ServerCommandSource> dispatcher)
+    {
+        ClientCommandManager.addClientSideCommand("refresh");
+        LiteralArgumentBuilder<ServerCommandSource> refresh = literal("refresh").executes(RefreshCommand::refresh);
+        dispatcher.register(refresh);
+    }
 
-	private static int refresh(CommandContext<ServerCommandSource> context) {
-		Command.reregisterWatsonCommand(Command.commandDispatcher, Configs.Generic.WATSON_PREFIX);
-		return 1;
-	}
+    private static int refresh(CommandContext<ServerCommandSource> context)
+    {
+        Command.reregisterWatsonCommand(Command.commandDispatcher, Configs.Generic.WATSON_PREFIX);
+        return 1;
+    }
 }
