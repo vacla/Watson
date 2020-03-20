@@ -3,6 +3,8 @@ package eu.minemania.watson.config;
 import fi.dy.masa.malilib.config.IConfigHandler;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -31,6 +33,8 @@ public class Configs implements IConfigHandler
      * Config file for mod.
      */
     private static final String CONFIG_FILE_NAME = Reference.MOD_ID + ".json";
+
+    private static final Map<Block, String> DEFAULT_COLORS = new HashMap<>();
 
     /**
      * Default Generic configuration.
@@ -214,41 +218,18 @@ public class Configs implements IConfigHandler
 
     private static String setCustomColorOres(Block block)
     {
-        String color = "#CC780E22";
-        if(block == Blocks.DIAMOND_ORE)
+        if(DEFAULT_COLORS.isEmpty())
         {
-            color = "#CC5DECF5";
+            DEFAULT_COLORS.put(Blocks.DIAMOND_ORE, "#CC5DECF5");
+            DEFAULT_COLORS.put(Blocks.IRON_ORE, "#CCE68C3F");
+            DEFAULT_COLORS.put(Blocks.LAPIS_ORE, "#CC1846B2");
+            DEFAULT_COLORS.put(Blocks.GOLD_ORE, "#CCFCEE4B");
+            DEFAULT_COLORS.put(Blocks.REDSTONE_ORE, "#CCA00000");
+            DEFAULT_COLORS.put(Blocks.COAL_ORE, "#CC191611");
+            DEFAULT_COLORS.put(Blocks.EMERALD_ORE, "#CC17DD62");
+            DEFAULT_COLORS.put(Blocks.NETHER_QUARTZ_ORE, "#CCEBE9E3");
         }
-        else if(block == Blocks.IRON_ORE)
-        {
-            color = "#CCE68C3F"; 
-        }
-        else if(block == Blocks.LAPIS_ORE)
-        {
-            color = "#CC1846B2";
-        }
-        else if(block == Blocks.GOLD_ORE)
-        {
-            color = "#CCFCEE4B";
-        }
-        else if(block == Blocks.REDSTONE_ORE)
-        {
-            color = "#CCA00000";
-        }
-        else if(block == Blocks.COAL_ORE)
-        {
-            color = "#CC191611";
-        }
-        else if(block == Blocks.EMERALD_ORE)
-        {
-            color = "#CC17DD62";
-        }
-        else if(block == Blocks.NETHER_QUARTZ_ORE)
-        {
-            color = "#CCEBE9E3";
-        }
-
-        return color;
+        return DEFAULT_COLORS.getOrDefault(block, "#CC737373");
     }
 
     /**
