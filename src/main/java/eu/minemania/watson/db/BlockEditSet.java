@@ -243,15 +243,10 @@ public class BlockEditSet
     {
         if(Configs.Generic.OUTLINE_SHOWN.getBooleanValue())
         {
-            Tessellator tessellator = Tessellator.getInstance();
-            BufferBuilder buffer = tessellator.getBuffer();
-
-            buffer.begin(GL11.GL_LINES, VertexFormats.POSITION_COLOR);
             for(PlayereditSet editsForPlayer : _playerEdits.values())
             {
-                editsForPlayer.drawOutlines(buffer);
+                editsForPlayer.drawOutlines();
             }
-            tessellator.draw();
         }
     }
 

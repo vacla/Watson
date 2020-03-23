@@ -59,7 +59,7 @@ public class RenderUtils
     {
         float posX = x + 0.25F / 2;
         float posY = y + 0.25F / 2;
-        float posZ = z + 0.5F - Direction.NORTH.getOffsetZ() * 0.46875F;
+        float posZ = z + 0.015F;
         float widthX = (12 / 32.0F) * 2;
         float heightY = (12 / 32.0F) * 2;
         float widthZ = (1.0F / 32.0F) * 2;
@@ -104,7 +104,7 @@ public class RenderUtils
     /**
      * Assumes a BufferBuilder in the GL_LINES mode has been initialized
      */
-    public static void drawBlockModelOutlinesBatched(BakedModel model, BlockState state, BlockPos pos, Color4f color, double expand, BufferBuilder buffer)
+    public static void drawBlockModelOutlinesBatched(BakedModel model, BlockState state, BlockPos pos, Color4f color, BufferBuilder buffer)
     {
         for (final Direction side : FACING_ALL)
         {
