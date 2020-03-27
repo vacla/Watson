@@ -75,7 +75,7 @@ public class Configs implements IConfigHandler
         public static final ConfigBoolean USE_CHAT_HIGHLIGHTS = new ConfigBoolean("useChatHighlights", false, "If true, chat highlighter will be enabled");
         public static final ConfigDouble VECTOR_LENGTH = new ConfigDouble("vectorFloat", 4.0f, 4.0f, 10.0f, "The current displayed vector length");
         public static final ConfigBoolean VECTOR_SHOWN = new ConfigBoolean("vectorShown", true, "Shows vector if enabled");
-        public static final ConfigString WATSON_PREFIX = new ConfigString("watsonPrefix", "w", "The start of all Watson commands, without a slash");
+        public static final ConfigString WATSON_PREFIX = new ConfigString("watsonPrefix", "watson", "The start of all Watson commands, without a slash");
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
                 ANNOTATION_SHOWN,
