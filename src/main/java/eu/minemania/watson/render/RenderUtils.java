@@ -135,11 +135,10 @@ public class RenderUtils
 
         for (int index = 0; index < 4; ++index)
         {
-            fx[index] = x + Float.intBitsToFloat(vertexData[index * 8 + 0]);
-            fy[index] = y + Float.intBitsToFloat(vertexData[index * 8 + 1]);
-            fz[index] = z + Float.intBitsToFloat(vertexData[index * 8 + 2]);
+            fx[index] = x + Float.intBitsToFloat(vertexData[index * 7 + 0]);
+            fy[index] = y + Float.intBitsToFloat(vertexData[index * 7 + 1]);
+            fz[index] = z + Float.intBitsToFloat(vertexData[index * 7 + 2]);
         }
-
         buffer.vertex(fx[0], fy[0], fz[0]).color(color.r, color.g, color.b, color.a).next();
         buffer.vertex(fx[1], fy[1], fz[1]).color(color.r, color.g, color.b, color.a).next();
 

@@ -9,6 +9,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.BlockEditSet;
+import eu.minemania.watson.render.playeredit.WorldRendererPlayeredit;
 import eu.minemania.watson.selection.EditSelection;
 import fi.dy.masa.malilib.render.RenderUtils;
 import fi.dy.masa.malilib.render.shader.ShaderProgram;
@@ -23,6 +24,7 @@ public class WatsonRenderer
     private static final ShaderProgram SHADER_ALPHA = new ShaderProgram("watson", null, "shaders/alpha.frag");
 
     private MinecraftClient mc;
+    private WorldRendererPlayeredit worldRenderer;
 
     static
     {
@@ -35,6 +37,22 @@ public class WatsonRenderer
     public static WatsonRenderer getInstance()
     {
         return INSTANCE;
+    }
+
+    public WorldRendererPlayeredit getWorldRenderer()
+    {
+        if(this.worldRenderer == null)
+        {
+            this.mc = MinecraftClient.getInstance();
+            this.worldRenderer = new WorldRendererPlayeredit(this.mc);
+        }
+
+        return this.worldRenderer;
+    }
+
+    public void loadRenderers()
+    {
+        this.getWorldRenderer().reload();
     }
 
     public void piecewiseRenderEntities(VisibleRegion visibleRegion, float partialTicks)
