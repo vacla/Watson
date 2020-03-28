@@ -3,7 +3,6 @@ package eu.minemania.watson.db;
 import java.util.Optional;
 
 import eu.minemania.watson.render.RenderUtils;
-import fi.dy.masa.malilib.util.Color4f;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
@@ -54,11 +53,11 @@ public class BlockEdit
             {
                 BlockState state = blocks.getDefaultState();
                 model = this.blockModelShapes.getModel(state);
-                RenderUtils.drawBlockModelOutlinesBatched(model, state, new BlockPos(x, y, z), new Color4f(1f, 0.5f, 0.3f), 0, buffer);
+                RenderUtils.drawBlockModelOutlinesBatched(model, state, new BlockPos(x, y, z), block.getColor(), 0, buffer);
             }
             else
             {
-                RenderUtils.drawGrassOutlinesBatched(x, y, z, new Color4f(1f, 0.5f, 0.3f), buffer);
+                RenderUtils.drawGrassOutlinesBatched(x, y, z, block.getColor(), buffer);
             }
         }
         else
@@ -68,7 +67,7 @@ public class BlockEdit
             {
                 if(block.getName().equals("minecraft:item_frame") || block.getName().equals("minecraft:painting"))
                 {
-                    RenderUtils.drawItemFramePaintingOutlinesBatched(x, y, z, new Color4f(1f, 0.5f, 0.3f), buffer);
+                    RenderUtils.drawItemFramePaintingOutlinesBatched(x, y, z, block.getColor(), buffer);
                 }
             }
         }

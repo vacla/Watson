@@ -21,6 +21,8 @@ import fi.dy.masa.malilib.config.options.ConfigString;
 import fi.dy.masa.malilib.config.options.ConfigStringList;
 import fi.dy.masa.malilib.util.FileUtils;
 import fi.dy.masa.malilib.util.JsonUtils;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.registry.Registry;
 
 public class Configs implements IConfigHandler
@@ -44,7 +46,7 @@ public class Configs implements IConfigHandler
         public static final ConfigColor BILLBOARD_BACKGROUND = new ConfigColor("billboardBackground", "0xA8000000", "Background color of the annotations");
         public static final ConfigColor BILLBOARD_FOREGROUND = new ConfigColor("billboardForeground", "0x7FFFFFFF", "Foreground color of the annotations");
         public static final ConfigBoolean GROUPING_ORES_IN_CREATIVE = new ConfigBoolean("groupingOresInCreative", true, "Ores are grouped even in creative");
-        public static final ConfigString TELEPORT_COMMAND = new ConfigString("teleportCommand", "/tppos %g %d %g", "Sets teleport command");
+        public static final ConfigString TELEPORT_COMMAND = new ConfigString("teleportCommand", "/tppos %d %d %d", "Sets teleport command\n%d for integers\n%g for decimal numbers");
         public static final ConfigDouble CHAT_TIMEOUT = new ConfigDouble("chatTimeoutSeconds", 0.1, "The minimum amount of seconds between sent chat messages by the mod");
         public static final ConfigInteger PAGE_LINES = new ConfigInteger("pagelines", 50, "Number of chat lines in a page");
         public static final ConfigInteger MAX_AUTO_PAGES = new ConfigInteger("maxAutoPages", 10, "Amount of automatic stepped thru pages");
@@ -205,9 +207,48 @@ public class Configs implements IConfigHandler
     private static ImmutableList<String> setWatsonBlockData()
     {
         ImmutableList.Builder<String> builder = ImmutableList.builder();
-        Registry.BLOCK.forEach((block) -> builder.add(Registry.BLOCK.getId(block).getNamespace() + ":" + Registry.BLOCK.getId(block).getPath() + ";1;14033081"));
-        Registry.ENTITY_TYPE.forEach((type) -> builder.add(Registry.ENTITY_TYPE.getId(type).getNamespace() + ":" + Registry.ENTITY_TYPE.getId(type).getPath() + ";1;14033081"));
+        Registry.BLOCK.forEach((block) -> builder.add(Registry.BLOCK.getId(block).getNamespace() + ":" + Registry.BLOCK.getId(block).getPath() + ";1;"+ setCustomColorOres(block)));
+        Registry.ENTITY_TYPE.forEach((type) -> builder.add(Registry.ENTITY_TYPE.getId(type).getNamespace() + ":" + Registry.ENTITY_TYPE.getId(type).getPath() + ";1;#CC780E22"));
         return builder.build();
+    }
+
+    private static String setCustomColorOres(Block block)
+    {
+        String color = "#CC780E22";
+        if(block == Blocks.DIAMOND_ORE)
+        {
+            color = "#CC5DECF5";
+        }
+        else if(block == Blocks.IRON_ORE)
+        {
+            color = "#CCE68C3F"; 
+        }
+        else if(block == Blocks.LAPIS_ORE)
+        {
+            color = "#CC1846B2";
+        }
+        else if(block == Blocks.GOLD_ORE)
+        {
+            color = "#CCFCEE4B";
+        }
+        else if(block == Blocks.REDSTONE_ORE)
+        {
+            color = "#CCA00000";
+        }
+        else if(block == Blocks.COAL_ORE)
+        {
+            color = "#CC191611";
+        }
+        else if(block == Blocks.EMERALD_ORE)
+        {
+            color = "#CC17DD62";
+        }
+        else if(block == Blocks.NETHER_QUARTZ_ORE)
+        {
+            color = "#CCEBE9E3";
+        }
+
+        return color;
     }
 
     /**
