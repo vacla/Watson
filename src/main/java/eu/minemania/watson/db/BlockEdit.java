@@ -1,10 +1,12 @@
 package eu.minemania.watson.db;
 
 import java.util.Optional;
-
+import com.mojang.blaze3d.platform.GlStateManager;
+import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.render.RenderUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.OreBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.model.BakedModel;
@@ -27,6 +29,7 @@ public class BlockEdit
     public PlayereditSet playereditSet;
     private final BlockRenderManager blockModelShapes;
     private MinecraftClient mc;
+    protected boolean drawn;
 
     public BlockEdit(long time, String player, boolean creation, int x, int y, int z, WatsonBlock block, String world)
     {
@@ -42,34 +45,81 @@ public class BlockEdit
         this.blockModelShapes = this.mc.getBlockRenderManager();
     }
 
-    //TODO later add custom colors
     public void drawOutline(BufferBuilder buffer)
     {
-        BakedModel model;
         Block blocks = Registry.BLOCK.get(Identifier.tryParse(block.getName()));
+        float lineWidth = block.getLineWidth();
         if(blocks != null && !blocks.getName().asString().equals("Air"))
         {
-            if(!block.getName().equals("minecraft:grass"))
+            if(Configs.Generic.ORE_OUTLINE_THICKER.getBooleanValue() && blocks instanceof OreBlock)
             {
-                BlockState state = blocks.getDefaultState();
-                model = this.blockModelShapes.getModel(state);
-                RenderUtils.drawBlockModelOutlinesBatched(model, state, new BlockPos(x, y, z), block.getColor(), 0, buffer);
+                lineWidth = Configs.Generic.ORE_LINEWIDTH.getIntegerValue();
+            }
+            GlStateManager.lineWidth(lineWidth);
+            renderBlocks(buffer, blocks);
+        }
+        else
+        {
+            GlStateManager.lineWidth(lineWidth);
+            Optional<EntityType<?>> entity = EntityType.get(block.getName());
+            renderEntities(buffer, entity);
+        }
+    }
+
+    private void renderBlocks(BufferBuilder buffer, Block blocks)
+    {
+        if(!block.getName().equals("minecraft:grass"))
+        {
+            BlockState state = blocks.getDefaultState();
+            BakedModel model = this.blockModelShapes.getModel(state);
+            if(Configs.Lists.SMALLER_RENDER_BOX.getStrings().contains(block.getName()))
+            {
+                fi.dy.masa.malilib.render.RenderUtils.drawBlockBoundingBoxOutlinesBatchedLines(new BlockPos(x, y, z), block.getColor(), -0.25, buffer);
             }
             else
             {
-                RenderUtils.drawGrassOutlinesBatched(x, y, z, block.getColor(), buffer);
+                if(!isOreDrawn())
+                {
+                    RenderUtils.drawBlockModelOutlinesBatched(model, state, new BlockPos(x, y, z), block.getColor(), buffer);
+                }
+            }
+            if(!drawn && blocks instanceof OreBlock)
+            {
+                drawn = true;
             }
         }
         else
         {
-            Optional<EntityType<?>> entity = EntityType.get(block.getName());
-            if(entity != null)
+            RenderUtils.drawGrassOutlinesBatched(x, y, z, block.getColor(), buffer);
+        }
+    }
+
+    private void renderEntities(BufferBuilder buffer, Optional<EntityType<?>> entity)
+    {
+        if(entity != null)
+        {
+            if(block.getName().equals("minecraft:item_frame") || block.getName().equals("minecraft:painting"))
             {
-                if(block.getName().equals("minecraft:item_frame") || block.getName().equals("minecraft:painting"))
-                {
-                    RenderUtils.drawItemFramePaintingOutlinesBatched(x, y, z, block.getColor(), buffer);
-                }
+                RenderUtils.drawItemFramePaintingOutlinesBatched(x, y, z, block.getColor(), buffer);
             }
         }
+    }
+
+    public boolean isOreDrawn()
+    {
+        for(BlockEdit blockEdit : playereditSet._edits)
+        {
+            if(Configs.Generic.ONLY_ORE_BLOCK.getBooleanValue() && blockEdit.x == x && blockEdit.y == y && blockEdit.z == z && blockEdit.drawn)
+            {
+                if(this == blockEdit)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        return false;
     }
 }

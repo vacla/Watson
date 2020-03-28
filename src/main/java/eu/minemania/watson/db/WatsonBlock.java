@@ -6,7 +6,7 @@ public final class WatsonBlock
 {
     private String name = "";
     private Color4f color = new Color4f(255,255,0,255);
-    private float lineWidth = 3.0f;
+    private float lineWidth = 1.0f;
 
     public void setName(String name)
     {
