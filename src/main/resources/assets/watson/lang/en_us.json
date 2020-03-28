@@ -9,7 +9,7 @@
 	
 	"watson.gui.button.config_gui.generic": "Generic",
 	"watson.gui.button.config_gui.lists": "Lists",
-	"watson.gui.button.config_gui.lookup": "Lookup",
+	"watson.gui.button.config_gui.analysis": "Analysis",
 	"watson.gui.button.config_gui.hotkeys": "Hotkeys",
 	
 	"watson.label.plugin.no_plugin": "No Plugin",

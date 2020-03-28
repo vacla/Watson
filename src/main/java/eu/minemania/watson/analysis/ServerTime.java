@@ -1,8 +1,5 @@
 package eu.minemania.watson.analysis;
 
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_NO_RESULTS;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_TIME_CHECK;
-
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
@@ -76,7 +73,7 @@ public class ServerTime extends Analysis
 
     public ServerTime()
     {
-        addMatchedChatHandler(LB_HEADER_TIME_CHECK, new IMatchedChatHandler()
+        addMatchedChatHandler(Configs.Analysis.LB_HEADER_TIME_CHECK, new IMatchedChatHandler()
         {
             @Override
             public boolean onMatchedChat(ITextComponent chat, Matcher m)
@@ -86,7 +83,7 @@ public class ServerTime extends Analysis
             }
         });
 
-        addMatchedChatHandler(LB_HEADER_NO_RESULTS, new IMatchedChatHandler()
+        addMatchedChatHandler(Configs.Analysis.LB_HEADER_NO_RESULTS, new IMatchedChatHandler()
         {
             @Override
             public boolean onMatchedChat(ITextComponent chat, Matcher m)

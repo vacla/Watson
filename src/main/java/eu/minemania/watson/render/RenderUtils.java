@@ -16,53 +16,53 @@ public class RenderUtils
     private static final Random RAND = new Random();
     public static final EnumFacing[] FACING_ALL = new EnumFacing[] { EnumFacing.DOWN, EnumFacing.UP, EnumFacing.NORTH, EnumFacing.SOUTH, EnumFacing.WEST, EnumFacing.EAST };
 
-    public static void drawGrassOutlinesBatched(double x, double y, double z, Color4f color, BufferBuilder buffer)
+    public static void drawGrassOutlinesBatched(float x, float y, float z, Color4f color, BufferBuilder buffer)
     {
         buffer.pos(x, y, z).color(color.r, color.g, color.b, color.a).endVertex();
-        buffer.pos(x + 1D, y, z).color(color.r, color.g, color.b, color.a).endVertex();
+        buffer.pos(x + 1F, y, z).color(color.r, color.g, color.b, color.a).endVertex();
 
         buffer.pos(x, y, z).color(color.r, color.g, color.b, color.a).endVertex();
-        buffer.pos(x, y, z + 1D).color(color.r, color.g, color.b, color.a).endVertex();
+        buffer.pos(x, y, z + 1F).color(color.r, color.g, color.b, color.a).endVertex();
 
-        buffer.pos(x, y, z + 1D).color(color.r, color.g, color.b, color.a).endVertex();
-        buffer.pos(x + 1D, y, z + 1D).color(color.r, color.g, color.b, color.a).endVertex();
+        buffer.pos(x, y, z + 1F).color(color.r, color.g, color.b, color.a).endVertex();
+        buffer.pos(x + 1F, y, z + 1F).color(color.r, color.g, color.b, color.a).endVertex();
 
-        buffer.pos(x + 1D, y, z).color(color.r, color.g, color.b, color.a).endVertex();
-        buffer.pos(x + 1D, y, z + 1D).color(color.r, color.g, color.b, color.a).endVertex();
+        buffer.pos(x + 1F, y, z).color(color.r, color.g, color.b, color.a).endVertex();
+        buffer.pos(x + 1F, y, z + 1F).color(color.r, color.g, color.b, color.a).endVertex();
 
-        buffer.pos(x, y + 1D, z).color(color.r, color.g, color.b, color.a).endVertex();
-        buffer.pos(x + 1D, y + 1D, z).color(color.r, color.g, color.b, color.a).endVertex();
+        buffer.pos(x, y + 1F, z).color(color.r, color.g, color.b, color.a).endVertex();
+        buffer.pos(x + 1F, y + 1F, z).color(color.r, color.g, color.b, color.a).endVertex();
 
-        buffer.pos(x, y + 1D, z).color(color.r, color.g, color.b, color.a).endVertex();
-        buffer.pos(x, y + 1D, z + 1D).color(color.r, color.g, color.b, color.a).endVertex();
+        buffer.pos(x, y + 1F, z).color(color.r, color.g, color.b, color.a).endVertex();
+        buffer.pos(x, y + 1F, z + 1F).color(color.r, color.g, color.b, color.a).endVertex();
 
-        buffer.pos(x, y + 1D, z + 1D).color(color.r, color.g, color.b, color.a).endVertex();
-        buffer.pos(x + 1D, y + 1D, z + 1D).color(color.r, color.g, color.b, color.a).endVertex();
+        buffer.pos(x, y + 1F, z + 1F).color(color.r, color.g, color.b, color.a).endVertex();
+        buffer.pos(x + 1F, y + 1F, z + 1F).color(color.r, color.g, color.b, color.a).endVertex();
 
-        buffer.pos(x + 1D, y + 1D, z).color(color.r, color.g, color.b, color.a).endVertex();
-        buffer.pos(x + 1D, y + 1D, z + 1D).color(color.r, color.g, color.b, color.a).endVertex();
+        buffer.pos(x + 1F, y + 1F, z).color(color.r, color.g, color.b, color.a).endVertex();
+        buffer.pos(x + 1F, y + 1F, z + 1F).color(color.r, color.g, color.b, color.a).endVertex();
 
         buffer.pos(x, y, z).color(color.r, color.g, color.b, color.a).endVertex();
-        buffer.pos(x, y + 1, z).color(color.r, color.g, color.b, color.a).endVertex();
+        buffer.pos(x, y + 1F, z).color(color.r, color.g, color.b, color.a).endVertex();
 
-        buffer.pos(x + 1D, y, z).color(color.r, color.g, color.b, color.a).endVertex();
-        buffer.pos(x + 1D, y + 1, z).color(color.r, color.g, color.b, color.a).endVertex();
+        buffer.pos(x + 1F, y, z).color(color.r, color.g, color.b, color.a).endVertex();
+        buffer.pos(x + 1F, y + 1F, z).color(color.r, color.g, color.b, color.a).endVertex();
 
-        buffer.pos(x, y, z + 1D).color(color.r, color.g, color.b, color.a).endVertex();
-        buffer.pos(x, y + 1, z + 1D).color(color.r, color.g, color.b, color.a).endVertex();
+        buffer.pos(x, y, z + 1F).color(color.r, color.g, color.b, color.a).endVertex();
+        buffer.pos(x, y + 1F, z + 1F).color(color.r, color.g, color.b, color.a).endVertex();
 
-        buffer.pos(x + 1D, y, z + 1D).color(color.r, color.g, color.b, color.a).endVertex();
-        buffer.pos(x + 1D, y + 1, z + 1D).color(color.r, color.g, color.b, color.a).endVertex();
+        buffer.pos(x + 1F, y, z + 1F).color(color.r, color.g, color.b, color.a).endVertex();
+        buffer.pos(x + 1F, y + 1F, z + 1F).color(color.r, color.g, color.b, color.a).endVertex();
     }
 
-    public static void drawItemFramePaintingOutlinesBatched(double x, double y, double z, Color4f color, BufferBuilder buffer)
+    public static void drawItemFramePaintingOutlinesBatched(float x, float y, float z, Color4f color, BufferBuilder buffer)
     {
-        double posX = x + 0.25D / 2;
-        double posY = y + 0.25D / 2;
-        double posZ = z + 0.5D - (double)EnumFacing.NORTH.getZOffset() * 0.46875D;
-        double widthX = (12 / 32.0D) * 2;
-        double heightY = (12 / 32.0D) * 2;
-        double widthZ = (1.0D / 32.0D) * 2;
+        float posX = x + 0.25F / 2;
+        float posY = y + 0.25F / 2;
+        float posZ = z + 0.015F;
+        float widthX = (12 / 32.0F) * 2;
+        float heightY = (12 / 32.0F) * 2;
+        float widthZ = (1.0F / 32.0F) * 2;
 
         buffer.pos(posX, posY, posZ).color(color.r, color.g, color.b, color.a).endVertex();
         buffer.pos(posX + widthX, posY, posZ).color(color.r, color.g, color.b, color.a).endVertex();
@@ -104,7 +104,7 @@ public class RenderUtils
     /**
      * Assumes a BufferBuilder in the GL_LINES mode has been initialized
      */
-    public static void drawBlockModelOutlinesBatched(IBakedModel model, IBlockState state, BlockPos pos, Color4f color, double expand, BufferBuilder buffer)
+    public static void drawBlockModelOutlinesBatched(IBakedModel model, IBlockState state, BlockPos pos, Color4f color, BufferBuilder buffer)
     {
         for (final EnumFacing side : FACING_ALL)
         {

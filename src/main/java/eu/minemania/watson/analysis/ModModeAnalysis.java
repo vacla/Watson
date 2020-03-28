@@ -1,12 +1,7 @@
 package eu.minemania.watson.analysis;
 
-import static eu.minemania.watson.analysis.MiscPatterns.DUTYMODE_DISABLE;
-import static eu.minemania.watson.analysis.MiscPatterns.DUTYMODE_ENABLE;
-import static eu.minemania.watson.analysis.MiscPatterns.MODMODE_DISABLE;
-import static eu.minemania.watson.analysis.MiscPatterns.MODMODE_ENABLE;
-
 import java.util.regex.Matcher;
-
+import java.util.regex.Pattern;
 import eu.minemania.watson.chat.IMatchedChatHandler;
 import eu.minemania.watson.config.Configs;
 import net.minecraft.util.text.ITextComponent;
@@ -25,8 +20,8 @@ public class ModModeAnalysis extends Analysis
             }
         };
 
-        addMatchedChatHandler(MODMODE_ENABLE, modmodeHandler);
-        addMatchedChatHandler(MODMODE_DISABLE, modmodeHandler);
+        addMatchedChatHandler(Configs.Analysis.MODMODE_ENABLE, modmodeHandler);
+        addMatchedChatHandler(Configs.Analysis.MODMODE_DISABLE, modmodeHandler);
 
         IMatchedChatHandler dutiesHandler = new IMatchedChatHandler()
         {
@@ -38,17 +33,17 @@ public class ModModeAnalysis extends Analysis
             }
         };
 
-        addMatchedChatHandler(DUTYMODE_ENABLE, dutiesHandler);
-        addMatchedChatHandler(DUTYMODE_DISABLE, dutiesHandler);
+        addMatchedChatHandler(Configs.Analysis.DUTYMODE_ENABLE, dutiesHandler);
+        addMatchedChatHandler(Configs.Analysis.DUTYMODE_DISABLE, dutiesHandler);
     }
 
     void changeModMode(ITextComponent chat, Matcher m)
     {
-        Configs.Generic.DISPLAYED.setBooleanValue(m.pattern() == MODMODE_ENABLE);
+        Configs.Generic.DISPLAYED.setBooleanValue(m.pattern() == Pattern.compile(Configs.Analysis.MODMODE_ENABLE.getStringValue()));
     }
 
     void changeDutyMode(ITextComponent chat, Matcher m)
     {
-        Configs.Generic.DISPLAYED.setBooleanValue(m.pattern() == DUTYMODE_ENABLE);
+        Configs.Generic.DISPLAYED.setBooleanValue(m.pattern() == Pattern.compile(Configs.Analysis.DUTYMODE_ENABLE.getStringValue()));
     }
 }

@@ -7,11 +7,13 @@ import java.util.Map;
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
 import fi.dy.masa.malilib.util.Color4f;
+import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.IRegistry;
 
 public final class WatsonBlockRegistery
@@ -64,19 +66,11 @@ public final class WatsonBlockRegistery
                             {
                                 watsonBlock.setLineWidth(lineWidth);
                             }
-                            int colorTemp = Integer.parseInt(watsonBlockData[2]);
+                            int colorst = StringUtils.getColor(watsonBlockData[2], 0);
+                            int colorTemp = MathHelper.clamp(colorst, Integer.MIN_VALUE, Integer.MAX_VALUE);
                             if(colorTemp != 0)
                             {
-                                float alpha = (colorTemp >>> 24) & 0xFF;
-                                Color4f color;
-                                if(alpha == 0)
-                                {
-                                    color = Color4f.fromColor(colorTemp, (int) (0.8 * 255));
-                                }
-                                else
-                                {
-                                    color = Color4f.fromColor(colorTemp);
-                                }
+                                Color4f color = Color4f.fromColor(colorTemp);
                                 watsonBlock.setColor(color);
                             }
                             addWatsonBlock(watsonBlock);
@@ -92,19 +86,11 @@ public final class WatsonBlockRegistery
                                 {
                                     watsonBlock.setLineWidth(lineWidth);
                                 }
-                                int colorTemp = Integer.parseInt(watsonBlockData[2]);
+                                int colorst = StringUtils.getColor(watsonBlockData[2], 0);
+                                int colorTemp = MathHelper.clamp(colorst, Integer.MIN_VALUE, Integer.MAX_VALUE);
                                 if(colorTemp != 0)
                                 {
-                                    float alpha = (colorTemp >>> 24) & 0xFF;
-                                    Color4f color;
-                                    if(alpha == 0)
-                                    {
-                                        color = Color4f.fromColor(colorTemp, (int) (0.8 * 255));
-                                    }
-                                    else
-                                    {
-                                        color = Color4f.fromColor(colorTemp);
-                                    }
+                                    Color4f color = Color4f.fromColor(colorTemp);
                                     watsonBlock.setColor(color);
                                 }
                                 addWatsonBlock(watsonBlock);

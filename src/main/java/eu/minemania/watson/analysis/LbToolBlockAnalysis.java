@@ -1,12 +1,9 @@
 package eu.minemania.watson.analysis;
 
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_EDIT;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_EDIT_REPLACED;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_POSITION;
-
 import java.util.regex.Matcher;
 
 import eu.minemania.watson.chat.IMatchedChatHandler;
+import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.BlockEdit;
 import eu.minemania.watson.db.TimeStamp;
@@ -29,7 +26,7 @@ public class LbToolBlockAnalysis extends Analysis
 
     public LbToolBlockAnalysis()
     {
-        addMatchedChatHandler(LB_POSITION, new IMatchedChatHandler()
+        addMatchedChatHandler(Configs.Analysis.LB_POSITION, new IMatchedChatHandler()
         {
             @Override
             public boolean onMatchedChat(ITextComponent chat, Matcher m)
@@ -39,7 +36,7 @@ public class LbToolBlockAnalysis extends Analysis
             }
         });
 
-        addMatchedChatHandler(LB_EDIT, new IMatchedChatHandler()
+        addMatchedChatHandler(Configs.Analysis.LB_EDIT, new IMatchedChatHandler()
         {
             @Override
             public boolean onMatchedChat(ITextComponent chat, Matcher m)
@@ -49,7 +46,7 @@ public class LbToolBlockAnalysis extends Analysis
             }
         });
 
-        addMatchedChatHandler(LB_EDIT_REPLACED, new IMatchedChatHandler()
+        addMatchedChatHandler(Configs.Analysis.LB_EDIT_REPLACED, new IMatchedChatHandler()
         {
             @Override
             public boolean onMatchedChat(ITextComponent chat, Matcher m)

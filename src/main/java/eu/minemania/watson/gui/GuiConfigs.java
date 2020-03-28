@@ -32,6 +32,7 @@ public class GuiConfigs extends GuiConfigsBase
 
         x += this.createButton(x, y, -1, ConfigGuiTab.GENERIC);
         x += this.createButton(x, y, -1, ConfigGuiTab.LISTS);
+        x += this.createButton(x, y, -1, ConfigGuiTab.ANALYSIS);
         x += this.createButton(x, y, -1, ConfigGuiTab.HOTKEYS);
     }
 
@@ -77,6 +78,10 @@ public class GuiConfigs extends GuiConfigsBase
         {
             configs = Configs.Lists.OPTIONS;
         }
+        else if(tab == ConfigGuiTab.ANALYSIS)
+        {
+            configs = Configs.Analysis.OPTIONS;
+        }
         else if(tab == ConfigGuiTab.HOTKEYS)
         {
             configs = Hotkeys.HOTKEY_LIST;
@@ -121,6 +126,7 @@ public class GuiConfigs extends GuiConfigsBase
     {
         GENERIC ("watson.gui.button.config_gui.generic"),
         LISTS ("watson.gui.button.config_gui.lists"),
+        ANALYSIS ("watson.gui.button.config_gui.analysis"),
         HOTKEYS ("watson.gui.button.config_gui.hotkeys");
 
         private final String translationKey;

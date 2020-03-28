@@ -4,10 +4,12 @@ import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.TreeSet;
-
+import org.lwjgl.opengl.GL11;
 import eu.minemania.watson.config.Configs;
 import fi.dy.masa.malilib.util.Color4f;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.Vec3d;
 
 public class PlayereditSet
@@ -71,16 +73,19 @@ public class PlayereditSet
         return _visible;
     }
 
-    public synchronized void drawOutlines(BufferBuilder buffer)
+    public synchronized void drawOutlines()
     {
         if(isVisible())
         {
-            if(Configs.Generic.OUTLINE_SHOWN.getBooleanValue())
+            for(BlockEdit edit : _edits)
             {
-                for(BlockEdit edit : _edits)
-                {
-                    edit.drawOutline(buffer);
-                }
+                Tessellator tesselator = Tessellator.getInstance();
+                BufferBuilder buffer = tesselator.getBuffer();
+                buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+
+                edit.drawOutline(buffer);
+
+                tesselator.draw();
             }
         }
     }

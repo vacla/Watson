@@ -1,12 +1,14 @@
 package eu.minemania.watson.db;
 
+import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.render.RenderUtils;
-import fi.dy.masa.malilib.util.Color4f;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockOre;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockModelShapes;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
@@ -26,6 +28,7 @@ public class BlockEdit
     public PlayereditSet playereditSet;
     private final BlockModelShapes blockModelShapes;
     private Minecraft mc;
+    protected boolean drawn;
 
     public BlockEdit(long time, String player, boolean creation, int x, int y, int z, WatsonBlock block, String world)
     {
@@ -41,34 +44,82 @@ public class BlockEdit
         this.blockModelShapes = this.mc.getBlockRendererDispatcher().getBlockModelShapes();
     }
 
-    //TODO later add custom colors
     public void drawOutline(BufferBuilder buffer)
     {
-        IBakedModel model;
         Block blocks = IRegistry.BLOCK.get(new ResourceLocation(block.getName()));
-        if(blocks != null)
+        float lineWidth = block.getLineWidth();
+        if(blocks != null && !blocks.getTranslationKey().equals("Air"))
         {
-            if(!block.getName().equals("minecraft:grass"))
+            if(Configs.Generic.ORE_OUTLINE_THICKER.getBooleanValue() && blocks instanceof BlockOre)
             {
-                IBlockState state = blocks.getDefaultState();
-                model = this.blockModelShapes.getModel(state);
-                RenderUtils.drawBlockModelOutlinesBatched(model, state, new BlockPos(x, y, z), new Color4f(1f, 0.5f, 0.3f), 0, buffer);
+                lineWidth = Configs.Generic.ORE_LINEWIDTH.getIntegerValue();
+            }
+            GlStateManager.lineWidth(lineWidth);
+            renderBlocks(buffer, blocks);
+
+        }
+        else
+        {
+            GlStateManager.lineWidth(lineWidth);
+            EntityType<?> entity = EntityType.getById(block.getName());
+            renderEntities(buffer, entity);
+        }
+    }
+
+    private void renderBlocks(BufferBuilder buffer, Block blocks)
+    {
+        if(!block.getName().equals("minecraft:grass"))
+        {
+            IBlockState state = blocks.getDefaultState();
+            IBakedModel model = this.blockModelShapes.getModel(state);
+            if(Configs.Lists.SMALLER_RENDER_BOX.getStrings().contains(block.getName()))
+            {
+                fi.dy.masa.malilib.render.RenderUtils.drawBlockBoundingBoxOutlinesBatchedLines(new BlockPos(x, y, z), block.getColor(), -0.25, buffer);
             }
             else
             {
-                RenderUtils.drawGrassOutlinesBatched(x, y, z, new Color4f(1f, 0.5f, 0.3f), buffer);
+                if(!isOreDrawn())
+                {
+                    RenderUtils.drawBlockModelOutlinesBatched(model, state, new BlockPos(x, y, z), block.getColor(), buffer);                    
+                }
+            }
+            if(!drawn && blocks instanceof BlockOre)
+            {
+                drawn = true;
             }
         }
         else
         {
-            EntityType<?> entity = EntityType.getById(block.getName());
-            if(entity != null)
+            RenderUtils.drawGrassOutlinesBatched(x, y, z, block.getColor(), buffer);
+        }
+    }
+
+    private void renderEntities(BufferBuilder buffer, EntityType<?> entity)
+    {
+        if(entity != null)
+        {
+            if(block.getName().equals("minecraft:item_frame") || block.getName().equals("minecraft:painting"))
             {
-                if(block.getName().equals("minecraft:item_frame") || block.getName().equals("minecraft:painting"))
-                {
-                    RenderUtils.drawItemFramePaintingOutlinesBatched(x, y, z, new Color4f(1f, 0.5f, 0.3f), buffer);
-                }
+                RenderUtils.drawItemFramePaintingOutlinesBatched(x, y, z, block.getColor(), buffer);
             }
         }
+    }
+
+    public boolean isOreDrawn()
+    {
+        for(BlockEdit blockEdit : playereditSet._edits)
+        {
+            if(Configs.Generic.ONLY_ORE_BLOCK.getBooleanValue() && blockEdit.x == x && blockEdit.y == y && blockEdit.z == z && blockEdit.drawn)
+            {
+                if(this == blockEdit)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        return false;
     }
 }
