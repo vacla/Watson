@@ -1,7 +1,5 @@
 package eu.minemania.watson.analysis;
 
-import static eu.minemania.watson.analysis.MiscPatterns.WG_REGIONS;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,9 +15,8 @@ public class RegionInfoAnalysis extends Analysis
 
     public RegionInfoAnalysis()
     {
-        addMatchedChatHandler(WG_REGIONS, new IMatchedChatHandler()
+        addMatchedChatHandler(Configs.Analysis.WG_REGIONS, new IMatchedChatHandler()
         {
-
             @Override
             public boolean onMatchedChat(Text chat, Matcher m)
             {

@@ -1,5 +1,6 @@
 package eu.minemania.watson.event;
 
+import eu.minemania.watson.analysis.Analysis;
 import eu.minemania.watson.chat.Highlight;
 import eu.minemania.watson.chat.command.Command;
 import eu.minemania.watson.client.Screenshot;
@@ -22,15 +23,35 @@ import net.minecraft.client.MinecraftClient;
 
 public class KeyCallbacks
 {
-
     public static void init(MinecraftClient mc)
-    {
+    {	
         IHotkeyCallback callbackHotkeys = new KeyCallbackHotkeys(mc);
         ValueChangeStringCallback valueChangeStringCallback = new ValueChangeStringCallback();
         ValueChangeStringListCallback valueChangeStringListCallback = new ValueChangeStringListCallback();
 
         Configs.Generic.WATSON_PREFIX.setValueChangeCallback(valueChangeStringCallback);
         Configs.Lists.HIGHLIGHT.setValueChangeCallback(valueChangeStringListCallback);
+        Configs.Analysis.LB_COORD.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.LB_COORD_KILLS.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.LB_COORD_POSITION.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.LB_COORD_REPLACED.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.LB_EDIT.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.LB_EDIT_REPLACED.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.LB_HEADER_BLOCK.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.LB_HEADER_BLOCKS.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.LB_HEADER_CHANGES.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.LB_HEADER_NO_RESULTS.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.LB_HEADER_RATIO.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.LB_HEADER_RATIO_CURRENT.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.LB_HEADER_SEARCHING.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.LB_HEADER_SUM_BLOCKS.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.LB_HEADER_SUM_PLAYERS.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.LB_HEADER_TIME_CHECK.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.LB_KILLS.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.LB_PAGE.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.LB_POSITION.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.LB_SUM.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.LB_TP.setValueChangeCallback(valueChangeStringCallback);
 
         Hotkeys.OPEN_GUI_MAIN_MENU.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.OPEN_GUI_SETTINGS.getKeybind().setCallback(callbackHotkeys);
@@ -46,7 +67,6 @@ public class KeyCallbacks
 
     private static class ValueChangeStringCallback implements IValueChangeCallback<ConfigString>
     {
-
         public ValueChangeStringCallback()
         {
         }
@@ -57,6 +77,90 @@ public class KeyCallbacks
             if(config == Configs.Generic.WATSON_PREFIX)
             {
                 Command.reregisterWatsonCommand(Command.commandDispatcher, Configs.Generic.WATSON_PREFIX);
+            }
+            else if(config == Configs.Analysis.LB_COORD)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_COORD);
+            }
+            else if(config == Configs.Analysis.LB_COORD_KILLS)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_COORD_KILLS);
+            }
+            else if(config == Configs.Analysis.LB_COORD_POSITION)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_COORD_POSITION);
+            }
+            else if(config == Configs.Analysis.LB_COORD_REPLACED)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_COORD_REPLACED);
+            }
+            else if(config == Configs.Analysis.LB_EDIT)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_EDIT);
+            }
+            else if(config == Configs.Analysis.LB_EDIT_REPLACED)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_EDIT_REPLACED);
+            }
+            else if(config == Configs.Analysis.LB_HEADER_BLOCK)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_HEADER_BLOCK);
+            }
+            else if(config == Configs.Analysis.LB_HEADER_BLOCKS)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_HEADER_BLOCKS);
+            }
+            else if(config == Configs.Analysis.LB_HEADER_CHANGES)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_HEADER_CHANGES);
+            }
+            else if(config == Configs.Analysis.LB_HEADER_NO_RESULTS)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_HEADER_NO_RESULTS);
+            }
+            else if(config == Configs.Analysis.LB_HEADER_RATIO)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_HEADER_RATIO);
+            }
+            else if(config == Configs.Analysis.LB_HEADER_RATIO_CURRENT)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_HEADER_RATIO_CURRENT);
+            }
+            else if(config == Configs.Analysis.LB_HEADER_SEARCHING)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_HEADER_SEARCHING);
+            }
+            else if(config == Configs.Analysis.LB_HEADER_SUM_BLOCKS)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_HEADER_SUM_BLOCKS);
+            }
+            else if(config == Configs.Analysis.LB_HEADER_SUM_PLAYERS)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_HEADER_SUM_PLAYERS);
+            }
+            else if(config == Configs.Analysis.LB_HEADER_TIME_CHECK)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_HEADER_TIME_CHECK);
+            }
+            else if(config == Configs.Analysis.LB_KILLS)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_KILLS);
+            }
+            else if(config == Configs.Analysis.LB_PAGE)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_PAGE);
+            }
+            else if(config == Configs.Analysis.LB_POSITION)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_POSITION);
+            }
+            else if(config == Configs.Analysis.LB_SUM)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_SUM);
+            }
+            else if(config == Configs.Analysis.LB_TP)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_TP);
             }
         }
     }

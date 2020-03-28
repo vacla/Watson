@@ -50,7 +50,8 @@ public class OverlayRenderer
     {
         Entity entity = mc.getCameraEntity();
 
-        if (canRender == false){
+        if (canRender == false)
+        {
             // Don't render before the player has been placed in the actual proper position,
             // otherwise some of the renderers mess up.
             // The magic 8.5, 65, 8.5 comes from the WorldClient constructor

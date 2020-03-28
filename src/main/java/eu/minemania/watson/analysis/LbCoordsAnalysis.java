@@ -1,22 +1,5 @@
 package eu.minemania.watson.analysis;
 
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_COORD;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_COORD_KILLS;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_COORD_POSITION;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_COORD_REPLACED;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_BLOCK;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_BLOCKS;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_CHANGES;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_NO_RESULTS;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_RATIO;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_RATIO_CURRENT;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_SEARCHING;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_SUM_BLOCKS;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_SUM_PLAYERS;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_TIME_CHECK;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_KILLS;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_PAGE;
-
 import java.util.Locale;
 import java.util.regex.Matcher;
 
@@ -46,7 +29,7 @@ public class LbCoordsAnalysis extends Analysis
 
     public LbCoordsAnalysis()
     {
-        addMatchedChatHandler(LB_COORD_POSITION, new IMatchedChatHandler()
+        addMatchedChatHandler(Configs.Analysis.LB_COORD_POSITION, new IMatchedChatHandler()
         {
 
             @Override
@@ -56,7 +39,7 @@ public class LbCoordsAnalysis extends Analysis
                 return false;
             }
         });
-        addMatchedChatHandler(LB_COORD, new IMatchedChatHandler()
+        addMatchedChatHandler(Configs.Analysis.LB_COORD, new IMatchedChatHandler()
         {
 
             @Override
@@ -66,7 +49,7 @@ public class LbCoordsAnalysis extends Analysis
                 return false;
             }
         });
-        addMatchedChatHandler(LB_KILLS, new IMatchedChatHandler()
+        addMatchedChatHandler(Configs.Analysis.LB_KILLS, new IMatchedChatHandler()
         {
 
             @Override
@@ -76,7 +59,7 @@ public class LbCoordsAnalysis extends Analysis
                 return true;
             }
         });
-        addMatchedChatHandler(LB_COORD_KILLS, new IMatchedChatHandler()
+        addMatchedChatHandler(Configs.Analysis.LB_COORD_KILLS, new IMatchedChatHandler()
         {
 
             @Override
@@ -86,7 +69,7 @@ public class LbCoordsAnalysis extends Analysis
                 return false;
             }
         });
-        addMatchedChatHandler(LB_COORD_REPLACED, new IMatchedChatHandler()
+        addMatchedChatHandler(Configs.Analysis.LB_COORD_REPLACED, new IMatchedChatHandler()
         {
 
             @Override
@@ -96,7 +79,7 @@ public class LbCoordsAnalysis extends Analysis
                 return false;
             }
         });
-        addMatchedChatHandler(LB_PAGE, new IMatchedChatHandler()
+        addMatchedChatHandler(Configs.Analysis.LB_PAGE, new IMatchedChatHandler()
         {
 
             @Override
@@ -117,27 +100,28 @@ public class LbCoordsAnalysis extends Analysis
             }
         };
 
-        addMatchedChatHandler(LB_HEADER_NO_RESULTS, headerHandler);
-        addMatchedChatHandler(LB_HEADER_CHANGES, headerHandler);
-        addMatchedChatHandler(LB_HEADER_BLOCKS, headerHandler);
-        addMatchedChatHandler(LB_HEADER_SUM_BLOCKS, headerHandler);
-        addMatchedChatHandler(LB_HEADER_SUM_PLAYERS, headerHandler);
-        addMatchedChatHandler(LB_HEADER_SEARCHING, headerHandler);
-        addMatchedChatHandler(LB_HEADER_RATIO, headerHandler);
-        addMatchedChatHandler(LB_HEADER_RATIO_CURRENT, headerHandler);
-        addMatchedChatHandler(LB_HEADER_TIME_CHECK, headerHandler);
-        addMatchedChatHandler(LB_HEADER_BLOCK, headerHandler);
+        addMatchedChatHandler(Configs.Analysis.LB_HEADER_NO_RESULTS, headerHandler);
+        addMatchedChatHandler(Configs.Analysis.LB_HEADER_CHANGES, headerHandler);
+        addMatchedChatHandler(Configs.Analysis.LB_HEADER_BLOCKS, headerHandler);
+        addMatchedChatHandler(Configs.Analysis.LB_HEADER_SUM_BLOCKS, headerHandler);
+        addMatchedChatHandler(Configs.Analysis.LB_HEADER_SUM_PLAYERS, headerHandler);
+        addMatchedChatHandler(Configs.Analysis.LB_HEADER_SEARCHING, headerHandler);
+        addMatchedChatHandler(Configs.Analysis.LB_HEADER_RATIO, headerHandler);
+        addMatchedChatHandler(Configs.Analysis.LB_HEADER_RATIO_CURRENT, headerHandler);
+        addMatchedChatHandler(Configs.Analysis.LB_HEADER_TIME_CHECK, headerHandler);
+        addMatchedChatHandler(Configs.Analysis.LB_HEADER_BLOCK, headerHandler);
     }
 
     void lbCoord(Text chat, Matcher m)
     {
+        System.out.println("test5");
         try
         {
             int index = Integer.parseInt(m.group(1));
             int[] ymd = TimeStamp.parseYMD(m.group(2));
             int hour = Integer.parseInt(m.group(3));
             int minute = Integer.parseInt(m.group(4));
-            int second = Integer.parseInt(m.group(5));
+            int second = Integer.parseInt(m.group(5) != null ? m.group(5) : String.valueOf(0));
             long millis = TimeStamp.toMillis(ymd, hour, minute, second);
 
             String player = m.group(6);
@@ -162,7 +146,6 @@ public class LbCoordsAnalysis extends Analysis
                 y = Integer.parseInt(m.group(10));
                 z = Integer.parseInt(m.group(11));
             }
-            
             WatsonBlock type = WatsonBlockRegistery.getInstance().getWatsonBlockByName(block);
             boolean created = action.equals("created");
             BlockEdit edit = new BlockEdit(millis, player, created, x, y, z, type, _world);
@@ -236,7 +219,6 @@ public class LbCoordsAnalysis extends Analysis
             Formatting color = Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue() ? getChatColorFormat(x, y, z) : null;
             if (Configs.Generic.REFORMAT_QUERY_RESULTS.getBooleanValue())
             {
-
                 if (!type.getName().equals("minecraft:stone"))
                 {
                     String year = (ymd[0] != 0) ? String.format(Locale.US, "%02d-", ymd[0]) : "";

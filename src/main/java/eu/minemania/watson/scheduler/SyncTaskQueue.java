@@ -28,5 +28,5 @@ public class SyncTaskQueue
             }
             task.run();
         }
-    }
+    }	  
 }

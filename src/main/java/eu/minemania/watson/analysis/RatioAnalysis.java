@@ -1,15 +1,5 @@
 package eu.minemania.watson.analysis;
 
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_BLOCK;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_BLOCKS;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_CHANGES;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_NO_RESULTS;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_RATIO;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_RATIO_CURRENT;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_SEARCHING;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_HEADER_TIME_CHECK;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_SUM;
-
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -17,6 +7,7 @@ import java.util.regex.Matcher;
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.chat.IMatchedChatHandler;
+import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.db.TimeStamp;
 import net.minecraft.text.Text;
 
@@ -35,7 +26,7 @@ public class RatioAnalysis extends Analysis
 
     public RatioAnalysis()
     {
-        addMatchedChatHandler(LB_HEADER_RATIO, new IMatchedChatHandler()
+        addMatchedChatHandler(Configs.Analysis.LB_HEADER_RATIO, new IMatchedChatHandler()
         {
 
             @Override
@@ -45,9 +36,8 @@ public class RatioAnalysis extends Analysis
                 return true;
             }
         });
-        addMatchedChatHandler(LB_HEADER_RATIO_CURRENT, new IMatchedChatHandler()
+        addMatchedChatHandler(Configs.Analysis.LB_HEADER_RATIO_CURRENT, new IMatchedChatHandler()
         {
-
             @Override
             public boolean onMatchedChat(Text chat, Matcher m)
             {
@@ -57,7 +47,6 @@ public class RatioAnalysis extends Analysis
         });
         IMatchedChatHandler headerHandler = new IMatchedChatHandler()
         {
-
             @Override
             public boolean onMatchedChat(Text chat, Matcher m)
             {
@@ -66,16 +55,15 @@ public class RatioAnalysis extends Analysis
             }
         };
 
-        addMatchedChatHandler(LB_HEADER_NO_RESULTS, headerHandler);
-        addMatchedChatHandler(LB_HEADER_CHANGES, headerHandler);
-        addMatchedChatHandler(LB_HEADER_BLOCKS, headerHandler);
-        addMatchedChatHandler(LB_HEADER_SEARCHING, headerHandler);
-        addMatchedChatHandler(LB_HEADER_TIME_CHECK, headerHandler);
-        addMatchedChatHandler(LB_HEADER_BLOCK, headerHandler);
+        addMatchedChatHandler(Configs.Analysis.LB_HEADER_NO_RESULTS, headerHandler);
+        addMatchedChatHandler(Configs.Analysis.LB_HEADER_CHANGES, headerHandler);
+        addMatchedChatHandler(Configs.Analysis.LB_HEADER_BLOCKS, headerHandler);
+        addMatchedChatHandler(Configs.Analysis.LB_HEADER_SEARCHING, headerHandler);
+        addMatchedChatHandler(Configs.Analysis.LB_HEADER_TIME_CHECK, headerHandler);
+        addMatchedChatHandler(Configs.Analysis.LB_HEADER_BLOCK, headerHandler);
 
-        addMatchedChatHandler(LB_SUM, new IMatchedChatHandler()
+        addMatchedChatHandler(Configs.Analysis.LB_SUM, new IMatchedChatHandler()
         {
-
             @Override
             public boolean onMatchedChat(Text chat, Matcher m)
             {

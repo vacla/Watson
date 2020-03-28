@@ -1,12 +1,9 @@
 package eu.minemania.watson.analysis;
 
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_EDIT;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_EDIT_REPLACED;
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_POSITION;
-
 import java.util.regex.Matcher;
 
 import eu.minemania.watson.chat.IMatchedChatHandler;
+import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.BlockEdit;
 import eu.minemania.watson.db.TimeStamp;
@@ -29,9 +26,8 @@ public class LbToolBlockAnalysis extends Analysis
 
     public LbToolBlockAnalysis()
     {
-        addMatchedChatHandler(LB_POSITION, new IMatchedChatHandler()
+        addMatchedChatHandler(Configs.Analysis.LB_POSITION, new IMatchedChatHandler()
         {
-
             @Override
             public boolean onMatchedChat(Text chat, Matcher m)
             {
@@ -39,9 +35,8 @@ public class LbToolBlockAnalysis extends Analysis
                 return true;
             }
         });
-        addMatchedChatHandler(LB_EDIT, new IMatchedChatHandler()
+        addMatchedChatHandler(Configs.Analysis.LB_EDIT, new IMatchedChatHandler()
         {
-
             @Override
             public boolean onMatchedChat(Text chat, Matcher m)
             {
@@ -49,9 +44,8 @@ public class LbToolBlockAnalysis extends Analysis
                 return true;
             }
         });
-        addMatchedChatHandler(LB_EDIT_REPLACED, new IMatchedChatHandler()
+        addMatchedChatHandler(Configs.Analysis.LB_EDIT_REPLACED, new IMatchedChatHandler()
         {
-
             @Override
             public boolean onMatchedChat(Text chat, Matcher m)
             {
@@ -69,7 +63,6 @@ public class LbToolBlockAnalysis extends Analysis
         _world = m.group(4);
         EditSelection selection = DataManager.getEditSelection();
         selection.selectPosition(_x, _y, _z, _world);
-
         _lbPositionTime = System.currentTimeMillis();
         _expectingFirstEdit = true;
     }
@@ -81,7 +74,7 @@ public class LbToolBlockAnalysis extends Analysis
             int[] ymd = TimeStamp.parseYMD(m.group(1));
             int hour = Integer.parseInt(m.group(2));
             int minute = Integer.parseInt(m.group(3));
-            int second = Integer.parseInt(m.group(4));
+            int second = Integer.parseInt(m.group(4) != null ? m.group(4) : String.valueOf(0));
             long millis = TimeStamp.toMillis(ymd, hour, minute, second);
             String player = m.group(5);
             String action = m.group(6);

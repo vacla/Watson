@@ -189,23 +189,23 @@ public class Highlight
         Formatting result = Formatting.RESET;
         switch (charac)
         {
-        case "+":
-            result = Formatting.BOLD;
-            break;
-        case "/":
-            result = Formatting.ITALIC;
-            break;
-        case "_":
-            result = Formatting.UNDERLINE;
-            break;
-        case "-":
-            result = Formatting.STRIKETHROUGH;
-            break;
-        case "?":
-            result = Formatting.OBFUSCATED;
-            break;
-        default:
-            break;
+            case "+":
+                result = Formatting.BOLD;
+                break;
+            case "/":
+                result = Formatting.ITALIC;
+                break;
+            case "_":
+                result = Formatting.UNDERLINE;
+                break;
+            case "-":
+                result = Formatting.STRIKETHROUGH;
+                break;
+            case "?":
+                result = Formatting.OBFUSCATED;
+                break;
+            default:
+                break;
         }
         return result;
     }
@@ -232,14 +232,14 @@ public class Highlight
     {
         switch (style)
         {
-        case "+":
-        case "/":
-        case "_":
-        case "-":
-        case "?":
-            return true;
-        default:
-            return false;
+            case "+":
+            case "/":
+            case "_":
+            case "-":
+            case "?":
+                return true;
+            default:
+                return false;
         }
     }
 
@@ -253,27 +253,27 @@ public class Highlight
     {
         switch (color)
         {
-        case "black":
-        case "darkblue":
-        case "darkgreen":
-        case "darkaqua":
-        case "darkred":
-        case "darkpurple":
-        case "gold":
-        case "grey":
-        case "gray":
-        case "darkgrey":
-        case "darkgray":
-        case "blue":
-        case "green":
-        case "aqua":
-        case "red":
-        case "lightpurple":
-        case "yellow":
-        case "white":
-            return true;
-        default:
-            return false;
+            case "black":
+            case "darkblue":
+            case "darkgreen":
+            case "darkaqua":
+            case "darkred":
+            case "darkpurple":
+            case "gold":
+            case "grey":
+            case "gray":
+            case "darkgrey":
+            case "darkgray":
+            case "blue":
+            case "green":
+            case "aqua":
+            case "red":
+            case "lightpurple":
+            case "yellow":
+            case "white":
+                return true;
+            default:
+                return false;
         }
     }
 

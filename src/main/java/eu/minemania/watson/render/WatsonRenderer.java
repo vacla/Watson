@@ -9,13 +9,11 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.BlockEditSet;
-import eu.minemania.watson.render.playeredit.WorldRendererPlayeredit;
 import eu.minemania.watson.selection.EditSelection;
 import fi.dy.masa.malilib.render.RenderUtils;
 import fi.dy.masa.malilib.render.shader.ShaderProgram;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VisibleRegion;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 
 public class WatsonRenderer
@@ -25,7 +23,6 @@ public class WatsonRenderer
     private static final ShaderProgram SHADER_ALPHA = new ShaderProgram("watson", null, "shaders/alpha.frag");
 
     private MinecraftClient mc;
-    private WorldRendererPlayeredit worldRenderer;
 
     static
     {
@@ -40,62 +37,46 @@ public class WatsonRenderer
         return INSTANCE;
     }
 
-    public WorldRendererPlayeredit getWorldRenderer()
-    {
-        if(this.worldRenderer == null)
-        {
-            this.mc = MinecraftClient.getInstance();
-            this.worldRenderer = new WorldRendererPlayeredit(this.mc);
-        }
-
-        return this.worldRenderer;
-    }
-
-    public void loadRenderers()
-    {
-        this.getWorldRenderer().reload();
-    }
-
     public void piecewiseRenderEntities(VisibleRegion visibleRegion, float partialTicks)
     {
+        if(this.mc == null)
+        {
+            this.mc = MinecraftClient.getInstance();
+        }
         if(Configs.Generic.DISPLAYED.getBooleanValue() && this.mc.getCameraEntity() != null && Configs.Generic.OUTLINE_SHOWN.getBooleanValue())
         {
             this.mc.getProfiler().push("watson_entities");
+            GlStateManager.pushMatrix();
             GlStateManager.disableLighting();
             GlStateManager.disableCull();
-            GlStateManager.disableTexture();
-            GlStateManager.pushMatrix();
             RenderUtils.setupBlend();
+            GlStateManager.disableTexture();
             RenderUtils.color(1f, 1f, 1f, 1f);
-            GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, 240, 240);
+            GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, 240.0F, 240.0F);
             GlStateManager.depthMask(false);
             boolean foggy = GL11.glIsEnabled(GL11.GL_FOG);
             GlStateManager.disableFog();
             GlStateManager.disableDepthTest();
             EditSelection selection = DataManager.getEditSelection();
             BlockEditSet edits = selection.getBlockEditSet();
-            Entity entity = mc.getCameraEntity();
-            if(entity == null)
-            {
-                entity = mc.player;
-            }
 
-            Vec3d cameraPos = mc.gameRenderer.getCamera().getPos();
-            GlStateManager.translated(-cameraPos.x, -cameraPos.y, -cameraPos.z);
+            Vec3d cameraPos = this.mc.gameRenderer.getCamera().getPos();
+            GlStateManager.translated(-cameraPos.getX(),-cameraPos.getY(),-cameraPos.getZ());
             edits.drawOutlines();
             edits.drawVectors();
             selection.drawSelection();
+
             if(foggy)
             {
                 GlStateManager.enableFog();
             }
             GlStateManager.enableDepthTest();
             GlStateManager.depthMask(true);
-            GlStateManager.popMatrix();
-            GlStateManager.disableBlend();
             GlStateManager.enableTexture();
+            GlStateManager.disableBlend();
             GlStateManager.enableCull();
             GlStateManager.enableLighting();
+            GlStateManager.popMatrix();
             this.mc.getProfiler().pop();
         }
     }

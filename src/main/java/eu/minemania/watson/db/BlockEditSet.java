@@ -245,6 +245,7 @@ public class BlockEditSet
         {
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder buffer = tessellator.getBufferBuilder();
+
             buffer.begin(GL11.GL_LINES, VertexFormats.POSITION_COLOR);
             for(PlayereditSet editsForPlayer : _playerEdits.values())
             {

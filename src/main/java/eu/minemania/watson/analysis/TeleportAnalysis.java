@@ -1,10 +1,9 @@
 package eu.minemania.watson.analysis;
 
-import static eu.minemania.watson.analysis.LogBlockPatterns.LB_TP;
-
 import java.util.regex.Matcher;
 
 import eu.minemania.watson.chat.IMatchedChatHandler;
+import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.BlockEdit;
 import eu.minemania.watson.selection.EditSelection;
@@ -14,9 +13,8 @@ public class TeleportAnalysis extends Analysis
 {
     public TeleportAnalysis()
     {
-        addMatchedChatHandler(LB_TP, new IMatchedChatHandler()
+        addMatchedChatHandler(Configs.Analysis.LB_TP, new IMatchedChatHandler()
         {
-
             @Override
             public boolean onMatchedChat(Text chat, Matcher m)
             {

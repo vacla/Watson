@@ -146,7 +146,8 @@ public class EditSelection
         return result;
     }
 
-    public void queryPreEdits(int count) {
+    public void queryPreEdits(int count)
+    {
         if(_variables.containsKey("player") && _variables.containsKey("time"))
         {
             if(Configs.Generic.PLUGIN.getStringValue().equals("LogBlock"))

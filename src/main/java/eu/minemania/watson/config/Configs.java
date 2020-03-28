@@ -3,7 +3,6 @@ package eu.minemania.watson.config;
 import fi.dy.masa.malilib.config.IConfigHandler;
 
 import java.io.File;
-
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -119,6 +118,64 @@ public class Configs implements IConfigHandler
                 );
     }
 
+    public static class Analysis
+    {
+        public static final ConfigString CP_DETAILS = new ConfigString("cp details", "^(\\d+[.,]\\d+\\/h ago|\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}) - (#?\\w+) (\\w+) (\\w+).+", "Changes regex for cp details");
+        public static final ConfigString CP_INSPECTOR_COORDS = new ConfigString("cp inspector coords", "^----- CoreProtect ----- \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\)$", "Changes regex for cp inspector coords");
+        public static final ConfigString CP_LOOKUP_COORDS = new ConfigString("cp lookup coords", "^ +\\^ \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\/(.+)\\)$", "Changes regex for cp lookup coords");
+        public static final ConfigString CP_LOOKUP_HEADER = new ConfigString("cp lookup header", "^----- CoreProtect Lookup Results -----$", "Changes regex for cp lookup header");
+        public static final ConfigString DUTYMODE_DISABLE = new ConfigString("duty mode disable", "^\\[Duties\\] Duty mode disabled.*", "Changes regex for disable duty mode");
+        public static final ConfigString DUTYMODE_ENABLE = new ConfigString("duty mode enable", "^\\[Duties\\] Duty mode enabled.*", "Changes regex for enable duty mode");
+        public static final ConfigString LB_POSITION = new ConfigString("lb position", "^Block changes in the last \\d+ \\w+ at (-?\\d+):(-?\\d+):(-?\\d+) in (.+):$", "Changes regex for position text");
+        public static final ConfigString LB_KILLS = new ConfigString("lb kills", "^Kills in the last \\d+ \\w+ in (.+):$", "Changes regex for kills text");
+        public static final ConfigString LB_COORD_POSITION = new ConfigString("lb coord position", "^Block changes in the last \\d+ \\w+ in (.+):$", "Changes regex for coords position text");
+        public static final ConfigString LB_EDIT = new ConfigString("lb edit", "^\\[((?:\\d{2,4}-)?\\d{2}-\\d{2}) (\\d{2}):(\\d{2})(?::?)(\\d{2})?\\] (\\w+) (created|destroyed) ((?: |\\w)+)( \\[.*\\] \\[.*\\\\] \\[.*\\] \\[.*\\])?$", "Changes regex for edits text");
+        public static final ConfigString LB_EDIT_REPLACED = new ConfigString("lb edit replaced", "^\\[((?:\\d{2,4}-)?\\d{2}-\\d{2}) (\\d{2}):(\\d{2})(?::?)(\\d{2})?\\] (\\w+) replaced ((?: |\\w)+) with ((?: |\\w)+)$", "Changes regex for edits replaced text");
+        public static final ConfigString LB_COORD = new ConfigString("lb coord", "^\\((\\d+)\\) \\[((?:\\d{2,4}-)?\\d{2}-\\d{2}) (\\d{2}):(\\d{2})(?::?)(\\d{2})?\\] (\\w+) (created|destroyed) ([a-zA-Z_]+)(?: \\[(?<sign1>.*)\\] \\[(?<sign2>.*)\\] \\[(?<sign3>.*)\\] \\[(?<sign4>.*)\\])? at (-?\\d+), (\\d+), (-?\\d+)$", "Changes regex for coords text");
+        public static final ConfigString LB_COORD_KILLS = new ConfigString("lb coord kills", "^\\((\\d+)\\) \\[((?:\\\\d{2,4}-)?\\d{2}-\\d{2}) (\\d{2}):(\\d{2})(?::?)(\\d{2})?\\] (\\w+) killed (\\w+) at (-?\\d+):(\\d+):(-?\\d+) with (.*)$", "Changes regex for coords kills text");
+        public static final ConfigString LB_COORD_REPLACED = new ConfigString("lb coord replaced", "^\\((\\d+)\\) ((?:\\d{2,4}-)?\\d{2}-\\d{2}) (\\d{2}):(\\d{2})(?::?)(\\d{2})?\\] (\\w+) replaced ([a-zA-Z_]+) with ([a-zA-Z_]+) at (-?\\d+):(\\d+):(-?\\d+)$", "Changes regex for coords replaced text");
+        public static final ConfigString LB_TP = new ConfigString("lb tp", "^Teleported to (-?\\d+):(\\d+):(-?\\d+)$", "Changes regex for teleport text");
+        public static final ConfigString LB_PAGE = new ConfigString("lb page", "^Page (\\d+)/(\\d+)$", "Changes regex for page text");
+        public static final ConfigString LB_HEADER_NO_RESULTS = new ConfigString("lb header no results", "^No results found\\.$", "Changes regex for header no results");
+        public static final ConfigString LB_HEADER_CHANGES = new ConfigString("lb header changes", "^\\d+ changes? found\\.$", "Changes regex for header changes");
+        public static final ConfigString LB_HEADER_BLOCKS = new ConfigString("lb header blocks", "^\\d+ blocks? found\\.$", "Changes regex for header blocks");
+        public static final ConfigString LB_HEADER_SUM_BLOCKS = new ConfigString("lb header sum blocks", "^Created - Destroyed - Block$", "Changes regex for header sum blocks");
+        public static final ConfigString LB_HEADER_SUM_PLAYERS = new ConfigString("lb header sum players", "^Created - Destroyed - Player$", "Changes regex for header sum players");
+        public static final ConfigString LB_HEADER_SEARCHING = new ConfigString("lb header searching", "^Searching Block changes from player \\w+ in the last \\d+ minutes (?:within \\d+ blocks of you )?in .+:$", "Changes regex for header searching");
+        public static final ConfigString LB_HEADER_RATIO = new ConfigString("lb header ratio", "^Stone and diamond ore changes from player \\w+ between (\\d+) and (\\d+) minutes ago in .+ summed up by blocks:$", "Changes regex for header ratio");
+        public static final ConfigString LB_HEADER_RATIO_CURRENT = new ConfigString("lb header ratio current", "^Stone and diamond ore changes from player \\w+ in the last (\\d+) minutes in .+ summed up by blocks:$", "Changes regex for header ratio current");
+        public static final ConfigString LB_HEADER_TIME_CHECK = new ConfigString("lb header time check", "Block changes from player \\w+ between (\\d+) and \\d+ minutes ago in .+:", "Changes regex for header time check");
+        public static final ConfigString LB_HEADER_BLOCK = new ConfigString("lb header block", "^(?: |,|\\w)+ (?:destructions|changes) from player \\w+ (?:in the last \\d+ minutes |between \\d+ and \\d+ minutes ago |more than -?\\d+ minutes ago )?(?:within \\d+ blocks of you )?in .+(?: summed up by (players|blocks))?:$", "Changes regex for header block");
+        public static final ConfigString LB_SUM = new ConfigString("lb sum", "^(\\d+)[ ]{6,}(\\d+)[ ]{6,}((?:\\w| )+)$", "Changes regex for header sum");
+        public static final ConfigString MODMODE_DISABLE = new ConfigString("modmode disable", "^You are no longer in ModMode!$", "Changes regex modmode disable");
+        public static final ConfigString MODMODE_ENABLE = new ConfigString("modmode enable", "^You are now in ModMode!$", "Changes regex modmode enable");
+        public static final ConfigString WG_REGIONS = new ConfigString("wg regions", "^Applicable regions: ([a-zA-Z0-9_-]+(?:, [a-zA-Z0-9_-]+)*)$", "Changes regex wg regions");
+
+        public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
+                LB_COORD,
+                LB_COORD_KILLS,
+                LB_COORD_POSITION,
+                LB_COORD_REPLACED,
+                LB_EDIT,
+                LB_EDIT_REPLACED,
+                LB_HEADER_BLOCK,
+                LB_HEADER_BLOCKS,
+                LB_HEADER_CHANGES,
+                LB_HEADER_NO_RESULTS,
+                LB_HEADER_RATIO,
+                LB_HEADER_RATIO_CURRENT,
+                LB_HEADER_SEARCHING,
+                LB_HEADER_SUM_BLOCKS,
+                LB_HEADER_SUM_PLAYERS,
+                LB_HEADER_TIME_CHECK,
+                LB_KILLS,
+                LB_PAGE,
+                LB_POSITION,
+                LB_SUM,
+                LB_TP
+                );
+    }
+
     /**
      * Loads configurations from configuration file.
      */
@@ -135,6 +192,7 @@ public class Configs implements IConfigHandler
                 JsonObject root = element.getAsJsonObject();
 
                 ConfigUtils.readConfigBase(root, "Generic", Generic.OPTIONS);
+                ConfigUtils.readConfigBase(root, "Analysis", Analysis.OPTIONS);
                 ConfigUtils.readConfigBase(root, "Lists", Lists.OPTIONS);
                 ConfigUtils.readConfigBase(root, "Hotkeys", Hotkeys.HOTKEY_LIST);
             }
@@ -164,6 +222,7 @@ public class Configs implements IConfigHandler
             JsonObject root = new JsonObject();
 
             ConfigUtils.writeConfigBase(root, "Generic", Generic.OPTIONS);
+            ConfigUtils.writeConfigBase(root, "Analysis", Analysis.OPTIONS);
             ConfigUtils.writeConfigBase(root, "Lists", Lists.OPTIONS);
             ConfigUtils.writeConfigBase(root, "Hotkeys", Hotkeys.HOTKEY_LIST);
 

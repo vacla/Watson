@@ -1,14 +1,10 @@
 package eu.minemania.watson.analysis;
 
-import static eu.minemania.watson.analysis.CoreProtectPatterns.DETAILS;
-import static eu.minemania.watson.analysis.CoreProtectPatterns.INSPECTOR_COORDS;
-import static eu.minemania.watson.analysis.CoreProtectPatterns.LOOKUP_COORDS;
-import static eu.minemania.watson.analysis.CoreProtectPatterns.LOOKUP_HEADER;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import eu.minemania.watson.chat.IMatchedChatHandler;
+import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.BlockEdit;
 import eu.minemania.watson.db.TimeStamp;
@@ -61,7 +57,7 @@ public class CoreProtectAnalysis extends Analysis
 
     public CoreProtectAnalysis()
     {
-        addMatchedChatHandler(INSPECTOR_COORDS, new IMatchedChatHandler()
+        addMatchedChatHandler(Configs.Analysis.CP_INSPECTOR_COORDS, new IMatchedChatHandler()
         {
             @Override
             public boolean onMatchedChat(Text chat, Matcher m)
@@ -70,7 +66,7 @@ public class CoreProtectAnalysis extends Analysis
                 return true;
             }
         });
-        addMatchedChatHandler(DETAILS, new IMatchedChatHandler()
+        addMatchedChatHandler(Configs.Analysis.CP_DETAILS, new IMatchedChatHandler()
         {
             @Override
             public boolean onMatchedChat(Text chat, Matcher m)
@@ -79,7 +75,7 @@ public class CoreProtectAnalysis extends Analysis
                 return true;
             }
         });
-        addMatchedChatHandler(LOOKUP_COORDS, new IMatchedChatHandler()
+        addMatchedChatHandler(Configs.Analysis.CP_LOOKUP_COORDS, new IMatchedChatHandler()
         {
             @Override
             public boolean onMatchedChat(Text chat, Matcher m)
@@ -88,7 +84,7 @@ public class CoreProtectAnalysis extends Analysis
                 return true;
             }
         });
-        addMatchedChatHandler(LOOKUP_HEADER, new IMatchedChatHandler()
+        addMatchedChatHandler(Configs.Analysis.CP_LOOKUP_HEADER, new IMatchedChatHandler()
         {
             @Override
             public boolean onMatchedChat(Text chat, Matcher m)

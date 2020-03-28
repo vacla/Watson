@@ -6,7 +6,6 @@ import net.minecraft.util.Formatting;
 
 public enum Color
 {
-
     black(Formatting.BLACK),
     darkblue(Formatting.DARK_BLUE),
     darkgreen(Formatting.DARK_GREEN),

@@ -29,8 +29,8 @@ import static com.mojang.brigadier.arguments.FloatArgumentType.getFloat;
 import static com.mojang.brigadier.arguments.DoubleArgumentType.doubleArg;
 import static com.mojang.brigadier.arguments.DoubleArgumentType.getDouble;
 
-public class WatsonCommand extends WatsonCommandBase {
-
+public class WatsonCommand extends WatsonCommandBase
+{
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher)
     {
         ClientCommandManager.addClientSideCommand(Configs.Generic.WATSON_PREFIX.getStringValue());
@@ -165,7 +165,8 @@ public class WatsonCommand extends WatsonCommandBase {
     private static int orePage(CommandContext<ServerCommandSource> context)
     {
         Integer page;
-        try {
+        try
+        {
             page = getInteger(context, "page");
         }
         catch (Exception e)
@@ -362,7 +363,8 @@ public class WatsonCommand extends WatsonCommandBase {
     {
         String players = getString(context, "player(s)");
         String[] playerList = players.split(" ");
-        for (String player : playerList) {
+        for (String player : playerList)
+        {
             DataManager.getEditSelection().getBlockEditSet().setEditVisibility(player, false);
         }
         return 1;
@@ -372,7 +374,8 @@ public class WatsonCommand extends WatsonCommandBase {
     {
         String players = getString(context, "player(s)");
         String[] playerList = players.split(" ");
-        for (String player : playerList) {
+        for (String player : playerList)
+        {
             DataManager.getEditSelection().getBlockEditSet().setEditVisibility(player, true);
         }
         return 1;
