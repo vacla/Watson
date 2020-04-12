@@ -109,7 +109,7 @@ public class CoreProtectAnalysis extends Analysis
     void details(Text chat, Matcher m)
     {
         _lookupDetails = false;
-        if(m.group(3).equals("placed") || m.group(3).equals("removed"))
+        if(m.group(3).equals("placed") || m.group(3).equals("removed") || m.group(3).equals("killed"))
         {
             _millis = parseTimeExpression(m.group(1));
             _player = m.group(2);

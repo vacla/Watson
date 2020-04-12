@@ -90,7 +90,7 @@ public class BlockEdit
         }
         else
         {
-            RenderUtils.drawGrassOutlinesBatched(x, y, z, block.getColor(), buffer);
+            RenderUtils.drawFullBlockOutlinesBatched(x, y, z, block.getColor(), buffer);
         }
     }
 
@@ -101,6 +101,10 @@ public class BlockEdit
             if(block.getName().equals("minecraft:item_frame") || block.getName().equals("minecraft:painting"))
             {
                 RenderUtils.drawItemFramePaintingOutlinesBatched(x, y, z, block.getColor(), buffer);
+            }
+            else
+            {
+                RenderUtils.drawFullBlockOutlinesBatched(x, y, z, block.getColor(), buffer);
             }
         }
     }

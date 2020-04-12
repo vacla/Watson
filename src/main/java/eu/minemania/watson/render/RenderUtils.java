@@ -16,7 +16,7 @@ public class RenderUtils
     private static final Random RAND = new Random();
     public static final Direction[] FACING_ALL = new Direction[] { Direction.DOWN, Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST };
 
-    public static void drawGrassOutlinesBatched(float x, float y, float z, Color4f color, BufferBuilder buffer)
+    public static void drawFullBlockOutlinesBatched(float x, float y, float z, Color4f color, BufferBuilder buffer)
     {
         buffer.vertex(x, y, z).color(color.r, color.g, color.b, color.a).next();
         buffer.vertex(x + 1F, y, z).color(color.r, color.g, color.b, color.a).next();
