@@ -28,12 +28,17 @@ public class ChatMessage
 
     public static void localOutputT(String translationKey, Object... args)
     {
-        sendToLocalChat(Formatting.AQUA, new TranslatableText(translationKey, args),true);
+        sendToLocalChat(Formatting.AQUA, new TranslatableText(translationKey, args), true);
     }
 
     public static void localError(String message, boolean watsonMessage)
     {
         sendToLocalChat(Formatting.DARK_RED, null, message, watsonMessage);
+    }
+
+    public static void localErrorT(String translationKey, Object... args)
+    {
+        sendToLocalChat(Formatting.DARK_RED, new TranslatableText(translationKey, args), true);
     }
 
     public void serverChat(String message)

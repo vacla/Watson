@@ -6,7 +6,6 @@ import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
 import eu.minemania.watson.chat.ChatProcessor;
 import eu.minemania.watson.chat.Highlight;
 import eu.minemania.watson.config.Configs;
@@ -22,6 +21,11 @@ public abstract class MixinChatHud
     private Text chatHighlighter(Text componentln)
     {
         delete = false;
+        if(Highlight.getReturnBoolean())
+        {
+            Highlight.toggleReturnBoolean();
+            return componentln;
+        }
         boolean allowChat = ChatProcessor.getInstance().onChat(componentln);
         if(allowChat)
         {

@@ -116,7 +116,7 @@ public final class WatsonBlockRegistery
     {
         if(Configs.Generic.DEBUG.getBooleanValue())
         {
-            Watson.logger.debug("watson block: '{}'", watsonBlock.toString());
+            Watson.logger.info("watson block: '{}'", watsonBlock.toString());
         }
         String name = watsonBlock.getName();
         addWatsonBlockName(name, watsonBlock);

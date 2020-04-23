@@ -5,7 +5,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
-import java.util.Locale;
 
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.analysis.ServerTime;
@@ -72,24 +71,24 @@ public class OreDB
         int depositCount = getOreDepositCount();
         if(depositCount == 0)
         {
-            ChatMessage.localOutput("There are no ore deposits.", true);
+            ChatMessage.localOutputT("waton.message.deposit.none");
         }
         else
         {
             int pages = (depositCount + Configs.Generic.PAGE_LINES.getIntegerValue() - 1) / Configs.Generic.PAGE_LINES.getIntegerValue();
             if(page > pages)
             {
-                ChatMessage.localError(String.format(Locale.US, "The highest page number is %d.", pages), true);
+                ChatMessage.localErrorT("watson.message.deposit.highest_page", pages);
             }
             else
             {
                 if(depositCount == 1)
                 {
-                    ChatMessage.localOutput("There is 1 ore deposit", true);
+                    ChatMessage.localOutputT("watson.message.deposit.ore.1");
                 }
                 else
                 {
-                    ChatMessage.localOutput(String.format(Locale.US, "There are %d ore deposits.", depositCount), true);
+                    ChatMessage.localOutputT("watson.message.deposit.ore.more", depositCount);
                 }
 
                 ArrayList<OreDeposit> deposits = getOreDepositSequence();
@@ -104,13 +103,13 @@ public class OreDB
                     WatsonBlock watsonblock = edit.block;
                     String player = edit.player;
                     Formatting strike = edit.playereditSet.isVisible() == true ? null : Formatting.STRIKETHROUGH;
-                    String line = String.format(Locale.US, "(%3d) %s (% 5d % 3d % 5d) %s [%2d] %s", id, TimeStamp.formatMonthDayTime(time), block.getLocation().getX(), block.getLocation().getY(), block.getLocation().getZ(), watsonblock.getName(), deposit.getBlockCount(), player);
+                    String line = String.format("(%3d) %s (% 5d % 3d % 5d) %s [%2d] %s", id, TimeStamp.formatMonthDayTime(time), block.getLocation().getX(), block.getLocation().getY(), block.getLocation().getZ(), watsonblock.getName(), deposit.getBlockCount(), player);
                     ChatMessage.sendToLocalChat(_chatColors.get(watsonblock).getColor(), strike, line, true);
                 }
                 if (page < pages)
                 {
-                    ChatMessage.localOutput(String.format(Locale.US, "Page %d of %d.", page, pages), true);
-                    ChatMessage.localOutput(String.format(Locale.US, "Use \"/%s ore %d\" to view the next page", Configs.Generic.WATSON_PREFIX.getStringValue(), (page+1)), true);
+                    ChatMessage.localOutputT("watson.message.blockedit.pages", page, pages);
+                    ChatMessage.localOutputT("watson.message.deposit.next_page", Configs.Generic.WATSON_PREFIX.getStringValue(), (page+1));
                 }
             }
         }
@@ -150,7 +149,7 @@ public class OreDB
     {
         if(getOreDepositCount() == 0)
         {
-            ChatMessage.localError("There are no ore deposits to teleport to.", true);
+            ChatMessage.localErrorT("watson.message.deposit.no_teleport");
         }
         else
         {
@@ -158,7 +157,7 @@ public class OreDB
             OreDeposit deposit = getOreDeposit(index);
             IntCoord coord = deposit.getKeyOreBlock().getLocation();
             Teleport.teleport(coord.getX(), coord.getY(), coord.getZ());
-            ChatMessage.localOutput(String.format(Locale.US, "Teleporting you to ore #%d", index), true);
+            ChatMessage.localOutputT("watson.message.deposit.teleport", index);
             EditSelection selection = DataManager.getEditSelection();
             selection.selectBlockEdit(deposit.getKeyOreBlock().getEdit());
         }
@@ -210,7 +209,7 @@ public class OreDB
         }
         else
         {
-            ChatMessage.localOutput("There are no diamond ore deposits.", true);
+            ChatMessage.localOutputT("watson.message.deposit.no_diamond");
         }
     }
 
@@ -292,8 +291,11 @@ public class OreDB
         String sinceTime = TimeStamp.formatQueryTime(startTime.getTimeInMillis());
         String beforeTime = TimeStamp.formatQueryTime(endTime.getTimeInMillis());
 
-        String query = String.format(Locale.US, "/lb player %s since %s before %s sum b block stone diamond_ore", player, sinceTime, beforeTime);
-        Watson.logger.debug(query);
+        String query = String.format("/lb player %s since %s before %s sum b block stone diamond_ore", player, sinceTime, beforeTime);
+        if(Configs.Generic.DEBUG.getBooleanValue())
+        {
+            Watson.logger.info(query);
+        }
         ChatMessage.getInstance().serverChat(query);
     }
 

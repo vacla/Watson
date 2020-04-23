@@ -220,7 +220,8 @@ public class WatsonCommand extends WatsonCommandBase
             Configs.Generic.DISPLAYED.toggleBooleanValue();
             displayed = Configs.Generic.DISPLAYED.getBooleanValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.display", displayed);
+        String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.display", strSetting);
         return 1;
     }
 
@@ -237,7 +238,8 @@ public class WatsonCommand extends WatsonCommandBase
             Configs.Generic.OUTLINE_SHOWN.toggleBooleanValue();
             displayed = Configs.Generic.OUTLINE_SHOWN.getBooleanValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.outline", displayed);
+        String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.outline", strSetting);
         return 1;
     }
 
@@ -254,7 +256,8 @@ public class WatsonCommand extends WatsonCommandBase
             Configs.Generic.ANNOTATION_SHOWN.toggleBooleanValue();
             displayed = Configs.Generic.ANNOTATION_SHOWN.getBooleanValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.anno", displayed);
+        String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.anno", strSetting);
         return 1;
     }
 
@@ -271,7 +274,8 @@ public class WatsonCommand extends WatsonCommandBase
             Configs.Generic.VECTOR_SHOWN.toggleBooleanValue();
             displayed = Configs.Generic.VECTOR_SHOWN.getBooleanValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector", displayed);
+        String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector", strSetting);
         return 1;
     }
 
@@ -288,7 +292,8 @@ public class WatsonCommand extends WatsonCommandBase
             Configs.Generic.LINKED_CREATION.toggleBooleanValue();
             displayed = Configs.Generic.LINKED_CREATION.getBooleanValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector.creation", displayed);
+        String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector.creation", strSetting);
         return 1;
     }
 
@@ -305,7 +310,8 @@ public class WatsonCommand extends WatsonCommandBase
             Configs.Generic.LINKED_DESTRUCTION.toggleBooleanValue();
             displayed = Configs.Generic.LINKED_DESTRUCTION.getBooleanValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector.destruction", displayed);
+        String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector.destruction", strSetting);
         return 1;
     }
 
@@ -330,7 +336,8 @@ public class WatsonCommand extends WatsonCommandBase
             Configs.Generic.LABEL_SHOWN.toggleBooleanValue();
             displayed = Configs.Generic.LABEL_SHOWN.getBooleanValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.label", displayed);
+        String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.label", strSetting);
         return 1;
     }
 
@@ -583,7 +590,8 @@ public class WatsonCommand extends WatsonCommandBase
             Configs.Generic.DEBUG.toggleBooleanValue();
             displayed = Configs.Generic.DEBUG.getBooleanValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.debug", displayed);
+        String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.debug", strSetting);
         return 1;
     }
 
@@ -600,7 +608,8 @@ public class WatsonCommand extends WatsonCommandBase
             Configs.Generic.AUTO_PAGE.toggleBooleanValue();
             displayed = Configs.Generic.AUTO_PAGE.getBooleanValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.auto_page", displayed);
+        String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.auto_page", strSetting);
         return 1;
     }
 
@@ -670,7 +679,8 @@ public class WatsonCommand extends WatsonCommandBase
             Configs.Generic.GROUPING_ORES_IN_CREATIVE.toggleBooleanValue();
             displayed = Configs.Generic.GROUPING_ORES_IN_CREATIVE.getBooleanValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.group_ores_creative", displayed);
+        String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.group_ores_creative", strSetting);
         return 1;
     }
 
@@ -771,7 +781,7 @@ public class WatsonCommand extends WatsonCommandBase
         {
             prefix = Configs.Generic.WATSON_PREFIX.getStringValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.watson_prefix", prefix);
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.watson.prefix", prefix);
         return 1;
     }
 
@@ -788,7 +798,8 @@ public class WatsonCommand extends WatsonCommandBase
             Configs.Generic.SS_PLAYER_DIRECTORY.toggleBooleanValue();
             displayed = Configs.Generic.SS_PLAYER_DIRECTORY.getBooleanValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.ss_player_directory", displayed);
+        String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.ss_player_directory", strSetting);
         return 1;
     }
 
@@ -805,7 +816,8 @@ public class WatsonCommand extends WatsonCommandBase
             Configs.Generic.SS_PLAYER_SUFFIX.toggleBooleanValue();
             displayed = Configs.Generic.SS_PLAYER_SUFFIX.getBooleanValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.ss_player_suffix", displayed);
+        String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.ss_player_suffix", strSetting);
         return 1;
     }
 
@@ -815,7 +827,7 @@ public class WatsonCommand extends WatsonCommandBase
         try
         {
             date_directory = getString(context, "format");
-            Configs.Generic.SS_DATE_DIRECTORY.setValueFromString(date_directory);;
+            Configs.Generic.SS_DATE_DIRECTORY.setValueFromString(date_directory);
         }
         catch (Exception e)
         {
@@ -838,7 +850,8 @@ public class WatsonCommand extends WatsonCommandBase
             Configs.Generic.REFORMAT_QUERY_RESULTS.toggleBooleanValue();
             displayed = Configs.Generic.REFORMAT_QUERY_RESULTS.getBooleanValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.reformat_query_results", displayed);
+        String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.reformat_query_results", strSetting);
         return 1;
     }
 
@@ -855,7 +868,8 @@ public class WatsonCommand extends WatsonCommandBase
             Configs.Generic.RECOLOR_QUERY_RESULTS.toggleBooleanValue();
             displayed = Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.recolor_query_results", displayed);
+        String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.recolor_query_results", strSetting);
         return 1;
     }
 
@@ -913,7 +927,8 @@ public class WatsonCommand extends WatsonCommandBase
             Configs.Generic.USE_CHAT_HIGHLIGHTS.toggleBooleanValue();
             displayed = Configs.Generic.USE_CHAT_HIGHLIGHTS.getBooleanValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.chat_highlights", displayed);
+        String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.chat_highlights", strSetting);
         return 1;
     }
 

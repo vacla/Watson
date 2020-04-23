@@ -10,7 +10,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,6 +20,7 @@ import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.render.OverlayRenderer;
 import eu.minemania.watson.selection.EditSelection;
+import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
@@ -196,14 +196,14 @@ public class BlockEditSet
     {
         if(_playerEdits.size() == 0)
         {
-            ChatMessage.localOutput("There are no stored edits for this world.", true);
+            ChatMessage.localOutputT("watson.message.edits.none_world");
         }
         else
         {
-            ChatMessage.localOutput("Listing number and visibility of edits in this world:", true);
+            ChatMessage.localOutputT("watson.message.edits.edits_list");
             for(PlayereditSet editsByPlayer : _playerEdits.values())
             {
-                ChatMessage.localOutput(String.format(Locale.US, " %s - %d edits %s", editsByPlayer.getPlayer(), editsByPlayer.getBlockEditCount(), (editsByPlayer.isVisible() ? "shown" : "hidden")), true);
+                ChatMessage.localOutputT("watson.message.edits.edit", editsByPlayer.getPlayer(), editsByPlayer.getBlockEditCount(), StringUtils.translate(editsByPlayer.isVisible() ? "watson.message.setting.shown" : "watson.message.setting.hidden"));
             }
         }
     }
@@ -215,11 +215,11 @@ public class BlockEditSet
         if(editsByPlayer != null)
         {
             editsByPlayer.setVisible(visible);
-            ChatMessage.localOutput(String.format(Locale.US, "%d edits by %s are now %s.", editsByPlayer.getBlockEditCount(), editsByPlayer.getPlayer(), (editsByPlayer.isVisible() ? "shown" : "hidden")), true);
+            ChatMessage.localOutputT("watson.message.edits.visibility", editsByPlayer.getBlockEditCount(), editsByPlayer.getPlayer(), StringUtils.translate(editsByPlayer.isVisible() ? "watson.message.setting.shown" : "watson.message.setting.hidden"));
         }
         else
         {
-            ChatMessage.localError(String.format(Locale.US, "There are no stored edits for %s.", player), true);
+            ChatMessage.localErrorT("watson.message.edits.none_edits", player);
         }
     }
 
@@ -231,11 +231,11 @@ public class BlockEditSet
         {
             _playerEdits.remove(player.toLowerCase());
             getOreDB().removeDeposits(player);
-            ChatMessage.localOutput(String.format(Locale.US, "%d edits by %s were removed.", editsByPlayer.getBlockEditCount(), editsByPlayer.getPlayer()), true);
+            ChatMessage.localOutputT("watson.message.edits.edit_removed", editsByPlayer.getBlockEditCount(), editsByPlayer.getPlayer());
         }
         else
         {
-            ChatMessage.localError(String.format(Locale.US, "There are no stored edits for %s.", player), true);
+            ChatMessage.localErrorT("watson.message.edits.none_edits", player);
         }
     }
 

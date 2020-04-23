@@ -2,7 +2,6 @@ package eu.minemania.watson.selection;
 
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Locale;
 
 import org.lwjgl.opengl.GL11;
 
@@ -60,7 +59,7 @@ public class EditSelection
         _variables.clear();
         _selectionChanged = true;
         _selection = null;
-        ChatMessage.localOutput("Watson edits cleared", true);
+        ChatMessage.localOutputT("watson.message.filters.edits_clear");
         DataManager.getFilters().clear();
     }
 
@@ -161,8 +160,11 @@ public class EditSelection
                 int second = _calendar.get(Calendar.SECOND);
                 String player = (String) _variables.get("player");
 
-                String query = String.format(Locale.US, "/lb before %d.%d.%d %02d:%02d:%02d player %s coords limit %d", day, month, year, hour, minute, second, player, count);
-                Watson.logger.debug(query);
+                String query = String.format("/lb before %d.%d.%d %02d:%02d:%02d player %s coords limit %d", day, month, year, hour, minute, second, player, count);
+                if(Configs.Generic.DEBUG.getBooleanValue())
+                {
+                    Watson.logger.info(query);
+                }
                 ChatMessage.sendToServerChat(query);
             }
             else
@@ -191,8 +193,11 @@ public class EditSelection
                 int second = _calendar.get(Calendar.SECOND);
                 String player = (String) _variables.get("player");
 
-                String query = String.format(Locale.US, "/lb since %d.%d.%d %02d:%02d:%02d player %s coords limit %d asc", day, month, year, hour, minute, second, player, count);
-                Watson.logger.debug(query);
+                String query = String.format("/lb since %d.%d.%d %02d:%02d:%02d player %s coords limit %d asc", day, month, year, hour, minute, second, player, count);
+                if(Configs.Generic.DEBUG.getBooleanValue())
+                {
+                    Watson.logger.info(query);
+                }
                 ChatMessage.sendToServerChat(query);
             }
             else

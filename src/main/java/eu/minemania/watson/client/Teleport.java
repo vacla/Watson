@@ -1,7 +1,6 @@
 package eu.minemania.watson.client;
 
 import java.util.BitSet;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,8 +26,11 @@ public class Teleport
         Number nx = (isDouble.get(0) ? (Number) (x+0.5) : x);
         Number ny = (isDouble.get(1) ? (Number) (y+0.5) : y);
         Number nz = (isDouble.get(2) ? (Number) (z+0.5) : z);
-        String command = String.format(Locale.US, format, nx, ny, nz);
-        Watson.logger.debug(command);
+        String command = String.format(format, nx, ny, nz);
+        if(Configs.Generic.DEBUG.getBooleanValue())
+        {
+            Watson.logger.info(command);
+        }
         ChatMessage.sendToServerChat(command);
     }
 }

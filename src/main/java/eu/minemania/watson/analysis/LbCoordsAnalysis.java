@@ -1,11 +1,11 @@
 package eu.minemania.watson.analysis;
 
-import java.util.Locale;
 import java.util.regex.Matcher;
 
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.chat.Color;
+import eu.minemania.watson.chat.Highlight;
 import eu.minemania.watson.chat.IMatchedChatHandler;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.db.BlockEdit;
@@ -114,7 +114,6 @@ public class LbCoordsAnalysis extends Analysis
 
     void lbCoord(Text chat, Matcher m)
     {
-        System.out.println("test5");
         try
         {
             int index = Integer.parseInt(m.group(1));
@@ -156,10 +155,10 @@ public class LbCoordsAnalysis extends Analysis
             {
                 if (!type.getName().equals("minecraft:stone"))
                 {
-                    String signText = (sign1 != null) ? String.format(Locale.US, " [%s] [%s] [%s] [%s]", sign1, sign2, sign3, sign4) : "";
+                    String signText = (sign1 != null) ? String.format(" [%s] [%s] [%s] [%s]", sign1, sign2, sign3, sign4) : "";
 
-                    String year = (ymd[0] != 0) ? String.format(Locale.US, "%02d-", ymd[0]) : "";
-                    String output = String.format(Locale.US, "(%2d) %s%02d-%02d %02d:%02d:%02d (%d,%d,%d) %C%s %s%s", index, year, ymd[1], ymd[2], hour, minute, second, x, y, z, (created ? '+' : '-'), type.getName(), player, signText);
+                    String year = (ymd[0] != 0) ? String.format("%02d-", ymd[0]) : "";
+                    String output = String.format("(%2d) %s%02d-%02d %02d:%02d:%02d (%d,%d,%d) %C%s %s%s", index, year, ymd[1], ymd[2], hour, minute, second, x, y, z, (created ? '+' : '-'), type.getName(), player, signText);
                     ChatMessage.sendToLocalChat(color, null, output, true);
                 }
             }
@@ -167,10 +166,12 @@ public class LbCoordsAnalysis extends Analysis
             {
                 if (Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue())
                 {
+                    Highlight.toggleReturnBoolean();
                     ChatMessage.sendToLocalChat(color, null, chat.getString(), true);
                 }
                 else
                 {
+                    Highlight.toggleReturnBoolean();
                     ChatMessage.sendToLocalChat(chat, true);
                 }
             }
@@ -221,8 +222,8 @@ public class LbCoordsAnalysis extends Analysis
             {
                 if (!type.getName().equals("minecraft:stone"))
                 {
-                    String year = (ymd[0] != 0) ? String.format(Locale.US, "%02d-", ymd[0]) : "";
-                    String output = String.format(Locale.US, "(%2d) %s%02d-%02d %02d:%02d:%02d (%d,%d,%d) %s %s %s > %s", index, year, ymd[1], ymd[2], hour, minute, second, x, y, z, _world, player, weapon, victim);
+                    String year = (ymd[0] != 0) ? String.format("%02d-", ymd[0]) : "";
+                    String output = String.format("(%2d) %s%02d-%02d %02d:%02d:%02d (%d,%d,%d) %s %s %s > %s", index, year, ymd[1], ymd[2], hour, minute, second, x, y, z, _world, player, weapon, victim);
                     ChatMessage.sendToLocalChat(output, true);
                 }
             }
@@ -230,10 +231,12 @@ public class LbCoordsAnalysis extends Analysis
             {
                 if (Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue())
                 {
+                    Highlight.toggleReturnBoolean();
                     ChatMessage.sendToLocalChat(color, null, chat.getString(), true);
                 }
                 else
                 {
+                    Highlight.toggleReturnBoolean();
                     ChatMessage.sendToLocalChat(chat, true);
                 }
             }
@@ -273,9 +276,9 @@ public class LbCoordsAnalysis extends Analysis
             {
                 if (!type.getName().equals("minecraft:stone"))
                 {
-                    String year = (ymd[0] != 0) ? String.format(Locale.US, "%02d-", ymd[0]) : "";
+                    String year = (ymd[0] != 0) ? String.format("%02d-", ymd[0]) : "";
 
-                    String output = String.format(Locale.US, "(%2d) %s%02d-%02d %02d:%02d:%02d (%d,%d,%d) %C%s %C%s %s", index, year, ymd[1], ymd[2], hour, minute, second, x, y, z, '-', type.getName(), '+', newtype.getName(), player);
+                    String output = String.format("(%2d) %s%02d-%02d %02d:%02d:%02d (%d,%d,%d) %C%s %C%s %s", index, year, ymd[1], ymd[2], hour, minute, second, x, y, z, '-', type.getName(), '+', newtype.getName(), player);
                     ChatMessage.sendToLocalChat(output, true);
                 }
             }
@@ -283,10 +286,12 @@ public class LbCoordsAnalysis extends Analysis
             {
                 if (Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue())
                 {
+                    Highlight.toggleReturnBoolean();
                     ChatMessage.sendToLocalChat(color, null, chat.getString(), true);
                 }
                 else
                 {
+                    Highlight.toggleReturnBoolean();
                     ChatMessage.sendToLocalChat(chat, true);
                 }
             }
@@ -324,7 +329,7 @@ public class LbCoordsAnalysis extends Analysis
         {
             if (_currentPage != 0 && _currentPage < _pageCount && _pageCount <= Configs.Generic.MAX_AUTO_PAGES.getIntegerValue())
             {
-                ChatMessage.sendToServerChat(String.format(Locale.US, "/lb page %d", _currentPage + 1));
+                ChatMessage.sendToServerChat(String.format("/lb page %d", _currentPage + 1));
 
                 _currentPage = _pageCount = 0;
             }

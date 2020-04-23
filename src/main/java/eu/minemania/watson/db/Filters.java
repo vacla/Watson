@@ -13,11 +13,11 @@ public class Filters
     {
         if(_filters.size() == 0)
         {
-            ChatMessage.localOutput("No filters are set. All edits are accepted", true);
+            ChatMessage.localOutputT("watson.message.filters.filters_edits");
         }
         else
         {
-            ChatMessage.localOutput("Edits by the following players will be accepted", true);
+            ChatMessage.localOutputT("watson.message.filters.edits_accepted");
             StringBuilder message = new StringBuilder(' ');
             for(String player : _filters)
             {
@@ -30,14 +30,14 @@ public class Filters
 
     public void clear()
     {
-        ChatMessage.localOutput("Watson filters cleared", true);
+        ChatMessage.localOutputT("watson.message.filters.filters_clear");
         _filters.clear();
     }
 
     public void addPlayer(String player)
     {
         player = player.toLowerCase();
-        ChatMessage.localOutput("Added a filter to accept edits by " + player + ".", true);
+        ChatMessage.localOutputT("watson.message.filters.filter_added", player);
         _filters.add(player);
         DataManager.getEditSelection().getVariables().put("player", player);
     }
@@ -47,12 +47,12 @@ public class Filters
         player = player.toLowerCase();
         if(_filters.contains(player))
         {
-            ChatMessage.localOutput("Removed the filter for " + player + ".", true);
+            ChatMessage.localOutputT("watson.message.filters.filter_removed", player);
             _filters.remove(player);
         }
         else
         {
-            ChatMessage.localError("The is no filter for " + player + ".", true);
+            ChatMessage.localErrorT("watson.message.filters.filter_none", player);
         }
     }
 

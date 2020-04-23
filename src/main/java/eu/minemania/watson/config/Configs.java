@@ -41,41 +41,41 @@ public class Configs implements IConfigHandler
      */
     public static class Generic
     {
-        public static final ConfigBoolean ANNOTATION_SHOWN = new ConfigBoolean("annotationShown", true, "Shows annotation if enabled");
-        public static final ConfigBoolean AUTO_PAGE = new ConfigBoolean("autopage", true, "Does automatic 3 pages at a time if enabled");
-        public static final ConfigColor BILLBOARD_BACKGROUND = new ConfigColor("billboardBackground", "0xA8000000", "Background color of the annotations");
-        public static final ConfigColor BILLBOARD_FOREGROUND = new ConfigColor("billboardForeground", "0x7FFFFFFF", "Foreground color of the annotations");
-        public static final ConfigDouble CHAT_TIMEOUT = new ConfigDouble("chatTimeoutSeconds", 0.1, "The minimum amount of seconds between sent chat messages by the mod");
-        public static final ConfigBoolean DEBUG = new ConfigBoolean("debugWatson", false, "enables debugging of Watson");
-        public static final ConfigBoolean DISPLAYED = new ConfigBoolean("displayed", true, "If true, watson will draw stuff");
-        public static final ConfigBoolean ENABLED = new ConfigBoolean("enabled", true, "Enables watson fully");
-        public static final ConfigBoolean GROUPING_ORES_IN_CREATIVE = new ConfigBoolean("groupingOresInCreative", true, "Ores are grouped even in creative");
-        public static final ConfigBoolean LABEL_SHOWN = new ConfigBoolean("labelshown", true, "Show ore deposit number label");
-        public static final ConfigBoolean LINKED_CREATION = new ConfigBoolean("linkedcreation", false, "If true, block creations will be linked by vectors");
-        public static final ConfigBoolean LINKED_DESTRUCTION = new ConfigBoolean("linkeddestruction", false, "If true, block destruction will be linked by vectors");
-        public static final ConfigInteger MAX_AUTO_PAGES = new ConfigInteger("maxAutoPages", 10, "Amount of automatic stepped thru pages");
-        public static final ConfigBoolean ONLY_ORE_BLOCK = new ConfigBoolean("onlyOreBlock", false, "Only shows block in block space");
-        public static final ConfigInteger ORE_LINEWIDTH = new ConfigInteger("oreLinewidth", 3 , 1, 10, "Uses this linewidth for all ores if oreOutlineThicker is enabled");
-        public static final ConfigBoolean ORE_OUTLINE_THICKER = new ConfigBoolean("oreOutlineThicker", false, "Ore outline thicker when enabled\nIf false, uses the integer for outline in watson blocks list config\nDefault line width: 1");
-        public static final ConfigBoolean OUTLINE_SHOWN = new ConfigBoolean("outlineshown", true, "If true, wireframe outline will be displayed");
-        public static final ConfigInteger PAGE_LINES = new ConfigInteger("pagelines", 50, "Number of chat lines in a page");
-        public static final ConfigOptionList PLUGIN = new ConfigOptionList("plugin", Plugins.NULL, "which plugin does the server use");
-        public static final ConfigInteger POST_COUNT = new ConfigInteger("postCount", 45, "Number of edits to be run post");
-        public static final ConfigInteger PRE_COUNT = new ConfigInteger("precount", 45, "Number of edits to be fetched");
-        public static final ConfigBoolean RECOLOR_QUERY_RESULTS = new ConfigBoolean("recolourQueryResults", true, "Recolour query results in chat");
-        public static final ConfigBoolean REFORMAT_QUERY_RESULTS = new ConfigBoolean("reformatQueryResults", true, "Format query in chat more compact if enabled");
-        public static final ConfigDouble REGION_INFO_TIMEOUT = new ConfigDouble("regionInfoTimeoutSeconds", 5.0, 1.0, 9.0, "Sets the timeout in seconds when right clicking with a wooden sword");
-        public static final ConfigBoolean SELECTION_SHOWN = new ConfigBoolean("selectionShown", true, "If enabled selection will be shown");
-        public static final ConfigString SS_DATE_DIRECTORY = new ConfigString("ssDateDirectory", "yyyy-MM-dd HH:mm:ss", "Format for the screenshot subdirectory");
-        public static final ConfigBoolean SS_KEY_CUSTOM = new ConfigBoolean("ssKeyCustom", false, "Custom screenshot key");
-        public static final ConfigBoolean SS_PLAYER_DIRECTORY = new ConfigBoolean("ssPlayerDirectory", true, "Subdirectory named after the currently selected player is created to hold screenshots of his edits if enabled");
-        public static final ConfigBoolean SS_PLAYER_SUFFIX = new ConfigBoolean("ssPlayerSuffix", true, "Name of current selected player is appended to screenshot files");
-        public static final ConfigString TELEPORT_COMMAND = new ConfigString("teleportCommand", "/tppos %d %d %d", "Sets teleport command\n%d for integers\n%g for decimal numbers");
-        public static final ConfigBoolean TIME_ORDERED_DEPOSITS = new ConfigBoolean("timeOrderedDeposits", false, "If true, ore deposits should be numeric labeled when mined, when false it gets ordered in descending order of rareness of the ore");
-        public static final ConfigBoolean USE_CHAT_HIGHLIGHTS = new ConfigBoolean("useChatHighlights", false, "If true, chat highlighter will be enabled");
-        public static final ConfigDouble VECTOR_LENGTH = new ConfigDouble("vectorFloat", 4.0f, 4.0f, 10.0f, "The current displayed vector length");
-        public static final ConfigBoolean VECTOR_SHOWN = new ConfigBoolean("vectorShown", true, "Shows vector if enabled");
-        public static final ConfigString WATSON_PREFIX = new ConfigString("watsonPrefix", "watson", "The start of all Watson commands, without a slash");
+        public static final ConfigBoolean ANNOTATION_SHOWN = new ConfigBoolean("annotationShown", true, "watson.description.config.annotation_shown");
+        public static final ConfigBoolean AUTO_PAGE = new ConfigBoolean("autopage", true, "watson.description.config.auto_page");
+        public static final ConfigColor BILLBOARD_BACKGROUND = new ConfigColor("billboardBackground", "0xA8000000", "watson.description.config.billboard_background");
+        public static final ConfigColor BILLBOARD_FOREGROUND = new ConfigColor("billboardForeground", "0x7FFFFFFF", "watson.description.config.billboard_foreground");
+        public static final ConfigDouble CHAT_TIMEOUT = new ConfigDouble("chatTimeoutSeconds", 0.1, "watson.description.config.chat_timeout");
+        public static final ConfigBoolean DEBUG = new ConfigBoolean("debugWatson", false, "watson.description.config.debug");
+        public static final ConfigBoolean DISPLAYED = new ConfigBoolean("displayed", true, "watson.description.config.displayed");
+        public static final ConfigBoolean ENABLED = new ConfigBoolean("enabled", true, "watson.description.config.enabled");
+        public static final ConfigBoolean GROUPING_ORES_IN_CREATIVE = new ConfigBoolean("groupingOresInCreative", true, "watson.description.config.grouping_ores_in_creative");
+        public static final ConfigBoolean LABEL_SHOWN = new ConfigBoolean("labelshown", true, "watson.description.config.label_shown");
+        public static final ConfigBoolean LINKED_CREATION = new ConfigBoolean("linkedcreation", false, "watson.description.config.linked_creation");
+        public static final ConfigBoolean LINKED_DESTRUCTION = new ConfigBoolean("linkeddestruction", false, "watson.description.config.linked_description");
+        public static final ConfigInteger MAX_AUTO_PAGES = new ConfigInteger("maxAutoPages", 10, "watson.description.config.max_auto_pages");
+        public static final ConfigBoolean ONLY_ORE_BLOCK = new ConfigBoolean("onlyOreBlock", false, "watson.description.config.only_ore_block");
+        public static final ConfigInteger ORE_LINEWIDTH = new ConfigInteger("oreLinewidth", 3 , 1, 10, "watson.description.config.ore_linewidth");
+        public static final ConfigBoolean ORE_OUTLINE_THICKER = new ConfigBoolean("oreOutlineThicker", false, "watson.description.config.ore_outline_thicker");
+        public static final ConfigBoolean OUTLINE_SHOWN = new ConfigBoolean("outlineshown", true, "watson.description.config.outline_shown");
+        public static final ConfigInteger PAGE_LINES = new ConfigInteger("pagelines", 50, "watson.description.config.page_lines");
+        public static final ConfigOptionList PLUGIN = new ConfigOptionList("plugin", Plugins.NULL, "watson.description.config.plugin");
+        public static final ConfigInteger POST_COUNT = new ConfigInteger("postCount", 45, "watson.description.config.post_count");
+        public static final ConfigInteger PRE_COUNT = new ConfigInteger("precount", 45, "watson.description.config.pre_count");
+        public static final ConfigBoolean RECOLOR_QUERY_RESULTS = new ConfigBoolean("recolourQueryResults", true, "watson.description.config.recolor_query_results");
+        public static final ConfigBoolean REFORMAT_QUERY_RESULTS = new ConfigBoolean("reformatQueryResults", true, "watson.description.config.reformat_query_results");
+        public static final ConfigDouble REGION_INFO_TIMEOUT = new ConfigDouble("regionInfoTimeoutSeconds", 5.0, 1.0, 9.0, "watson.description.config.region_info_timeout");
+        public static final ConfigBoolean SELECTION_SHOWN = new ConfigBoolean("selectionShown", true, "watson.description.config.selection_shown");
+        public static final ConfigString SS_DATE_DIRECTORY = new ConfigString("ssDateDirectory", "yyyy-MM-dd HH:mm:ss", "watson.description.config.ss_date_directory");
+        public static final ConfigBoolean SS_KEY_CUSTOM = new ConfigBoolean("ssKeyCustom", false, "watson.description.config.ss_key_custom");
+        public static final ConfigBoolean SS_PLAYER_DIRECTORY = new ConfigBoolean("ssPlayerDirectory", true, "watson.description.config.ss_player_directory");
+        public static final ConfigBoolean SS_PLAYER_SUFFIX = new ConfigBoolean("ssPlayerSuffix", true, "watson.description.config.ss_player_suffix");
+        public static final ConfigString TELEPORT_COMMAND = new ConfigString("teleportCommand", "/tppos %d %d %d", "watson.description.config.teleport_command");
+        public static final ConfigBoolean TIME_ORDERED_DEPOSITS = new ConfigBoolean("timeOrderedDeposits", false, "watson.description.config.time_ordered_deposits");
+        public static final ConfigBoolean USE_CHAT_HIGHLIGHTS = new ConfigBoolean("useChatHighlights", false, "watson.description.config.use_chat_highlights");
+        public static final ConfigDouble VECTOR_LENGTH = new ConfigDouble("vectorFloat", 4.0f, 4.0f, 10.0f, "watson.description.config.vector_length");
+        public static final ConfigBoolean VECTOR_SHOWN = new ConfigBoolean("vectorShown", true, "watson.description.config.vector_shown");
+        public static final ConfigString WATSON_PREFIX = new ConfigString("watsonPrefix", "watson", "watson.description.config.watson_prefix");
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
                 ANNOTATION_SHOWN,
@@ -121,9 +121,9 @@ public class Configs implements IConfigHandler
      */
     public static class Lists
     {
-        public static final ConfigStringList HIGHLIGHT = new ConfigStringList("highlight", ImmutableList.of(), "What gets highlighted in chat");
-        public static final ConfigStringList SMALLER_RENDER_BOX = new ConfigStringList("Smaller render box", ImmutableList.of("minecraft:stone", "minecraft:gravel", "minecraft:dirt", "minecraft:diorite", "minecraft:sand", "minecraft:andesite", "minecraft:granite"), "blocks will have a smaller rendering box");
-        public static final ConfigStringList WATSON_BLOCKS = new ConfigStringList("watson blocks", setWatsonBlockData(), "Watson blocks");
+        public static final ConfigStringList HIGHLIGHT = new ConfigStringList("highlight", ImmutableList.of(), "watson.description.config.highlight");
+        public static final ConfigStringList SMALLER_RENDER_BOX = new ConfigStringList("Smaller render box", ImmutableList.of("minecraft:stone", "minecraft:gravel", "minecraft:dirt", "minecraft:diorite", "minecraft:sand", "minecraft:andesite", "minecraft:granite"), "watson.description.config.smaller_render_box");
+        public static final ConfigStringList WATSON_BLOCKS = new ConfigStringList("watson blocks", setWatsonBlockData(), "watson.description.config.watson_blocks");
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
                 HIGHLIGHT,
@@ -134,38 +134,44 @@ public class Configs implements IConfigHandler
 
     public static class Analysis
     {
-        public static final ConfigString CP_DETAILS = new ConfigString("cp details", "^(\\d+[.,]\\d+\\/h ago|\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}) - (#?\\w+) (\\w+) (\\w+).+", "Changes regex for cp details");
-        public static final ConfigString CP_INSPECTOR_COORDS = new ConfigString("cp inspector coords", "^----- CoreProtect ----- \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\)$", "Changes regex for cp inspector coords");
-        public static final ConfigString CP_LOOKUP_COORDS = new ConfigString("cp lookup coords", "^ +\\^ \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\/(.+)\\)$", "Changes regex for cp lookup coords");
-        public static final ConfigString CP_LOOKUP_HEADER = new ConfigString("cp lookup header", "^----- CoreProtect Lookup Results -----$", "Changes regex for cp lookup header");
-        public static final ConfigString DUTYMODE_DISABLE = new ConfigString("duty mode disable", "^\\[Duties\\] Duty mode disabled.*", "Changes regex for disable duty mode");
-        public static final ConfigString DUTYMODE_ENABLE = new ConfigString("duty mode enable", "^\\[Duties\\] Duty mode enabled.*", "Changes regex for enable duty mode");
-        public static final ConfigString LB_POSITION = new ConfigString("lb position", "^Block changes in the last \\d+ \\w+ at (-?\\d+):(-?\\d+):(-?\\d+) in (.+):$", "Changes regex for position text");
-        public static final ConfigString LB_KILLS = new ConfigString("lb kills", "^Kills in the last \\d+ \\w+ in (.+):$", "Changes regex for kills text");
-        public static final ConfigString LB_COORD_POSITION = new ConfigString("lb coord position", "^Block changes in the last \\d+ \\w+ in (.+):$", "Changes regex for coords position text");
-        public static final ConfigString LB_EDIT = new ConfigString("lb edit", "^\\[((?:\\d{2,4}-)?\\d{2}-\\d{2}) (\\d{2}):(\\d{2})(?::?)(\\d{2})?\\] (\\w+) (created|destroyed) ((?: |\\w)+)( \\[.*\\] \\[.*\\\\] \\[.*\\] \\[.*\\])?$", "Changes regex for edits text");
-        public static final ConfigString LB_EDIT_REPLACED = new ConfigString("lb edit replaced", "^\\[((?:\\d{2,4}-)?\\d{2}-\\d{2}) (\\d{2}):(\\d{2})(?::?)(\\d{2})?\\] (\\w+) replaced ((?: |\\w)+) with ((?: |\\w)+)$", "Changes regex for edits replaced text");
-        public static final ConfigString LB_COORD = new ConfigString("lb coord", "^\\((\\d+)\\) \\[((?:\\d{2,4}-)?\\d{2}-\\d{2}) (\\d{2}):(\\d{2})(?::?)(\\d{2})?\\] (\\w+) (created|destroyed) ([a-zA-Z_]+)(?: \\[(?<sign1>.*)\\] \\[(?<sign2>.*)\\] \\[(?<sign3>.*)\\] \\[(?<sign4>.*)\\])? at (-?\\d+), (\\d+), (-?\\d+)$", "Changes regex for coords text");
-        public static final ConfigString LB_COORD_KILLS = new ConfigString("lb coord kills", "^\\((\\d+)\\) \\[((?:\\\\d{2,4}-)?\\d{2}-\\d{2}) (\\d{2}):(\\d{2})(?::?)(\\d{2})?\\] (\\w+) killed (\\w+) at (-?\\d+):(\\d+):(-?\\d+) with (.*)$", "Changes regex for coords kills text");
-        public static final ConfigString LB_COORD_REPLACED = new ConfigString("lb coord replaced", "^\\((\\d+)\\) ((?:\\d{2,4}-)?\\d{2}-\\d{2}) (\\d{2}):(\\d{2})(?::?)(\\d{2})?\\] (\\w+) replaced ([a-zA-Z_]+) with ([a-zA-Z_]+) at (-?\\d+):(\\d+):(-?\\d+)$", "Changes regex for coords replaced text");
-        public static final ConfigString LB_TP = new ConfigString("lb tp", "^Teleported to (-?\\d+):(\\d+):(-?\\d+)$", "Changes regex for teleport text");
-        public static final ConfigString LB_PAGE = new ConfigString("lb page", "^Page (\\d+)/(\\d+)$", "Changes regex for page text");
-        public static final ConfigString LB_HEADER_NO_RESULTS = new ConfigString("lb header no results", "^No results found\\.$", "Changes regex for header no results");
-        public static final ConfigString LB_HEADER_CHANGES = new ConfigString("lb header changes", "^\\d+ changes? found\\.$", "Changes regex for header changes");
-        public static final ConfigString LB_HEADER_BLOCKS = new ConfigString("lb header blocks", "^\\d+ blocks? found\\.$", "Changes regex for header blocks");
-        public static final ConfigString LB_HEADER_SUM_BLOCKS = new ConfigString("lb header sum blocks", "^Created - Destroyed - Block$", "Changes regex for header sum blocks");
-        public static final ConfigString LB_HEADER_SUM_PLAYERS = new ConfigString("lb header sum players", "^Created - Destroyed - Player$", "Changes regex for header sum players");
-        public static final ConfigString LB_HEADER_SEARCHING = new ConfigString("lb header searching", "^Searching Block changes from player \\w+ in the last \\d+ minutes (?:within \\d+ blocks of you )?in .+:$", "Changes regex for header searching");
-        public static final ConfigString LB_HEADER_RATIO = new ConfigString("lb header ratio", "^Stone and diamond ore changes from player \\w+ between (\\d+) and (\\d+) minutes ago in .+ summed up by blocks:$", "Changes regex for header ratio");
-        public static final ConfigString LB_HEADER_RATIO_CURRENT = new ConfigString("lb header ratio current", "^Stone and diamond ore changes from player \\w+ in the last (\\d+) minutes in .+ summed up by blocks:$", "Changes regex for header ratio current");
-        public static final ConfigString LB_HEADER_TIME_CHECK = new ConfigString("lb header time check", "Block changes from player \\w+ between (\\d+) and \\d+ minutes ago in .+:", "Changes regex for header time check");
-        public static final ConfigString LB_HEADER_BLOCK = new ConfigString("lb header block", "^(?: |,|\\w)+ (?:destructions|changes) from player \\w+ (?:in the last \\d+ minutes |between \\d+ and \\d+ minutes ago |more than -?\\d+ minutes ago )?(?:within \\d+ blocks of you )?in .+(?: summed up by (players|blocks))?:$", "Changes regex for header block");
-        public static final ConfigString LB_SUM = new ConfigString("lb sum", "^(\\d+)[ ]{6,}(\\d+)[ ]{6,}((?:\\w| )+)$", "Changes regex for header sum");
-        public static final ConfigString MODMODE_DISABLE = new ConfigString("modmode disable", "^You are no longer in ModMode!$", "Changes regex modmode disable");
-        public static final ConfigString MODMODE_ENABLE = new ConfigString("modmode enable", "^You are now in ModMode!$", "Changes regex modmode enable");
-        public static final ConfigString WG_REGIONS = new ConfigString("wg regions", "^Applicable regions: ([a-zA-Z0-9_-]+(?:, [a-zA-Z0-9_-]+)*)$", "Changes regex wg regions");
+        public static final ConfigStringExt CP_DETAILS = new ConfigStringExt("cp details", "^(\\d+[.,]\\d+\\/h ago|\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}) - (#?\\w+) (\\w+) (\\w+).+", "watson.description.config.analysis").setCommentArgs("cp details");
+        public static final ConfigStringExt CP_INSPECTOR_COORDS = new ConfigStringExt("cp inspector coords", "^----- CoreProtect ----- \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\)$", "watson.description.config.analysis").setCommentArgs("cp inspector coords");
+        public static final ConfigStringExt CP_LOOKUP_COORDS = new ConfigStringExt("cp lookup coords", "^ +\\^ \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\/(.+)\\)$", "watson.description.config.analysis").setCommentArgs("cp lookup coords");
+        public static final ConfigStringExt CP_LOOKUP_HEADER = new ConfigStringExt("cp lookup header", "^----- CoreProtect Lookup Results -----$", "watson.description.config.analysis").setCommentArgs("cp lookup header");
+        public static final ConfigStringExt DUTYMODE_DISABLE = new ConfigStringExt("duty mode disable", "^\\[Duties\\] Duty mode disabled.*", "watson.description.config.analysis").setCommentArgs("duty mode disable");
+        public static final ConfigStringExt DUTYMODE_ENABLE = new ConfigStringExt("duty mode enable", "^\\[Duties\\] Duty mode enabled.*", "watson.description.config.analysis").setCommentArgs("duty mode enable");
+        public static final ConfigStringExt LB_POSITION = new ConfigStringExt("lb position", "^Block changes in the last \\d+ \\w+ at (-?\\d+):(-?\\d+):(-?\\d+) in (.+):$", "watson.description.config.analysis").setCommentArgs("lb position");
+        public static final ConfigStringExt LB_KILLS = new ConfigStringExt("lb kills", "^Kills in the last \\d+ \\w+ in (.+):$", "watson.description.config.analysis").setCommentArgs("lb kills");
+        public static final ConfigStringExt LB_COORD_POSITION = new ConfigStringExt("lb coord position", "^Block changes in the last \\d+ \\w+ in (.+):$", "watson.description.config.analysis").setCommentArgs("lb coord position");
+        public static final ConfigStringExt LB_EDIT = new ConfigStringExt("lb edit", "^\\[((?:\\d{2,4}-)?\\d{2}-\\d{2}) (\\d{2}):(\\d{2})(?::?)(\\d{2})?\\] (\\w+) (created|destroyed) ((?: |\\w)+)( \\[.*\\] \\[.*\\\\] \\[.*\\] \\[.*\\])?$", "watson.description.config.analysis").setCommentArgs("lb edit");
+        public static final ConfigStringExt LB_EDIT_REPLACED = new ConfigStringExt("lb edit replaced", "^\\[((?:\\d{2,4}-)?\\d{2}-\\d{2}) (\\d{2}):(\\d{2})(?::?)(\\d{2})?\\] (\\w+) replaced ((?: |\\w)+) with ((?: |\\w)+)$", "watson.description.config.analysis").setCommentArgs("lb edit replaced");
+        public static final ConfigStringExt LB_COORD = new ConfigStringExt("lb coord", "^\\((\\d+)\\) \\[((?:\\d{2,4}-)?\\d{2}-\\d{2}) (\\d{2}):(\\d{2})(?::?)(\\d{2})?\\] (\\w+) (created|destroyed) ([a-zA-Z_]+)(?: \\[(?<sign1>.*)\\] \\[(?<sign2>.*)\\] \\[(?<sign3>.*)\\] \\[(?<sign4>.*)\\])? at (-?\\d+), (\\d+), (-?\\d+)$", "watson.description.config.analysis").setCommentArgs("lb coord");
+        public static final ConfigStringExt LB_COORD_KILLS = new ConfigStringExt("lb coord kills", "^\\((\\d+)\\) \\[((?:\\\\d{2,4}-)?\\d{2}-\\d{2}) (\\d{2}):(\\d{2})(?::?)(\\d{2})?\\] (\\w+) killed (\\w+) at (-?\\d+):(\\d+):(-?\\d+) with (.*)$", "watson.description.config.analysis").setCommentArgs("lb coord kills");
+        public static final ConfigStringExt LB_COORD_REPLACED = new ConfigStringExt("lb coord replaced", "^\\((\\d+)\\) ((?:\\d{2,4}-)?\\d{2}-\\d{2}) (\\d{2}):(\\d{2})(?::?)(\\d{2})?\\] (\\w+) replaced ([a-zA-Z_]+) with ([a-zA-Z_]+) at (-?\\d+):(\\d+):(-?\\d+)$", "watson.description.config.analysis").setCommentArgs("lb coord replaced");
+        public static final ConfigStringExt LB_TP = new ConfigStringExt("lb tp", "^Teleported to (-?\\d+):(\\d+):(-?\\d+)$", "watson.description.config.analysis").setCommentArgs("lb tp");
+        public static final ConfigStringExt LB_PAGE = new ConfigStringExt("lb page", "^Page (\\d+)/(\\d+)$", "watson.description.config.analysis").setCommentArgs("lb page");
+        public static final ConfigStringExt LB_HEADER_NO_RESULTS = new ConfigStringExt("lb header no results", "^No results found\\.$", "watson.description.config.analysis").setCommentArgs("lb header no results");
+        public static final ConfigStringExt LB_HEADER_CHANGES = new ConfigStringExt("lb header changes", "^\\d+ changes? found\\.$", "watson.description.config.analysis").setCommentArgs("lb header changes");
+        public static final ConfigStringExt LB_HEADER_BLOCKS = new ConfigStringExt("lb header blocks", "^\\d+ blocks? found\\.$", "watson.description.config.analysis").setCommentArgs("lb header blocks");
+        public static final ConfigStringExt LB_HEADER_SUM_BLOCKS = new ConfigStringExt("lb header sum blocks", "^Created - Destroyed - Block$", "watson.description.config.analysis").setCommentArgs("lb header sum blocks");
+        public static final ConfigStringExt LB_HEADER_SUM_PLAYERS = new ConfigStringExt("lb header sum players", "^Created - Destroyed - Player$", "watson.description.config.analysis").setCommentArgs("lb header sum players");
+        public static final ConfigStringExt LB_HEADER_SEARCHING = new ConfigStringExt("lb header searching", "^Searching Block changes from player \\w+ in the last \\d+ minutes (?:within \\d+ blocks of you )?in .+:$", "watson.description.config.analysis").setCommentArgs("lb header searching");
+        public static final ConfigStringExt LB_HEADER_RATIO = new ConfigStringExt("lb header ratio", "^Stone and diamond ore changes from player \\w+ between (\\d+) and (\\d+) minutes ago in .+ summed up by blocks:$", "watson.description.config.analysis").setCommentArgs("lb header ratio");
+        public static final ConfigStringExt LB_HEADER_RATIO_CURRENT = new ConfigStringExt("lb header ratio current", "^Stone and diamond ore changes from player \\w+ in the last (\\d+) minutes in .+ summed up by blocks:$", "watson.description.config.analysis").setCommentArgs("lb header ratio current");
+        public static final ConfigStringExt LB_HEADER_TIME_CHECK = new ConfigStringExt("lb header time check", "Block changes from player \\w+ between (\\d+) and \\d+ minutes ago in .+:", "watson.description.config.analysis").setCommentArgs("lb header time check");
+        public static final ConfigStringExt LB_HEADER_BLOCK = new ConfigStringExt("lb header block", "^(?: |,|\\w)+ (?:destructions|changes) from player \\w+ (?:in the last \\d+ minutes |between \\d+ and \\d+ minutes ago |more than -?\\d+ minutes ago )?(?:within \\d+ blocks of you )?in .+(?: summed up by (players|blocks))?:$", "watson.description.config.analysis").setCommentArgs("lb header block");
+        public static final ConfigStringExt LB_SUM = new ConfigStringExt("lb sum", "^(\\d+)[ ]{6,}(\\d+)[ ]{6,}((?:\\w| )+)$", "watson.description.config.analysis").setCommentArgs("lb sum");
+        public static final ConfigStringExt MODMODE_DISABLE = new ConfigStringExt("modmode disable", "^You are no longer in ModMode!$", "watson.description.config.analysis").setCommentArgs("modmode disable");
+        public static final ConfigStringExt MODMODE_ENABLE = new ConfigStringExt("modmode enable", "^You are now in ModMode!$", "watson.description.config.analysis").setCommentArgs("modmode enable");
+        public static final ConfigStringExt WG_REGIONS = new ConfigStringExt("wg regions", "^Applicable regions: ([a-zA-Z0-9_-]+(?:, [a-zA-Z0-9_-]+)*)$", "watson.description.config.analysis").setCommentArgs("wg regions");
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
+                CP_DETAILS,
+                CP_INSPECTOR_COORDS,
+                CP_LOOKUP_COORDS,
+                CP_LOOKUP_HEADER,
+                DUTYMODE_DISABLE,
+                DUTYMODE_ENABLE,
                 LB_COORD,
                 LB_COORD_KILLS,
                 LB_COORD_POSITION,
@@ -186,7 +192,10 @@ public class Configs implements IConfigHandler
                 LB_PAGE,
                 LB_POSITION,
                 LB_SUM,
-                LB_TP
+                LB_TP,
+                MODMODE_DISABLE,
+                MODMODE_ENABLE,
+                WG_REGIONS
                 );
     }
 

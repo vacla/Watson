@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -263,13 +262,13 @@ public class DataManager implements IDirectoryCache
             String player = (String) getEditSelection().getVariables().get("player");
             if(player == null)
             {
-                ChatMessage.localError("No current player set, so you must specify a file name.", true);
+                ChatMessage.localErrorT("watson.message.blockedit.no_player");
                 return;
             }
             else
             {
                 Calendar calendar = Calendar.getInstance();
-                fileName = String.format(Locale.US, "%s-%4d-%02d-%02d-%02d.%02d.%02d", player, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
+                fileName = String.format("%s-%4d-%02d-%02d-%02d.%02d.%02d", player, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
             }
         }
 
@@ -279,12 +278,12 @@ public class DataManager implements IDirectoryCache
             BlockEditSet edits = DataManager.getEditSelection().getBlockEditSet();
             int editCount = edits.save(file);
             int annoCount = edits.getAnnotations().size();
-            ChatMessage.localOutput(String.format(Locale.US, "Saved %d edits and %d annotations to %s", editCount, annoCount, fileName), true);
+            ChatMessage.localOutputT("watson.message.blockedit.edits_annotations.saved", editCount, annoCount, fileName);
         }
         catch (IOException e)
         {
             Watson.logger.error("error saving BlockEditSet to " + file, e);
-            ChatMessage.localError("The file " + fileName + " could not be saved.", true);
+            ChatMessage.localErrorT("watson.message.blockedit.not_saved", fileName);
         }
     }
 
@@ -307,17 +306,17 @@ public class DataManager implements IDirectoryCache
                 BlockEditSet edits = DataManager.getEditSelection().getBlockEditSet();
                 int editCount = edits.load(file);
                 int annoCount = edits.getAnnotations().size();
-                ChatMessage.localOutput(String.format(Locale.US, "Loaded %d edits and %d annotations from %s", editCount, annoCount, file.getName()), true);
+                ChatMessage.localOutputT("watson.message.blockedit.edits_annotations.loaded", editCount, annoCount, file.getName());
             }
             catch (Exception e)
             {
                 Watson.logger.error("error loading BlockEditSet from " + file, e);
-                ChatMessage.localError("The file " + fileName + " could not be loaded.", true);
+                ChatMessage.localErrorT("watson.message.blockedit.not_loaded", fileName);
             }
         }
         else
         {
-            ChatMessage.localError("Can't open " + fileName + " to read.", true);
+            ChatMessage.localErrorT("watson.message.blockedit.not_read", fileName);
         }
     }
 
@@ -326,27 +325,27 @@ public class DataManager implements IDirectoryCache
         File[] files = getInstance().getBlockEditFileList(prefix);
         if(files.length == 0)
         {
-            ChatMessage.localOutput("No matching files.", true);
+            ChatMessage.localOutputT("watson.message.blockedit.not_match");
         }
         else
         {
             if(files.length == 1)
             {
-                ChatMessage.localOutput("1 matching file:", true);
+                ChatMessage.localOutputT("watson.message.blockedit.match_file.1");
             }
             else
             {
-                ChatMessage.localOutput(files.length + " matching files:", true);
+                ChatMessage.localOutputT("watson.message.blockedit.match_file.more", files.length);
             }
 
             int pages = (files.length + Configs.Generic.PAGE_LINES.getIntegerValue() - 1) / Configs.Generic.PAGE_LINES.getIntegerValue();
             if(page > pages)
             {
-                ChatMessage.localError(String.format(Locale.US, "The highest page is %d.", page), true);
+                ChatMessage.localErrorT("watson.message.blockedit.highest_page", page);
             }
             else
             {
-                ChatMessage.localOutput(String.format(Locale.US, "Page %d of %d.", page, pages), true);
+                ChatMessage.localOutputT("watson.message.blockedit.pages", page, pages);
 
                 int start = (page - 1) * Configs.Generic.PAGE_LINES.getIntegerValue();
                 int end = Math.min(files.length, page * Configs.Generic.PAGE_LINES.getIntegerValue());
@@ -356,10 +355,10 @@ public class DataManager implements IDirectoryCache
                     ChatMessage.localOutput("     " + files[i].getName(), true);
                 }
 
-                ChatMessage.localOutput(String.format(Locale.US, "Page %d of %d.", page, pages), true);
+                ChatMessage.localOutputT("watson.message.blockedit.pages", page, pages);
                 if(page < pages)
                 {
-                    ChatMessage.localOutput(String.format(Locale.US, "Use \"/%s file list %s %d\" to see the next page.", Configs.Generic.WATSON_PREFIX.getStringValue(), prefix, (page + 1)), true);
+                    ChatMessage.localOutputT("watson.message.blockedit.next_page", Configs.Generic.WATSON_PREFIX.getStringValue(), prefix, (page + 1));
                 }
             }
         }
@@ -375,26 +374,26 @@ public class DataManager implements IDirectoryCache
             {
                 if(file.delete())
                 {
-                    ChatMessage.localOutput("Deleted " + file.getName(), true);
+                    ChatMessage.localOutputT("watson.message.blockedit.deleted", file.getName());
                 }
                 else
                 {
                     ++failed;
                 }
             }
-            String message = String.format(Locale.US, "Deleted %d out of %d save files matching \"%s\".", (files.length - failed), files.length, prefix);
+            String message = "watson.message.blockedit.deleted_matching";
             if(failed == 0)
             {
-                ChatMessage.localOutput(message, true);
+                ChatMessage.localOutputT(message, (files.length - failed), files.length, prefix);
             }
             else
             {
-                ChatMessage.localError(message, true);
+                ChatMessage.localErrorT(message, (files.length - failed), files.length, prefix);
             }
         }
         else
         {
-            ChatMessage.localOutput(String.format(Locale.US, "There are no save files matching \"%s\".", prefix), true);
+            ChatMessage.localOutputT("watson.message.blockedit.no_matching", prefix);
         }
     }
 
@@ -418,7 +417,7 @@ public class DataManager implements IDirectoryCache
             }
             catch (Exception e)
             {
-                ChatMessage.localError(date + " is not a valid date of the form YYYY-MM-DD.", true);
+                ChatMessage.localErrorT("watson.message.blockedit.date_not_valid", date);
                 return;
             }
 
@@ -432,35 +431,35 @@ public class DataManager implements IDirectoryCache
                     if(file.delete())
                     {
                         ++deleted;
-                        ChatMessage.localOutput("Deleted " + file.getName(), true);
+                        ChatMessage.localOutputT("watson.message.blockedit.deleted", file.getName());
                     }
                     else
                     {
                         ++failed;
-                        ChatMessage.localError("Could not delete " + file.getName(), true);
+                        ChatMessage.localErrorT("watson.message.blockedit.not_delete", file.getName());
                     }
                 }
             }
             if(deleted + failed == 0)
             {
-                ChatMessage.localOutput("There are no save files older than " + date + " 00:00:00 to delete.", true);
+                ChatMessage.localOutputT("watson.message.blockedit.nothing_between", date);
             }
             else
             {
-                String message = String.format(Locale.US, "Deleted %d out of %d save files older than %s 00:00:00", deleted, deleted + failed, date);
+                String message = "watson.message.blockedit.deleted_older";
                 if(failed == 0)
                 {
-                    ChatMessage.localOutput(message, true);
+                    ChatMessage.localOutputT(message, deleted, deleted + failed, date);
                 }
                 else
                 {
-                    ChatMessage.localError(message, true);
+                    ChatMessage.localErrorT(message, deleted, deleted + failed, date);
                 }
             }
         }
         else
         {
-            ChatMessage.localError("The date must take the form YYYY-MM-DD.", true);
+            ChatMessage.localErrorT("watson.message.blockedit.date_form");
         }
     }
 

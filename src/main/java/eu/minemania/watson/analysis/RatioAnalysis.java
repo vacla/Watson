@@ -1,7 +1,6 @@
 package eu.minemania.watson.analysis;
 
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.regex.Matcher;
 
 import eu.minemania.watson.Watson;
@@ -9,6 +8,7 @@ import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.chat.IMatchedChatHandler;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.db.TimeStamp;
+import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.text.Text;
 
 public class RatioAnalysis extends Analysis
@@ -121,31 +121,34 @@ public class RatioAnalysis extends Analysis
                 Calendar before = Calendar.getInstance();
                 before.set(Calendar.SECOND, 0);
                 before.add(Calendar.MINUTE, -(localMinusServer + _beforeMinutes));
-                String period = String.format(Locale.US, "Between %s and %s:", TimeStamp.formatQueryTime(since.getTimeInMillis()), TimeStamp.formatQueryTime(before.getTimeInMillis()));
-                Watson.logger.debug("Between " + _sinceMinutes + " and " + _beforeMinutes + " minutes ago ==>");
-                Watson.logger.debug(period);
+                String period = StringUtils.translate("watson.message.lb.between_period", TimeStamp.formatQueryTime(since.getTimeInMillis()), TimeStamp.formatQueryTime(before.getTimeInMillis()));
+                if(Configs.Generic.DEBUG.getBooleanValue())
+                {
+                    Watson.logger.info("Between " + _sinceMinutes + " and " + _beforeMinutes + " minutes ago ==>");
+                    Watson.logger.info(period);
+                }
 
                 String message;
                 if (_stoneCount <= 0)
                 {
-                    message = "Was the player spelunking?";
+                    message = "watson.message.lb.spelunk";
                 }
                 else if (_diamondCount < 0)
                 {
-                    message = "Player placed more diamonds than were destroyed.";
+                    message = "watson.message.lb.more_diamond_placed";
                 }
                 else if (_diamondCount == 0)
                 {
-                    message = "Did the player place and destroy previously silk touched diamonds?";
+                    message = "watson.message.lb.silktouch_diamond";
                 }
                 else
                 {
-                    message = String.format(Locale.US, "stone:diamond = %d / %d = %.3g", _stoneCount, _diamondCount, (_stoneCount / (double) _diamondCount));
+                    message = StringUtils.translate("watson.message.lb.stone_diamond", _stoneCount, _diamondCount, (_stoneCount / (double) _diamondCount));
                 }
 
                 ChatMessage.sendToLocalChat(chat, true);
                 ChatMessage.localOutput(period, true);
-                ChatMessage.localOutput(message, true);
+                ChatMessage.localOutputT(message);
                 reset();
 
                 return false;

@@ -2,7 +2,6 @@ package eu.minemania.watson.analysis;
 
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.regex.Matcher;
 
 import eu.minemania.watson.Watson;
@@ -53,9 +52,12 @@ public class ServerTime extends Analysis
                 if(Configs.Generic.PLUGIN.getOptionListValue().getStringValue().equals("LogBlock"))
                 {
                     Calendar pastTime = getPastTime();
-                    String date = String.format(Locale.US, "%d,%d,%d", pastTime.get(Calendar.DAY_OF_MONTH), pastTime.get(Calendar.MONTH) + 1, pastTime.get(Calendar.YEAR));
-                    String query = String.format(Locale.US, "/lb player %s since 00:00:00 before 00:00:01 limit 1", MinecraftClient.getInstance().player.getName().getString(), date, date);
-                    Watson.logger.debug("Server time query for " + serverIP + ": " + query);
+                    String date = String.format("%d,%d,%d", pastTime.get(Calendar.DAY_OF_MONTH), pastTime.get(Calendar.MONTH) + 1, pastTime.get(Calendar.YEAR));
+                    String query = String.format("/lb player %s since 00:00:00 before 00:00:01 limit 1", MinecraftClient.getInstance().player.getName().getString(), date, date);
+                    if(Configs.Generic.DEBUG.getBooleanValue())
+                    {
+                        Watson.logger.info("Server time query for " + serverIP + ": " + query);
+                    }
                     _showServerTime = showServerTime;
                     ChatMessage.sendToServerChat(query);
                 }
@@ -103,8 +105,11 @@ public class ServerTime extends Analysis
             int localMinutes = (int) ((now.getTimeInMillis() - pastTime.getTimeInMillis()) / MINUTES_TO_MILLISECONDS);
             int localMinusServer = localMinutes - serverMinutes;
             _localMinusServerMinutes.put(serverIP, localMinusServer);
-            Watson.logger.debug("Past time was " + serverMinutes + " minutes ago on the server and " + localMinutes + " minutes ago on the client.");
-            Watson.logger.debug("Client is " + localMinusServer + " minutes ahead of the server.");
+            if(Configs.Generic.DEBUG.getBooleanValue())
+            {
+                Watson.logger.info("Past time was " + serverMinutes + " minutes ago on the server and " + localMinutes + " minutes ago on the client.");
+                Watson.logger.info("Client is " + localMinusServer + " minutes ahead of the server.");
+            }
             if(_showServerTime)
             {
                 showCurrentServerTime();
