@@ -2,7 +2,6 @@
     "watson.chat.message": "%s %s %s",
     "watson.chat.message.hover": "Time: %s",
     "watson.description.config.analysis": "Changes regex for %s",
-    "watson.description.config.analysis1": "Changes regex for",
     "watson.description.config.annotation_shown": "Shows annotation if enabled",
     "watson.description.config.auto_page": "Does automatic 3 pages at a time if enabled",
     "watson.description.config.billboard_background": "Background color of the annotations",
