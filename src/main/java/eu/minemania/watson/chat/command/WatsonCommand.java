@@ -10,6 +10,7 @@ import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import fi.dy.masa.malilib.gui.Message.MessageType;
 import fi.dy.masa.malilib.util.InfoUtils;
+import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.LiteralText;
 
@@ -221,7 +222,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Generic.DISPLAYED.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.display", strSetting);
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.display", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -239,7 +240,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Generic.OUTLINE_SHOWN.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.outline", strSetting);
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.outline", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -257,7 +258,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Generic.ANNOTATION_SHOWN.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.anno", strSetting);
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.anno", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -275,7 +276,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Generic.VECTOR_SHOWN.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector", strSetting);
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -293,7 +294,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Generic.LINKED_CREATION.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector.creation", strSetting);
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector.creation", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -311,7 +312,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Generic.LINKED_DESTRUCTION.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector.destruction", strSetting);
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector.destruction", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -337,7 +338,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Generic.LABEL_SHOWN.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.label", strSetting);
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.label", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -591,7 +592,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Generic.DEBUG.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.debug", strSetting);
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.debug", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -609,7 +610,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Generic.AUTO_PAGE.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.auto_page", strSetting);
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.auto_page", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -680,7 +681,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Generic.GROUPING_ORES_IN_CREATIVE.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.group_ores_creative", strSetting);
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.group_ores_creative", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -799,7 +800,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Generic.SS_PLAYER_DIRECTORY.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.ss_player_directory", strSetting);
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.ss_player_directory", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -817,7 +818,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Generic.SS_PLAYER_SUFFIX.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.ss_player_suffix", strSetting);
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.ss_player_suffix", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -851,7 +852,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Generic.REFORMAT_QUERY_RESULTS.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.reformat_query_results", strSetting);
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.reformat_query_results", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -869,7 +870,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.recolor_query_results", strSetting);
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.recolor_query_results", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -928,7 +929,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Generic.USE_CHAT_HIGHLIGHTS.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.chat_highlights", strSetting);
+        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.chat_highlights", StringUtils.translate(strSetting));
         return 1;
     }
 

@@ -71,7 +71,7 @@ public class OreDB
         int depositCount = getOreDepositCount();
         if(depositCount == 0)
         {
-            ChatMessage.localOutputT("waton.message.deposit.none");
+            ChatMessage.localOutputT("watson.message.deposit.none");
         }
         else
         {
