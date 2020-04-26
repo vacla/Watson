@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import fi.dy.masa.malilib.util.Color4f;
+import fi.dy.masa.malilib.util.PositionUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.BufferBuilder;
@@ -14,7 +15,6 @@ import net.minecraft.util.math.BlockPos;
 public class RenderUtils
 {
     private static final Random RAND = new Random();
-    public static final Direction[] FACING_ALL = new Direction[] { Direction.DOWN, Direction.UP, Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST };
 
     public static void drawFullBlockOutlinesBatched(float x, float y, float z, Color4f color, BufferBuilder buffer)
     {
@@ -106,7 +106,7 @@ public class RenderUtils
      */
     public static void drawBlockModelOutlinesBatched(BakedModel model, BlockState state, BlockPos pos, Color4f color, BufferBuilder buffer)
     {
-        for (final Direction side : FACING_ALL)
+        for (final Direction side : PositionUtils.ALL_DIRECTIONS)
         {
             renderModelQuadOutlines(pos, color, model.getQuads(state, side, RAND), buffer);
         }

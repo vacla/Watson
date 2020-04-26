@@ -9,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.tuple.MutablePair;
+import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
 import fi.dy.masa.malilib.gui.Message.MessageType;
 import fi.dy.masa.malilib.util.InfoUtils;
@@ -71,6 +72,10 @@ public class Highlight
         {
             endMessage = message;
         }
+        if(Configs.Generic.DEBUG.getBooleanValue())
+        {
+            Watson.logger.info("vanilla message: "+ endMessage);
+        }
         return endMessage;
     }
 
@@ -102,8 +107,16 @@ public class Highlight
         }
         if(serverBrand.contains("spigot") || serverBrand.contains("paper"))
         {
+            if(Configs.Generic.DEBUG.getBooleanValue())
+            {
+                Watson.logger.info("message: "+message);
+            }
             for(Text chatComponent : message)
             {
+                if(Configs.Generic.DEBUG.getBooleanValue())
+                {
+                    Watson.logger.info("component: "+chatComponent);
+                }
                 if(i > 0)
                 {
                     chat += chatComponent.asFormattedString();
@@ -119,7 +132,7 @@ public class Highlight
                 i++;
             }
 
-            if(chat.contains("<") && chat.contains(">") && !chat.startsWith("/"))
+            if(chat.contains("<") && chat.contains(">") && !chat.startsWith("/") && (!chat.startsWith("§") && chat.charAt(2) != '/'))
             {
                 int startUsername = chat.indexOf("<") + 1;
                 int endUsername = chat.indexOf(">");
@@ -146,23 +159,40 @@ public class Highlight
                     endMessage = prefix;
                 }
             }
-            else if (chat.contains(" "+divineDivider+" "))
+            else if (chat.contains(divineDivider))
             {
-                int startUsername = chat.indexOf("]") + 2;
+                if(Configs.Generic.DEBUG.getBooleanValue())
+                {
+                    Watson.logger.info("chat: "+chat);
+                }
+                int startUsername = chat.indexOf("]") + 1;
                 int endUsername = chat.indexOf(divineDivider) - 1;
                 if(prefix.equals(new LiteralText("")) && (chat.contains("[") && chat.contains("]")) && chat.indexOf("]") < endUsername)
                 {
                     String textPrefix;
-                    textPrefix = chat.substring(chat.indexOf("["), chat.indexOf("]") + 2);
+                    textPrefix = chat.substring(chat.indexOf("["), chat.indexOf("]") + 1);
                     if(prefixStyle != null)
                     {
                         textPrefix = prefixStyle.asString() + textPrefix + Formatting.RESET;
+                        if(Configs.Generic.DEBUG.getBooleanValue())
+                        {
+                            Watson.logger.info("prefixStyle: "+ prefixStyle + " as string: " + prefixStyle.asString() + " formatting: " + Formatting.RESET);
+                            Watson.logger.info("text prefix: "+textPrefix);
+                        }
                     }
                     prefix = new LiteralText(textPrefix);
+                    if(Configs.Generic.DEBUG.getBooleanValue())
+                    {
+                        Watson.logger.info("prefix: "+prefix.asString());
+                    }
                 }
                 if(!prefix.equals(new LiteralText("")) || chat.startsWith("["))
                 {
                     username = chat.substring(startUsername, endUsername);
+                    if(Configs.Generic.DEBUG.getBooleanValue())
+                    {
+                        Watson.logger.info("username: "+ username);
+                    }
                 }
                 else
                 {
@@ -188,12 +218,30 @@ public class Highlight
                     }
                     if(!textMessage.isEmpty())
                     {
+                        if(Configs.Generic.DEBUG.getBooleanValue())
+                        {
+                            Watson.logger.info("textmessage: "+textMessage);
+                            Watson.logger.info("divider: "+beforeDivider.asFormattedString());
+                        }
                         message = beforeDivider.append(new LiteralText(highlight(textMessage)));
+                        if(Configs.Generic.DEBUG.getBooleanValue())
+                        {
+                            Watson.logger.info("total message: "+message.asFormattedString());
+                        }
                     }
                     return endMessage = message;
                 }
 
-                textChat = chat.substring(endUsername + 3);
+                textChat = chat.substring(endUsername + 2);
+                if(Configs.Generic.DEBUG.getBooleanValue())
+                {
+                    Watson.logger.info("input textChat1: "+ textChat);
+                }
+                textChat = textChat.replaceFirst("\u00A7[a-z0-9]\u00A7[a-z0-9] ", "");
+                if(Configs.Generic.DEBUG.getBooleanValue())
+                {
+                    Watson.logger.info("output textChat2: "+ textChat);
+                }
                 changeUsername = true;
                 setUsername(username, prefixStyle);
                 Text displayName = mc.player.getDisplayName();
@@ -212,7 +260,15 @@ public class Highlight
                 changeUsername = false;
                 if(!prefix.equals(new LiteralText("")))
                 {
+                    if(Configs.Generic.DEBUG.getBooleanValue())
+                    {
+                        Watson.logger.info("endmessage1: "+ endMessage);
+                    }
                     prefix.append(endMessage);
+                    if(Configs.Generic.DEBUG.getBooleanValue())
+                    {
+                        Watson.logger.info("endmessage2: "+ prefix);
+                    }
                     endMessage = prefix;
                 }
             }
@@ -224,6 +280,10 @@ public class Highlight
         else
         {
             endMessage = message;
+        }
+        if(Configs.Generic.DEBUG.getBooleanValue())
+        {
+            Watson.logger.info("endmessage3: "+ endMessage);
         }
         return endMessage;
     }
