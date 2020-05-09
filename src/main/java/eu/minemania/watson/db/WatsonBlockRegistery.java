@@ -79,7 +79,7 @@ public final class WatsonBlockRegistery
                         else
                         {
                             Optional<EntityType<?>> entity = EntityType.get(watsonBlockData[0]);
-                            if(entity != null)
+                            if(entity.isPresent())
                             {
                                 watsonBlock.setName(watsonBlockData[0]);
                                 float lineWidth = Float.parseFloat(watsonBlockData[1]);

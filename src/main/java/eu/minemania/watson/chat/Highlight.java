@@ -189,6 +189,10 @@ public class Highlight
                 if(!prefix.equals(new LiteralText("")) || chat.startsWith("["))
                 {
                     username = chat.substring(startUsername, endUsername);
+                    if(username.endsWith("\u00A7"))
+                    {
+                        username = username.concat("r");
+                    }
                     if(Configs.Generic.DEBUG.getBooleanValue())
                     {
                         Watson.logger.info("username: "+ username);

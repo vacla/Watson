@@ -96,7 +96,7 @@ public class BlockEdit
 
     private void renderEntities(BufferBuilder buffer, Optional<EntityType<?>> entity)
     {
-        if(entity != null)
+        if(entity.isPresent())
         {
             if(block.getName().equals("minecraft:item_frame") || block.getName().equals("minecraft:painting"))
             {

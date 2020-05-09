@@ -56,7 +56,7 @@ public abstract class MixinPlayerEntity extends LivingEntity
     @ModifyVariable(method = "addTellClickEvent(Lnet/minecraft/text/Text;)Lnet/minecraft/text/Text;", at = @At("HEAD"))
     private Text changeUsernameColor(Text componentln)
     {
-        if(Highlight.changeUsername)
+        if(Highlight.changeUsername && !(Highlight.getPrefixColor() == null))
         {
             componentln.formatted(Highlight.getPrefixColor().getColor());
         }
