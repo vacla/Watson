@@ -25,6 +25,11 @@ public class PlayereditSet
         _player = player;
     }
 
+    public TreeSet<BlockEdit> getBlockEdits()
+    {
+        return _edits;
+    }
+
     public String getPlayer()
     {
         return _player;

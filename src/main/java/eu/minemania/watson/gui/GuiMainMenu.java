@@ -28,6 +28,8 @@ public class GuiMainMenu extends GuiBase
         int width = this.getButtonWidth();
 
         this.createChangeMenuButton(x, y, width, ButtonListenerChangeMenu.ButtonType.CONFIGURATION);
+        y += 22;
+        this.createChangeMenuButton(x, y, width, ButtonListenerChangeMenu.ButtonType.PLAYEREDIT_LOADED);
     }
 
     private void createChangeMenuButton(int x, int y, int width, ButtonListenerChangeMenu.ButtonType type)
@@ -74,6 +76,9 @@ public class GuiMainMenu extends GuiBase
                 case MAIN_MENU:
                     gui = new GuiMainMenu();
                     break;
+                case PLAYEREDIT_LOADED:
+                    gui = new GuiPlayereditLoadedList();
+                    break;
             }
 
             if(gui != null)
@@ -86,7 +91,8 @@ public class GuiMainMenu extends GuiBase
         public enum ButtonType
         {
             CONFIGURATION ("watson.gui.button.change_menu.configuration_menu", ButtonIcons.CONFIGURATION),
-            MAIN_MENU ("watson.gui.button.change_menu.to_main_menu", null);
+            MAIN_MENU ("watson.gui.button.change_menu.to_main_menu", null),
+            PLAYEREDIT_LOADED ("watson.gui.button.change_menu.playeredit_loaded_menu", null);
 
             private final String labelKey;
             private final ButtonIcons icon;
