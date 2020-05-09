@@ -56,7 +56,7 @@
  	"watson.error.entity.not_found": "Существо не найдено %s",
 	"watson.error.highlight": "Недопустимый световый момент: '%s'",
 	"watson.gui.title.configs": "Конфиги",
- 	"watson.gui.title.edits": "Правки %s, количество: %d",
+ 	"watson.gui.title.edits": "Правки %s  количество: %d",
   	"watson.gui.title.loaded_playeredits": "Загружены playeredits",
 	"watson.gui.title.watson_main_menu": "Watson %s",
 	"watson.gui.button.blockedit.close": "Закрыть",
