@@ -287,4 +287,9 @@ public class BlockEditSet
     {
         return _oreDB;
     }
+
+    public LinkedHashMap<String, PlayereditSet> getPlayereditSet()
+    {
+        return _playerEdits;
+    }
 }
