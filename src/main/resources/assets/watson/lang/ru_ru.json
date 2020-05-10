@@ -73,6 +73,8 @@
 	"watson.gui.button.playeredit.hover": "Количество правок блока: %d",
 	"watson.gui.button.playeredit.remove": "Удалить",
 	"watson.gui.label.blockedit.list.blocks": "%d %d %d %d-%d-%d %d:%d:%d %s %s",
+	"watson.gui.label.blockedit.list.data": "Дата",
+	"watson.gui.label.blockedit.list.teleport": "ТЕЛЕПОРТ",
 	"watson.gui.label.edits.title.item": "Предмет",
 	"watson.gui.label.edits.title.total": "Всего",
 	"watson.hotkeys.category.generic_hotkeys": "Общие кнопки",
