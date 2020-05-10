@@ -24,7 +24,6 @@ public class EditListPlayeredit extends PlayereditBase
     public void reCreatePlayeredits()
     {
         this.playereditAll = ImmutableList.copyOf(PlayereditUtils.createPlayereditListFor(this.playeredit));
-        
     }
 
     @Override

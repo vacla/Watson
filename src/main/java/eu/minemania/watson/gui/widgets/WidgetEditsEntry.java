@@ -3,7 +3,8 @@ package eu.minemania.watson.gui.widgets;
 import java.util.List;
 import javax.annotation.Nullable;
 import com.mojang.blaze3d.systems.RenderSystem;
-import eu.minemania.watson.gui.GuiDisplayBoxBase;
+import eu.minemania.watson.db.data.EditListBlockedit;
+import eu.minemania.watson.gui.GuiBlockeditData;
 import eu.minemania.watson.gui.Icons;
 import eu.minemania.watson.selection.PlayereditBase;
 import eu.minemania.watson.selection.PlayereditBase.SortCriteria;
@@ -13,7 +14,6 @@ import fi.dy.masa.malilib.gui.button.ButtonBase;
 import fi.dy.masa.malilib.gui.button.ButtonGeneric;
 import fi.dy.masa.malilib.gui.button.IButtonActionListener;
 import fi.dy.masa.malilib.gui.widgets.WidgetListEntrySortable;
-import fi.dy.masa.malilib.interfaces.IConfirmationListener;
 import fi.dy.masa.malilib.render.RenderUtils;
 import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.item.ItemStack;
@@ -278,10 +278,8 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
         {
             if(this.type == ButtonType.BLOCKS)
             {
-                BlocksList blocksList = new BlocksList();
-                System.out.println("blocks:"+this.entry.getBlocks());
-                System.out.println(this.entry.getStack().getTranslationKey());
-                GuiBase.openGui(new GuiDisplayBoxBase(this.entry.getStack().getTranslationKey(), this.entry.getBlocks(), blocksList, listWidget.getParent()));
+                EditListBlockedit editList = new EditListBlockedit(this.entry.getBlocks(), true);
+                GuiBase.openGui(new GuiBlockeditData(editList, this.entry.getStack().getTranslationKey(), this.entry.getBlocks(), listWidget.getParent()));
             }
         }
 
@@ -300,21 +298,6 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
             {
                 return StringUtils.translate(translationKey);
             }
-        }
-    }
-
-    private static class BlocksList implements IConfirmationListener
-    {
-        @Override
-        public boolean onActionConfirmed()
-        {
-            return true;
-        }
-
-        @Override
-        public boolean onActionCancelled()
-        {
-            return false;
         }
     }
 }

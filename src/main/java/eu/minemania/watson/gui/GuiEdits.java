@@ -14,7 +14,7 @@ import fi.dy.masa.malilib.util.GuiUtils;
 import fi.dy.masa.malilib.util.StringUtils;
 
 public class GuiEdits extends GuiListBase<PlayereditEntry, WidgetEditsEntry, WidgetListEdits>
-                      implements ICompletionListener 
+implements ICompletionListener 
 {
     private final PlayereditBase edits;
 
@@ -153,11 +153,6 @@ public class GuiEdits extends GuiListBase<PlayereditEntry, WidgetEditsEntry, Wid
             private Type(String translationKey)
             {
                 this.translationKey = translationKey;
-            }
-
-            public String getTranslationKey()
-            {
-                return this.translationKey;
             }
 
             public String getDisplayName(Object... args)

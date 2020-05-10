@@ -1,14 +1,17 @@
 package eu.minemania.watson.selection;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import eu.minemania.watson.db.BlockEdit;
 import eu.minemania.watson.db.PlayereditSet;
 import eu.minemania.watson.db.WatsonBlock;
+import eu.minemania.watson.db.data.BlockeditEntry;
 import fi.dy.masa.malilib.gui.Message.MessageType;
 import fi.dy.masa.malilib.util.InfoUtils;
 import fi.dy.masa.malilib.util.ItemType;
+import fi.dy.masa.malilib.util.StringUtils;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -42,7 +45,6 @@ public class PlayereditUtils
 
             convertNameToStack(countsTotal, itemTypesTotal);
 
-            
             for(ItemType type : itemTypesTotal.keySet())
             {
                 List<BlockEdit> watsonBlocks = new ArrayList<>();
@@ -50,8 +52,6 @@ public class PlayereditUtils
                 {
                     String typeName = type.getStack().getItem().toString();
                     String blockName = getItemStack(edit.block.getName()).getItem().toString();
-                    System.out.println("1:"+typeName);
-                    System.out.println("2:"+blockName);
                     if(typeName.contains("minecraft:") == false)
                     {
                         typeName = "minecraft:"+typeName;
@@ -60,14 +60,26 @@ public class PlayereditUtils
                     {
                         blockName = "minecraft:"+blockName;
                     }
-                    System.out.println("3:"+typeName);
-                    System.out.println("4:"+blockName);
                     if(blockName.equals(typeName))
                     {
                         watsonBlocks.add(edit);
                     }
                 }
                 list.add(new PlayereditEntry(type.getStack().copy(), itemTypesTotal.getInt(type), watsonBlocks));
+            }
+        }
+
+        return list;
+    }
+
+    public static List<BlockeditEntry> createDisplayListFor(List<BlockEdit> blockedit)
+    {
+        List<BlockeditEntry> list = new ArrayList<>();
+        if(blockedit.isEmpty() == false)
+        {
+            for(BlockEdit edit : blockedit)
+            {
+                list.add(new BlockeditEntry(edit));
             }
         }
 
@@ -161,5 +173,18 @@ public class PlayereditUtils
             InfoUtils.showGuiMessage(MessageType.WARNING, "watson.error.entity.not_found", blocks);
             return new ItemStack(Items.BEDROCK);
         }
+    }
+
+    public static String blockString(BlockEdit blockedit)
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(blockedit.time);
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        int second = calendar.get(Calendar.SECOND);
+        return StringUtils.translate("watson.gui.label.blockedit.list.blocks", blockedit.x, blockedit.y, blockedit.z, day, month, year, hour, minute, second, blockedit.world, blockedit.block.getName());
     }
 }
