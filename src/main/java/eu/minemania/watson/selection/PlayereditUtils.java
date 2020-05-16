@@ -105,7 +105,18 @@ public class PlayereditUtils
         Block block = Registry.BLOCK.get(Identifier.tryParse(blocks));
         if(block != Blocks.AIR)
         {
-            return new ItemStack(block);
+            if(block.equals(Blocks.WATER))
+            {
+                return new ItemStack(Items.WATER_BUCKET);
+            }
+            else if(block.equals(Blocks.LAVA))
+            {
+                return new ItemStack(Items.LAVA_BUCKET);
+            }
+            else if(!block.equals(Blocks.BEDROCK))
+            {
+                return new ItemStack(block);
+            }
         }
         else
         {
@@ -169,10 +180,10 @@ public class PlayereditUtils
                     return new ItemStack(spawnEgg);
                 }
             }
-
-            InfoUtils.showGuiMessage(MessageType.WARNING, "watson.error.entity.not_found", blocks);
-            return new ItemStack(Items.BEDROCK);
         }
+
+        InfoUtils.showGuiMessage(MessageType.WARNING, "watson.error.blockentity.not_found", blocks);
+        return new ItemStack(Items.BEDROCK);
     }
 
     public static String blockString(BlockEdit blockedit)

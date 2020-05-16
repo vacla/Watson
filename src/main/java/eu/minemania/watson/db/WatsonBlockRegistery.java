@@ -12,7 +12,6 @@ import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
@@ -60,7 +59,7 @@ public final class WatsonBlockRegistery
                         WatsonBlock watsonBlock = new WatsonBlock();
                         if(block != Blocks.AIR)
                         {
-                            String blockName = Registry.ITEM.getId(new ItemStack(block).getItem()).toString();
+                            String blockName = Registry.BLOCK.getId(block).toString();
                             watsonBlock.setName(blockName);
                             float lineWidth = Float.parseFloat(watsonBlockData[1]);
                             if(lineWidth != 0)

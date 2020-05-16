@@ -132,7 +132,7 @@ public class Highlight
                 i++;
             }
 
-            if(chat.contains("<") && chat.contains(">") && !chat.startsWith("/") && (!chat.startsWith("ง") && chat.charAt(2) != '/'))
+            if(chat.contains("<") && chat.contains(">") && !chat.startsWith("/") && (!chat.startsWith("ยง") && chat.charAt(2) != '/'))
             {
                 int startUsername = chat.indexOf("<") + 1;
                 int endUsername = chat.indexOf(">");
