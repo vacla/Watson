@@ -62,7 +62,7 @@ public class LbToolBlockAnalysis extends Analysis
         _z = Integer.parseInt(m.group(3));
         _world = m.group(4);
         EditSelection selection = DataManager.getEditSelection();
-        selection.selectPosition(_x, _y, _z, _world);
+        selection.selectPosition(_x, _y, _z, _world, 1);
         _lbPositionTime = System.currentTimeMillis();
         _expectingFirstEdit = true;
     }
@@ -106,7 +106,7 @@ public class LbToolBlockAnalysis extends Analysis
     {
         if(DataManager.getFilters().isAcceptedPlayer(player))
         {
-            BlockEdit edit = new BlockEdit(millis, player, created, _x, _y, _z, type, world);
+            BlockEdit edit = new BlockEdit(millis, player, created, _x, _y, _z, type, world, 1);
             SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, _expectingFirstEdit));
 
             if(_expectingFirstEdit)

@@ -54,6 +54,7 @@ public class CoreProtectAnalysis extends Analysis
     protected long _millis;
     protected String _player;
     protected WatsonBlock _block;
+    protected int _loop;
 
     public CoreProtectAnalysis()
     {
@@ -102,31 +103,43 @@ public class CoreProtectAnalysis extends Analysis
         _y = Integer.parseInt(m.group(2));
         _z = Integer.parseInt(m.group(3));
         EditSelection selection = DataManager.getEditSelection();
-        selection.selectPosition(_x, _y, _z, _world);
+        selection.selectPosition(_x, _y, _z, _world, 1);
         _firstInspectorResult = true;
     }
 
     void details(Text chat, Matcher m)
     {
         _lookupDetails = false;
-        if(m.group(3).equals("placed") || m.group(3).equals("removed") || m.group(3).equals("killed"))
+        if(m.group(3).equals("placed") || m.group(3).equals("removed") || m.group(3).equals("killed")
+                || m.group(3).equals("added") || m.group(3).equals("clicked"))
         {
             _millis = parseTimeExpression(m.group(1));
             _player = m.group(2);
             _creation = m.group(3).equals("placed");
             String block = m.group(4);
+            String[] blockStuff = block.split(" ");
+            if(blockStuff.length == 2)
+            {
+                block = blockStuff[1];
+            }
             _block = WatsonBlockRegistery.getInstance().getWatsonBlockByName(block);
+            _loop = 1;
             if(_isLookup)
             {
                 // Record that we can use these details at the next
                 // coreprotect.lookupcoords only.
                 _lookupDetails = true;
+                if(blockStuff.length == 2)
+                {
+                    String number = blockStuff[0].substring(1);
+                    _loop = Integer.valueOf(number);
+                }
             }
             else
             {
                 if(DataManager.getFilters().isAcceptedPlayer(_player))
                 {
-                    BlockEdit edit = new BlockEdit(_millis, _player, _creation, _x, _y, _z, _block, _world);
+                    BlockEdit edit = new BlockEdit(_millis, _player, _creation, _x, _y, _z, _block, _world, _loop);
                     SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, _firstInspectorResult));
 
                     if(_firstInspectorResult)
@@ -154,8 +167,9 @@ public class CoreProtectAnalysis extends Analysis
             _world = m.group(4);
             // https://github.com/totemo/watson/issues/23
 
-            BlockEdit edit = new BlockEdit(_millis, _player, _creation, _x, _y, _z, _block, _world);
+            BlockEdit edit = new BlockEdit(_millis, _player, _creation, _x, _y, _z, _block, _world, _loop);
             SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, true));
+
             _lookupDetails = false;
         }
     }

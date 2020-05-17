@@ -38,7 +38,7 @@ public class BlockEditSet
 
         try
         {
-            Pattern editPattern = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})\\|(\\d{2}):(\\d{2}):(\\d{2})\\|(\\w+)\\|([cd])\\|(minecraft:\\w+)\\|(-?\\d+)\\|(\\d+)\\|(-?\\d+)\\|(\\w+)");
+            Pattern editPattern = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})\\|(\\d{2}):(\\d{2}):(\\d{2})\\|(\\w+)\\|([cd])\\|(minecraft:\\w+)\\|(-?\\d+)\\|(\\d+)\\|(-?\\d+)\\|(\\w+)\\|(\\d+)");
             Pattern annoPattern = Pattern.compile("#(-?\\d+)\\|(\\d+)\\|(-?\\d+)\\|(\\w+)\\|(.*)");
             Calendar time = Calendar.getInstance();
             String line;
@@ -64,9 +64,10 @@ public class BlockEditSet
                     int y = Integer.parseInt(edit.group(11));
                     int z = Integer.parseInt(edit.group(12));
                     String world = edit.group(13);
+                    int amount = Integer.parseInt(edit.group(14));
 
                     WatsonBlock watsonBlock = WatsonBlockRegistery.getInstance().getWatsonBlockByName(blockName);
-                    blockEdit = new BlockEdit(time.getTimeInMillis(), player, created, x, y, z, watsonBlock, world);
+                    blockEdit = new BlockEdit(time.getTimeInMillis(), player, created, x, y, z, watsonBlock, world, amount);
                     addBlockEdit(blockEdit);
                     ++edits;
                 }

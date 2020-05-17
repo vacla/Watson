@@ -147,7 +147,7 @@ public class LbCoordsAnalysis extends Analysis
             }
             WatsonBlock type = WatsonBlockRegistery.getInstance().getWatsonBlockByName(block);
             boolean created = action.equals("created");
-            BlockEdit edit = new BlockEdit(millis, player, created, x, y, z, type, _world);
+            BlockEdit edit = new BlockEdit(millis, player, created, x, y, z, type, _world, 1);
             SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, true));
 
             Formatting color = Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue() ? getChatColorFormat(x, y, z) : null;
@@ -214,7 +214,7 @@ public class LbCoordsAnalysis extends Analysis
             String weapon = m.group(11);
 
             WatsonBlock type = WatsonBlockRegistery.getInstance().getBlockKillTypeByName(victim);
-            BlockEdit edit = new BlockEdit(millis, player, false, x, y, z, type, _world);
+            BlockEdit edit = new BlockEdit(millis, player, false, x, y, z, type, _world, 1);
             SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, true));
 
             Formatting color = Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue() ? getChatColorFormat(x, y, z) : null;
@@ -268,7 +268,7 @@ public class LbCoordsAnalysis extends Analysis
             int z = Integer.parseInt(m.group(11));
             WatsonBlock type = WatsonBlockRegistery.getInstance().getWatsonBlockByName(oldBlock);
             WatsonBlock newtype = WatsonBlockRegistery.getInstance().getWatsonBlockByName(newBlock);
-            BlockEdit edit = new BlockEdit(millis, player, false, x, y, z, type, _world);
+            BlockEdit edit = new BlockEdit(millis, player, false, x, y, z, type, _world, 1);
             SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, true));
 
             Formatting color = Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue() ? getChatColorFormat(x, y, z) : null;

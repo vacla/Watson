@@ -67,4 +67,21 @@ public class TimeStamp
         }
         return ymd;
     }
+
+    public static long timeDiff(int month, int dayOfMonth, int hour, int minute, int second)
+    {
+        Calendar time = Calendar.getInstance();
+        try
+        {
+            time.add(Calendar.MONTH, -month);
+            time.add(Calendar.DAY_OF_MONTH, -dayOfMonth);
+            time.add(Calendar.HOUR_OF_DAY, -hour);
+            time.add(Calendar.MINUTE, -minute);
+            time.add(Calendar.SECOND, -second);
+            return time.getTimeInMillis();
+        }
+        catch (Exception e) {
+            return 0;
+        }
+    }
 }

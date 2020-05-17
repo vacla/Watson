@@ -1,7 +1,10 @@
 package eu.minemania.watson.db.data;
 
 import java.util.Collection;
+import java.util.List;
+import com.google.common.collect.ImmutableList;
 import eu.minemania.watson.gui.GuiBlockeditData;
+import eu.minemania.watson.selection.PlayereditUtils;
 import fi.dy.masa.malilib.gui.widgets.WidgetListBase;
 
 public class WidgetListBlockedit extends WidgetListBase<BlockeditEntry, WidgetBlockeditEntry>
@@ -15,7 +18,7 @@ public class WidgetListBlockedit extends WidgetListBase<BlockeditEntry, WidgetBl
     {
         super(x, y, width, height, null);
 
-        this.browserEntryHeight = 22;
+        this.browserEntryHeight = 26;
         this.gui = parent;
         this.setParent(parent);
     }
@@ -54,6 +57,44 @@ public class WidgetListBlockedit extends WidgetListBase<BlockeditEntry, WidgetBl
     }
 
     @Override
+    protected void addFilteredContents(Collection<BlockeditEntry> entries)
+    {
+        for (BlockeditEntry entry : entries)
+        {
+            if(this.gui.getTime() == 0 || this.entryMatchesFilter(entry, ""))
+            {
+                this.listContents.add(entry);
+            }
+        }
+    }
+
+    @Override
+    protected boolean entryMatchesFilter(BlockeditEntry entry, String filterText)
+    {
+        List<String> entryStrings = this.getEntryStringsForFilter(entry);
+
+        if (entryStrings.isEmpty())
+        {
+            return false;
+        }
+
+        return this.matchesFilter(entryStrings, filterText);
+    }
+
+    @Override
+    protected List<String> getEntryStringsForFilter(BlockeditEntry entry)
+    {
+        if (this.gui.getTime() != 0 && entry.getEdit().time >= this.gui.getTime())
+        {
+            return ImmutableList.of(PlayereditUtils.blockString(entry.getEdit()));
+        }
+        else
+        {
+            return ImmutableList.of();
+        }
+    }
+
+    @Override
     protected void refreshBrowserEntries()
     {
         super.refreshBrowserEntries();
@@ -64,6 +105,16 @@ public class WidgetListBlockedit extends WidgetListBase<BlockeditEntry, WidgetBl
             this.scrollbarRestored = true;
             this.reCreateListEntryWidgets();
         }
+    }
+
+    @Override
+    protected boolean hasFilter()
+    {
+        if(this.gui.getTime() != 0)
+        {
+            return true;
+        }
+        return false;
     }
 
     @Override

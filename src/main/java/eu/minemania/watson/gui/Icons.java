@@ -7,9 +7,10 @@ import net.minecraft.util.Identifier;
 
 public enum Icons implements IGuiIcon
 {
-    FILE_ICON_SEARCH        (0,  14, 12, 12),
-    ARROW_UP                (42,   0, 15, 15),
-    ARROW_DOWN              (42,  15, 15, 15);
+    ARROW_DOWN              ( 42,  15, 15, 15),
+    ARROW_UP                ( 42,   0, 15, 15),
+    FILE_ICON_SEARCH        (  0,  14, 12, 12),
+    INFO_11                 ( 12,  14, 11, 11);
 
     public static final Identifier TEXTURE = new Identifier(Reference.MOD_ID, "textures/gui/gui_widgets.png");
 

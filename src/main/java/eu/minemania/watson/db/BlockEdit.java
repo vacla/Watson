@@ -21,6 +21,7 @@ public class BlockEdit
     public long time;
     public String player;
     public boolean creation;
+    public int amount;
     public int x;
     public int y;
     public int z;
@@ -31,11 +32,12 @@ public class BlockEdit
     private MinecraftClient mc;
     protected boolean drawn;
 
-    public BlockEdit(long time, String player, boolean creation, int x, int y, int z, WatsonBlock block, String world)
+    public BlockEdit(long time, String player, boolean creation, int x, int y, int z, WatsonBlock block, String world, int amount)
     {
         this.time = time;
         this.player = player;
         this.creation = creation;
+        this.amount = amount;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -68,7 +70,8 @@ public class BlockEdit
 
     private void renderBlocks(BufferBuilder buffer, Block blocks)
     {
-        if(!block.getName().equals("minecraft:grass"))
+        if(!block.getName().equals("minecraft:grass") && !block.getName().equals("minecraft:water") && 
+                !block.getName().equals("minecraft:lava"))
         {
             BlockState state = blocks.getDefaultState();
             BakedModel model = this.blockModelShapes.getModel(state);
