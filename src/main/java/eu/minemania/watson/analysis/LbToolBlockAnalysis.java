@@ -78,10 +78,9 @@ public class LbToolBlockAnalysis extends Analysis
             long millis = TimeStamp.toMillis(ymd, hour, minute, second);
             String player = m.group(5);
             String action = m.group(6);
-            boolean created = action.equals("created");
             String block = m.group(7);
             WatsonBlock type = WatsonBlockRegistery.getInstance().getWatsonBlockByName(block);
-            addBlockEdit(millis, player, created, type, _world);
+            addBlockEdit(millis, player, action, type, _world);
         }
     }
 
@@ -98,15 +97,15 @@ public class LbToolBlockAnalysis extends Analysis
             String oldBlock = m.group(6);
             WatsonBlock type = WatsonBlockRegistery.getInstance().getWatsonBlockByName(oldBlock);
 
-            addBlockEdit(millis, player, false, type, _world);
+            addBlockEdit(millis, player, "replaced", type, _world);
         }
     }
 
-    protected void addBlockEdit(long millis, String player, boolean created, WatsonBlock type, String world)
+    protected void addBlockEdit(long millis, String player, String action, WatsonBlock type, String world)
     {
         if(DataManager.getFilters().isAcceptedPlayer(player))
         {
-            BlockEdit edit = new BlockEdit(millis, player, created, _x, _y, _z, type, world, 1);
+            BlockEdit edit = new BlockEdit(millis, player, action, _x, _y, _z, type, world, 1);
             SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, _expectingFirstEdit));
 
             if(_expectingFirstEdit)

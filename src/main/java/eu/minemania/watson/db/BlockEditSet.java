@@ -38,7 +38,7 @@ public class BlockEditSet
 
         try
         {
-            Pattern editPattern = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})\\|(\\d{2}):(\\d{2}):(\\d{2})\\|(\\w+)\\|([cd])\\|(minecraft:\\w+)\\|(-?\\d+)\\|(\\d+)\\|(-?\\d+)\\|(\\w+)\\|(\\d+)");
+            Pattern editPattern = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})\\|(\\d{2}):(\\d{2}):(\\d{2})\\|(\\w+)\\|(\\w+)\\|(minecraft:\\w+)\\|(-?\\d+)\\|(\\d+)\\|(-?\\d+)\\|(\\w+)\\|(\\d+)");
             Pattern annoPattern = Pattern.compile("#(-?\\d+)\\|(\\d+)\\|(-?\\d+)\\|(\\w+)\\|(.*)");
             Calendar time = Calendar.getInstance();
             String line;
@@ -58,7 +58,7 @@ public class BlockEditSet
                     time.set(year, month, day, hour, minute, second);
 
                     String player = edit.group(7);
-                    boolean created = edit.group(8).equals("c");
+                    String action = edit.group(8);
                     String blockName = edit.group(9);
                     int x = Integer.parseInt(edit.group(10));
                     int y = Integer.parseInt(edit.group(11));
@@ -67,7 +67,7 @@ public class BlockEditSet
                     int amount = Integer.parseInt(edit.group(14));
 
                     WatsonBlock watsonBlock = WatsonBlockRegistery.getInstance().getWatsonBlockByName(blockName);
-                    blockEdit = new BlockEdit(time.getTimeInMillis(), player, created, x, y, z, watsonBlock, world, amount);
+                    blockEdit = new BlockEdit(time.getTimeInMillis(), player, action, x, y, z, watsonBlock, world, amount);
                     addBlockEdit(blockEdit);
                     ++edits;
                 }
@@ -232,7 +232,12 @@ public class BlockEditSet
         {
             _playerEdits.remove(player.toLowerCase());
             getOreDB().removeDeposits(player);
+            boolean selection = DataManager.getEditSelection().getSelection().playereditSet == editsByPlayer;
             ChatMessage.localOutputT("watson.message.edits.edit_removed", editsByPlayer.getBlockEditCount(), editsByPlayer.getPlayer());
+            if(_playerEdits.isEmpty() || selection)
+            {
+                DataManager.getEditSelection().clearSelection();
+            }
         }
         else
         {

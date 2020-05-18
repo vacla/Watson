@@ -112,7 +112,7 @@ public class PlayereditSet
                 {
                     BlockEdit next = it.next();
 
-                    boolean show = (next.creation && Configs.Generic.LINKED_CREATION.getBooleanValue()) || (!next.creation && Configs.Generic.LINKED_DESTRUCTION.getBooleanValue());
+                    boolean show = (next.isCreated() && Configs.Generic.LINKED_CREATION.getBooleanValue()) || (!next.isCreated() && Configs.Generic.LINKED_DESTRUCTION.getBooleanValue());
                     if(show)
                     {
                         Vec3d pPos = new Vec3d(prev.x + 0.5, prev.y + 0.5, prev.z + 0.5);
@@ -185,8 +185,8 @@ public class PlayereditSet
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
             int minute = calendar.get(Calendar.MINUTE);
             int second = calendar.get(Calendar.SECOND);
-            char action = edit.creation ? 'c' : 'd';
-            writer.format("%4d-%02d-%02d|%02d:%02d:%02d|%s|%c|%s|%d|%d|%d|%s|%d\n", year, month, day, hour, minute, second, edit.player, action, edit.block.getName(), edit.x, edit.y, edit.z, edit.world, edit.amount);
+            String action = edit.action;
+            writer.format("%4d-%02d-%02d|%02d:%02d:%02d|%s|%s|%s|%d|%d|%d|%s|%d\n", year, month, day, hour, minute, second, edit.player, action, edit.block.getName(), edit.x, edit.y, edit.z, edit.world, edit.amount);
             ++editCount;
         }
         return editCount;

@@ -74,7 +74,7 @@
     "watson.gui.button.playeredit.remove": "Удалить",
     "watson.gui.label.blockedit.info.format": "Формат: 'месяц-дней часов:минуты:секунды'",
     "watson.gui.label.blockedit.info.time": "Время:",
-    "watson.gui.label.blockedit.list.blocks": "%d %d %d %d-%d-%d %d:%d:%d %s %s %d",
+    "watson.gui.label.blockedit.list.blocks": "X:%d Y:%d Z:%d %d-%d-%d %d:%d:%d %s %s Количество:%d %s",
     "watson.gui.label.blockedit.list.data": "Дата",
     "watson.gui.label.blockedit.list.teleport": "ТЕЛЕПОРТ",
     "watson.gui.label.edits.title.item": "Предмет",

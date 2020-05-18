@@ -20,7 +20,7 @@ public class BlockEdit
 {
     public long time;
     public String player;
-    public boolean creation;
+    public String action;
     public int amount;
     public int x;
     public int y;
@@ -32,11 +32,11 @@ public class BlockEdit
     private MinecraftClient mc;
     protected boolean drawn;
 
-    public BlockEdit(long time, String player, boolean creation, int x, int y, int z, WatsonBlock block, String world, int amount)
+    public BlockEdit(long time, String player, String action, int x, int y, int z, WatsonBlock block, String world, int amount)
     {
         this.time = time;
         this.player = player;
-        this.creation = creation;
+        this.action = action;
         this.amount = amount;
         this.x = x;
         this.y = y;
@@ -112,7 +112,7 @@ public class BlockEdit
         }
     }
 
-    public boolean isOreDrawn()
+    private boolean isOreDrawn()
     {
         for(BlockEdit blockEdit : playereditSet._edits)
         {
@@ -127,6 +127,15 @@ public class BlockEdit
             }
         }
 
+        return false;
+    }
+
+    public boolean isCreated()
+    {
+        if(this.action.equals("placed") || this.action.equals("created"))
+        {
+            return true;
+        }
         return false;
     }
 }

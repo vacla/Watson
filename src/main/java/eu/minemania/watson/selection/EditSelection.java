@@ -45,7 +45,7 @@ public class EditSelection
             _variables.put("time", edit.time);
             _variables.put("player", edit.player);
             _variables.put("block", edit.block.getName());
-            _variables.put("creation", edit.creation);
+            _variables.put("action", edit.action);
             _variables.put("world", edit.world);
 
             // Will also dispatch the onWatsonSelection Macro/Keybind event:
@@ -63,11 +63,18 @@ public class EditSelection
         DataManager.getFilters().clear();
     }
 
+    public void clearSelection()
+    {
+        _variables.clear();
+        _selectionChanged = true;
+        _selection = null;
+    }
+
     public void selectPosition(int x, int y, int z, String world, int amount)
     {
         if(_selection == null || _selection.x != x || _selection.y != y || _selection.z != z || _selection.world != world || _selection.amount != amount)
         {
-            _selection = new BlockEdit(0, "", false, x, y, z, null, world, amount);
+            _selection = new BlockEdit(0, "", "selection", x, y, z, null, world, amount);
         }
 
         _variables.put("x", x);

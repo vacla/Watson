@@ -74,7 +74,7 @@
     "watson.gui.button.playeredit.remove": "Remove",
     "watson.gui.label.blockedit.info.format": "Format: 'month-day hour:minute:second'",
     "watson.gui.label.blockedit.info.time": "Time:",
-    "watson.gui.label.blockedit.list.blocks": "%d %d %d %d-%d-%d %d:%d:%d %s %s %d",
+    "watson.gui.label.blockedit.list.blocks": "X:%d Y:%d Z:%d %d-%d-%d %d:%d:%d %s %s Amount:%d %s",
     "watson.gui.label.blockedit.list.data": "Data",
     "watson.gui.label.blockedit.list.teleport": "TELEPORT",
     "watson.gui.label.edits.title.item": "Item",

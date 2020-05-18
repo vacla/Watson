@@ -240,7 +240,7 @@ public class OreDB
         try
         {
             WatsonBlock mergedBlock = edit.block;
-            if(!edit.creation && isOre(mergedBlock))
+            if(!edit.isCreated() && isOre(mergedBlock))
             {
                 TypedOreDB db = getDB(mergedBlock);
                 db.addBlockEdit(edit);

@@ -17,11 +17,11 @@ public class BlockEditComparator implements Comparator<BlockEdit>
         }
         else
         {
-            if(!l.creation && r.creation)
+            if(!l.isCreated() && r.isCreated())
             {
                 return -1;
             }
-            else if (l.creation && !r.creation)
+            else if (l.isCreated() && !r.isCreated())
             {
                 return +1;
             }
