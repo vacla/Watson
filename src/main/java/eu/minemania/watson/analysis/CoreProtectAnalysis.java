@@ -269,12 +269,9 @@ public class CoreProtectAnalysis extends Analysis
 
     private void requestNextPage()
     {
-        if (Configs.Generic.AUTO_PAGE.getBooleanValue())
+        if (_currentPage != 0 && _currentPage < _pageCount)
         {
-            if (_currentPage != 0 && _currentPage < _pageCount && _pageCount <= Configs.Generic.MAX_AUTO_PAGES.getIntegerValue())
-            {
-                ChatMessage.getInstance().serverChat(String.format("/co l %d", _currentPage + 1), _currentPage == 1);
-            }
+            ChatMessage.getInstance().serverChat(String.format("/co l %d", _currentPage + 1), _currentPage == 1);
         }
     }
 
