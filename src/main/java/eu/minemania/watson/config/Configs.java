@@ -134,10 +134,13 @@ public class Configs implements IConfigHandler
 
     public static class Analysis
     {
+        public static final ConfigStringExt CP_BUSY = new ConfigStringExt("cp busy", "^CoreProtect - Database busy. Please try again later.$", "watson.description.config.analysis").setCommentArgs("cp busy");
         public static final ConfigStringExt CP_DETAILS = new ConfigStringExt("cp details", "^(\\d+[.,]\\d+\\/h ago|\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}) - (#?\\w+) (\\w+) ((?:\\w+\\s)?\\w+).+", "watson.description.config.analysis").setCommentArgs("cp details");
         public static final ConfigStringExt CP_INSPECTOR_COORDS = new ConfigStringExt("cp inspector coords", "^----- CoreProtect ----- \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\)$", "watson.description.config.analysis").setCommentArgs("cp inspector coords");
         public static final ConfigStringExt CP_LOOKUP_COORDS = new ConfigStringExt("cp lookup coords", "^ +\\^ \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\/(.+)\\)$", "watson.description.config.analysis").setCommentArgs("cp lookup coords");
         public static final ConfigStringExt CP_LOOKUP_HEADER = new ConfigStringExt("cp lookup header", "^----- CoreProtect Lookup Results -----$", "watson.description.config.analysis").setCommentArgs("cp lookup header");
+        public static final ConfigStringExt CP_PAGE = new ConfigStringExt("cp page", "^Page (\\d+)\\/(\\d+)\\. View older data by typing \"\\/co l <page>\"\\.$", "watson.description.config.analysis").setCommentArgs("cp page");
+        public static final ConfigStringExt CP_SEARCH = new ConfigStringExt("cp search", "^CoreProtect - Lookup searching. Please wait...$", "watson.description.config.analysis").setCommentArgs("cp search");
         public static final ConfigStringExt DUTYMODE_DISABLE = new ConfigStringExt("duty mode disable", "^\\[Duties\\] Duty mode disabled.*", "watson.description.config.analysis").setCommentArgs("duty mode disable");
         public static final ConfigStringExt DUTYMODE_ENABLE = new ConfigStringExt("duty mode enable", "^\\[Duties\\] Duty mode enabled.*", "watson.description.config.analysis").setCommentArgs("duty mode enable");
         public static final ConfigStringExt LB_POSITION = new ConfigStringExt("lb position", "^Block changes in the last \\d+ \\w+ at (-?\\d+):(-?\\d+):(-?\\d+) in (.+):$", "watson.description.config.analysis").setCommentArgs("lb position");
@@ -166,10 +169,13 @@ public class Configs implements IConfigHandler
         public static final ConfigStringExt WG_REGIONS = new ConfigStringExt("wg regions", "^Applicable regions: ([a-zA-Z0-9_-]+(?:, [a-zA-Z0-9_-]+)*)$", "watson.description.config.analysis").setCommentArgs("wg regions");
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
+                CP_BUSY,
                 CP_DETAILS,
                 CP_INSPECTOR_COORDS,
                 CP_LOOKUP_COORDS,
                 CP_LOOKUP_HEADER,
+                CP_PAGE,
+                CP_SEARCH,
                 DUTYMODE_DISABLE,
                 DUTYMODE_ENABLE,
                 LB_COORD,

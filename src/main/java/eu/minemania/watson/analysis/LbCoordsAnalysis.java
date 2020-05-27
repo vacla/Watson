@@ -174,7 +174,6 @@ public class LbCoordsAnalysis extends Analysis
                     ChatMessage.sendToLocalChat(chat, true);
                 }
             }
-
             requestNextPage();
         }
         catch (Exception ex)

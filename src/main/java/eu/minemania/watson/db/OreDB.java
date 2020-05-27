@@ -296,7 +296,7 @@ public class OreDB
         {
             Watson.logger.info(query);
         }
-        ChatMessage.getInstance().serverChat(query);
+        ChatMessage.getInstance().serverChat(query, false);
     }
 
     protected TypedOreDB getDB(WatsonBlock block)

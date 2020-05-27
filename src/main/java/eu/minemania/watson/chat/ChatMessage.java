@@ -41,9 +41,13 @@ public class ChatMessage
         sendToLocalChat(Formatting.DARK_RED, new TranslatableText(translationKey, args), true);
     }
 
-    public void serverChat(String message)
+    public void serverChat(String message, boolean firstMessage)
     {
         _serverChatQueue.add(message);
+        if(firstMessage)
+        {
+            _lastServerChatTime = (long)(System.currentTimeMillis());
+        }
     }
 
     public void immediateServerChat(String message)

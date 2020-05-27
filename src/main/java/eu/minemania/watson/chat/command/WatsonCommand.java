@@ -105,18 +105,18 @@ public class WatsonCommand extends WatsonCommandBase
                                 .then(argument("enabled", bool()).executes(WatsonCommand::config_debug)))
                         .then(literal("auto_page").executes(WatsonCommand::config_auto_page)
                                 .then(argument("enabled", bool()).executes(WatsonCommand::config_auto_page)))
-                        .then(literal("region_info_timeout").executes(WatsonCommand::config_region_info_timeout) //get
-                                .then(argument("seconds", doubleArg()).executes(WatsonCommand::config_region_info_timeout))) //set
-                        .then(literal("billboard_background").executes(WatsonCommand::config_billb_background) //get
-                                .then(argument("argb", integer()).executes(WatsonCommand::config_billb_background))) //set
-                        .then(literal("billboard_foreground").executes(WatsonCommand::config_billb_foreground) //get
-                                .then(argument("argb", integer()).executes(WatsonCommand::config_billb_foreground))) //set
+                        .then(literal("region_info_timeout").executes(WatsonCommand::config_region_info_timeout)
+                                .then(argument("seconds", doubleArg()).executes(WatsonCommand::config_region_info_timeout)))
+                        .then(literal("billboard_background").executes(WatsonCommand::config_billb_background)
+                                .then(argument("argb", integer()).executes(WatsonCommand::config_billb_background)))
+                        .then(literal("billboard_foreground").executes(WatsonCommand::config_billb_foreground)
+                                .then(argument("argb", integer()).executes(WatsonCommand::config_billb_foreground)))
                         .then(literal("group_ores_in_creative").executes(WatsonCommand::config_group_ores_creative)
                                 .then(argument("enabled", bool()).executes(WatsonCommand::config_group_ores_creative)))
                         .then(literal("teleport_command").executes(WatsonCommand::config_teleport_command)
                                 .then(argument("command", greedyString()).executes(WatsonCommand::config_teleport_command)))
-                        .then(literal("chat_timeout").executes(WatsonCommand::config_chat_timeout) //get
-                                .then(argument("seconds", doubleArg()).executes(WatsonCommand::config_chat_timeout))) //set
+                        .then(literal("chat_timeout").executes(WatsonCommand::config_chat_timeout)
+                                .then(argument("seconds", doubleArg()).executes(WatsonCommand::config_chat_timeout)))
                         .then(literal("max_auto_page").executes(WatsonCommand::config_max_auto_page)
                                 .then(argument("pages", integer(1)).executes(WatsonCommand::config_max_auto_page)))
                         .then(literal("pre_count").executes(WatsonCommand::config_pre_count)

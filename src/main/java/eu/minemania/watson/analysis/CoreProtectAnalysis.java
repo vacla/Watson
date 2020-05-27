@@ -2,7 +2,7 @@ package eu.minemania.watson.analysis;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.chat.IMatchedChatHandler;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
@@ -55,9 +55,21 @@ public class CoreProtectAnalysis extends Analysis
     protected String _player;
     protected WatsonBlock _block;
     protected int _loop;
+    protected int _currentPage = 0;
+    protected int _pageCount = 0;
+    protected boolean _looping;
 
     public CoreProtectAnalysis()
     {
+        addMatchedChatHandler(Configs.Analysis.CP_SEARCH, new IMatchedChatHandler()
+        {
+            @Override
+            public boolean onMatchedChat(Text chat, Matcher m)
+            {
+                cpSearch(chat, m);
+                return true;
+            }
+        });
         addMatchedChatHandler(Configs.Analysis.CP_INSPECTOR_COORDS, new IMatchedChatHandler()
         {
             @Override
@@ -94,6 +106,29 @@ public class CoreProtectAnalysis extends Analysis
                 return true;
             }
         });
+        addMatchedChatHandler(Configs.Analysis.CP_PAGE, new IMatchedChatHandler()
+        {
+            @Override
+            public boolean onMatchedChat(Text chat, Matcher m)
+            {
+                cpPage(chat, m);
+                return true;
+            }
+        });
+        addMatchedChatHandler(Configs.Analysis.CP_BUSY, new IMatchedChatHandler()
+        {
+            @Override
+            public boolean onMatchedChat(Text chat, Matcher m)
+            {
+                cpBusy(chat, m);
+                return true;
+            }
+        });
+    }
+
+    void cpSearch(Text chat, Matcher m)
+    {
+        _looping = true;
     }
 
     void inspectorCoords(Text chat, Matcher m)
@@ -196,5 +231,56 @@ public class CoreProtectAnalysis extends Analysis
             }
         }
         return 0;
+    }
+
+    void cpPage(Text chat, Matcher m)
+    {
+        int currentPage = Integer.parseInt(m.group(1));
+        int pageCount = Integer.parseInt(m.group(2));
+
+        if(currentPage > _currentPage)
+        {
+            if (pageCount <= Configs.Generic.MAX_AUTO_PAGES.getIntegerValue())
+            {
+                _currentPage = currentPage;
+                _pageCount = pageCount;
+                if(_looping)
+                {
+                    requestNextPage();
+                }
+            }
+            else
+            {
+                reset();
+            }
+        }
+        else if(_currentPage == _pageCount)
+        {
+            reset();
+        }
+    }
+
+
+
+    void cpBusy(Text chat, Matcher m)
+    {
+        reset();
+    }
+
+    private void requestNextPage()
+    {
+        if (Configs.Generic.AUTO_PAGE.getBooleanValue())
+        {
+            if (_currentPage != 0 && _currentPage < _pageCount && _pageCount <= Configs.Generic.MAX_AUTO_PAGES.getIntegerValue())
+            {
+                ChatMessage.getInstance().serverChat(String.format("/co l %d", _currentPage + 1), _currentPage == 1);
+            }
+        }
+    }
+
+    private void reset()
+    {
+        _looping = false;
+        _currentPage = _pageCount = 0;
     }
 }
