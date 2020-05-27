@@ -40,6 +40,7 @@
     "watson.description.config.vector_shown": "Если включено, то показывает вектор",
     "watson.description.config.watson_blocks": "Watson блоки",
     "watson.description.config.watson_prefix": "Начало всех команд мода Watson, без сокращение",
+    "watson.description.hotkey.keybind_auto_page": "Nереключает Auto Page",
     "watson.description.hotkey.keybind_cursor_next": "Курсор для следующего правки",
     "watson.description.hotkey.keybind_cursor_prev": "Курсор для предыдущего правки",
     "watson.description.hotkey.keybind_query_after": "Запрос правок после\n(Установите плагин LogBlock в канале Общем, чтобы сработало)",

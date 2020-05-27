@@ -40,6 +40,7 @@
     "watson.description.config.vector_shown": "Shows vector if enabled",
     "watson.description.config.watson_blocks": "Watson blocks",
     "watson.description.config.watson_prefix": "The start of all Watson commands, without a slash",
+    "watson.description.hotkey.keybind_auto_page": "Toggles Auto Page",
     "watson.description.hotkey.keybind_cursor_next": "Cursor to next edit",
     "watson.description.hotkey.keybind_cursor_prev": "Cursor to previous edit",
     "watson.description.hotkey.keybind_query_after": "Query edits after\n(Set Plugin in Generic to LogBlock and only works with LogBlock)",

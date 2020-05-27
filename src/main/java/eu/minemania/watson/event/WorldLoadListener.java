@@ -39,7 +39,6 @@ public class WorldLoadListener implements IWorldLoadListener
         if(worldBefore == null && worldAfter != null && Configs.Generic.ENABLED.getBooleanValue())
         {
             DataManager.onClientTickStart();
-            DataManager.configure(mc.world.getLevelProperties().getGameMode());
         }
         if (worldAfter != null)
         {

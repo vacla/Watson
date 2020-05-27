@@ -31,7 +31,6 @@ import fi.dy.masa.malilib.util.StringUtils;
 import fi.dy.masa.malilib.util.WorldUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerInfo;
-import net.minecraft.world.GameMode;
 
 public class DataManager implements IDirectoryCache
 {
@@ -468,11 +467,6 @@ public class DataManager implements IDirectoryCache
         File[] files = getPlayereditsBaseDirectory().listFiles(new CaseInsensitivePrefixFileFilter(prefix));
         Arrays.sort(files);
         return files;
-    }
-
-    public static void configure(GameMode gameMode)
-    {
-        Configs.Generic.DISPLAYED.setBooleanValue(gameMode.isCreative());
     }
 
     public class CaseInsensitivePrefixFileFilter implements FileFilter

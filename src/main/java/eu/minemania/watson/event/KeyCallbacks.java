@@ -18,6 +18,7 @@ import fi.dy.masa.malilib.gui.GuiBase;
 import fi.dy.masa.malilib.hotkeys.IHotkeyCallback;
 import fi.dy.masa.malilib.hotkeys.IKeybind;
 import fi.dy.masa.malilib.hotkeys.KeyAction;
+import fi.dy.masa.malilib.hotkeys.KeyCallbackToggleBoolean;
 import fi.dy.masa.malilib.interfaces.IValueChangeCallback;
 import net.minecraft.client.MinecraftClient;
 
@@ -53,16 +54,17 @@ public class KeyCallbacks
         Configs.Analysis.LB_SUM.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.LB_TP.setValueChangeCallback(valueChangeStringCallback);
 
-        Hotkeys.OPEN_GUI_MAIN_MENU.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.OPEN_GUI_SETTINGS.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.KEYBIND_SCREENSHOT.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.KEYBIND_TP_NEXT.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.KEYBIND_TP_PREV.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.KEYBIND_QUERY_BEFORE.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.KEYBIND_QUERY_AFTER.getKeybind().setCallback(callbackHotkeys);
+        Hotkeys.KEYBIND_AUTO_PAGE.getKeybind().setCallback(new KeyCallbackToggleBoolean(Configs.Generic.AUTO_PAGE));
         Hotkeys.KEYBIND_CURSOR_NEXT.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.KEYBIND_CURSOR_PREV.getKeybind().setCallback(callbackHotkeys);
+        Hotkeys.KEYBIND_QUERY_AFTER.getKeybind().setCallback(callbackHotkeys);
+        Hotkeys.KEYBIND_QUERY_BEFORE.getKeybind().setCallback(callbackHotkeys);
+        Hotkeys.KEYBIND_SCREENSHOT.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.KEYBIND_TP_CURSOR.getKeybind().setCallback(callbackHotkeys);
+        Hotkeys.KEYBIND_TP_NEXT.getKeybind().setCallback(callbackHotkeys);
+        Hotkeys.KEYBIND_TP_PREV.getKeybind().setCallback(callbackHotkeys);
+        Hotkeys.OPEN_GUI_MAIN_MENU.getKeybind().setCallback(callbackHotkeys);
+        Hotkeys.OPEN_GUI_SETTINGS.getKeybind().setCallback(callbackHotkeys);
     }
 
     private static class ValueChangeStringCallback implements IValueChangeCallback<ConfigString>
