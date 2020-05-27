@@ -1,7 +1,7 @@
 package eu.minemania.watson.event;
 
 import javax.annotation.Nullable;
-
+import eu.minemania.watson.analysis.CoreProtectAnalysis;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.render.OverlayRenderer;
@@ -21,6 +21,7 @@ public class WorldLoadListener implements IWorldLoadListener
             if(worldAfter == null && DataManager.getEditSelection().getSelection() != null)
             {
                 DataManager.getEditSelection().clearBlockEditSet();
+                CoreProtectAnalysis.reset();
             }
         }
         else

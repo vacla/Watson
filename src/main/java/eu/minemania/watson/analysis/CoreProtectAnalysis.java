@@ -55,9 +55,9 @@ public class CoreProtectAnalysis extends Analysis
     protected String _player;
     protected WatsonBlock _block;
     protected int _loop;
-    protected int _currentPage = 0;
-    protected int _pageCount = 0;
-    protected boolean _looping;
+    protected static int _currentPage = 0;
+    protected static int _pageCount = 0;
+    protected static boolean _looping;
 
     public CoreProtectAnalysis()
     {
@@ -238,7 +238,7 @@ public class CoreProtectAnalysis extends Analysis
         int currentPage = Integer.parseInt(m.group(1));
         int pageCount = Integer.parseInt(m.group(2));
 
-        if(currentPage > _currentPage)
+        if(Configs.Generic.AUTO_PAGE.getBooleanValue() && currentPage > _currentPage)
         {
             if (pageCount <= Configs.Generic.MAX_AUTO_PAGES.getIntegerValue())
             {
@@ -278,7 +278,7 @@ public class CoreProtectAnalysis extends Analysis
         }
     }
 
-    private void reset()
+    public static void reset()
     {
         _looping = false;
         _currentPage = _pageCount = 0;
