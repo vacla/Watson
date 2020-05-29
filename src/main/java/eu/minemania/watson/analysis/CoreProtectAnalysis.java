@@ -13,6 +13,7 @@ import eu.minemania.watson.db.WatsonBlockRegistery;
 import eu.minemania.watson.scheduler.SyncTaskQueue;
 import eu.minemania.watson.scheduler.tasks.AddBlockEditTask;
 import eu.minemania.watson.selection.EditSelection;
+import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.text.Text;
 
 //----------------------------------------------------------------------------
@@ -61,13 +62,22 @@ public class CoreProtectAnalysis extends Analysis
 
     public CoreProtectAnalysis()
     {
-        addMatchedChatHandler(Configs.Analysis.CP_SEARCH, new IMatchedChatHandler()
+        addMatchedChatHandler(Configs.Analysis.CP_BUSY, new IMatchedChatHandler()
         {
             @Override
             public boolean onMatchedChat(Text chat, Matcher m)
             {
-                cpSearch(chat, m);
-                return true;
+                cpBusy(chat, m);
+                return sendMessage();
+            }
+        });
+        addMatchedChatHandler(Configs.Analysis.CP_DETAILS, new IMatchedChatHandler()
+        {
+            @Override
+            public boolean onMatchedChat(Text chat, Matcher m)
+            {
+                details(chat, m);
+                return sendMessage();
             }
         });
         addMatchedChatHandler(Configs.Analysis.CP_INSPECTOR_COORDS, new IMatchedChatHandler()
@@ -79,22 +89,13 @@ public class CoreProtectAnalysis extends Analysis
                 return true;
             }
         });
-        addMatchedChatHandler(Configs.Analysis.CP_DETAILS, new IMatchedChatHandler()
-        {
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                details(chat, m);
-                return true;
-            }
-        });
         addMatchedChatHandler(Configs.Analysis.CP_LOOKUP_COORDS, new IMatchedChatHandler()
         {
             @Override
             public boolean onMatchedChat(Text chat, Matcher m)
             {
                 lookupCoords(chat, m);
-                return true;
+                return sendMessage();
             }
         });
         addMatchedChatHandler(Configs.Analysis.CP_LOOKUP_HEADER, new IMatchedChatHandler()
@@ -103,6 +104,15 @@ public class CoreProtectAnalysis extends Analysis
             public boolean onMatchedChat(Text chat, Matcher m)
             {
                 lookupHeader(chat, m);
+                return sendMessage();
+            }
+        });
+        addMatchedChatHandler(Configs.Analysis.CP_NO_RESULT, new IMatchedChatHandler()
+        {
+            @Override
+            public boolean onMatchedChat(Text chat, Matcher m)
+            {
+                cpNoResult(chat, m);
                 return true;
             }
         });
@@ -112,34 +122,76 @@ public class CoreProtectAnalysis extends Analysis
             public boolean onMatchedChat(Text chat, Matcher m)
             {
                 cpPage(chat, m);
-                return true;
+                return sendMessage();
             }
         });
-        addMatchedChatHandler(Configs.Analysis.CP_BUSY, new IMatchedChatHandler()
+        addMatchedChatHandler(Configs.Analysis.CP_SEARCH, new IMatchedChatHandler()
         {
             @Override
             public boolean onMatchedChat(Text chat, Matcher m)
             {
-                cpBusy(chat, m);
-                return true;
+                cpSearch(chat, m);
+                return sendMessage();
             }
         });
+    }
+
+    void cpBusy(Text chat, Matcher m)
+    {
+        if(_looping && Configs.Generic.AUTO_PAGE.getBooleanValue() && Configs.Generic.DISABLE_CP_MESSAGES.getBooleanValue())
+        {
+            ChatMessage.localErrorT("watson.message.cp.auto_page.error");
+        }
+        reset();
+    }
+
+    void cpNoResult(Text chat, Matcher m)
+    {
+        reset();
+    }
+
+    void cpPage(Text chat, Matcher m)
+    {
+        int currentPage = Integer.parseInt(m.group(1));
+        int pageCount = Integer.parseInt(m.group(2));
+
+        if(Configs.Generic.AUTO_PAGE.getBooleanValue() && currentPage > _currentPage)
+        {
+            if (pageCount <= Configs.Generic.MAX_AUTO_PAGES.getIntegerValue())
+            {
+                _currentPage = currentPage;
+                _pageCount = pageCount;
+                if(_looping)
+                {
+                    if(Configs.Generic.DISABLE_CP_MESSAGES.getBooleanValue())
+                    {
+                        InfoUtils.printActionbarMessage("%d / %d", _currentPage, _pageCount);
+                        if(_currentPage == 1)
+                        {
+                            ChatMessage.localOutputT("watson.message.cp.auto_page.start", _pageCount);
+                        }
+                        else if(_currentPage == _pageCount)
+                        {
+                            ChatMessage.localOutputT("watson.message.cp.auto_page.finished");
+                        }
+                    }
+                    requestNextPage();
+                }
+            }
+            else
+            {
+                reset();
+            }
+        }
+        else if(_currentPage == _pageCount)
+        {
+            reset();
+        }
     }
 
     void cpSearch(Text chat, Matcher m)
     {
         _looping = true;
-    }
-
-    void inspectorCoords(Text chat, Matcher m)
-    {
-        _isLookup = false;
-        _x = Integer.parseInt(m.group(1));
-        _y = Integer.parseInt(m.group(2));
-        _z = Integer.parseInt(m.group(3));
-        EditSelection selection = DataManager.getEditSelection();
-        selection.selectPosition(_x, _y, _z, _world, 1);
-        _firstInspectorResult = true;
     }
 
     void details(Text chat, Matcher m)
@@ -182,9 +234,15 @@ public class CoreProtectAnalysis extends Analysis
         }
     }
 
-    void lookupHeader(Text chat, Matcher m)
+    void inspectorCoords(Text chat, Matcher m)
     {
-        _isLookup = true;
+        _isLookup = false;
+        _x = Integer.parseInt(m.group(1));
+        _y = Integer.parseInt(m.group(2));
+        _z = Integer.parseInt(m.group(3));
+        EditSelection selection = DataManager.getEditSelection();
+        selection.selectPosition(_x, _y, _z, _world, 1);
+        _firstInspectorResult = true;
     }
 
     void lookupCoords(Text chat, Matcher m)
@@ -203,6 +261,11 @@ public class CoreProtectAnalysis extends Analysis
 
             _lookupDetails = false;
         }
+    }
+
+    void lookupHeader(Text chat, Matcher m)
+    {
+        _isLookup = true;
     }
 
     private long parseTimeExpression(String time)
@@ -233,40 +296,6 @@ public class CoreProtectAnalysis extends Analysis
         return 0;
     }
 
-    void cpPage(Text chat, Matcher m)
-    {
-        int currentPage = Integer.parseInt(m.group(1));
-        int pageCount = Integer.parseInt(m.group(2));
-
-        if(Configs.Generic.AUTO_PAGE.getBooleanValue() && currentPage > _currentPage)
-        {
-            if (pageCount <= Configs.Generic.MAX_AUTO_PAGES.getIntegerValue())
-            {
-                _currentPage = currentPage;
-                _pageCount = pageCount;
-                if(_looping)
-                {
-                    requestNextPage();
-                }
-            }
-            else
-            {
-                reset();
-            }
-        }
-        else if(_currentPage == _pageCount)
-        {
-            reset();
-        }
-    }
-
-
-
-    void cpBusy(Text chat, Matcher m)
-    {
-        reset();
-    }
-
     private void requestNextPage()
     {
         if (_currentPage != 0 && _currentPage < _pageCount)
@@ -279,5 +308,14 @@ public class CoreProtectAnalysis extends Analysis
     {
         _looping = false;
         _currentPage = _pageCount = 0;
+    }
+
+    private boolean sendMessage()
+    {
+        if(_looping && Configs.Generic.AUTO_PAGE.getBooleanValue() && Configs.Generic.DISABLE_CP_MESSAGES.getBooleanValue())
+        {
+            return false;
+        }
+        return true;
     }
 }

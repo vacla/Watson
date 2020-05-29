@@ -271,12 +271,13 @@ public class DataManager implements IDirectoryCache
             }
         }
 
-        File file = new File(getPlayereditsBaseDirectory(), fileName);
+        File file = new File(getPlayereditsBaseDirectory(), fileName+".txt");
         try
         {
             BlockEditSet edits = DataManager.getEditSelection().getBlockEditSet();
             int editCount = edits.save(file);
             int annoCount = edits.getAnnotations().size();
+            StringUtils.sendOpenFileChatMessage(MinecraftClient.getInstance().player, "%s", file);
             ChatMessage.localOutputT("watson.message.blockedit.edits_annotations.saved", editCount, annoCount, fileName);
         }
         catch (IOException e)
@@ -288,7 +289,7 @@ public class DataManager implements IDirectoryCache
 
     public static void loadBlockEditFile(String fileName)
     {
-        File file = new File(getPlayereditsBaseDirectory(), fileName);
+        File file = new File(getPlayereditsBaseDirectory(), fileName+".txt");
         if(!file.canRead())
         {
             File[] files = getInstance().getBlockEditFileList(fileName);

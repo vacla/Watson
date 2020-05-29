@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+import eu.minemania.watson.Watson;
+import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.db.BlockEdit;
 import eu.minemania.watson.db.PlayereditSet;
 import eu.minemania.watson.db.WatsonBlock;
@@ -183,6 +185,10 @@ public class PlayereditUtils
         }
 
         InfoUtils.showGuiMessage(MessageType.WARNING, "watson.error.blockentity.not_found", blocks);
+        if(Configs.Generic.DEBUG.getBooleanValue())
+        {
+            Watson.logger.warn("watson.error.blockentity.not_found", blocks);
+        }
         return new ItemStack(Items.BEDROCK);
     }
 

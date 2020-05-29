@@ -91,7 +91,6 @@ public class LbCoordsAnalysis extends Analysis
         });
         IMatchedChatHandler headerHandler = new IMatchedChatHandler()
         {
-
             @Override
             public boolean onMatchedChat(Text chat, Matcher m)
             {

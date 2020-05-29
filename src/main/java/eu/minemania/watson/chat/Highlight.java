@@ -483,11 +483,6 @@ public class Highlight
 
     public static void add(String pattern, String color, String style)
     {
-        if(highlights.isEmpty())
-        {
-            InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.highlight.empty");
-            return;
-        }
         List<String> orig = Configs.Lists.HIGHLIGHT.getStrings();
         List<String> copy = new ArrayList<String>(orig);
         if(pattern != null && (style != null || color != null))
