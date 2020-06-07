@@ -50,7 +50,7 @@ public class OverlayRenderer
     {
         Entity entity = mc.getCameraEntity();
 
-        if (canRender == false)
+        if (!canRender)
         {
             // Don't render before the player has been placed in the actual proper position,
             // otherwise some of the renderers mess up.

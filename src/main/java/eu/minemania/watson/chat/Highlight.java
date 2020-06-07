@@ -24,7 +24,7 @@ import net.minecraft.util.Formatting;
 
 public class Highlight
 {
-    private static MinecraftClient mc = MinecraftClient.getInstance();
+    private static final MinecraftClient mc = MinecraftClient.getInstance();
     private static final Highlight INSTANCE = new Highlight();
     public static boolean changeUsername;
     public static boolean returnBoolean;
@@ -48,7 +48,7 @@ public class Highlight
     public static Text setHighlightChatMessage(String key,Text message, boolean watsonMessage)
     {
         String user = "";
-        String textChat = "";
+        StringBuilder textChat = new StringBuilder();
         int i = 0;
         Text endMessage;
         if(!watsonMessage)
@@ -61,12 +61,12 @@ public class Highlight
                 }
                 if(i>2)
                 {
-                    textChat += chatComponent.asFormattedString();
+                    textChat.append(chatComponent.asFormattedString());
                 }
                 i++;
             }
             setUsername(user, null);
-            endMessage = new TranslatableText(key, new Object[] {mc.player.getDisplayName(), Configs.Generic.USE_CHAT_HIGHLIGHTS.getBooleanValue() ? highlight(textChat) : textChat});
+            endMessage = new TranslatableText(key, mc.player.getDisplayName(), Configs.Generic.USE_CHAT_HIGHLIGHTS.getBooleanValue() ? highlight(textChat.toString()) : textChat.toString());
         }
         else
         {
@@ -87,8 +87,8 @@ public class Highlight
      */
     public static Text setHighlightChatMessage(Text message)
     {
-        String textChat = "";
-        String chat = "";
+        String textChat;
+        StringBuilder chat = new StringBuilder();
         Text endMessage;
         Text prefix = new LiteralText("");
         Style prefixStyle = null;
@@ -119,7 +119,7 @@ public class Highlight
                 }
                 if(i > 0)
                 {
-                    chat += chatComponent.asFormattedString();
+                    chat.append(chatComponent.asFormattedString());
                     if(i == 1 && chatComponent.getString().contains("[") && chatComponent.getString().contains("]"))
                     {
                         prefixStyle = chatComponent.getStyle();
@@ -132,34 +132,34 @@ public class Highlight
                 i++;
             }
 
-            if(chat.contains("<") && chat.contains(">") && !chat.startsWith("/") && (!chat.startsWith("§") && chat.charAt(2) != '/'))
+            if(chat.toString().contains("<") && chat.toString().contains(">") && !chat.toString().startsWith("/") && (!chat.toString().startsWith("§") && chat.charAt(2) != '/'))
             {
                 int startUsername = chat.indexOf("<") + 1;
                 int endUsername = chat.indexOf(">");
-                if(chat.contains("[") && chat.contains("]") && chat.indexOf("]") < startUsername - 1 && ((startUsername - 2) - (chat.indexOf("]")) <= 5))
+                if(chat.toString().contains("[") && chat.toString().contains("]") && chat.indexOf("]") < startUsername - 1 && ((startUsername - 2) - (chat.indexOf("]")) <= 5))
                 {
                     prefix = new LiteralText(chat.substring(chat.indexOf("["), chat.indexOf("]") + 1)); 
                 }
-                if(!prefix.equals(new LiteralText("")) || chat.startsWith("<"))
+                if(!prefix.equals(new LiteralText("")) || chat.toString().startsWith("<"))
                 {
                     username = chat.substring(startUsername, endUsername);
                 }
                 else
                 {
-                    return endMessage = message;
+                    return message;
                 }
                 textChat = chat.substring(endUsername + 2);
                 changeUsername = true;
                 setUsername(username, null);
 
-                endMessage = new TranslatableText(tempkey, new Object[] { mc.player.getDisplayName(), highlight(textChat)});
+                endMessage = new TranslatableText(tempkey, mc.player.getDisplayName(), highlight(textChat));
                 if(!prefix.equals(new LiteralText("")))
                 {
                     prefix.append(endMessage);
                     endMessage = prefix;
                 }
             }
-            else if (chat.contains(divineDivider))
+            else if (chat.toString().contains(divineDivider))
             {
                 if(Configs.Generic.DEBUG.getBooleanValue())
                 {
@@ -167,7 +167,7 @@ public class Highlight
                 }
                 int startUsername = chat.indexOf("]") + 1;
                 int endUsername = chat.indexOf(divineDivider) - 1;
-                if(prefix.equals(new LiteralText("")) && (chat.contains("[") && chat.contains("]")) && chat.indexOf("]") < endUsername)
+                if(prefix.equals(new LiteralText("")) && (chat.toString().contains("[") && chat.toString().contains("]")) && chat.indexOf("]") < endUsername)
                 {
                     String textPrefix;
                     textPrefix = chat.substring(chat.indexOf("["), chat.indexOf("]") + 1);
@@ -186,7 +186,7 @@ public class Highlight
                         Watson.logger.info("prefix: "+prefix.asString());
                     }
                 }
-                if(!prefix.equals(new LiteralText("")) || chat.startsWith("["))
+                if(!prefix.equals(new LiteralText("")) || chat.toString().startsWith("["))
                 {
                     username = chat.substring(startUsername, endUsername);
                     if(username.endsWith("\u00A7"))
@@ -202,38 +202,38 @@ public class Highlight
                 {
                     Text beforeDivider = new LiteralText("");
                     boolean dividerShown = false;
-                    String textMessage = "";
+                    StringBuilder textMessage = new StringBuilder();
                     for(Text textComponent1 : message)
                     {
                         String stringChat = textComponent1.getString();
                         if(dividerShown)
                         {
-                            textMessage += textComponent1.getStyle().asString() + stringChat + Formatting.RESET;
+                            textMessage.append(textComponent1.getStyle().asString()).append(stringChat).append(Formatting.RESET);
                         }
                         else if(stringChat.contains(divineDivider))
                         {
                             dividerShown = true;
-                            textMessage += stringChat.length() > 3 ? textComponent1.getStyle().asString() + stringChat.substring(stringChat.indexOf(divineDivider)) + Formatting.RESET : textComponent1.getStyle().asString() + stringChat + Formatting.RESET;
+                            textMessage.append(stringChat.length() > 3 ? textComponent1.getStyle().asString() + stringChat.substring(stringChat.indexOf(divineDivider)) + Formatting.RESET : textComponent1.getStyle().asString() + stringChat + Formatting.RESET);
                         }
                         else
                         {
                             beforeDivider.append(textComponent1);
                         }
                     }
-                    if(!textMessage.isEmpty())
+                    if(textMessage.length() > 0)
                     {
                         if(Configs.Generic.DEBUG.getBooleanValue())
                         {
-                            Watson.logger.info("textmessage: "+textMessage);
+                            Watson.logger.info("text message: "+textMessage);
                             Watson.logger.info("divider: "+beforeDivider.asFormattedString());
                         }
-                        message = beforeDivider.append(new LiteralText(highlight(textMessage)));
+                        message = beforeDivider.append(new LiteralText(highlight(textMessage.toString())));
                         if(Configs.Generic.DEBUG.getBooleanValue())
                         {
                             Watson.logger.info("total message: "+message.asFormattedString());
                         }
                     }
-                    return endMessage = message;
+                    return message;
                 }
 
                 textChat = chat.substring(endUsername + 2);
@@ -250,15 +250,15 @@ public class Highlight
                 setUsername(username, prefixStyle);
                 Text displayName = mc.player.getDisplayName();
                 String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
-                HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableText("watson.chat.message.hover", new Object[]{(new LiteralText(time)).formatted(Formatting.YELLOW)}));
+                HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableText("watson.chat.message.hover", (new LiteralText(time)).formatted(Formatting.YELLOW)));
                 displayName.getStyle().setHoverEvent(hover);
                 if(dividerStyle != null)
                 {
-                    endMessage = new TranslatableText("watson.chat.message", new Object[] { displayName, new LiteralText(divineDivider).setStyle(dividerStyle), new LiteralText(highlight(textChat))});
+                    endMessage = new TranslatableText("watson.chat.message", displayName, new LiteralText(divineDivider).setStyle(dividerStyle), new LiteralText(highlight(textChat)));
                 }
                 else
                 {
-                    endMessage = new TranslatableText(tempkey, new Object[] { displayName, new LiteralText(highlight(textChat))});
+                    endMessage = new TranslatableText(tempkey, displayName, new LiteralText(highlight(textChat)));
                 }
 
                 changeUsername = false;
@@ -385,7 +385,7 @@ public class Highlight
     {
         highlights.clear();
 
-        getInstance().populateHighlightList(highlights, list);
+        getInstance().populateHighlightList(list);
     }
 
     /**
@@ -457,7 +457,7 @@ public class Highlight
                 Formatting color = item_highlight.getRight().getLeft();
                 Formatting style = item_highlight.getRight().getRight();
 
-                ChatMessage.localOutputT("watson.message.highlight.list_string", index + 1, item_highlight.getLeft(), color != null ? color.getName() : color, style != null ? style.getName() : style);
+                ChatMessage.localOutputT("watson.message.highlight.list_string", index + 1, item_highlight.getLeft(), color != null ? color.getName() : null, style != null ? style.getName() : null);
                 ++index;
             }
         }
@@ -484,7 +484,7 @@ public class Highlight
     public static void add(String pattern, String color, String style)
     {
         List<String> orig = Configs.Lists.HIGHLIGHT.getStrings();
-        List<String> copy = new ArrayList<String>(orig);
+        List<String> copy = new ArrayList<>(orig);
         if(pattern != null && (style != null || color != null))
         {
             copy.add(style + color + ";" + pattern);
@@ -495,17 +495,16 @@ public class Highlight
 
     /**
      * Populates highlight list with config highlight list.
-     * 
-     * @param highlightpair List for highlight
+     *
      * @param names Config highlight list items
      */
-    private void populateHighlightList(HashSet<MutablePair<Pattern, MutablePair<Formatting, Formatting>>> highlightpair, List<String> names)
+    private void populateHighlightList(List<String> names)
     {
         for (String str : names)
         {
             try
             {
-                if(str.isEmpty() == false)
+                if(!str.isEmpty())
                 {
                     int index = str.indexOf(";");
                     if (index != -1)
@@ -548,7 +547,7 @@ public class Highlight
                         }
                         if(pr.getLeft() != null && pr.getRight() != null)
                         {
-                            highlightpair.add(pr);
+                            Highlight.highlights.add(pr);
                         }
                     }
                 }

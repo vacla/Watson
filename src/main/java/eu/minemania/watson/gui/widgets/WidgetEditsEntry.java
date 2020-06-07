@@ -169,7 +169,7 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
 
         if(this.header1 != null)
         {
-            if(this.listWidget.getSearchBarWidget().isSearchOpen() == false)
+            if(!this.listWidget.getSearchBarWidget().isSearchOpen())
             {
                 this.drawString(x1, y, color, this.header1);
                 this.drawString(x2, y, color, this.header2);
@@ -213,7 +213,7 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
             ItemStack stack = this.entry.getStack();
             String stackName = stack.getName().getString();
             int total = this.entry.getCountTotal();
-            String strTotal = this.getFormattedCountString(total, stack.getMaxCount());
+            String strTotal = this.getFormattedCountString(total);
 
             int w1 = Math.max(this.getStringWidth(header1), this.getStringWidth(header2));
             int w2 = Math.max(this.getStringWidth(stackName), this.getStringWidth(strTotal));
@@ -254,10 +254,9 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
         }
     }
 
-    private String getFormattedCountString(int total, int maxStackSize)
+    private String getFormattedCountString(int total)
     {
-        String strCount = String.format("%d", total);
-        return strCount;
+        return String.format("%d", total);
     }
 
     static class ButtonListener implements IButtonActionListener
@@ -279,7 +278,7 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
             if(this.type == ButtonType.BLOCKS)
             {
                 EditListBlockedit editList = new EditListBlockedit(this.entry.getBlocks(), true);
-                GuiBase.openGui(new GuiBlockeditData(editList, this.entry.getStack().getTranslationKey(), this.entry.getBlocks(), listWidget.getParent()));
+                GuiBase.openGui(new GuiBlockeditData(editList, this.entry.getStack().getTranslationKey(), listWidget.getParent()));
             }
         }
 
@@ -289,7 +288,7 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
 
             private final String translationKey;
 
-            private ButtonType(String translationKey)
+            ButtonType(String translationKey)
             {
                 this.translationKey = translationKey;
             }

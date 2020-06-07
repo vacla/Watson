@@ -34,9 +34,8 @@ public class BlockEditSet
 
     public synchronized int load(File file) throws Exception
     {
-        BufferedReader reader = new BufferedReader(new FileReader(file));
 
-        try
+        try(BufferedReader reader = new BufferedReader(new FileReader(file)))
         {
             Pattern editPattern = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})\\|(\\d{2}):(\\d{2}):(\\d{2})\\|(\\w+)\\|(\\w+)\\|(minecraft:\\w+)\\|(-?\\d+)\\|(\\d+)\\|(-?\\d+)\\|(\\w+)\\|(\\d+)");
             Pattern annoPattern = Pattern.compile("#(-?\\d+)\\|(\\d+)\\|(-?\\d+)\\|(\\w+)\\|(.*)");
@@ -97,17 +96,12 @@ public class BlockEditSet
 
             return edits;
         }
-        finally
-        {
-            reader.close();
-        }
     }
 
     public synchronized int save(File file) throws IOException
     {
-        PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 
-        try
+        try(PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(file))))
         {
             int editCount = 0;
             for(PlayereditSet editsForPlayer : _playerEdits.values())
@@ -120,10 +114,6 @@ public class BlockEditSet
                 writer.format("#%d|%d|%d|%s|%s\n", annotation.getX(), annotation.getY(), annotation.getZ(), annotation.getWorld(), annotation.getText());
             }
             return editCount;
-        }
-        finally
-        {
-            writer.close();
         }
     }
 
@@ -275,7 +265,7 @@ public class BlockEditSet
 
     public synchronized void drawAnnotations(double dx, double dy, double dz)
     {
-        if(Configs.Generic.ANNOTATION_SHOWN.getBooleanValue() && _annotations.isEmpty() == false)
+        if(Configs.Generic.ANNOTATION_SHOWN.getBooleanValue() && !_annotations.isEmpty())
         {
             for(Annotation annotation : _annotations)
             {

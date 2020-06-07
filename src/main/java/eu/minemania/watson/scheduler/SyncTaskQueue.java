@@ -4,8 +4,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class SyncTaskQueue
 {
-    private static SyncTaskQueue INSTANCE = new SyncTaskQueue();
-    protected ConcurrentLinkedQueue<Runnable> _taskQueue = new ConcurrentLinkedQueue<Runnable>();
+    private static final SyncTaskQueue INSTANCE = new SyncTaskQueue();
+    protected ConcurrentLinkedQueue<Runnable> _taskQueue = new ConcurrentLinkedQueue<>();
 
     public static SyncTaskQueue getInstance()
     {

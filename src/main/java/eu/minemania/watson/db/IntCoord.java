@@ -65,7 +65,7 @@ public class IntCoord
         {
             return true;
         }
-        else if (obj != null && obj instanceof IntCoord)
+        else if (obj instanceof IntCoord)
         {
             IntCoord c = (IntCoord) obj;
             return (c._x == _x && c._y == _y && c._z == _z);

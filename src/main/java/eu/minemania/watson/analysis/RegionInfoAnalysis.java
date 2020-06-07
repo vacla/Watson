@@ -4,7 +4,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import eu.minemania.watson.chat.ChatMessage;
-import eu.minemania.watson.chat.IMatchedChatHandler;
 import eu.minemania.watson.config.Configs;
 import net.minecraft.text.Text;
 
@@ -15,14 +14,9 @@ public class RegionInfoAnalysis extends Analysis
 
     public RegionInfoAnalysis()
     {
-        addMatchedChatHandler(Configs.Analysis.WG_REGIONS, new IMatchedChatHandler()
-        {
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                wgRegions(chat, m);
-                return true;
-            }
+        addMatchedChatHandler(Configs.Analysis.WG_REGIONS, (chat, m) -> {
+            wgRegions(chat, m);
+            return true;
         });
     }
 

@@ -116,11 +116,8 @@ public class RenderUtils
 
     private static void renderModelQuadOutlines(BlockPos pos, Color4f color, List<BakedQuad> quads, BufferBuilder buffer)
     {
-        final int size = quads.size();
-
-        for (int i = 0; i < size; i++)
-        {
-            renderQuadOutlinesBatched(pos, color, quads.get(i).getVertexData(), buffer);
+        for (BakedQuad quad : quads) {
+            renderQuadOutlinesBatched(pos, color, quad.getVertexData(), buffer);
         }
     }
 
@@ -129,13 +126,13 @@ public class RenderUtils
         final int x = pos.getX();
         final int y = pos.getY();
         final int z = pos.getZ();
-        float fx[] = new float[4];
-        float fy[] = new float[4];
-        float fz[] = new float[4];
+        float[] fx = new float[4];
+        float[] fy = new float[4];
+        float[] fz = new float[4];
 
         for (int index = 0; index < 4; ++index)
         {
-            fx[index] = x + Float.intBitsToFloat(vertexData[index * 8 + 0]);
+            fx[index] = x + Float.intBitsToFloat(vertexData[index * 8]);
             fy[index] = y + Float.intBitsToFloat(vertexData[index * 8 + 1]);
             fz[index] = z + Float.intBitsToFloat(vertexData[index * 8 + 2]);
         }

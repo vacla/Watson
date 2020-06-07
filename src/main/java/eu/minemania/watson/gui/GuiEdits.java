@@ -82,7 +82,7 @@ implements ICompletionListener
     private int createButton(int x, int y, int width, ButtonListener.Type type)
     {
         ButtonListener listener = new ButtonListener(type, this);
-        String label = "";
+        String label;
 
         label = type.getDisplayName();
 
@@ -150,7 +150,7 @@ implements ICompletionListener
 
             private final String translationKey;
 
-            private Type(String translationKey)
+            Type(String translationKey)
             {
                 this.translationKey = translationKey;
             }

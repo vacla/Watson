@@ -35,14 +35,12 @@ public abstract class MixinChatHud
                 {
                     if(((TranslatableText)componentln).getKey().contains("chat.type.text"))
                     {
-                        Text newComponent = Highlight.setHighlightChatMessage(((TranslatableText)componentln).getKey(),componentln, false);
-                        return newComponent;
+                        return Highlight.setHighlightChatMessage(((TranslatableText)componentln).getKey(),componentln, false);
                     }
                 }
                 else
                 {
-                    Text newComponent = Highlight.setHighlightChatMessage(componentln);
-                    return newComponent;
+                    return Highlight.setHighlightChatMessage(componentln);
                 }
             }
         }

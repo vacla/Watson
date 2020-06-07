@@ -62,79 +62,39 @@ public class CoreProtectAnalysis extends Analysis
 
     public CoreProtectAnalysis()
     {
-        IMatchedChatHandler inspectcoords = new IMatchedChatHandler()
-        {
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                inspectorCoords(chat, m);
-                return true;
-            }
+        IMatchedChatHandler inspectcoords = (chat, m) -> {
+            inspectorCoords(chat, m);
+            return true;
         };
-        addMatchedChatHandler(Configs.Analysis.CP_BUSY, new IMatchedChatHandler()
-        {
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                cpBusy(chat, m);
-                return sendMessage();
-            }
+        addMatchedChatHandler(Configs.Analysis.CP_BUSY, (chat, m) -> {
+            cpBusy(chat, m);
+            return sendMessage();
         });
-        addMatchedChatHandler(Configs.Analysis.CP_DETAILS, new IMatchedChatHandler()
-        {
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                details(chat, m);
-                return sendMessage();
-            }
+        addMatchedChatHandler(Configs.Analysis.CP_DETAILS, (chat, m) -> {
+            details(chat, m);
+            return sendMessage();
         });
         addMatchedChatHandler(Configs.Analysis.CP_INSPECTOR_COORDS, inspectcoords);
         addMatchedChatHandler(Configs.Analysis.CP_INSPECTOR_COORDS_CONT, inspectcoords);
-        addMatchedChatHandler(Configs.Analysis.CP_LOOKUP_COORDS, new IMatchedChatHandler()
-        {
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                lookupCoords(chat, m);
-                return sendMessage();
-            }
+        addMatchedChatHandler(Configs.Analysis.CP_LOOKUP_COORDS, (chat, m) -> {
+            lookupCoords(chat, m);
+            return sendMessage();
         });
-        addMatchedChatHandler(Configs.Analysis.CP_LOOKUP_HEADER, new IMatchedChatHandler()
-        {
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                lookupHeader(chat, m);
-                return sendMessage();
-            }
+        addMatchedChatHandler(Configs.Analysis.CP_LOOKUP_HEADER, (chat, m) -> {
+            lookupHeader(chat, m);
+            return sendMessage();
         });
-        addMatchedChatHandler(Configs.Analysis.CP_NO_RESULT, new IMatchedChatHandler()
-        {
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                cpNoResult(chat, m);
-                return true;
-            }
+        addMatchedChatHandler(Configs.Analysis.CP_NO_RESULT, (chat, m) -> {
+            cpNoResult(chat, m);
+            return true;
         });
-        addMatchedChatHandler(Configs.Analysis.CP_PAGE, new IMatchedChatHandler()
-        {
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                cpPage(chat, m);
-                return sendMessage();
-            }
+        addMatchedChatHandler(Configs.Analysis.CP_PAGE, (chat, m) -> {
+            cpPage(chat, m);
+            return sendMessage();
         });
-        addMatchedChatHandler(Configs.Analysis.CP_SEARCH, new IMatchedChatHandler()
-        {
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                cpSearch(chat, m);
-                return sendMessage();
-            }
+        addMatchedChatHandler(Configs.Analysis.CP_SEARCH, (chat, m) -> {
+            cpSearch(chat, m);
+            return sendMessage();
         });
     }
 

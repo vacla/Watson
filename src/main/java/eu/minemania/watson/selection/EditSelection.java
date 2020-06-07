@@ -23,7 +23,7 @@ public class EditSelection
     protected boolean _selectionChanged;
     protected BlockEdit _selection;
     protected HashMap<String, Object> _variables = new HashMap<>();
-    protected static HashMap<String, BlockEditSet> _edits = new HashMap<String, BlockEditSet>();
+    protected static HashMap<String, BlockEditSet> _edits = new HashMap<>();
     protected Calendar _calendar = Calendar.getInstance();
 
     public HashMap<String, Object> getVariables()
@@ -143,13 +143,6 @@ public class EditSelection
                 }
             }
         }
-    }
-
-    public boolean isSelectionChanged()
-    {
-        boolean result = _selectionChanged;
-        _selectionChanged = false;
-        return result;
     }
 
     public void queryPreEdits(int count)

@@ -1,10 +1,8 @@
 package eu.minemania.watson.gui;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
-import eu.minemania.watson.db.BlockEdit;
 import eu.minemania.watson.db.TimeStamp;
 import eu.minemania.watson.db.data.BlockeditBase;
 import eu.minemania.watson.db.data.BlockeditEntry;
@@ -32,7 +30,7 @@ implements ICompletionListener
     protected static final Pattern ABSOLUTE_TIME = Pattern.compile("(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{1,2}):(\\d{1,2})");
     protected long time = 0;
 
-    public GuiBlockeditData(BlockeditBase display, String titleKey, List<BlockEdit> blockedit, @Nullable Screen parent)
+    public GuiBlockeditData(BlockeditBase display, String titleKey, @Nullable Screen parent)
     {
         super(12, 40);
 
@@ -201,7 +199,7 @@ implements ICompletionListener
 
         private final String labelKey;
 
-        private ButtonType(String labelKey)
+        ButtonType(String labelKey)
         {
             this.labelKey = labelKey;
         }

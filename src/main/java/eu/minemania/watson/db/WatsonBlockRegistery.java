@@ -19,9 +19,7 @@ import net.minecraft.util.registry.Registry;
 public final class WatsonBlockRegistery
 {
     private static final WatsonBlockRegistery INSTANCE = new WatsonBlockRegistery();
-    public static final Map<String, WatsonBlock> _byName = new HashMap<String, WatsonBlock>();
-    protected String blockname = "";
-    protected float lineWidth;
+    public static final Map<String, WatsonBlock> _byName = new HashMap<>();
     protected Color4f color;
 
     public static WatsonBlockRegistery getInstance()
@@ -50,7 +48,7 @@ public final class WatsonBlockRegistery
         {
             try
             {
-                if(entry.isEmpty() == false)
+                if(!entry.isEmpty())
                 {
                     String[] watsonBlockData = entry.split(";");
                     if(watsonBlockData.length == 3)
@@ -131,11 +129,7 @@ public final class WatsonBlockRegistery
 
     private void addWatsonBlockName(String name, WatsonBlock watsonBlock)
     {
-        WatsonBlock oldWatsonBlock = _byName.get(name);
-        if (oldWatsonBlock == null)
-        {
-            _byName.put(name, watsonBlock);
-        }
+        _byName.putIfAbsent(name, watsonBlock);
     }
 
     public WatsonBlock getWatsonBlockByName(String name)

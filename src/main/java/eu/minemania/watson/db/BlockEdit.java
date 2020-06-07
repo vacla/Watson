@@ -29,7 +29,6 @@ public class BlockEdit
     public String world;
     public PlayereditSet playereditSet;
     private final BlockRenderManager blockModelShapes;
-    private MinecraftClient mc;
     protected boolean drawn;
 
     public BlockEdit(long time, String player, String action, int x, int y, int z, WatsonBlock block, String world, int amount)
@@ -43,15 +42,15 @@ public class BlockEdit
         this.z = z;
         this.block = block;
         this.world = world;
-        this.mc = MinecraftClient.getInstance();
-        this.blockModelShapes = this.mc.getBlockRenderManager();
+        MinecraftClient mc = MinecraftClient.getInstance();
+        this.blockModelShapes = mc.getBlockRenderManager();
     }
 
     public void drawOutline(BufferBuilder buffer)
     {
         Block blocks = Registry.BLOCK.get(Identifier.tryParse(block.getName()));
         float lineWidth = block.getLineWidth();
-        if(blocks != null && !blocks.getName().asString().equals("Air"))
+        if(!blocks.getName().asString().equals("Air"))
         {
             if(Configs.Generic.ORE_OUTLINE_THICKER.getBooleanValue() && blocks instanceof OreBlock)
             {
@@ -118,12 +117,7 @@ public class BlockEdit
         {
             if(Configs.Generic.ONLY_ORE_BLOCK.getBooleanValue() && blockEdit.x == x && blockEdit.y == y && blockEdit.z == z && blockEdit.drawn)
             {
-                if(this == blockEdit)
-                {
-                    return false;
-                }
-
-                return true;
+                return this != blockEdit;
             }
         }
 
@@ -132,10 +126,6 @@ public class BlockEdit
 
     public boolean isCreated()
     {
-        if(this.action.equals("placed") || this.action.equals("created"))
-        {
-            return true;
-        }
-        return false;
+        return this.action.equals("placed") || this.action.equals("created");
     }
 }

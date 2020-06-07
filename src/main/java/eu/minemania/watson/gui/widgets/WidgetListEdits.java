@@ -95,7 +95,7 @@ public class WidgetListEdits extends WidgetListBase<PlayereditEntry, WidgetEdits
     {
         super.refreshBrowserEntries();
 
-        if(this.scrollbarRestored == false && lastScrollbarPosition <= this.scrollBar.getMaxValue())
+        if(!this.scrollbarRestored && lastScrollbarPosition <= this.scrollBar.getMaxValue())
         {
             this.scrollBar.setValue(lastScrollbarPosition);
             this.scrollbarRestored = true;

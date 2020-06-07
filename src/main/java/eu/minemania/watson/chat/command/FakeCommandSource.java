@@ -11,8 +11,8 @@ import net.minecraft.server.command.ServerCommandSource;
 
 public class FakeCommandSource extends ServerCommandSource
 {
-    private static List<String> colors = Arrays.asList(new String[] {"black", "darkblue", "darkgreen", "darkaqua", "darkred", "darkpurple", "gold", "grey", "gray", "darkgrey", "darkgray", "blue", "green", "aqua", "red", "lightpurple", "yellow", "white"});
-    private static List<String> styles = Arrays.asList(new String[] {"+", "/", "_", "-", "?"});
+    private static final List<String> colors = Arrays.asList("black", "darkblue", "darkgreen", "darkaqua", "darkred", "darkpurple", "gold", "grey", "gray", "darkgrey", "darkgray", "blue", "green", "aqua", "red", "lightpurple", "yellow", "white");
+    private static final List<String> styles = Arrays.asList("+", "/", "_", "-", "?");
     public FakeCommandSource(ClientPlayerEntity player)
     {
         super(player, player.getPosVector(), player.getRotationClient(), null, 0, player.getEntityName(), player.getName(), null, player);

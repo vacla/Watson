@@ -2,8 +2,6 @@ package eu.minemania.watson.db;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 
 import eu.minemania.watson.Watson;
@@ -19,10 +17,10 @@ import net.minecraft.util.Formatting;
 
 public class OreDB
 {
-    protected LinkedHashMap<WatsonBlock, TypedOreDB> _db = new LinkedHashMap<WatsonBlock, TypedOreDB>();
-    protected LinkedHashMap<WatsonBlock, Color> _chatColors = new LinkedHashMap<WatsonBlock, Color>();
+    protected LinkedHashMap<WatsonBlock, TypedOreDB> _db = new LinkedHashMap<>();
+    protected LinkedHashMap<WatsonBlock, Color> _chatColors = new LinkedHashMap<>();
     protected int _tpIndex = 0;
-    protected ArrayList<OreDeposit> _oreDepositSequence = new ArrayList<OreDeposit>();
+    protected ArrayList<OreDeposit> _oreDepositSequence = new ArrayList<>();
     protected boolean _oreDepositSequenceChanged = true;
     protected boolean _lastTimeOrderedDeposits = true;
 
@@ -102,7 +100,7 @@ public class OreDB
                     BlockEdit edit = block.getEdit();
                     WatsonBlock watsonblock = edit.block;
                     String player = edit.player;
-                    Formatting strike = edit.playereditSet.isVisible() == true ? null : Formatting.STRIKETHROUGH;
+                    Formatting strike = edit.playereditSet.isVisible() ? null : Formatting.STRIKETHROUGH;
                     String line = String.format("(%3d) %s (% 5d % 3d % 5d) %s [%2d] %s", id, TimeStamp.formatMonthDayTime(time), block.getLocation().getX(), block.getLocation().getY(), block.getLocation().getZ(), watsonblock.getName(), deposit.getBlockCount(), player);
                     ChatMessage.sendToLocalChat(_chatColors.get(watsonblock).getColor(), strike, line, true);
                 }
@@ -338,21 +336,11 @@ public class OreDB
             _oreDepositSequence.clear();
             for(TypedOreDB db : _db.values())
             {
-                for(OreDeposit deposit : db.getOreDeposits())
-                {
-                    _oreDepositSequence.add(deposit);
-                }
+                _oreDepositSequence.addAll(db.getOreDeposits());
             }
             if(Configs.Generic.TIME_ORDERED_DEPOSITS.getBooleanValue())
             {
-                Collections.sort(_oreDepositSequence, new Comparator<OreDeposit>()
-                {
-                    @Override
-                    public int compare(OreDeposit o1, OreDeposit o2)
-                    {
-                        return Long.signum(o1.getEarliestEdit().time - o2.getEarliestEdit().time);
-                    }
-                });
+                _oreDepositSequence.sort((o1, o2) -> Long.signum(o1.getEarliestEdit().time - o2.getEarliestEdit().time));
             }
         }
         return _oreDepositSequence;

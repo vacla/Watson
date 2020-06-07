@@ -127,7 +127,7 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
 
             private final String translationKey;
 
-            private ButtonType(String translationKey)
+            ButtonType(String translationKey)
             {
                 this.translationKey = translationKey;
             }

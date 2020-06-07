@@ -165,7 +165,7 @@ public class WatsonCommand extends WatsonCommandBase
 
     private static int orePage(CommandContext<ServerCommandSource> context)
     {
-        Integer page;
+        int page;
         try
         {
             page = getInteger(context, "page");
@@ -180,7 +180,7 @@ public class WatsonCommand extends WatsonCommandBase
 
     private static int preCount(CommandContext<ServerCommandSource> context)
     {
-        Integer count;
+        int count;
         try
         {
             count = getInteger(context, "count");
@@ -195,7 +195,7 @@ public class WatsonCommand extends WatsonCommandBase
 
     private static int postCount(CommandContext<ServerCommandSource> context)
     {
-        Integer count;
+        int count;
         try
         {
             count = getInteger(context, "count");
@@ -356,7 +356,7 @@ public class WatsonCommand extends WatsonCommandBase
 
     private static int teleport(CommandContext<ServerCommandSource> context)
     {
-        Integer index = getInteger(context, "index");
+        int index = getInteger(context, "index");
         DataManager.getEditSelection().getBlockEditSet().getOreDB().tpIndex(index);
         return 1;
     }
@@ -637,7 +637,7 @@ public class WatsonCommand extends WatsonCommandBase
 
     private static int config_billb_background(CommandContext<ServerCommandSource> context)
     {
-        Integer color;
+        int color;
         try
         {
             color = getInteger(context, "argb");
@@ -653,7 +653,7 @@ public class WatsonCommand extends WatsonCommandBase
 
     private static int config_billb_foreground(CommandContext<ServerCommandSource> context)
     {
-        Integer color;
+        int color;
         try
         {
             color = getInteger(context, "argb");
@@ -724,7 +724,7 @@ public class WatsonCommand extends WatsonCommandBase
 
     private static int config_max_auto_page(CommandContext<ServerCommandSource> context)
     {
-        Integer pages;
+        int pages;
         try
         {
             pages = getInteger(context, "pages");
@@ -740,7 +740,7 @@ public class WatsonCommand extends WatsonCommandBase
 
     private static int config_pre_count(CommandContext<ServerCommandSource> context)
     {
-        Integer count;
+        int count;
         try
         {
             count = getInteger(context, "count");
@@ -756,7 +756,7 @@ public class WatsonCommand extends WatsonCommandBase
 
     private static int config_post_count(CommandContext<ServerCommandSource> context)
     {
-        Integer count;
+        int count;
         try
         {
             count = getInteger(context, "count");

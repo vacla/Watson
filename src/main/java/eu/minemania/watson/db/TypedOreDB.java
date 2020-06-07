@@ -8,11 +8,11 @@ import java.util.TreeSet;
 public class TypedOreDB
 {
     protected HashMap<IntCoord, OreBlock> _oreBlocks;
-    protected TreeSet<OreDeposit> _oreDeposits = new TreeSet<OreDeposit>();
+    protected TreeSet<OreDeposit> _oreDeposits = new TreeSet<>();
 
     public TypedOreDB(int initialCapacity)
     {
-        _oreBlocks = new HashMap<IntCoord, OreBlock>(initialCapacity);
+        _oreBlocks = new HashMap<>(initialCapacity);
     }
 
     public void clear()
@@ -59,10 +59,8 @@ public class TypedOreDB
         else
         {
             int currentIndex = 1;
-            Iterator<OreDeposit> it = _oreDeposits.iterator();
-            while (it.hasNext())
+            for(OreDeposit deposit : _oreDeposits)
             {
-                OreDeposit deposit = it.next();
                 if(currentIndex == index)
                 {
                     return deposit;
@@ -98,7 +96,7 @@ public class TypedOreDB
             }
             else
             {
-                ArrayList<OreBlock> blocks = new ArrayList<OreBlock>();
+                ArrayList<OreBlock> blocks = new ArrayList<>();
                 for(OreDeposit deposit : deposits)
                 {
                     _oreDeposits.remove(deposit);
@@ -117,7 +115,7 @@ public class TypedOreDB
 
     public void removeDeposits(String player)
     {
-        ArrayList<BlockEdit> retainedEdits = new ArrayList<BlockEdit>();
+        ArrayList<BlockEdit> retainedEdits = new ArrayList<>();
         for (OreBlock block : _oreBlocks.values())
         {
             if(!block.getEdit().player.equalsIgnoreCase(player))
@@ -140,7 +138,7 @@ public class TypedOreDB
 
     protected TreeSet<OreDeposit> getAdjacentDeposits(IntCoord location)
     {
-        TreeSet<OreDeposit> deposits = new TreeSet<OreDeposit>();
+        TreeSet<OreDeposit> deposits = new TreeSet<>();
         IntCoord adjacent = new IntCoord();
         for (int dx = -1; dx <= 1; ++dx)
         {
@@ -148,11 +146,7 @@ public class TypedOreDB
             {
                 for(int dz = -1; dz <= 1; ++dz)
                 {
-                    if(dx == 0 && dy == 0 && dz == 0)
-                    {
-                        continue;
-                    }
-                    else
+                    if(dx != 0 || dy != 0 || dz != 0)
                     {
                         adjacent.setX(location.getX() + dx);
                         adjacent.setY(location.getY() + dy);

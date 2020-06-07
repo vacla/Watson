@@ -6,7 +6,6 @@ import java.util.regex.Matcher;
 
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.chat.ChatMessage;
-import eu.minemania.watson.chat.IMatchedChatHandler;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.TimeStamp;
@@ -18,7 +17,7 @@ import net.minecraft.text.Text;
 public class ServerTime extends Analysis
 {
     protected static final int MINUTES_TO_MILLISECONDS = 60 * 1000;
-    protected HashMap<String, Integer> _localMinusServerMinutes = new HashMap<String, Integer>();
+    protected HashMap<String, Integer> _localMinusServerMinutes = new HashMap<>();
     protected boolean _echoNextNoResults = true;
     protected boolean _showServerTime = false;
     private static final ServerTime INSTANCE = new ServerTime();
@@ -53,7 +52,7 @@ public class ServerTime extends Analysis
                 {
                     Calendar pastTime = getPastTime();
                     String date = String.format("%d,%d,%d", pastTime.get(Calendar.DAY_OF_MONTH), pastTime.get(Calendar.MONTH) + 1, pastTime.get(Calendar.YEAR));
-                    String query = String.format("/lb player %s since 00:00:00 before 00:00:01 limit 1", MinecraftClient.getInstance().player.getName().getString(), date, date);
+                    String query = String.format("/lb player %s since %s 00:00:00 before %s 00:00:01 limit 1", MinecraftClient.getInstance().player.getName().getString(), date, date);
                     if(Configs.Generic.DEBUG.getBooleanValue())
                     {
                         Watson.logger.info("Server time query for " + serverIP + ": " + query);
@@ -75,23 +74,11 @@ public class ServerTime extends Analysis
 
     public ServerTime()
     {
-        addMatchedChatHandler(Configs.Analysis.LB_HEADER_TIME_CHECK, new IMatchedChatHandler()
-        {
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                lbHeaderTimeCheck(chat,m);
-                return false;
-            }
+        addMatchedChatHandler(Configs.Analysis.LB_HEADER_TIME_CHECK, (chat, m) -> {
+            lbHeaderTimeCheck(chat,m);
+            return false;
         });
-        addMatchedChatHandler(Configs.Analysis.LB_HEADER_NO_RESULTS, new IMatchedChatHandler()
-        {
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                return lbHeaderNoResults(chat,m);
-            }
-        });
+        addMatchedChatHandler(Configs.Analysis.LB_HEADER_NO_RESULTS, this::lbHeaderNoResults);
     }
 
     void lbHeaderTimeCheck(Text chat, Matcher m)

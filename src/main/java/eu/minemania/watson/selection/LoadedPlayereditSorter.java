@@ -20,7 +20,7 @@ public class LoadedPlayereditSorter implements Comparator<PlayereditSet>
 
         if(parent.isChecked())
         {
-            return entry1.getBlockEditCount() == entry2.getBlockEditCount() ? nameCompare : ((entry1.getBlockEditCount() > entry2.getBlockEditCount()) != false ? -1 : 1);
+            return entry1.getBlockEditCount() == entry2.getBlockEditCount() ? nameCompare : ((entry1.getBlockEditCount() > entry2.getBlockEditCount()) ? -1 : 1);
         }
 
         return nameCompare * -1;

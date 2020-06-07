@@ -12,8 +12,8 @@ import net.minecraft.util.Formatting;
 
 public class ChatMessage
 {
-    private static ChatMessage INSTANCE = new ChatMessage();
-    protected ConcurrentLinkedQueue<String> _serverChatQueue = new ConcurrentLinkedQueue<String>();
+    private static final ChatMessage INSTANCE = new ChatMessage();
+    protected ConcurrentLinkedQueue<String> _serverChatQueue = new ConcurrentLinkedQueue<>();
     protected long _lastServerChatTime;
 
     public static ChatMessage getInstance()
@@ -46,7 +46,7 @@ public class ChatMessage
         _serverChatQueue.add(message);
         if(firstMessage)
         {
-            _lastServerChatTime = (long)(System.currentTimeMillis());
+            _lastServerChatTime = System.currentTimeMillis();
         }
     }
 
@@ -76,7 +76,7 @@ public class ChatMessage
         {
             chat.formatted(color);
         }
-        else if(color != null && style != null)
+        else if(color != null)
         {
             chat.formatted(color, style);
         }

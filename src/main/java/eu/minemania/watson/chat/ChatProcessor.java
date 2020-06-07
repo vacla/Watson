@@ -15,8 +15,8 @@ import net.minecraft.text.Text;
 
 public class ChatProcessor
 {
-    private static ChatProcessor INSTANCE = new ChatProcessor();
-    protected ArrayList<IChatHandler> _handlers = new ArrayList<IChatHandler>();
+    private static final ChatProcessor INSTANCE = new ChatProcessor();
+    private final ArrayList<IChatHandler> _handlers = new ArrayList<>();
 
     private ChatProcessor()
     {

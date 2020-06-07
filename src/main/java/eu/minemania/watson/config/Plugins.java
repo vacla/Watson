@@ -13,7 +13,7 @@ public enum Plugins implements IConfigOptionListEntry
     private final String configString;
     private final String translationKey;
 
-    private Plugins(String configString, String translationKey)
+    Plugins(String configString, String translationKey)
     {
         this.configString = configString;
         this.translationKey = translationKey;

@@ -99,7 +99,7 @@ public class WidgetListBlockedit extends WidgetListBase<BlockeditEntry, WidgetBl
     {
         super.refreshBrowserEntries();
 
-        if(this.scrollbarRestored == false && lastScrollbarPosition <= this.scrollBar.getMaxValue())
+        if(!this.scrollbarRestored && lastScrollbarPosition <= this.scrollBar.getMaxValue())
         {
             this.scrollBar.setValue(lastScrollbarPosition);
             this.scrollbarRestored = true;
@@ -110,11 +110,7 @@ public class WidgetListBlockedit extends WidgetListBase<BlockeditEntry, WidgetBl
     @Override
     protected boolean hasFilter()
     {
-        if(this.gui.getTime() != 0)
-        {
-            return true;
-        }
-        return false;
+        return this.gui.getTime() != 0;
     }
 
     @Override

@@ -26,33 +26,17 @@ public class RatioAnalysis extends Analysis
 
     public RatioAnalysis()
     {
-        addMatchedChatHandler(Configs.Analysis.LB_HEADER_RATIO, new IMatchedChatHandler()
-        {
-
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                lbHeaderRatio(chat, m);
-                return true;
-            }
+        addMatchedChatHandler(Configs.Analysis.LB_HEADER_RATIO, (chat, m) -> {
+            lbHeaderRatio(chat, m);
+            return true;
         });
-        addMatchedChatHandler(Configs.Analysis.LB_HEADER_RATIO_CURRENT, new IMatchedChatHandler()
-        {
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                lbHeaderRatioCurrent(chat, m);
-                return true;
-            }
+        addMatchedChatHandler(Configs.Analysis.LB_HEADER_RATIO_CURRENT, (chat, m) -> {
+            lbHeaderRatioCurrent(chat, m);
+            return true;
         });
-        IMatchedChatHandler headerHandler = new IMatchedChatHandler()
-        {
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                lbHeader(chat, m);
-                return true;
-            }
+        IMatchedChatHandler headerHandler = (chat, m) -> {
+            lbHeader(chat, m);
+            return true;
         };
 
         addMatchedChatHandler(Configs.Analysis.LB_HEADER_NO_RESULTS, headerHandler);
@@ -62,14 +46,7 @@ public class RatioAnalysis extends Analysis
         addMatchedChatHandler(Configs.Analysis.LB_HEADER_TIME_CHECK, headerHandler);
         addMatchedChatHandler(Configs.Analysis.LB_HEADER_BLOCK, headerHandler);
 
-        addMatchedChatHandler(Configs.Analysis.LB_SUM, new IMatchedChatHandler()
-        {
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                return lbSum(chat, m);
-            }
-        });
+        addMatchedChatHandler(Configs.Analysis.LB_SUM, this::lbSum);
     }
 
     void lbHeader(Text chat, Matcher m)

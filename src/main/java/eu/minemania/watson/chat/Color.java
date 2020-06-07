@@ -25,8 +25,8 @@ public enum Color
     yellow(Formatting.YELLOW),
     white(Formatting.WHITE);
 
-    private Formatting _color;
-    private static HashMap<Formatting, Color> _byTextFormatColor = new HashMap<Formatting, Color>();
+    private final Formatting _color;
+    private static final HashMap<Formatting, Color> _byTextFormatColor = new HashMap<>();
 
     static
     {
@@ -46,7 +46,7 @@ public enum Color
         _byTextFormatColor.put(Formatting.LIGHT_PURPLE, Color.lightpurple);
         _byTextFormatColor.put(Formatting.YELLOW, Color.yellow);
         _byTextFormatColor.put(Formatting.WHITE, Color.white);
-    };
+    }
 
     public Formatting getColor()
     {
@@ -58,7 +58,7 @@ public enum Color
         Color color = _byTextFormatColor.get(colorTextFormat);
         if(color == null)
         {
-            throw new IllegalArgumentException("invalid color code: " + color);
+            throw new IllegalArgumentException("invalid color code: " + colorTextFormat.toString());
         }
         return color;
     }
@@ -75,7 +75,7 @@ public enum Color
         }
     }
 
-    private Color(Formatting formattingName)
+    Color(Formatting formattingName)
     {
         _color = formattingName;
     }

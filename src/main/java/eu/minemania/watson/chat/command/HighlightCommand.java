@@ -24,12 +24,8 @@ import net.minecraft.text.LiteralText;
 
 public class HighlightCommand extends WatsonCommandBase
 {
-    private static final SuggestionProvider<ServerCommandSource> SUGGESTION_COLOR = (p_201404_0_, p_201404_1_) -> {
-        return CommandSource.suggestMatching(FakeCommandSource.getColor(), p_201404_1_);
-    };
-    private static final SuggestionProvider<ServerCommandSource> SUGGESTION_STYLE = (p_201404_0_, p_201404_1_) -> {
-        return CommandSource.suggestMatching(FakeCommandSource.getStyle(), p_201404_1_);
-    };
+    private static final SuggestionProvider<ServerCommandSource> SUGGESTION_COLOR = (p_201404_0_, p_201404_1_) -> CommandSource.suggestMatching(FakeCommandSource.getColor(), p_201404_1_);
+    private static final SuggestionProvider<ServerCommandSource> SUGGESTION_STYLE = (p_201404_0_, p_201404_1_) ->  CommandSource.suggestMatching(FakeCommandSource.getStyle(), p_201404_1_);
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher)
     {

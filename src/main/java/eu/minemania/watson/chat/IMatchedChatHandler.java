@@ -6,5 +6,5 @@ import net.minecraft.text.Text;
 
 public interface IMatchedChatHandler
 {
-    public boolean onMatchedChat(Text chat, Matcher m);
+    boolean onMatchedChat(Text chat, Matcher m);
 }

@@ -30,7 +30,7 @@ public class Screenshot
     {
         Date now = new Date();
         String player2 = (String) DataManager.getEditSelection().getVariables().get("player");
-        String subdirectoryName = (!player2.isEmpty() && Configs.Generic.SS_PLAYER_DIRECTORY.getBooleanValue()) ? player2 : new SimpleDateFormat(Configs.Generic.SS_DATE_DIRECTORY.getStringValue()).format(now).toString();
+        String subdirectoryName = (!player2.isEmpty() && Configs.Generic.SS_PLAYER_DIRECTORY.getBooleanValue()) ? player2 : new SimpleDateFormat(Configs.Generic.SS_DATE_DIRECTORY.getStringValue()).format(now);
         MinecraftClient mc = MinecraftClient.getInstance();
         File screenshotsDir = new File(mc.runDirectory, "screenshots");
         File subdirectory = new File(screenshotsDir, subdirectoryName);
@@ -74,12 +74,12 @@ public class Screenshot
             ImageIO.write(image, "png", file);
             LiteralText text = new LiteralText(file.getName());
             text.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, file.getAbsolutePath()));
-            text.getStyle().setUnderline(Boolean.valueOf(true));
-            return new TranslatableText("screenshot.success", new Object[]{text});
+            text.getStyle().setUnderline(Boolean.TRUE);
+            return new TranslatableText("screenshot.success", text);
         }
         catch (Exception ex)
         {
-            return new TranslatableText("screenshot.failure", new Object[]{ex.getMessage()});
+            return new TranslatableText("screenshot.failure", ex.getMessage());
         }
     }
 

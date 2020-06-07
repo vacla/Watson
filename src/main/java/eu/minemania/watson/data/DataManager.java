@@ -43,7 +43,7 @@ public class DataManager implements IDirectoryCache
     private static boolean canSave;
     private static long clientTickStart;
 
-    private EditSelection editselection = new EditSelection();
+    private final EditSelection editselection = new EditSelection();
 
     protected Filters filters = new Filters();
 
@@ -168,7 +168,7 @@ public class DataManager implements IDirectoryCache
 
     public static void save(boolean forceSave)
     {
-        if(canSave == false && forceSave == false)
+        if(!canSave && !forceSave)
         {
             return;
         }
@@ -200,7 +200,7 @@ public class DataManager implements IDirectoryCache
     {
         File dir = FileUtils.getCanonicalFileIfPossible(new File(FileUtils.getMinecraftDirectory(), "playeredits"));
 
-        if(dir.exists() == false && dir.mkdirs() == false)
+        if(!dir.exists() && !dir.mkdirs())
         {
             Watson.logger.warn("Failed to create the playeredit directory '{}'", dir.getAbsolutePath());
         }
@@ -212,7 +212,7 @@ public class DataManager implements IDirectoryCache
     {
         File dir = getCurrentConfigDirectory();
 
-        if(dir.exists() == false && dir.mkdirs() == false)
+        if(!dir.exists() && !dir.mkdirs())
         {
             Watson.logger.warn("Failed to create the config directory '{}'", dir.getAbsolutePath());
         }
@@ -470,7 +470,7 @@ public class DataManager implements IDirectoryCache
         return files;
     }
 
-    public class CaseInsensitivePrefixFileFilter implements FileFilter
+    public static class CaseInsensitivePrefixFileFilter implements FileFilter
     {
         protected String _lowerPrefix;
 

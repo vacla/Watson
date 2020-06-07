@@ -7,7 +7,7 @@ import eu.minemania.watson.data.DataManager;
 
 public class Filters
 {
-    protected LinkedHashSet<String> _filters = new LinkedHashSet<String>();
+    protected LinkedHashSet<String> _filters = new LinkedHashSet<>();
 
     public void list()
     {
@@ -18,7 +18,7 @@ public class Filters
         else
         {
             ChatMessage.localOutputT("watson.message.filters.edits_accepted");
-            StringBuilder message = new StringBuilder(' ');
+            StringBuilder message = new StringBuilder(" ");
             for(String player : _filters)
             {
                 message.append(' ');

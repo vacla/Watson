@@ -10,27 +10,17 @@ public class ModModeAnalysis extends Analysis
 {
     public ModModeAnalysis()
     {
-        IMatchedChatHandler modmodeHandler = new IMatchedChatHandler()
-        {
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                changeModMode(chat, m);
-                return true;
-            }
+        IMatchedChatHandler modmodeHandler = (chat, m) -> {
+            changeModMode(chat, m);
+            return true;
         };
 
         addMatchedChatHandler(Configs.Analysis.MODMODE_ENABLE, modmodeHandler);
         addMatchedChatHandler(Configs.Analysis.MODMODE_DISABLE, modmodeHandler);
 
-        IMatchedChatHandler dutiesHandler = new IMatchedChatHandler()
-        {
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                changeDutyMode(chat, m);
-                return true;
-            }
+        IMatchedChatHandler dutiesHandler = (chat, m) -> {
+            changeDutyMode(chat, m);
+            return true;
         };
 
         addMatchedChatHandler(Configs.Analysis.DUTYMODE_ENABLE, dutiesHandler);

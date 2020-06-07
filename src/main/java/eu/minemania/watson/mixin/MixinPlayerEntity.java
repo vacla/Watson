@@ -44,8 +44,7 @@ public abstract class MixinPlayerEntity extends LivingEntity
     {
         if (Highlight.changeUsername)
         {
-            Text playerText = new LiteralText(Highlight.getUsername());
-            return playerText;
+            return new LiteralText(Highlight.getUsername());
         }
         else
         {

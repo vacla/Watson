@@ -19,7 +19,7 @@ import net.minecraft.util.Formatting;
 
 public class LbCoordsAnalysis extends Analysis
 {
-    protected static final Formatting _COLOUR_CYCLE[] = {Color.red.getColor(), Color.gold.getColor(), Color.yellow.getColor(), Color.green.getColor(), Color.aqua.getColor(), Color.darkpurple.getColor(), Color.lightpurple.getColor()};
+    protected static final Formatting[] _COLOUR_CYCLE = new Formatting[]{Color.red.getColor(), Color.gold.getColor(), Color.yellow.getColor(), Color.green.getColor(), Color.aqua.getColor(), Color.darkpurple.getColor(), Color.lightpurple.getColor()};
     protected int _colourIndex = _COLOUR_CYCLE.length - 1;
     protected static final float _COLOUR_PROXIMITY_LIMIT = 4.0f;
     protected int _lastX, _lastY, _lastZ;
@@ -29,74 +29,33 @@ public class LbCoordsAnalysis extends Analysis
 
     public LbCoordsAnalysis()
     {
-        addMatchedChatHandler(Configs.Analysis.LB_COORD_POSITION, new IMatchedChatHandler()
-        {
-
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                lbCoordPosition(chat, m);
-                return false;
-            }
+        addMatchedChatHandler(Configs.Analysis.LB_COORD_POSITION, (chat, m) -> {
+            lbCoordPosition(chat, m);
+            return false;
         });
-        addMatchedChatHandler(Configs.Analysis.LB_COORD, new IMatchedChatHandler()
-        {
-
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                lbCoord(chat, m);
-                return false;
-            }
+        addMatchedChatHandler(Configs.Analysis.LB_COORD, (chat, m) -> {
+            lbCoord(chat, m);
+            return false;
         });
-        addMatchedChatHandler(Configs.Analysis.LB_KILLS, new IMatchedChatHandler()
-        {
-
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                lbKills(chat, m);
-                return true;
-            }
+        addMatchedChatHandler(Configs.Analysis.LB_KILLS, (chat, m) -> {
+            lbKills(chat, m);
+            return true;
         });
-        addMatchedChatHandler(Configs.Analysis.LB_COORD_KILLS, new IMatchedChatHandler()
-        {
-
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                lbCoordKills(chat, m);
-                return false;
-            }
+        addMatchedChatHandler(Configs.Analysis.LB_COORD_KILLS, (chat, m) -> {
+            lbCoordKills(chat, m);
+            return false;
         });
-        addMatchedChatHandler(Configs.Analysis.LB_COORD_REPLACED, new IMatchedChatHandler()
-        {
-
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                lbCoordReplaced(chat, m);
-                return false;
-            }
+        addMatchedChatHandler(Configs.Analysis.LB_COORD_REPLACED, (chat, m) -> {
+            lbCoordReplaced(chat, m);
+            return false;
         });
-        addMatchedChatHandler(Configs.Analysis.LB_PAGE, new IMatchedChatHandler()
-        {
-
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                lbPage(chat, m);
-                return true;
-            }
+        addMatchedChatHandler(Configs.Analysis.LB_PAGE, (chat, m) -> {
+            lbPage(chat, m);
+            return true;
         });
-        IMatchedChatHandler headerHandler = new IMatchedChatHandler()
-        {
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                lbHeader(chat, m);
-                return true;
-            }
+        IMatchedChatHandler headerHandler = (chat, m) -> {
+            lbHeader(chat, m);
+            return true;
         };
 
         addMatchedChatHandler(Configs.Analysis.LB_HEADER_NO_RESULTS, headerHandler);

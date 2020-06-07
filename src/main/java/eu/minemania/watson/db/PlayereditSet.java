@@ -15,7 +15,7 @@ import net.minecraft.util.math.Vec3d;
 public class PlayereditSet
 {
     protected String _player;
-    protected TreeSet<BlockEdit> _edits = new TreeSet<BlockEdit>(new BlockEditComparator()); 
+    protected TreeSet<BlockEdit> _edits = new TreeSet<>(new BlockEditComparator());
     protected boolean _visible = true;
     protected static final double UNIT_VECTOR_ARROW_SIZE = 0.025;
     protected static final double MAX_ARROW_SIZE = 0.5;

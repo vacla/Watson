@@ -41,7 +41,7 @@ public class PlayereditUtils
     public static List<PlayereditEntry> getPlayereditList(Object2IntOpenHashMap<WatsonBlock> countsTotal, PlayereditSet playeredit)
     {
         List<PlayereditEntry> list = new ArrayList<>();
-        if(countsTotal.isEmpty() == false)
+        if(!countsTotal.isEmpty())
         {
             Object2IntOpenHashMap<ItemType> itemTypesTotal = new Object2IntOpenHashMap<>();
 
@@ -54,11 +54,11 @@ public class PlayereditUtils
                 {
                     String typeName = type.getStack().getItem().toString();
                     String blockName = getItemStack(edit.block.getName()).getItem().toString();
-                    if(typeName.contains("minecraft:") == false)
+                    if(!typeName.contains("minecraft:"))
                     {
                         typeName = "minecraft:"+typeName;
                     }
-                    if(blockName.contains("minecraft:") == false)
+                    if(!blockName.contains("minecraft:"))
                     {
                         blockName = "minecraft:"+blockName;
                     }
@@ -77,7 +77,7 @@ public class PlayereditUtils
     public static List<BlockeditEntry> createDisplayListFor(List<BlockEdit> blockedit)
     {
         List<BlockeditEntry> list = new ArrayList<>();
-        if(blockedit.isEmpty() == false)
+        if(!blockedit.isEmpty())
         {
             for(BlockEdit edit : blockedit)
             {
@@ -94,7 +94,7 @@ public class PlayereditUtils
         {
             ItemStack stack = getItemStack(block.getName());
 
-            if(stack.isEmpty() == false)
+            if(!stack.isEmpty())
             {
                 ItemType type = new ItemType(stack);
                 itemTypeOut.addTo(type, watsonBlockIn.getInt(block));
@@ -187,7 +187,7 @@ public class PlayereditUtils
         InfoUtils.showGuiMessage(MessageType.WARNING, "watson.error.blockentity.not_found", blocks);
         if(Configs.Generic.DEBUG.getBooleanValue())
         {
-            Watson.logger.warn("watson.error.blockentity.not_found", blocks);
+            Watson.logger.warn(StringUtils.translate("watson.error.blockentity.not_found", blocks));
         }
         return new ItemStack(Items.BEDROCK);
     }

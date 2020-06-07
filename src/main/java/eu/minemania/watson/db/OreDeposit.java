@@ -4,7 +4,7 @@ import java.util.TreeSet;
 
 public class OreDeposit implements Comparable<OreDeposit>
 {
-    protected TreeSet<OreBlock> _oreBlocks = new TreeSet<OreBlock>();
+    protected TreeSet<OreBlock> _oreBlocks = new TreeSet<>();
     protected OreBlock _earliestOreBlock;
     protected OreBlock _latestOreBlock;
 

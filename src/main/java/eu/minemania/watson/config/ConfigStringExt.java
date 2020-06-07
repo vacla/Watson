@@ -12,7 +12,7 @@ public class ConfigStringExt extends ConfigString
         this.comment = comment;
     }
 
-    private String comment;
+    private final String comment;
     private Object[] commentArgs;
 
     @Override

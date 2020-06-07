@@ -24,6 +24,6 @@ public class PlayereditSorter implements Comparator<PlayereditEntry>
             return entry1.getCountTotal() == entry2.getCountTotal() ? nameCompare : ((entry1.getCountTotal() > entry2.getCountTotal()) != reverse ? -1 : 1);
         }
 
-        return reverse == false ? nameCompare * -1 : nameCompare;
+        return !reverse ? nameCompare * -1 : nameCompare;
     }
 }

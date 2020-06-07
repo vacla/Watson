@@ -97,7 +97,7 @@ public class GuiMainMenu extends GuiBase
             private final String labelKey;
             private final ButtonIcons icon;
 
-            private ButtonType(String labelKey, ButtonIcons icon)
+            ButtonType(String labelKey, ButtonIcons icon)
             {
                 this.labelKey = labelKey;
                 this.icon = icon;
