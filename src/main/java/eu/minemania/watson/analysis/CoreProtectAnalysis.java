@@ -62,6 +62,15 @@ public class CoreProtectAnalysis extends Analysis
 
     public CoreProtectAnalysis()
     {
+        IMatchedChatHandler inspectcoords = new IMatchedChatHandler()
+        {
+            @Override
+            public boolean onMatchedChat(Text chat, Matcher m)
+            {
+                inspectorCoords(chat, m);
+                return true;
+            }
+        };
         addMatchedChatHandler(Configs.Analysis.CP_BUSY, new IMatchedChatHandler()
         {
             @Override
@@ -80,15 +89,8 @@ public class CoreProtectAnalysis extends Analysis
                 return sendMessage();
             }
         });
-        addMatchedChatHandler(Configs.Analysis.CP_INSPECTOR_COORDS, new IMatchedChatHandler()
-        {
-            @Override
-            public boolean onMatchedChat(Text chat, Matcher m)
-            {
-                inspectorCoords(chat, m);
-                return true;
-            }
-        });
+        addMatchedChatHandler(Configs.Analysis.CP_INSPECTOR_COORDS, inspectcoords);
+        addMatchedChatHandler(Configs.Analysis.CP_INSPECTOR_COORDS_CONT, inspectcoords);
         addMatchedChatHandler(Configs.Analysis.CP_LOOKUP_COORDS, new IMatchedChatHandler()
         {
             @Override
@@ -202,22 +204,19 @@ public class CoreProtectAnalysis extends Analysis
         _action = m.group(3);
         String block = m.group(4);
         String[] blockStuff = block.split(" ");
+        _loop = 1;
         if(blockStuff.length == 2)
         {
             block = blockStuff[1];
+            String number = blockStuff[0].substring(1);
+            _loop = Integer.parseInt(number);
         }
         _block = WatsonBlockRegistery.getInstance().getWatsonBlockByName(block);
-        _loop = 1;
         if(_isLookup)
         {
             // Record that we can use these details at the next
             // coreprotect.lookupcoords only.
             _lookupDetails = true;
-            if(blockStuff.length == 2)
-            {
-                String number = blockStuff[0].substring(1);
-                _loop = Integer.valueOf(number);
-            }
         }
         else
         {
@@ -312,10 +311,6 @@ public class CoreProtectAnalysis extends Analysis
 
     private boolean sendMessage()
     {
-        if(_looping && Configs.Generic.AUTO_PAGE.getBooleanValue() && Configs.Generic.DISABLE_CP_MESSAGES.getBooleanValue())
-        {
-            return false;
-        }
-        return true;
+        return !_looping || !Configs.Generic.AUTO_PAGE.getBooleanValue() || !Configs.Generic.DISABLE_CP_MESSAGES.getBooleanValue();
     }
 }

@@ -139,6 +139,7 @@ public class Configs implements IConfigHandler
         public static final ConfigStringExt CP_BUSY = new ConfigStringExt("cp busy", "^CoreProtect - Database busy. Please try again later.$", "watson.description.config.analysis").setCommentArgs("cp busy");
         public static final ConfigStringExt CP_DETAILS = new ConfigStringExt("cp details", "^(\\d+[.,]\\d+\\/h ago|\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}) - (#?\\w+) (\\w+) ((?:\\w+\\s)?\\w+).+", "watson.description.config.analysis").setCommentArgs("cp details");
         public static final ConfigStringExt CP_INSPECTOR_COORDS = new ConfigStringExt("cp inspector coords", "^----- CoreProtect ----- \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\)$", "watson.description.config.analysis").setCommentArgs("cp inspector coords");
+        public static final ConfigStringExt CP_INSPECTOR_COORDS_CONT = new ConfigStringExt("cp inspector coords container", "^----- Container Transactions ----- \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\)$", "watson.description.config.analysis").setCommentArgs("cp inspector coords container");
         public static final ConfigStringExt CP_LOOKUP_COORDS = new ConfigStringExt("cp lookup coords", "^ +\\^ \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\/(.+)\\)$", "watson.description.config.analysis").setCommentArgs("cp lookup coords");
         public static final ConfigStringExt CP_LOOKUP_HEADER = new ConfigStringExt("cp lookup header", "^----- CoreProtect Lookup Results -----$", "watson.description.config.analysis").setCommentArgs("cp lookup header");
         public static final ConfigStringExt CP_NO_RESULT = new ConfigStringExt("cp no result", "^CoreProtect - No results found.$", "watson.description.config.analysis").setCommentArgs("cp no result");
@@ -175,6 +176,7 @@ public class Configs implements IConfigHandler
                 CP_BUSY,
                 CP_DETAILS,
                 CP_INSPECTOR_COORDS,
+                CP_INSPECTOR_COORDS_CONT,
                 CP_LOOKUP_COORDS,
                 CP_LOOKUP_HEADER,
                 CP_NO_RESULT,
