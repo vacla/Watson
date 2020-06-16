@@ -32,6 +32,20 @@ public class KeyCallbacks
 
         Configs.Generic.WATSON_PREFIX.setValueChangeCallback(valueChangeStringCallback);
         Configs.Lists.HIGHLIGHT.setValueChangeCallback(valueChangeStringListCallback);
+
+        Configs.Analysis.CP_BUSY.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.CP_DETAILS.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.CP_INSPECTOR_COORDS.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.CP_INSPECTOR_COORDS_CONT.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.CP_LOOKUP_COORDS.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.CP_LOOKUP_HEADER.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.CP_NO_RESULT.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.CP_PAGE.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.CP_SEARCH.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.DUTYMODE_DISABLE.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.DUTYMODE_ENABLE.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.MODMODE_DISABLE.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.MODMODE_ENABLE.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.LB_COORD.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.LB_COORD_KILLS.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.LB_COORD_POSITION.setValueChangeCallback(valueChangeStringCallback);
@@ -53,6 +67,7 @@ public class KeyCallbacks
         Configs.Analysis.LB_POSITION.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.LB_SUM.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.LB_TP.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.WG_REGIONS.setValueChangeCallback(valueChangeStringCallback);
 
         Hotkeys.KEYBIND_AUTO_PAGE.getKeybind().setCallback(new KeyCallbackToggleBoolean(Configs.Generic.AUTO_PAGE));
         Hotkeys.KEYBIND_CURSOR_NEXT.getKeybind().setCallback(callbackHotkeys);
@@ -76,9 +91,57 @@ public class KeyCallbacks
         @Override
         public void onValueChanged(ConfigString config)
         {
-            if(config == Configs.Generic.WATSON_PREFIX)
+            if(config == Configs.Analysis.CP_BUSY)
             {
-                Command.reregisterWatsonCommand(Command.commandDispatcher, Configs.Generic.WATSON_PREFIX);
+                Analysis.removeMatchedChatHandler(Configs.Analysis.CP_BUSY);
+            }
+            else if(config == Configs.Analysis.CP_DETAILS)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.CP_DETAILS);
+            }
+            else if(config == Configs.Analysis.CP_INSPECTOR_COORDS)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.CP_INSPECTOR_COORDS);
+            }
+            else if(config == Configs.Analysis.CP_INSPECTOR_COORDS_CONT)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.CP_INSPECTOR_COORDS_CONT);
+            }
+            else if(config == Configs.Analysis.CP_LOOKUP_COORDS)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.CP_LOOKUP_COORDS);
+            }
+            else if(config == Configs.Analysis.CP_LOOKUP_HEADER)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.CP_LOOKUP_HEADER);
+            }
+            else if(config == Configs.Analysis.CP_NO_RESULT)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.CP_NO_RESULT);
+            }
+            else if(config == Configs.Analysis.CP_PAGE)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.CP_PAGE);
+            }
+            else if(config == Configs.Analysis.CP_SEARCH)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.CP_SEARCH);
+            }
+            else if(config == Configs.Analysis.DUTYMODE_DISABLE)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.DUTYMODE_DISABLE);
+            }
+            else if(config == Configs.Analysis.DUTYMODE_ENABLE)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.DUTYMODE_ENABLE);
+            }
+            else if(config == Configs.Analysis.MODMODE_DISABLE)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.MODMODE_DISABLE);
+            }
+            else if(config == Configs.Analysis.MODMODE_ENABLE)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.MODMODE_ENABLE);
             }
             else if(config == Configs.Analysis.LB_COORD)
             {
@@ -163,6 +226,14 @@ public class KeyCallbacks
             else if(config == Configs.Analysis.LB_TP)
             {
                 Analysis.removeMatchedChatHandler(Configs.Analysis.LB_TP);
+            }
+            else if(config == Configs.Analysis.WG_REGIONS)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.WG_REGIONS);
+            }
+            else if(config == Configs.Generic.WATSON_PREFIX)
+            {
+                Command.reregisterWatsonCommand(Command.commandDispatcher, Configs.Generic.WATSON_PREFIX);
             }
         }
     }
