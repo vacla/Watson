@@ -13,8 +13,10 @@ public class Teleport
     public static void teleport(int x, int y, int z)
     {
         String format = Configs.Generic.TELEPORT_COMMAND.getStringValue();
+        String tempFormat = format.replaceAll("\\{d}", "%d").replaceAll("\\{g}", "%g");
+        format = tempFormat.replaceAll("%d", "%g");
         Pattern specifier = Pattern.compile("%[dg]");
-        Matcher specifiers = specifier.matcher(format);
+        Matcher specifiers = specifier.matcher(tempFormat);
 
         BitSet isDouble = new BitSet();
         int i = 0;

@@ -35,8 +35,8 @@ public class KeyCallbacks
 
         Configs.Analysis.CP_BUSY.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.CP_DETAILS.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.CP_DETAILS_SIGN.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.CP_INSPECTOR_COORDS.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.CP_INSPECTOR_COORDS_CONT.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.CP_LOOKUP_COORDS.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.CP_LOOKUP_HEADER.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.CP_NO_RESULT.setValueChangeCallback(valueChangeStringCallback);
@@ -99,13 +99,13 @@ public class KeyCallbacks
             {
                 Analysis.removeMatchedChatHandler(Configs.Analysis.CP_DETAILS);
             }
+            else if(config == Configs.Analysis.CP_DETAILS_SIGN)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.CP_DETAILS_SIGN);
+            }
             else if(config == Configs.Analysis.CP_INSPECTOR_COORDS)
             {
                 Analysis.removeMatchedChatHandler(Configs.Analysis.CP_INSPECTOR_COORDS);
-            }
-            else if(config == Configs.Analysis.CP_INSPECTOR_COORDS_CONT)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.CP_INSPECTOR_COORDS_CONT);
             }
             else if(config == Configs.Analysis.CP_LOOKUP_COORDS)
             {
