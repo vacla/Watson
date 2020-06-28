@@ -18,6 +18,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.SpawnEggItem;
@@ -122,6 +123,11 @@ public class PlayereditUtils
         }
         else
         {
+            Item item = Registry.ITEM.get(Identifier.tryParse(blocks));
+            if(item != Items.AIR)
+            {
+                return new ItemStack(item);
+            }
             Optional<EntityType<?>> entityType = EntityType.get(blocks);
             if(entityType.isPresent())
             {

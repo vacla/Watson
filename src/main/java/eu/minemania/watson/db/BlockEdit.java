@@ -7,6 +7,8 @@ import eu.minemania.watson.render.RenderUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.OreBlock;
+import net.minecraft.block.SignBlock;
+import net.minecraft.block.WallSignBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.model.BakedModel;
@@ -82,7 +84,14 @@ public class BlockEdit
             {
                 if(!isOreDrawn())
                 {
-                    RenderUtils.drawBlockModelOutlinesBatched(model, state, new BlockPos(x, y, z), block.getColor(), buffer);
+                    if(blocks instanceof SignBlock || blocks instanceof WallSignBlock)
+                    {
+                        RenderUtils.drawItemFramePaintingOutlinesBatched(x, y, z, block.getColor(), buffer);
+                    }
+                    else
+                    {
+                        RenderUtils.drawBlockModelOutlinesBatched(model, state, new BlockPos(x, y, z), block.getColor(), buffer);
+                    }
                 }
             }
             if(!drawn && blocks instanceof OreBlock)

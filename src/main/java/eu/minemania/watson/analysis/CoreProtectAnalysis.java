@@ -3,7 +3,6 @@ package eu.minemania.watson.analysis;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import eu.minemania.watson.chat.ChatMessage;
-import eu.minemania.watson.chat.IMatchedChatHandler;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.BlockEdit;
@@ -42,7 +41,7 @@ import net.minecraft.text.Text;
 public class CoreProtectAnalysis extends Analysis
 {
     protected static final int MS_PER_HOUR = 60 * 60 * 1000;
-    protected static final Pattern ABSOLUTE_TIME = Pattern.compile("(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{2}):(\\d{2})");
+    protected static final Pattern ABSOLUTE_TIME = Pattern.compile("(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{2}):(\\d{2}) \\w+");
     protected static final Pattern HOURS_AGO_TIME = Pattern.compile("(\\d+.\\d+)/h ago");
     protected boolean _isLookup = false;
     protected boolean _firstInspectorResult = false;
@@ -62,20 +61,18 @@ public class CoreProtectAnalysis extends Analysis
 
     public CoreProtectAnalysis()
     {
-        IMatchedChatHandler inspectcoords = (chat, m) -> {
-            inspectorCoords(chat, m);
-            return true;
-        };
         addMatchedChatHandler(Configs.Analysis.CP_BUSY, (chat, m) -> {
-            cpBusy(chat, m);
+            busy(chat, m);
             return sendMessage();
         });
         addMatchedChatHandler(Configs.Analysis.CP_DETAILS, (chat, m) -> {
             details(chat, m);
             return sendMessage();
         });
-        addMatchedChatHandler(Configs.Analysis.CP_INSPECTOR_COORDS, inspectcoords);
-        addMatchedChatHandler(Configs.Analysis.CP_INSPECTOR_COORDS_CONT, inspectcoords);
+        addMatchedChatHandler(Configs.Analysis.CP_INSPECTOR_COORDS, (chat, m) -> {
+            inspectorCoords(chat, m);
+            return true;
+        });
         addMatchedChatHandler(Configs.Analysis.CP_LOOKUP_COORDS, (chat, m) -> {
             lookupCoords(chat, m);
             return sendMessage();
@@ -85,75 +82,26 @@ public class CoreProtectAnalysis extends Analysis
             return sendMessage();
         });
         addMatchedChatHandler(Configs.Analysis.CP_NO_RESULT, (chat, m) -> {
-            cpNoResult(chat, m);
+            noResult(chat, m);
             return true;
         });
         addMatchedChatHandler(Configs.Analysis.CP_PAGE, (chat, m) -> {
-            cpPage(chat, m);
+            page(chat, m);
             return sendMessage();
         });
         addMatchedChatHandler(Configs.Analysis.CP_SEARCH, (chat, m) -> {
-            cpSearch(chat, m);
+            search(chat, m);
             return sendMessage();
         });
     }
 
-    void cpBusy(Text chat, Matcher m)
+    void busy(Text chat, Matcher m)
     {
         if(_looping && Configs.Generic.AUTO_PAGE.getBooleanValue() && Configs.Generic.DISABLE_CP_MESSAGES.getBooleanValue())
         {
             ChatMessage.localErrorT("watson.message.cp.auto_page.error");
         }
         reset();
-    }
-
-    void cpNoResult(Text chat, Matcher m)
-    {
-        reset();
-    }
-
-    void cpPage(Text chat, Matcher m)
-    {
-        int currentPage = Integer.parseInt(m.group(1));
-        int pageCount = Integer.parseInt(m.group(2));
-
-        if(Configs.Generic.AUTO_PAGE.getBooleanValue() && currentPage > _currentPage)
-        {
-            if (pageCount <= Configs.Generic.MAX_AUTO_PAGES.getIntegerValue())
-            {
-                _currentPage = currentPage;
-                _pageCount = pageCount;
-                if(_looping)
-                {
-                    if(Configs.Generic.DISABLE_CP_MESSAGES.getBooleanValue())
-                    {
-                        InfoUtils.printActionbarMessage("%d / %d", _currentPage, _pageCount);
-                        if(_currentPage == 1)
-                        {
-                            ChatMessage.localOutputT("watson.message.cp.auto_page.start", _pageCount);
-                        }
-                        else if(_currentPage == _pageCount)
-                        {
-                            ChatMessage.localOutputT("watson.message.cp.auto_page.finished");
-                        }
-                    }
-                    requestNextPage();
-                }
-            }
-            else
-            {
-                reset();
-            }
-        }
-        else if(_currentPage == _pageCount)
-        {
-            reset();
-        }
-    }
-
-    void cpSearch(Text chat, Matcher m)
-    {
-        _looping = true;
     }
 
     void details(Text chat, Matcher m)
@@ -163,13 +111,11 @@ public class CoreProtectAnalysis extends Analysis
         _player = m.group(2);
         _action = m.group(3);
         String block = m.group(4);
-        String[] blockStuff = block.split(" ");
         _loop = 1;
-        if(blockStuff.length == 2)
+        if(m.group(5) != null)
         {
-            block = blockStuff[1];
-            String number = blockStuff[0].substring(1);
-            _loop = Integer.parseInt(number);
+            block = m.group(4).split(" ")[1];
+            _loop = Integer.parseInt(m.group(5));
         }
         _block = WatsonBlockRegistery.getInstance().getWatsonBlockByName(block);
         if(_isLookup)
@@ -225,6 +171,55 @@ public class CoreProtectAnalysis extends Analysis
     void lookupHeader(Text chat, Matcher m)
     {
         _isLookup = true;
+    }
+
+    void noResult(Text chat, Matcher m)
+    {
+        reset();
+    }
+
+    void page(Text chat, Matcher m)
+    {
+        int currentPage = Integer.parseInt(m.group(1));
+        int pageCount = Integer.parseInt(m.group(2));
+
+        if(Configs.Generic.AUTO_PAGE.getBooleanValue() && currentPage > _currentPage)
+        {
+            if (pageCount <= Configs.Generic.MAX_AUTO_PAGES.getIntegerValue())
+            {
+                _currentPage = currentPage;
+                _pageCount = pageCount;
+                if(_looping)
+                {
+                    if(Configs.Generic.DISABLE_CP_MESSAGES.getBooleanValue())
+                    {
+                        InfoUtils.printActionbarMessage("watson.message.cp.auto_page.page", _currentPage, _pageCount);
+                        if(_currentPage == 1)
+                        {
+                            ChatMessage.localOutputT("watson.message.cp.auto_page.start", _pageCount);
+                        }
+                        else if(_currentPage == _pageCount)
+                        {
+                            ChatMessage.localOutputT("watson.message.cp.auto_page.finished");
+                        }
+                    }
+                    requestNextPage();
+                }
+            }
+            else
+            {
+                reset();
+            }
+        }
+        else if(_currentPage == _pageCount)
+        {
+            reset();
+        }
+    }
+
+    void search(Text chat, Matcher m)
+    {
+        _looping = true;
     }
 
     private long parseTimeExpression(String time)

@@ -12,6 +12,8 @@ import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
@@ -75,6 +77,24 @@ public final class WatsonBlockRegistery
                         }
                         else
                         {
+                            Item item = Registry.ITEM.get(Identifier.tryParse(watsonBlockData[0]));
+                            if(item != Items.AIR)
+                            {
+                                watsonBlock.setName(watsonBlockData[0]);
+                                float lineWidth = Float.parseFloat(watsonBlockData[1]);
+                                if(lineWidth != 0)
+                                {
+                                    watsonBlock.setLineWidth(lineWidth);
+                                }
+                                int colorst = StringUtils.getColor(watsonBlockData[2], 0);
+                                int colorTemp = MathHelper.clamp(colorst, Integer.MIN_VALUE, Integer.MAX_VALUE);
+                                if(colorTemp != 0)
+                                {
+                                    Color4f color = Color4f.fromColor(colorTemp);
+                                    watsonBlock.setColor(color);
+                                }
+                                addWatsonBlock(watsonBlock);
+                            }
                             Optional<EntityType<?>> entity = EntityType.get(watsonBlockData[0]);
                             if(entity.isPresent())
                             {

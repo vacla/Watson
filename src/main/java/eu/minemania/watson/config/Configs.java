@@ -3,7 +3,9 @@ package eu.minemania.watson.config;
 import fi.dy.masa.malilib.config.IConfigHandler;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
@@ -23,8 +25,8 @@ import fi.dy.masa.malilib.config.options.ConfigString;
 import fi.dy.masa.malilib.config.options.ConfigStringList;
 import fi.dy.masa.malilib.util.FileUtils;
 import fi.dy.masa.malilib.util.JsonUtils;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.util.registry.Registry;
 
 public class Configs implements IConfigHandler
@@ -34,7 +36,7 @@ public class Configs implements IConfigHandler
      */
     private static final String CONFIG_FILE_NAME = Reference.MOD_ID + ".json";
 
-    private static final Map<Block, String> DEFAULT_COLORS = new HashMap<>();
+    private static final Map<Item, String> DEFAULT_COLORS = new HashMap<>();
 
     /**
      * Default Generic configuration.
@@ -71,7 +73,7 @@ public class Configs implements IConfigHandler
         public static final ConfigBoolean SS_KEY_CUSTOM = new ConfigBoolean("ssKeyCustom", false, "watson.description.config.ss_key_custom");
         public static final ConfigBoolean SS_PLAYER_DIRECTORY = new ConfigBoolean("ssPlayerDirectory", true, "watson.description.config.ss_player_directory");
         public static final ConfigBoolean SS_PLAYER_SUFFIX = new ConfigBoolean("ssPlayerSuffix", true, "watson.description.config.ss_player_suffix");
-        public static final ConfigString TELEPORT_COMMAND = new ConfigString("teleportCommand", "/tppos %d %d %d", "watson.description.config.teleport_command");
+        public static final ConfigString TELEPORT_COMMAND = new ConfigString("teleportCommand", "/tppos {d} {d} {d}", "watson.description.config.teleport_command");
         public static final ConfigBoolean TIME_ORDERED_DEPOSITS = new ConfigBoolean("timeOrderedDeposits", false, "watson.description.config.time_ordered_deposits");
         public static final ConfigBoolean USE_CHAT_HIGHLIGHTS = new ConfigBoolean("useChatHighlights", false, "watson.description.config.use_chat_highlights");
         public static final ConfigDouble VECTOR_LENGTH = new ConfigDouble("vectorFloat", 4.0f, 4.0f, 10.0f, "watson.description.config.vector_length");
@@ -137,9 +139,8 @@ public class Configs implements IConfigHandler
     public static class Analysis
     {
         public static final ConfigStringExt CP_BUSY = new ConfigStringExt("cp busy", "^CoreProtect - Database busy. Please try again later.$", "watson.description.config.analysis").setCommentArgs("cp busy");
-        public static final ConfigStringExt CP_DETAILS = new ConfigStringExt("cp details", "^(\\d+[.,]\\d+\\/h ago|\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}) - (#?\\w+) (\\w+) ((?:\\w+\\s)?\\w+).+", "watson.description.config.analysis").setCommentArgs("cp details");
-        public static final ConfigStringExt CP_INSPECTOR_COORDS = new ConfigStringExt("cp inspector coords", "^----- CoreProtect ----- \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\)$", "watson.description.config.analysis").setCommentArgs("cp inspector coords");
-        public static final ConfigStringExt CP_INSPECTOR_COORDS_CONT = new ConfigStringExt("cp inspector coords container", "^----- Container Transactions ----- \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\)$", "watson.description.config.analysis").setCommentArgs("cp inspector coords container");
+        public static final ConfigStringExt CP_DETAILS = new ConfigStringExt("cp details", "^(\\d+[.,]\\d+\\/[mhd] ago|\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}) - #?(\\w+) (.*?) ((?:x(\\d+) )?\\w+(?::\\w+)?)\\.$", "watson.description.config.analysis").setCommentArgs("cp details");
+        public static final ConfigStringExt CP_INSPECTOR_COORDS = new ConfigStringExt("cp inspector coords", "^-{5} \\w+(?:\\s\\w+)* -{5} \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\)$", "watson.description.config.analysis").setCommentArgs("cp inspector coords");
         public static final ConfigStringExt CP_LOOKUP_COORDS = new ConfigStringExt("cp lookup coords", "^ +\\^ \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\/(.+)\\)$", "watson.description.config.analysis").setCommentArgs("cp lookup coords");
         public static final ConfigStringExt CP_LOOKUP_HEADER = new ConfigStringExt("cp lookup header", "^----- CoreProtect Lookup Results -----$", "watson.description.config.analysis").setCommentArgs("cp lookup header");
         public static final ConfigStringExt CP_NO_RESULT = new ConfigStringExt("cp no result", "^CoreProtect - No results found.$", "watson.description.config.analysis").setCommentArgs("cp no result");
@@ -176,7 +177,6 @@ public class Configs implements IConfigHandler
                 CP_BUSY,
                 CP_DETAILS,
                 CP_INSPECTOR_COORDS,
-                CP_INSPECTOR_COORDS_CONT,
                 CP_LOOKUP_COORDS,
                 CP_LOOKUP_HEADER,
                 CP_NO_RESULT,
@@ -240,23 +240,32 @@ public class Configs implements IConfigHandler
     private static ImmutableList<String> setWatsonBlockData()
     {
         ImmutableList.Builder<String> builder = ImmutableList.builder();
-        Registry.BLOCK.forEach((block) -> builder.add(Registry.BLOCK.getId(block).getNamespace() + ":" + Registry.BLOCK.getId(block).getPath() + ";1;"+ setCustomColorOres(block)));
-        Registry.ENTITY_TYPE.forEach((type) -> builder.add(Registry.ENTITY_TYPE.getId(type).getNamespace() + ":" + Registry.ENTITY_TYPE.getId(type).getPath() + ";1;#CC780E22"));
+        final HashSet<String> set = new HashSet<>();
+
+        Registry.BLOCK.forEach((block) -> set.add(Registry.BLOCK.getId(block).toString() + ";1;"+ setCustomColorOres(block.asItem())));
+        Registry.ITEM.forEach((item) -> set.add(Registry.ITEM.getId(item).toString() + ";1;"+ setCustomColorOres(item)));
+        Registry.ENTITY_TYPE.forEach((type) -> set.add(Registry.ENTITY_TYPE.getId(type).toString() + ";1;#CC780E22"));
+
+        ArrayList<String> list = new ArrayList<>(set);
+        list.sort(String::compareTo);
+
+        builder.addAll(list);
+
         return builder.build();
     }
 
-    private static String setCustomColorOres(Block block)
+    private static String setCustomColorOres(Item block)
     {
         if(DEFAULT_COLORS.isEmpty())
         {
-            DEFAULT_COLORS.put(Blocks.DIAMOND_ORE, "#CC5DECF5");
-            DEFAULT_COLORS.put(Blocks.IRON_ORE, "#CCE68C3F");
-            DEFAULT_COLORS.put(Blocks.LAPIS_ORE, "#CC1846B2");
-            DEFAULT_COLORS.put(Blocks.GOLD_ORE, "#CCFCEE4B");
-            DEFAULT_COLORS.put(Blocks.REDSTONE_ORE, "#CCA00000");
-            DEFAULT_COLORS.put(Blocks.COAL_ORE, "#CC191611");
-            DEFAULT_COLORS.put(Blocks.EMERALD_ORE, "#CC17DD62");
-            DEFAULT_COLORS.put(Blocks.NETHER_QUARTZ_ORE, "#CCEBE9E3");
+            DEFAULT_COLORS.put(Items.DIAMOND_ORE, "#CC5DECF5");
+            DEFAULT_COLORS.put(Items.IRON_ORE, "#CCE68C3F");
+            DEFAULT_COLORS.put(Items.LAPIS_ORE, "#CC1846B2");
+            DEFAULT_COLORS.put(Items.GOLD_ORE, "#CCFCEE4B");
+            DEFAULT_COLORS.put(Items.REDSTONE_ORE, "#CCA00000");
+            DEFAULT_COLORS.put(Items.COAL_ORE, "#CC191611");
+            DEFAULT_COLORS.put(Items.EMERALD_ORE, "#CC17DD62");
+            DEFAULT_COLORS.put(Items.NETHER_QUARTZ_ORE, "#CCEBE9E3");
         }
         return DEFAULT_COLORS.getOrDefault(block, "#CC737373");
     }

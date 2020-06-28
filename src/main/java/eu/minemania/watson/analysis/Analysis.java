@@ -17,6 +17,7 @@ public class Analysis implements IChatHandler
     public boolean dispatchMatchedChat(Text chat)
     {
         String unformatted = chat.getString();
+        unformatted = unformatted.replaceAll("\u00A7.", "");
         for(Entry<String, IMatchedChatHandler> entry : m.entries())
         {
             Matcher m = Pattern.compile(entry.getKey()).matcher(unformatted);
