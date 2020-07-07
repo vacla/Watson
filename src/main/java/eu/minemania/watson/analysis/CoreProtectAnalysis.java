@@ -41,8 +41,8 @@ import net.minecraft.text.Text;
 public class CoreProtectAnalysis extends Analysis
 {
     protected static final int MS_PER_HOUR = 60 * 60 * 1000;
-    protected static final Pattern ABSOLUTE_TIME = Pattern.compile("(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{2}):(\\d{2}) \\w+");
-    protected static final Pattern HOURS_AGO_TIME = Pattern.compile("(\\d+.\\d+)/h ago");
+    protected static final Pattern ABSOLUTE_TIME = Pattern.compile("(\\d{1,4})-(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{2}):(\\d{2}) (\\w+)");
+    protected static final Pattern HOURS_AGO_TIME = Pattern.compile("(\\d+.\\d+)/(\\w) ago");
     protected boolean _isLookup = false;
     protected boolean _firstInspectorResult = false;
     protected boolean _lookupDetails = false;
@@ -72,6 +72,10 @@ public class CoreProtectAnalysis extends Analysis
         addMatchedChatHandler(Configs.Analysis.CP_INSPECTOR_COORDS, (chat, m) -> {
             inspectorCoords(chat, m);
             return true;
+        });
+        addMatchedChatHandler(Configs.Analysis.CP_DETAILS_SIGN, (chat, m) -> {
+            detailsSign(chat, m);
+            return sendMessage();
         });
         addMatchedChatHandler(Configs.Analysis.CP_LOOKUP_COORDS, (chat, m) -> {
             lookupCoords(chat, m);
@@ -135,6 +139,32 @@ public class CoreProtectAnalysis extends Analysis
                 {
                     _firstInspectorResult = false;
                 }
+            }
+        }
+    }
+
+    void detailsSign(Text chat, Matcher m)
+    {
+        _lookupDetails = false;
+        _millis = parseTimeExpression(m.group(1));
+        _player = m.group(2);
+        _action = m.group(3);
+        String block = "minecraft:oak_sign";
+        if (_isLookup)
+        {
+            block = "minecraft:player";
+            _x = _y = _z = 2;
+        }
+        _world = null;
+        _block = WatsonBlockRegistery.getInstance().getWatsonBlockByName(block);
+        if(DataManager.getFilters().isAcceptedPlayer(_player))
+        {
+            BlockEdit edit = new BlockEdit(_millis, _player, _action, _x, _y, _z, _block, _world, 1);
+            SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, _firstInspectorResult));
+
+            if(_firstInspectorResult)
+            {
+                _firstInspectorResult = false;
             }
         }
     }
@@ -227,12 +257,14 @@ public class CoreProtectAnalysis extends Analysis
         Matcher absolute = ABSOLUTE_TIME.matcher(time);
         if(absolute.matches())
         {
-            int month = Integer.parseInt(absolute.group(1));
-            int day = Integer.parseInt(absolute.group(2));
-            int hour = Integer.parseInt(absolute.group(3));
-            int minute = Integer.parseInt(absolute.group(4));
-            int second = Integer.parseInt(absolute.group(5));
-            return TimeStamp.toMillis(month, day, hour, minute, second);
+            int year = Integer.parseInt(absolute.group(1));
+            int month = Integer.parseInt(absolute.group(2));
+            int day = Integer.parseInt(absolute.group(3));
+            int hour = Integer.parseInt(absolute.group(4));
+            int minute = Integer.parseInt(absolute.group(5));
+            int second = Integer.parseInt(absolute.group(6));
+            String timezone = absolute.group(7);
+            return TimeStamp.toMillis(year, month, day, hour, minute, second, timezone);
         }
         else
         {
@@ -240,7 +272,14 @@ public class CoreProtectAnalysis extends Analysis
             if(relative.matches())
             {
                 String timed = relative.group(1).replace(",", ".");
-                float hours = Float.parseFloat(timed);
+                float hours;
+                if(relative.group(2).contains("d")) {
+                    hours = Float.parseFloat(timed) / 24;
+                } else if(relative.group(2).contains("m")) {
+                    hours = Float.parseFloat(timed) * 60;
+                } else {
+                    hours = Float.parseFloat(timed);
+                }
                 long millis = System.currentTimeMillis() - (long) (hours * MS_PER_HOUR);
 
                 millis -= millis % (MS_PER_HOUR / 100);
@@ -254,7 +293,11 @@ public class CoreProtectAnalysis extends Analysis
     {
         if (_currentPage != 0 && _currentPage < _pageCount)
         {
-            ChatMessage.getInstance().serverChat(String.format("/co l %d", _currentPage + 1), _currentPage == 1);
+            if(_currentPage == 1)
+            {
+                ChatMessage.getInstance().serverChat(String.format("/co l %d:%d", 1, Configs.Generic.AMOUNT_ROWS.getIntegerValue()), _currentPage == 1);
+            }
+            ChatMessage.getInstance().serverChat(String.format("/co l %d:%d", _currentPage + 1, Configs.Generic.AMOUNT_ROWS.getIntegerValue()), _currentPage == 1);
         }
     }
 

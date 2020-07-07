@@ -43,6 +43,7 @@ public class Configs implements IConfigHandler
      */
     public static class Generic
     {
+        public static final ConfigInteger AMOUNT_ROWS = new ConfigInteger("amountRowes", 5, "watson.description.config.amount_rows");
         public static final ConfigBoolean ANNOTATION_SHOWN = new ConfigBoolean("annotationShown", true, "watson.description.config.annotation_shown");
         public static final ConfigBoolean AUTO_PAGE = new ConfigBoolean("autopage", true, "watson.description.config.auto_page");
         public static final ConfigColor BILLBOARD_BACKGROUND = new ConfigColor("billboardBackground", "0xA8000000", "watson.description.config.billboard_background");
@@ -81,6 +82,7 @@ public class Configs implements IConfigHandler
         public static final ConfigString WATSON_PREFIX = new ConfigString("watsonPrefix", "watson", "watson.description.config.watson_prefix");
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
+                AMOUNT_ROWS,
                 ANNOTATION_SHOWN,
                 AUTO_PAGE,
                 BILLBOARD_BACKGROUND,
@@ -140,6 +142,7 @@ public class Configs implements IConfigHandler
     {
         public static final ConfigStringExt CP_BUSY = new ConfigStringExt("cp busy", "^CoreProtect - Database busy. Please try again later.$", "watson.description.config.analysis").setCommentArgs("cp busy");
         public static final ConfigStringExt CP_DETAILS = new ConfigStringExt("cp details", "^(\\d+[.,]\\d+\\/[mhd] ago|\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}) - #?(\\w+) (.*?) ((?:x(\\d+) )?\\w+(?::\\w+)?)\\.$", "watson.description.config.analysis").setCommentArgs("cp details");
+        public static final ConfigStringExt CP_DETAILS_SIGN = new ConfigStringExt("cp details sign", "^(\\d+[.,]\\d+\\/[mhd] ago|\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}) - (\\w+): ([\\s\\w+\\W]+)", "watson.description.config.analysis").setCommentArgs("cp details sign");
         public static final ConfigStringExt CP_INSPECTOR_COORDS = new ConfigStringExt("cp inspector coords", "^-{5} \\w+(?:\\s\\w+)* -{5} \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\)$", "watson.description.config.analysis").setCommentArgs("cp inspector coords");
         public static final ConfigStringExt CP_LOOKUP_COORDS = new ConfigStringExt("cp lookup coords", "^ +\\^ \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\/(.+)\\)$", "watson.description.config.analysis").setCommentArgs("cp lookup coords");
         public static final ConfigStringExt CP_LOOKUP_HEADER = new ConfigStringExt("cp lookup header", "^----- CoreProtect Lookup Results -----$", "watson.description.config.analysis").setCommentArgs("cp lookup header");
@@ -176,6 +179,7 @@ public class Configs implements IConfigHandler
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
                 CP_BUSY,
                 CP_DETAILS,
+                CP_DETAILS_SIGN,
                 CP_INSPECTOR_COORDS,
                 CP_LOOKUP_COORDS,
                 CP_LOOKUP_HEADER,

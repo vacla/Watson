@@ -86,7 +86,7 @@ public class WidgetListBlockedit extends WidgetListBase<BlockeditEntry, WidgetBl
     {
         if (this.gui.getTime() != 0 && entry.getEdit().time >= this.gui.getTime())
         {
-            return ImmutableList.of(PlayereditUtils.blockString(entry.getEdit()));
+            return ImmutableList.of(PlayereditUtils.blockString(entry.getEdit(), PlayereditUtils.Edit.DESCRIPTION));
         }
         else
         {
