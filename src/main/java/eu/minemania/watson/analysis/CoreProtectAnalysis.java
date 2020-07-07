@@ -42,7 +42,7 @@ import net.minecraft.text.Text;
 public class CoreProtectAnalysis extends Analysis
 {
     protected static final int MS_PER_HOUR = 60 * 60 * 1000;
-    protected static final Pattern ABSOLUTE_TIME = Pattern.compile("(\\d{1,4})-(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{2}):(\\d{2}) \\w+");
+    protected static final Pattern ABSOLUTE_TIME = Pattern.compile("(\\d{1,4})-(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{2}):(\\d{2}) (\\w+)");
     protected static final Pattern HOURS_AGO_TIME = Pattern.compile("(\\d+.\\d+)/(\\w) ago");
     protected boolean _isLookup = false;
     protected boolean _firstInspectorResult = false;
@@ -169,24 +169,21 @@ public class CoreProtectAnalysis extends Analysis
         _player = m.group(2);
         _action = m.group(3);
         String block = "minecraft:oak_sign";
-        _block = WatsonBlockRegistery.getInstance().getWatsonBlockByName(block);
-        if(_isLookup)
+        if (_isLookup)
         {
-            // Record that we can use these details at the next
-            // coreprotect.lookupcoords only.
-            _lookupDetails = true;
+            block = "minecraft:player";
+            _x = _y = _z = 2;
         }
-        else
+        _world = null;
+        _block = WatsonBlockRegistery.getInstance().getWatsonBlockByName(block);
+        if(DataManager.getFilters().isAcceptedPlayer(_player))
         {
-            if(DataManager.getFilters().isAcceptedPlayer(_player))
-            {
-                BlockEdit edit = new BlockEdit(_millis, _player, _action, _x, _y, _z, _block, _world, 1);
-                SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, _firstInspectorResult));
+            BlockEdit edit = new BlockEdit(_millis, _player, _action, _x, _y, _z, _block, _world, 1);
+            SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, _firstInspectorResult));
 
-                if(_firstInspectorResult)
-                {
-                    _firstInspectorResult = false;
-                }
+            if(_firstInspectorResult)
+            {
+                _firstInspectorResult = false;
             }
         }
     }
@@ -285,7 +282,8 @@ public class CoreProtectAnalysis extends Analysis
             int hour = Integer.parseInt(absolute.group(4));
             int minute = Integer.parseInt(absolute.group(5));
             int second = Integer.parseInt(absolute.group(6));
-            return TimeStamp.toMillis(year, month, day, hour, minute, second);
+            String timezone = absolute.group(7);
+            return TimeStamp.toMillis(year, month, day, hour, minute, second, timezone);
         }
         else
         {
@@ -314,7 +312,11 @@ public class CoreProtectAnalysis extends Analysis
     {
         if (_currentPage != 0 && _currentPage < _pageCount)
         {
-            ChatMessage.getInstance().serverChat(String.format("/co l %d", _currentPage + 1), _currentPage == 1);
+            if(_currentPage == 1)
+            {
+                ChatMessage.getInstance().serverChat(String.format("/co l %d:%d", 1, Configs.Generic.AMOUNT_ROWS.getIntegerValue()), _currentPage == 1);
+            }
+            ChatMessage.getInstance().serverChat(String.format("/co l %d:%d", _currentPage + 1, Configs.Generic.AMOUNT_ROWS.getIntegerValue()), _currentPage == 1);
         }
     }
 

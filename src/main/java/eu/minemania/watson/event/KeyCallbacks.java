@@ -78,6 +78,7 @@ public class KeyCallbacks
         Hotkeys.KEYBIND_TP_CURSOR.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.KEYBIND_TP_NEXT.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.KEYBIND_TP_PREV.getKeybind().setCallback(callbackHotkeys);
+        Hotkeys.KEYBIND_WATSON_CLEAR.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.OPEN_GUI_MAIN_MENU.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.OPEN_GUI_SETTINGS.getKeybind().setCallback(callbackHotkeys);
     }
@@ -293,27 +294,7 @@ public class KeyCallbacks
             }
             else if(Configs.Generic.ENABLED.getBooleanValue())
             {
-                if(key == Hotkeys.KEYBIND_TP_NEXT.getKeybind())
-                {
-                    edits.getBlockEditSet().getOreDB().tpNext();
-                    return true;
-                }
-                else if(key == Hotkeys.KEYBIND_TP_PREV.getKeybind())
-                {
-                    edits.getBlockEditSet().getOreDB().tpPrev();
-                    return true;
-                }
-                else if(key == Hotkeys.KEYBIND_QUERY_BEFORE.getKeybind() && Configs.Generic.PLUGIN.getStringValue().equals("LogBlock"))
-                {
-                    edits.queryPreEdits(Configs.Generic.PRE_COUNT.getIntegerValue());
-                    return true;
-                }
-                else if(key == Hotkeys.KEYBIND_QUERY_AFTER.getKeybind() && Configs.Generic.PLUGIN.getStringValue().equals("LogBlock"))
-                {
-                    edits.queryPostEdits(Configs.Generic.POST_COUNT.getIntegerValue());
-                    return true;
-                }
-                else if(key == Hotkeys.KEYBIND_CURSOR_NEXT.getKeybind())
+                if(key == Hotkeys.KEYBIND_CURSOR_NEXT.getKeybind())
                 {
                     if (edits.getSelection() != null && edits.getSelection().playereditSet != null)
                     {
@@ -337,6 +318,16 @@ public class KeyCallbacks
                         }
                     }
                 }
+                else if(key == Hotkeys.KEYBIND_QUERY_AFTER.getKeybind() && Configs.Generic.PLUGIN.getStringValue().equals("LogBlock"))
+                {
+                    edits.queryPostEdits(Configs.Generic.POST_COUNT.getIntegerValue());
+                    return true;
+                }
+                else if(key == Hotkeys.KEYBIND_QUERY_BEFORE.getKeybind() && Configs.Generic.PLUGIN.getStringValue().equals("LogBlock"))
+                {
+                    edits.queryPreEdits(Configs.Generic.PRE_COUNT.getIntegerValue());
+                    return true;
+                }
                 else if(key == Hotkeys.KEYBIND_TP_CURSOR.getKeybind())
                 {
                     if (edits.getSelection() != null)
@@ -344,6 +335,21 @@ public class KeyCallbacks
                         Teleport.teleport(edits.getSelection().x, edits.getSelection().y, edits.getSelection().z);
                         return true;
                     }
+                }
+                if(key == Hotkeys.KEYBIND_TP_NEXT.getKeybind())
+                {
+                    edits.getBlockEditSet().getOreDB().tpNext();
+                    return true;
+                }
+                else if(key == Hotkeys.KEYBIND_TP_PREV.getKeybind())
+                {
+                    edits.getBlockEditSet().getOreDB().tpPrev();
+                    return true;
+                }
+                else if (key == Hotkeys.KEYBIND_WATSON_CLEAR.getKeybind())
+                {
+                    edits.clearBlockEditSet();
+                    return true;
                 }
             }
             return false;

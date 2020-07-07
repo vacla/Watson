@@ -178,11 +178,19 @@ public class PlayereditUtils
                 }
                 else
                 {
+                    if(entity.equals(EntityType.PLAYER))
+                    {
+                        return new ItemStack(SpawnEggItem.forEntity(EntityType.VILLAGER));
+                    }
                     SpawnEggItem spawnEgg = SpawnEggItem.forEntity(entity);
                     if(spawnEgg == null)
                     {
                         InfoUtils.showGuiMessage(MessageType.WARNING, "watson.error.entity.not_found", entity.getName().getString());
-                        return null;
+                        if(Configs.Generic.DEBUG.getBooleanValue())
+                        {
+                            Watson.logger.warn(StringUtils.translate("watson.error.blockentity.not_found", blocks));
+                        }
+                        return new ItemStack(Items.BEDROCK);
                     }
 
                     return new ItemStack(spawnEgg);
@@ -198,7 +206,7 @@ public class PlayereditUtils
         return new ItemStack(Items.BEDROCK);
     }
 
-    public static String blockString(BlockEdit blockedit)
+    public static String blockString(BlockEdit blockedit, Edit edit)
     {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(blockedit.time);
@@ -208,6 +216,58 @@ public class PlayereditUtils
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
         int second = calendar.get(Calendar.SECOND);
-        return StringUtils.translate("watson.gui.label.blockedit.list.blocks", blockedit.x, blockedit.y, blockedit.z, day, month, year, hour, minute, second, blockedit.world, blockedit.block.getName(), blockedit.amount, blockedit.action);
+
+        if(edit == Edit.ACTION)
+        {
+            if(blockedit.block.getName().equals("minecraft:player"))
+            {
+                return StringUtils.translate("watson.gui.label.blockedit.list.chat");
+            }
+            else if(blockedit.block.getName().equals("minecraft:oak_sign") && !blockedit.action.equals("broke") && !blockedit.action.equals("placed"))
+            {
+                return StringUtils.translate("watson.gui.label.blockedit.list.sign");
+            }
+            return blockedit.action;
+        }
+        else if(edit == Edit.TIME)
+        {
+            return StringUtils.translate("watson.gui.label.blockedit.list.time", day, month, year, hour, minute, second);
+        }
+        else if(edit == Edit.COORDS)
+        {
+            return StringUtils.translate("watson.gui.label.blockedit.list.coords", blockedit.x, blockedit.y, blockedit.z);
+        }
+        else if(edit == Edit.WORLD)
+        {
+            return blockedit.world;
+        }
+        else if(edit == Edit.AMOUNT)
+        {
+            return String.valueOf(blockedit.amount);
+        }
+        else if(edit == Edit.DESCRIPTION)
+        {
+            if(blockedit.block.getName().equals("minecraft:player"))
+            {
+                return blockedit.action;
+            }
+            else if(blockedit.block.getName().equals("minecraft:oak_sign") && !blockedit.action.equals("broke") && !blockedit.action.equals("placed"))
+            {
+                return blockedit.action.trim();
+            }
+            return blockedit.block.getName();
+        }
+
+        return StringUtils.translate("watson.gui.label.blockedit.list.blocks", blockedit.x, blockedit.y, blockedit.z, day, month, year, hour, minute, second, blockedit.world, blockedit.amount, blockedit.action);
+    }
+
+    public enum Edit
+    {
+        ACTION,
+        TIME,
+        COORDS,
+        WORLD,
+        AMOUNT,
+        DESCRIPTION
     }
 }
