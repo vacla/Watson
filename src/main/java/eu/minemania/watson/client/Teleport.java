@@ -13,10 +13,9 @@ public class Teleport
     public static void teleport(int x, int y, int z)
     {
         String format = Configs.Generic.TELEPORT_COMMAND.getStringValue();
-        String tempFormat = format.replaceAll("\\{d}", "%d").replaceAll("\\{g}", "%g");
-        format = tempFormat.replaceAll("%d", "%g");
+        format = format.replaceAll("\\{d}", "%d").replaceAll("\\{g}", "%g");
         Pattern specifier = Pattern.compile("%[dg]");
-        Matcher specifiers = specifier.matcher(tempFormat);
+        Matcher specifiers = specifier.matcher(format);
 
         BitSet isDouble = new BitSet();
         int i = 0;
@@ -25,9 +24,9 @@ public class Teleport
             isDouble.set(i, specifiers.group().equals("%g"));
             ++i;
         }
-        Number nx = (isDouble.get(0) ? (x+0.5) : x);
-        Number ny = (isDouble.get(1) ? (y+0.5) : y);
-        Number nz = (isDouble.get(2) ? (z+0.5) : z);
+        Number nx = (isDouble.get(0) ? (Number) (x+0.5) : x);
+        Number ny = (isDouble.get(1) ? (Number) (y+0.5) : y);
+        Number nz = (isDouble.get(2) ? (Number) (z+0.5) : z);
         String command = String.format(format, nx, ny, nz);
         if(Configs.Generic.DEBUG.getBooleanValue())
         {

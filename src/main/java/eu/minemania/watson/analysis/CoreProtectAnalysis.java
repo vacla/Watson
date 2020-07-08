@@ -260,7 +260,7 @@ public class CoreProtectAnalysis extends Analysis
                 reset();
             }
         }
-        else if(_currentPage == _pageCount)
+        if(_currentPage == _pageCount)
         {
             reset();
         }
