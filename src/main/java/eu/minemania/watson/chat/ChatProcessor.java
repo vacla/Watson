@@ -2,14 +2,7 @@ package eu.minemania.watson.chat;
 
 import java.util.ArrayList;
 
-import eu.minemania.watson.analysis.CoreProtectAnalysis;
-import eu.minemania.watson.analysis.LbCoordsAnalysis;
-import eu.minemania.watson.analysis.LbToolBlockAnalysis;
-import eu.minemania.watson.analysis.ModModeAnalysis;
-import eu.minemania.watson.analysis.RatioAnalysis;
-import eu.minemania.watson.analysis.RegionInfoAnalysis;
-import eu.minemania.watson.analysis.ServerTime;
-import eu.minemania.watson.analysis.TeleportAnalysis;
+import eu.minemania.watson.analysis.*;
 import eu.minemania.watson.config.Configs;
 import net.minecraft.text.Text;
 
@@ -46,12 +39,7 @@ public class ChatProcessor
     {
         if (Configs.Generic.ENABLED.getBooleanValue())
         {
-            boolean allow = true;
-            for (IChatHandler handler : _handlers)
-            {
-                allow &= handler.onChat(chat);
-            }
-            return allow;
+            return new Analysis().onChat(chat);
         }
         else
         {
