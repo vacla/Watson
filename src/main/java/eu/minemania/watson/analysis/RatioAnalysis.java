@@ -9,20 +9,20 @@ import eu.minemania.watson.chat.IMatchedChatHandler;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.db.TimeStamp;
 import fi.dy.masa.malilib.util.StringUtils;
-import net.minecraft.text.Text;
+import net.minecraft.text.MutableText;
 
 public class RatioAnalysis extends Analysis
 {
     protected static long STONE_DIAMOND_TIMEOUT_MILLIS = 250;
-    protected boolean     _parsing;
-    protected boolean     _gotStone;
-    protected boolean     _gotDiamond;
-    protected int         _stoneCount;
-    protected int         _diamondCount;
-    protected long        _stoneTime;
-    protected long        _diamondTime;
-    protected int         _sinceMinutes;
-    protected int         _beforeMinutes;
+    protected boolean _parsing;
+    protected boolean _gotStone;
+    protected boolean _gotDiamond;
+    protected int _stoneCount;
+    protected int _diamondCount;
+    protected long _stoneTime;
+    protected long _diamondTime;
+    protected int _sinceMinutes;
+    protected int _beforeMinutes;
 
     public RatioAnalysis()
     {
@@ -49,12 +49,12 @@ public class RatioAnalysis extends Analysis
         addMatchedChatHandler(Configs.Analysis.LB_SUM, this::lbSum);
     }
 
-    void lbHeader(Text chat, Matcher m)
+    void lbHeader(MutableText chat, Matcher m)
     {
         reset();
     }
 
-    void lbHeaderRatio(Text chat, Matcher m)
+    void lbHeaderRatio(MutableText chat, Matcher m)
     {
         reset();
         _parsing = true;
@@ -62,7 +62,7 @@ public class RatioAnalysis extends Analysis
         _beforeMinutes = Integer.parseInt(m.group(2));
     }
 
-    void lbHeaderRatioCurrent(Text chat, Matcher m)
+    void lbHeaderRatioCurrent(MutableText chat, Matcher m)
     {
         reset();
         _parsing = true;
@@ -70,14 +70,14 @@ public class RatioAnalysis extends Analysis
         _beforeMinutes = 0;
     }
 
-    boolean lbSum(Text chat, Matcher m)
+    boolean lbSum(MutableText chat, Matcher m)
     {
-        if(_parsing)
+        if (_parsing)
         {
             int created = Integer.parseInt(m.group(1));
-            int destroyed = Integer .parseInt(m.group(2));
+            int destroyed = Integer.parseInt(m.group(2));
             String block = m.group(3);
-            if(block.equalsIgnoreCase("stone"))
+            if (block.equalsIgnoreCase("stone"))
             {
                 _stoneCount = destroyed;
                 _gotStone = true;
@@ -99,7 +99,7 @@ public class RatioAnalysis extends Analysis
                 before.set(Calendar.SECOND, 0);
                 before.add(Calendar.MINUTE, -(localMinusServer + _beforeMinutes));
                 String period = StringUtils.translate("watson.message.lb.between_period", TimeStamp.formatQueryTime(since.getTimeInMillis()), TimeStamp.formatQueryTime(before.getTimeInMillis()));
-                if(Configs.Generic.DEBUG.getBooleanValue())
+                if (Configs.Generic.DEBUG.getBooleanValue())
                 {
                     Watson.logger.info("Between " + _sinceMinutes + " and " + _beforeMinutes + " minutes ago ==>");
                     Watson.logger.info(period);

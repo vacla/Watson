@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -48,18 +49,19 @@ public class Configs implements IConfigHandler
         public static final ConfigBoolean AUTO_PAGE = new ConfigBoolean("autopage", true, "watson.description.config.auto_page");
         public static final ConfigColor BILLBOARD_BACKGROUND = new ConfigColor("billboardBackground", "0xA8000000", "watson.description.config.billboard_background");
         public static final ConfigColor BILLBOARD_FOREGROUND = new ConfigColor("billboardForeground", "0x7FFFFFFF", "watson.description.config.billboard_foreground");
-        public static final ConfigDouble CHAT_TIMEOUT = new ConfigDouble("chatTimeoutSeconds", 1, 0.5, 5, "watson.description.config.chat_timeout");
+        public static final ConfigDouble CHAT_TIMEOUT = new ConfigDouble("chatTimeoutSeconds", 1, 0.1, 5, "watson.description.config.chat_timeout");
         public static final ConfigBoolean DEBUG = new ConfigBoolean("debugWatson", false, "watson.description.config.debug");
         public static final ConfigBoolean DISABLE_CP_MESSAGES = new ConfigBoolean("disableCPMessages", false, "watson.description.config.coreprotect_messages");
         public static final ConfigBoolean DISPLAYED = new ConfigBoolean("displayed", true, "watson.description.config.displayed");
         public static final ConfigBoolean ENABLED = new ConfigBoolean("enabled", true, "watson.description.config.enabled");
         public static final ConfigBoolean GROUPING_ORES_IN_CREATIVE = new ConfigBoolean("groupingOresInCreative", true, "watson.description.config.grouping_ores_in_creative");
+        public static final ConfigBoolean HIGHLIGHT_CASE_SENSITIVE = new ConfigBoolean("highlightCaseSensitive", true, "watson.description.config.highlight_case_sensitive");
         public static final ConfigBoolean LABEL_SHOWN = new ConfigBoolean("labelshown", true, "watson.description.config.label_shown");
         public static final ConfigBoolean LINKED_CREATION = new ConfigBoolean("linkedcreation", false, "watson.description.config.linked_creation");
         public static final ConfigBoolean LINKED_DESTRUCTION = new ConfigBoolean("linkeddestruction", false, "watson.description.config.linked_description");
         public static final ConfigInteger MAX_AUTO_PAGES = new ConfigInteger("maxAutoPages", 100, "watson.description.config.max_auto_pages");
         public static final ConfigBoolean ONLY_ORE_BLOCK = new ConfigBoolean("onlyOreBlock", false, "watson.description.config.only_ore_block");
-        public static final ConfigInteger ORE_LINEWIDTH = new ConfigInteger("oreLinewidth", 3 , 1, 10, "watson.description.config.ore_linewidth");
+        public static final ConfigInteger ORE_LINEWIDTH = new ConfigInteger("oreLinewidth", 3, 1, 10, "watson.description.config.ore_linewidth");
         public static final ConfigBoolean ORE_OUTLINE_THICKER = new ConfigBoolean("oreOutlineThicker", false, "watson.description.config.ore_outline_thicker");
         public static final ConfigBoolean OUTLINE_SHOWN = new ConfigBoolean("outlineshown", true, "watson.description.config.outline_shown");
         public static final ConfigInteger PAGE_LINES = new ConfigInteger("pagelines", 50, "watson.description.config.page_lines");
@@ -93,6 +95,7 @@ public class Configs implements IConfigHandler
                 DISPLAYED,
                 ENABLED,
                 GROUPING_ORES_IN_CREATIVE,
+                HIGHLIGHT_CASE_SENSITIVE,
                 LABEL_SHOWN,
                 LINKED_CREATION,
                 LINKED_DESTRUCTION,
@@ -119,7 +122,7 @@ public class Configs implements IConfigHandler
                 VECTOR_LENGTH,
                 VECTOR_SHOWN,
                 WATSON_PREFIX
-                );
+        );
     }
 
     /**
@@ -135,7 +138,7 @@ public class Configs implements IConfigHandler
                 HIGHLIGHT,
                 SMALLER_RENDER_BOX,
                 WATSON_BLOCKS
-                );
+        );
     }
 
     public static class Analysis
@@ -212,7 +215,7 @@ public class Configs implements IConfigHandler
                 MODMODE_DISABLE,
                 MODMODE_ENABLE,
                 WG_REGIONS
-                );
+        );
     }
 
     /**
@@ -222,11 +225,11 @@ public class Configs implements IConfigHandler
     {
         File configFile = new File(FileUtils.getConfigDirectory(), CONFIG_FILE_NAME);
 
-        if(configFile.exists() && configFile.isFile() && configFile.canRead())
+        if (configFile.exists() && configFile.isFile() && configFile.canRead())
         {
             JsonElement element = JsonUtils.parseJsonFile(configFile);
 
-            if(element != null && element.isJsonObject())
+            if (element != null && element.isJsonObject())
             {
                 JsonObject root = element.getAsJsonObject();
 
@@ -246,8 +249,8 @@ public class Configs implements IConfigHandler
         ImmutableList.Builder<String> builder = ImmutableList.builder();
         final HashSet<String> set = new HashSet<>();
 
-        Registry.BLOCK.forEach((block) -> set.add(Registry.BLOCK.getId(block).toString() + ";1;"+ setCustomColorOres(block.asItem())));
-        Registry.ITEM.forEach((item) -> set.add(Registry.ITEM.getId(item).toString() + ";1;"+ setCustomColorOres(item)));
+        Registry.BLOCK.forEach((block) -> set.add(Registry.BLOCK.getId(block).toString() + ";1;" + setCustomColorOres(block.asItem())));
+        Registry.ITEM.forEach((item) -> set.add(Registry.ITEM.getId(item).toString() + ";1;" + setCustomColorOres(item)));
         Registry.ENTITY_TYPE.forEach((type) -> set.add(Registry.ENTITY_TYPE.getId(type).toString() + ";1;#CC780E22"));
 
         ArrayList<String> list = new ArrayList<>(set);
@@ -260,7 +263,7 @@ public class Configs implements IConfigHandler
 
     private static String setCustomColorOres(Item block)
     {
-        if(DEFAULT_COLORS.isEmpty())
+        if (DEFAULT_COLORS.isEmpty())
         {
             DEFAULT_COLORS.put(Items.DIAMOND_ORE, "#CC5DECF5");
             DEFAULT_COLORS.put(Items.IRON_ORE, "#CCE68C3F");
@@ -281,7 +284,7 @@ public class Configs implements IConfigHandler
     {
         File dir = FileUtils.getConfigDirectory();
 
-        if((dir.exists() && dir.isDirectory()) || dir.mkdirs())
+        if ((dir.exists() && dir.isDirectory()) || dir.mkdirs())
         {
             JsonObject root = new JsonObject();
 

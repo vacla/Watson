@@ -14,7 +14,7 @@ import fi.dy.masa.malilib.util.GuiUtils;
 import fi.dy.masa.malilib.util.StringUtils;
 
 public class GuiEdits extends GuiListBase<PlayereditEntry, WidgetEditsEntry, WidgetListEdits>
-implements ICompletionListener 
+        implements ICompletionListener
 {
     private final PlayereditBase edits;
 
@@ -64,7 +64,7 @@ implements ICompletionListener
         int gap = 1;
         x += this.createButton(x, y, -1, ButtonListener.Type.REFRESH_LIST) + gap;
 
-        if(isNarrow)
+        if (isNarrow)
         {
             x = 12;
             y = this.height - 22;
@@ -111,7 +111,7 @@ implements ICompletionListener
     @Override
     public void onTaskCompleted()
     {
-        if(GuiUtils.getCurrentScreen() == this)
+        if (GuiUtils.getCurrentScreen() == this)
         {
             WidgetEditsEntry.setMaxNameLength(this.edits.getPlayereditsAll());
             this.initGui();

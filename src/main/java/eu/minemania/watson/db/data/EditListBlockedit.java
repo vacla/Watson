@@ -1,6 +1,7 @@
 package eu.minemania.watson.db.data;
 
 import java.util.List;
+
 import com.google.common.collect.ImmutableList;
 import eu.minemania.watson.db.BlockEdit;
 import eu.minemania.watson.selection.PlayereditUtils;
@@ -15,7 +16,7 @@ public class EditListBlockedit extends BlockeditBase
 
         this.edits = edits;
 
-        if(reCreate)
+        if (reCreate)
         {
             this.reCreateBlockedits();
         }

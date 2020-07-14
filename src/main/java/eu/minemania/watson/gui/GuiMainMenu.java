@@ -43,7 +43,7 @@ public class GuiMainMenu extends GuiBase
     {
         int width = 0;
 
-        for(ButtonListenerChangeMenu.ButtonType type : ButtonListenerChangeMenu.ButtonType.values())
+        for (ButtonListenerChangeMenu.ButtonType type : ButtonListenerChangeMenu.ButtonType.values())
         {
             width = Math.max(width, this.getStringWidth(type.getDisplayName()) + 30);
         }
@@ -81,7 +81,7 @@ public class GuiMainMenu extends GuiBase
                     break;
             }
 
-            if(gui != null)
+            if (gui != null)
             {
                 gui.setParent(this.parent);
                 GuiBase.openGui(gui);
@@ -90,9 +90,9 @@ public class GuiMainMenu extends GuiBase
 
         public enum ButtonType
         {
-            CONFIGURATION ("watson.gui.button.change_menu.configuration_menu", ButtonIcons.CONFIGURATION),
-            MAIN_MENU ("watson.gui.button.change_menu.to_main_menu", null),
-            PLAYEREDIT_LOADED ("watson.gui.button.change_menu.playeredit_loaded_menu", null);
+            CONFIGURATION("watson.gui.button.change_menu.configuration_menu", ButtonIcons.CONFIGURATION),
+            MAIN_MENU("watson.gui.button.change_menu.to_main_menu", null),
+            PLAYEREDIT_LOADED("watson.gui.button.change_menu.playeredit_loaded_menu", null);
 
             private final String labelKey;
             private final ButtonIcons icon;

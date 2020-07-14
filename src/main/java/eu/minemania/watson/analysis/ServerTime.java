@@ -12,7 +12,7 @@ import eu.minemania.watson.db.TimeStamp;
 import fi.dy.masa.malilib.gui.Message.MessageType;
 import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
+import net.minecraft.text.MutableText;
 
 public class ServerTime extends Analysis
 {
@@ -44,16 +44,16 @@ public class ServerTime extends Analysis
     public void queryServerTime(boolean showServerTime)
     {
         String serverIP = DataManager.getServerIP();
-        if(serverIP != null)
+        if (serverIP != null)
         {
-            if(_localMinusServerMinutes.get(serverIP) == null)
+            if (_localMinusServerMinutes.get(serverIP) == null)
             {
-                if(Configs.Generic.PLUGIN.getOptionListValue().getStringValue().equals("LogBlock"))
+                if (Configs.Generic.PLUGIN.getOptionListValue().getStringValue().equals("LogBlock"))
                 {
                     Calendar pastTime = getPastTime();
                     String date = String.format("%d,%d,%d", pastTime.get(Calendar.DAY_OF_MONTH), pastTime.get(Calendar.MONTH) + 1, pastTime.get(Calendar.YEAR));
                     String query = String.format("/lb player %s since %s 00:00:00 before %s 00:00:01 limit 1", MinecraftClient.getInstance().player.getName().getString(), date, date);
-                    if(Configs.Generic.DEBUG.getBooleanValue())
+                    if (Configs.Generic.DEBUG.getBooleanValue())
                     {
                         Watson.logger.info("Server time query for " + serverIP + ": " + query);
                     }
@@ -75,16 +75,16 @@ public class ServerTime extends Analysis
     public ServerTime()
     {
         addMatchedChatHandler(Configs.Analysis.LB_HEADER_TIME_CHECK, (chat, m) -> {
-            lbHeaderTimeCheck(chat,m);
+            lbHeaderTimeCheck(chat, m);
             return false;
         });
         addMatchedChatHandler(Configs.Analysis.LB_HEADER_NO_RESULTS, this::lbHeaderNoResults);
     }
 
-    void lbHeaderTimeCheck(Text chat, Matcher m)
+    void lbHeaderTimeCheck(MutableText chat, Matcher m)
     {
         String serverIP = DataManager.getServerIP();
-        if(serverIP != null && _localMinusServerMinutes.get(serverIP) == null)
+        if (serverIP != null && _localMinusServerMinutes.get(serverIP) == null)
         {
             int serverMinutes = Integer.parseInt(m.group(1));
             Calendar now = Calendar.getInstance();
@@ -92,12 +92,12 @@ public class ServerTime extends Analysis
             int localMinutes = (int) ((now.getTimeInMillis() - pastTime.getTimeInMillis()) / MINUTES_TO_MILLISECONDS);
             int localMinusServer = localMinutes - serverMinutes;
             _localMinusServerMinutes.put(serverIP, localMinusServer);
-            if(Configs.Generic.DEBUG.getBooleanValue())
+            if (Configs.Generic.DEBUG.getBooleanValue())
             {
                 Watson.logger.info("Past time was " + serverMinutes + " minutes ago on the server and " + localMinutes + " minutes ago on the client.");
                 Watson.logger.info("Client is " + localMinusServer + " minutes ahead of the server.");
             }
-            if(_showServerTime)
+            if (_showServerTime)
             {
                 showCurrentServerTime();
                 _showServerTime = false;
@@ -106,7 +106,7 @@ public class ServerTime extends Analysis
         }
     }
 
-    boolean lbHeaderNoResults(Text chat, Matcher m)
+    boolean lbHeaderNoResults(MutableText chat, Matcher m)
     {
         boolean echo = _echoNextNoResults;
         _echoNextNoResults = true;

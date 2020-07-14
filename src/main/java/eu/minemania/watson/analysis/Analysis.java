@@ -3,25 +3,26 @@ package eu.minemania.watson.analysis;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import eu.minemania.watson.chat.IChatHandler;
 import eu.minemania.watson.chat.IMatchedChatHandler;
 import fi.dy.masa.malilib.config.options.ConfigString;
-import net.minecraft.text.Text;
+import net.minecraft.text.MutableText;
 
 public class Analysis implements IChatHandler
 {
     protected static ListMultimap<String, IMatchedChatHandler> m = ArrayListMultimap.create();
 
-    public boolean dispatchMatchedChat(Text chat)
+    public boolean dispatchMatchedChat(MutableText chat)
     {
         String unformatted = chat.getString();
         unformatted = unformatted.replaceAll("\u00A7.", "");
-        for(Entry<String, IMatchedChatHandler> entry : m.entries())
+        for (Entry<String, IMatchedChatHandler> entry : m.entries())
         {
             Matcher m = Pattern.compile(entry.getKey()).matcher(unformatted);
-            if(m.matches())
+            if (m.matches())
             {
                 return entry.getValue().onMatchedChat(chat, m);
             }
@@ -36,7 +37,7 @@ public class Analysis implements IChatHandler
 
     public static void removeMatchedChatHandler(ConfigString pattern)
     {
-        for(IMatchedChatHandler handler : m.get(pattern.getOldStringValue()))
+        for (IMatchedChatHandler handler : m.get(pattern.getOldStringValue()))
         {
             m.put(pattern.getStringValue(), handler);
         }
@@ -44,7 +45,7 @@ public class Analysis implements IChatHandler
     }
 
     @Override
-    public boolean onChat(Text chat)
+    public boolean onChat(MutableText chat)
     {
         return dispatchMatchedChat(chat);
     }

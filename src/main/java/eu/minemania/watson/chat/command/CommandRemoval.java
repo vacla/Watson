@@ -12,6 +12,7 @@ import net.minecraft.server.MinecraftServer;
 public class CommandRemoval
 {
     private static final Field CHILDREN, LITERALS, ARGUMENTS;
+
     static
     {
         try
@@ -31,8 +32,8 @@ public class CommandRemoval
 
     /**
      * Remove the command with the given name from the given {@link MinecraftServer}
-     * 
-     * @param server The server to remove the command from
+     *
+     * @param server  The server to remove the command from
      * @param command The name of the command to remove
      */
     public static void removeCommand(MinecraftServer server, String command)
@@ -42,8 +43,8 @@ public class CommandRemoval
 
     /**
      * Remove the command with the given name from the given {@link CommandNode}
-     * 
-     * @param node The command node to remove the command from
+     *
+     * @param node    The command node to remove the command from
      * @param command The name of the command to remove
      */
     @SuppressWarnings("unchecked")

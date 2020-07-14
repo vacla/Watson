@@ -2,6 +2,7 @@ package eu.minemania.watson.db.data;
 
 import java.util.List;
 import javax.annotation.Nullable;
+
 import eu.minemania.watson.client.Teleport;
 import eu.minemania.watson.selection.PlayereditUtils;
 import fi.dy.masa.malilib.gui.GuiBase;
@@ -11,10 +12,11 @@ import fi.dy.masa.malilib.gui.button.IButtonActionListener;
 import fi.dy.masa.malilib.gui.widgets.WidgetListEntrySortable;
 import fi.dy.masa.malilib.render.RenderUtils;
 import fi.dy.masa.malilib.util.StringUtils;
+import net.minecraft.client.util.math.MatrixStack;
 
 public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry>
 {
-    private static final String[] HEADERS = new String[] {
+    private static final String[] HEADERS = new String[]{
             "watson.gui.label.blockedit.title.action",
             "watson.gui.label.blockedit.title.time",
             "watson.gui.label.blockedit.title.coords",
@@ -29,17 +31,24 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
     private static int maxAmountLength;
     private static int maxDescriptionLength;
 
-    @Nullable private final BlockeditEntry entry;
-    @Nullable private final String header1;
-    @Nullable private final String header2;
-    @Nullable private final String header3;
-    @Nullable private final String header4;
-    @Nullable private final String header5;
-    @Nullable private final String header6;
+    @Nullable
+    private final BlockeditEntry entry;
+    @Nullable
+    private final String header1;
+    @Nullable
+    private final String header2;
+    @Nullable
+    private final String header3;
+    @Nullable
+    private final String header4;
+    @Nullable
+    private final String header5;
+    @Nullable
+    private final String header6;
     private final boolean isOdd;
 
     public WidgetBlockeditEntry(int x, int y, int width, int height, boolean isOdd,
-                                   @Nullable BlockeditEntry entry, int listIndex)
+                                @Nullable BlockeditEntry entry, int listIndex)
     {
         super(x, y, width, height, entry, listIndex);
 
@@ -47,7 +56,7 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
         this.entry = entry;
         this.isOdd = isOdd;
 
-        if(this.entry != null)
+        if (this.entry != null)
         {
             this.header1 = null;
             this.header2 = null;
@@ -88,7 +97,7 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
         maxAmountLength = StringUtils.getStringWidth(GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[4]) + GuiBase.TXT_RST);
         maxDescriptionLength = StringUtils.getStringWidth(GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[5]) + GuiBase.TXT_RST);
 
-        for(BlockeditEntry entry : edits)
+        for (BlockeditEntry entry : edits)
         {
             maxActionLength = Math.max(maxActionLength, StringUtils.getStringWidth(PlayereditUtils.blockString(entry.getEdit(), PlayereditUtils.Edit.ACTION)));
             maxTimeLength = Math.max(maxTimeLength, StringUtils.getStringWidth(PlayereditUtils.blockString(entry.getEdit(), PlayereditUtils.Edit.TIME)));
@@ -106,15 +115,15 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
     }
 
     @Override
-    public void render(int mouseX, int mouseY, boolean selected)
+    public void render(int mouseX, int mouseY, boolean selected, MatrixStack matrixStack)
     {
         RenderUtils.color(1f, 1f, 1f, 1f);
 
-        if(this.header1 == null && (selected || this.isMouseOver(mouseX, mouseY)))
+        if (this.header1 == null && (selected || this.isMouseOver(mouseX, mouseY)))
         {
             RenderUtils.drawRect(this.x, this.y, this.width, this.height, 0x70FFFFFF);
         }
-        else if(this.isOdd)
+        else if (this.isOdd)
         {
             RenderUtils.drawRect(this.x, this.y, this.width, this.height, 0x20FFFFFF);
         }
@@ -132,16 +141,16 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
         int y = this.y + 7;
         int color = 0xFFFFFFFF;
 
-        if(this.header1 != null)
+        if (this.header1 != null)
         {
-            this.drawString(x1, y, color, this.header1);
-            this.drawString(x2, y, color, this.header2);
-            this.drawString(x3, y, color, this.header3);
-            this.drawString(x4, y, color, this.header4);
-            this.drawString(x5, y, color, this.header5);
-            this.drawString(x6, y, color, this.header6);
+            this.drawString(x1, y, color, this.header1, matrixStack);
+            this.drawString(x2, y, color, this.header2, matrixStack);
+            this.drawString(x3, y, color, this.header3, matrixStack);
+            this.drawString(x4, y, color, this.header4, matrixStack);
+            this.drawString(x5, y, color, this.header5, matrixStack);
+            this.drawString(x6, y, color, this.header6, matrixStack);
         }
-        else if(this.entry != null)
+        else if (this.entry != null)
         {
             String action = PlayereditUtils.blockString(this.entry.getEdit(), PlayereditUtils.Edit.ACTION);
             String time = PlayereditUtils.blockString(this.entry.getEdit(), PlayereditUtils.Edit.TIME);
@@ -149,14 +158,14 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
             String world = PlayereditUtils.blockString(this.entry.getEdit(), PlayereditUtils.Edit.WORLD);
             String amount = PlayereditUtils.blockString(this.entry.getEdit(), PlayereditUtils.Edit.AMOUNT);
             String description = PlayereditUtils.blockString(this.entry.getEdit(), PlayereditUtils.Edit.DESCRIPTION);
-            this.drawString(x1, y, 0xFFFFFFFF, action);
-            this.drawString(x2, y, 0xFFFFFFFF, time);
-            this.drawString(x3, y, 0xFFFFFFFF, coords);
-            this.drawString(x4, y, 0xFFFFFFFF, world);
-            this.drawString(x5, y, 0xFFFFFFFF, amount);
-            this.drawString(x6, y, 0xFFFFFFFF, description);
+            this.drawString(x1, y, 0xFFFFFFFF, action, matrixStack);
+            this.drawString(x2, y, 0xFFFFFFFF, time, matrixStack);
+            this.drawString(x3, y, 0xFFFFFFFF, coords, matrixStack);
+            this.drawString(x4, y, 0xFFFFFFFF, world, matrixStack);
+            this.drawString(x5, y, 0xFFFFFFFF, amount, matrixStack);
+            this.drawString(x6, y, 0xFFFFFFFF, description, matrixStack);
 
-            super.render(mouseX, mouseY, selected);
+            super.render(mouseX, mouseY, selected, matrixStack);
         }
     }
 
@@ -174,7 +183,7 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
         @Override
         public void actionPerformedWithButton(ButtonBase button, int mouseButton)
         {
-            if(this.type == WidgetBlockeditEntry.ButtonListenerTeleport.ButtonType.TELEPORT)
+            if (this.type == WidgetBlockeditEntry.ButtonListenerTeleport.ButtonType.TELEPORT)
             {
                 Teleport.teleport(entry.getEdit().x, entry.getEdit().y, entry.getEdit().z);
             }
@@ -182,7 +191,7 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
 
         public enum ButtonType
         {
-            TELEPORT  ("watson.gui.label.blockedit.list.teleport");
+            TELEPORT("watson.gui.label.blockedit.list.teleport");
 
             private final String translationKey;
 
@@ -210,13 +219,20 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
 
         switch (column)
         {
-            case 0: return x1;
-            case 1: return x2;
-            case 2: return x3;
-            case 3: return x4;
-            case 4: return x5;
-            case 5: return x6;
-            default: return x1;
+            case 0:
+                return x1;
+            case 1:
+                return x2;
+            case 2:
+                return x3;
+            case 3:
+                return x4;
+            case 4:
+                return x5;
+            case 5:
+                return x6;
+            default:
+                return x1;
         }
     }
 

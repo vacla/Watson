@@ -5,7 +5,7 @@ import fi.dy.masa.malilib.util.Color4f;
 public final class WatsonBlock
 {
     private String name = "";
-    private Color4f color = new Color4f(255,255,0,255);
+    private Color4f color = new Color4f(255, 255, 0, 255);
     private float lineWidth = 1.0f;
 
     public void setName(String name)
@@ -69,14 +69,14 @@ public final class WatsonBlock
     @Override
     public boolean equals(Object obj)
     {
-        if(obj == this)
+        if (obj == this)
         {
             return true;
         }
 
-        if(obj instanceof WatsonBlock)
+        if (obj instanceof WatsonBlock)
         {
-            return ((WatsonBlock)obj).name.equals(this.name);
+            return ((WatsonBlock) obj).name.equals(this.name);
         }
 
         return false;

@@ -1,5 +1,6 @@
 package eu.minemania.watson.interfaces;
 
-public interface ITextFieldWidget {
-	int clientcommands_getMaxLength();
+public interface ITextFieldWidget
+{
+    int clientcommands_getMaxLength();
 }

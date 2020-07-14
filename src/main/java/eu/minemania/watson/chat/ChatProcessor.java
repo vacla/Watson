@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import eu.minemania.watson.analysis.*;
 import eu.minemania.watson.config.Configs;
-import net.minecraft.text.Text;
+import net.minecraft.text.MutableText;
 
 public class ChatProcessor
 {
@@ -35,7 +35,7 @@ public class ChatProcessor
         _handlers.add(handler);
     }
 
-    public boolean onChat(Text chat)
+    public boolean onChat(MutableText chat)
     {
         if (Configs.Generic.ENABLED.getBooleanValue())
         {

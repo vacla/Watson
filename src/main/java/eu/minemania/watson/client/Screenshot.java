@@ -9,6 +9,7 @@ import java.util.Date;
 
 import javax.imageio.ImageIO;
 
+import net.minecraft.util.Formatting;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
@@ -40,9 +41,9 @@ public class Screenshot
 
     /**
      * Returns if screenshot is saved or not.
-     * 
-     * @param file Sets filename
-     * @param width Sets width
+     *
+     * @param file   Sets filename
+     * @param width  Sets width
      * @param height Sets height
      * @return TextComponentTranslation of screenshot save
      */
@@ -73,8 +74,8 @@ public class Screenshot
 
             ImageIO.write(image, "png", file);
             LiteralText text = new LiteralText(file.getName());
-            text.getStyle().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, file.getAbsolutePath()));
-            text.getStyle().setUnderline(Boolean.TRUE);
+            text.getStyle().withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, file.getAbsolutePath()));
+            text.getStyle().withFormatting(Formatting.UNDERLINE);
             return new TranslatableText("screenshot.success", text);
         }
         catch (Exception ex)
@@ -85,10 +86,10 @@ public class Screenshot
 
     /**
      * Returns unique file name for screenshot, adds username if filled in.
-     * 
-     * @param dir Directory gets saved
+     *
+     * @param dir    Directory gets saved
      * @param player Username
-     * @param now Current date
+     * @param now    Current date
      * @return Unique PNG file name for screenshot
      */
     public static File getUniqueFilename(File dir, String player, Date now)

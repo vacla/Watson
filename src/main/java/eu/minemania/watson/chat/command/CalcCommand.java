@@ -33,18 +33,18 @@ public class CalcCommand extends WatsonCommandBase
     {
         int cmdCount = 0;
         CommandDispatcher<ServerCommandSource> dispatcher = Command.commandDispatcher;
-        for(CommandNode<ServerCommandSource> command : dispatcher.getRoot().getChildren())
+        for (CommandNode<ServerCommandSource> command : dispatcher.getRoot().getChildren())
         {
             String cmdName = command.getName();
-            if(ClientCommandManager.isClientSideCommand(cmdName))
+            if (ClientCommandManager.isClientSideCommand(cmdName))
             {
                 Map<CommandNode<ServerCommandSource>, String> usage = dispatcher.getSmartUsage(command, context.getSource());
-                for(String u : usage.values())
+                for (String u : usage.values())
                 {
                     ClientCommandManager.sendFeedback(new LiteralText("/" + cmdName + " " + u));
                 }
                 cmdCount += usage.size();
-                if(usage.size() == 0)
+                if (usage.size() == 0)
                 {
                     ClientCommandManager.sendFeedback(new LiteralText("/" + cmdName));
                     cmdCount++;
@@ -98,7 +98,7 @@ public class CalcCommand extends WatsonCommandBase
     private static double expr(StreamTokenizer tokenizer) throws IOException
     {
         double result = term(tokenizer);
-        for (;;)
+        for (; ; )
         {
             int token = tokenizer.nextToken();
             if (token == '+')
@@ -121,7 +121,7 @@ public class CalcCommand extends WatsonCommandBase
     private static double term(StreamTokenizer tokenizer) throws IOException
     {
         double result = factor(tokenizer);
-        for (;;)
+        for (; ; )
         {
             int token = tokenizer.nextToken();
             if (token == '*')

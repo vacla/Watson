@@ -1,5 +1,6 @@
 package eu.minemania.watson.mixin;
 
+import net.minecraft.text.MutableText;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -39,7 +40,7 @@ public abstract class MixinPlayerEntity extends LivingEntity
         }
     }
 
-    @Redirect(method = "getDisplayName", at = @At(value = "INVOKE",	target = "Lnet/minecraft/entity/player/PlayerEntity;getName()Lnet/minecraft/text/Text;"))
+    @Redirect(method = "getDisplayName", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getName()Lnet/minecraft/text/Text;"))
     private Text getCustomUsername(PlayerEntity player)
     {
         if (Highlight.changeUsername)
@@ -52,20 +53,21 @@ public abstract class MixinPlayerEntity extends LivingEntity
         }
     }
 
-    @ModifyVariable(method = "addTellClickEvent(Lnet/minecraft/text/Text;)Lnet/minecraft/text/Text;", at = @At("HEAD"))
-    private Text changeUsernameColor(Text componentln)
+    @ModifyVariable(method = "addTellClickEvent(Lnet/minecraft/text/MutableText;)Lnet/minecraft/text/MutableText;", at = @At("HEAD"))
+    private MutableText changeUsernameColor(MutableText componentln)
     {
-        if(Highlight.changeUsername && !(Highlight.getPrefixColor() == null))
+        if (Highlight.changeUsername && Highlight.getStyle() != null)
         {
-            componentln.formatted(Highlight.getPrefixColor().getColor());
+            componentln.setStyle(Highlight.getStyle());
         }
         return componentln;
     }
 
-    @Redirect(method = "addTellClickEvent(Lnet/minecraft/text/Text;)Lnet/minecraft/text/Text;", at = @At(value = "INVOKE", target = "Lcom/mojang/authlib/GameProfile;getName()Ljava/lang/String;"))
-    private String changeCustomUsername(GameProfile gameProfile) {
+    @Redirect(method = "addTellClickEvent(Lnet/minecraft/text/MutableText;)Lnet/minecraft/text/MutableText;", at = @At(value = "INVOKE", target = "Lcom/mojang/authlib/GameProfile;getName()Ljava/lang/String;"))
+    private String changeCustomUsername(GameProfile gameProfile)
+    {
         String username = gameProfile.getName();
-        if(Highlight.changeUsername)
+        if (Highlight.changeUsername)
         {
             username = Highlight.getUsername();
         }

@@ -12,11 +12,11 @@ public class OreDeposit implements Comparable<OreDeposit>
     {
         block.setDeposit(this);
         _oreBlocks.add(block);
-        if(_earliestOreBlock == null || block.getEdit().time < _earliestOreBlock.getEdit().time)
+        if (_earliestOreBlock == null || block.getEdit().time < _earliestOreBlock.getEdit().time)
         {
             _earliestOreBlock = block;
         }
-        if(_latestOreBlock == null || block.getEdit().time > _latestOreBlock.getEdit().time)
+        if (_latestOreBlock == null || block.getEdit().time > _latestOreBlock.getEdit().time)
         {
             _latestOreBlock = block;
         }

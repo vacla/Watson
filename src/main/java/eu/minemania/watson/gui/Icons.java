@@ -7,12 +7,12 @@ import net.minecraft.util.Identifier;
 
 public enum Icons implements IGuiIcon
 {
-    ARROW_DOWN              ( 42,  15, 15, 15),
-    ARROW_UP                ( 42,   0, 15, 15),
-    CHECKBOX_SELECTED       ( 87,  11, 11, 11),
-    CHECKBOX_UNSELECTED     ( 87,   0, 11, 11),
-    FILE_ICON_SEARCH        (  0,  14, 12, 12),
-    INFO_11                 ( 12,  14, 11, 11);
+    ARROW_DOWN(42, 15, 15, 15),
+    ARROW_UP(42, 0, 15, 15),
+    CHECKBOX_SELECTED(87, 11, 11, 11),
+    CHECKBOX_UNSELECTED(87, 0, 11, 11),
+    FILE_ICON_SEARCH(0, 14, 12, 12),
+    INFO_11(12, 14, 11, 11);
 
     public static final Identifier TEXTURE = new Identifier(Reference.MOD_ID, "textures/gui/gui_widgets.png");
 

@@ -116,7 +116,7 @@ public class DataManager implements IDirectoryCache
 
         JsonElement element = JsonUtils.parseJsonFile(file);
 
-        if(element != null && element.isJsonObject())
+        if (element != null && element.isJsonObject())
         {
             LAST_DIRECTORIES.clear();
 
@@ -149,7 +149,9 @@ public class DataManager implements IDirectoryCache
                 {
                     configGuiTab = ConfigGuiTab.valueOf(root.get("config_gui_tab").getAsString());
                 }
-                catch (Exception e) {}
+                catch (Exception e)
+                {
+                }
 
                 if (configGuiTab == null)
                 {
@@ -168,7 +170,7 @@ public class DataManager implements IDirectoryCache
 
     public static void save(boolean forceSave)
     {
-        if(!canSave && !forceSave)
+        if (!canSave && !forceSave)
         {
             return;
         }
@@ -176,7 +178,7 @@ public class DataManager implements IDirectoryCache
         JsonObject root = new JsonObject();
         JsonObject objDirs = new JsonObject();
 
-        for(Map.Entry<String, File> entry : LAST_DIRECTORIES.entrySet())
+        for (Map.Entry<String, File> entry : LAST_DIRECTORIES.entrySet())
         {
             objDirs.add(entry.getKey(), new JsonPrimitive(entry.getValue().getAbsolutePath()));
         }
@@ -200,7 +202,7 @@ public class DataManager implements IDirectoryCache
     {
         File dir = FileUtils.getCanonicalFileIfPossible(new File(FileUtils.getMinecraftDirectory(), "playeredits"));
 
-        if(!dir.exists() && !dir.mkdirs())
+        if (!dir.exists() && !dir.mkdirs())
         {
             Watson.logger.warn("Failed to create the playeredit directory '{}'", dir.getAbsolutePath());
         }
@@ -212,7 +214,7 @@ public class DataManager implements IDirectoryCache
     {
         File dir = getCurrentConfigDirectory();
 
-        if(!dir.exists() && !dir.mkdirs())
+        if (!dir.exists() && !dir.mkdirs())
         {
             Watson.logger.warn("Failed to create the config directory '{}'", dir.getAbsolutePath());
         }
@@ -225,9 +227,9 @@ public class DataManager implements IDirectoryCache
         MinecraftClient mc = MinecraftClient.getInstance();
         String name = StringUtils.getWorldOrServerName();
 
-        if(name != null)
+        if (name != null)
         {
-            if(globalData)
+            if (globalData)
             {
                 return Reference.MOD_ID + "_" + name + ".json";
             }
@@ -244,7 +246,7 @@ public class DataManager implements IDirectoryCache
     {
         MinecraftClient mc = MinecraftClient.getInstance();
         ServerInfo serverData = mc.getCurrentServerEntry();
-        if(!mc.isInSingleplayer() && serverData != null)
+        if (!mc.isInSingleplayer() && serverData != null)
         {
             return serverData.address;
         }
@@ -256,10 +258,10 @@ public class DataManager implements IDirectoryCache
 
     public static void saveBlockEditFile(String fileName)
     {
-        if(fileName == null)
+        if (fileName == null)
         {
             String player = (String) getEditSelection().getVariables().get("player");
-            if(player == null)
+            if (player == null)
             {
                 ChatMessage.localErrorT("watson.message.blockedit.no_player");
                 return;
@@ -271,7 +273,7 @@ public class DataManager implements IDirectoryCache
             }
         }
 
-        File file = new File(getPlayereditsBaseDirectory(), fileName+".txt");
+        File file = new File(getPlayereditsBaseDirectory(), fileName + ".txt");
         try
         {
             BlockEditSet edits = DataManager.getEditSelection().getBlockEditSet();
@@ -289,17 +291,17 @@ public class DataManager implements IDirectoryCache
 
     public static void loadBlockEditFile(String fileName)
     {
-        File file = new File(getPlayereditsBaseDirectory(), fileName+".txt");
-        if(!file.canRead())
+        File file = new File(getPlayereditsBaseDirectory(), fileName + ".txt");
+        if (!file.canRead())
         {
             File[] files = getInstance().getBlockEditFileList(fileName);
-            if(files.length > 0)
+            if (files.length > 0)
             {
                 file = files[files.length - 1];
             }
         }
 
-        if(file.canRead())
+        if (file.canRead())
         {
             try
             {
@@ -323,13 +325,13 @@ public class DataManager implements IDirectoryCache
     public static void listBlockEditFiles(String prefix, int page)
     {
         File[] files = getInstance().getBlockEditFileList(prefix);
-        if(files.length == 0)
+        if (files.length == 0)
         {
             ChatMessage.localOutputT("watson.message.blockedit.not_match");
         }
         else
         {
-            if(files.length == 1)
+            if (files.length == 1)
             {
                 ChatMessage.localOutputT("watson.message.blockedit.match_file.1");
             }
@@ -339,7 +341,7 @@ public class DataManager implements IDirectoryCache
             }
 
             int pages = (files.length + Configs.Generic.PAGE_LINES.getIntegerValue() - 1) / Configs.Generic.PAGE_LINES.getIntegerValue();
-            if(page > pages)
+            if (page > pages)
             {
                 ChatMessage.localErrorT("watson.message.blockedit.highest_page", page);
             }
@@ -350,13 +352,13 @@ public class DataManager implements IDirectoryCache
                 int start = (page - 1) * Configs.Generic.PAGE_LINES.getIntegerValue();
                 int end = Math.min(files.length, page * Configs.Generic.PAGE_LINES.getIntegerValue());
 
-                for(int i = start; i < end; ++i)
+                for (int i = start; i < end; ++i)
                 {
                     ChatMessage.localOutput("     " + files[i].getName(), true);
                 }
 
                 ChatMessage.localOutputT("watson.message.blockedit.pages", page, pages);
-                if(page < pages)
+                if (page < pages)
                 {
                     ChatMessage.localOutputT("watson.message.blockedit.next_page", Configs.Generic.WATSON_PREFIX.getStringValue(), prefix, (page + 1));
                 }
@@ -367,12 +369,12 @@ public class DataManager implements IDirectoryCache
     public static void deleteBlockEditFiles(String prefix)
     {
         File[] files = getInstance().getBlockEditFileList(prefix);
-        if(files.length > 0)
+        if (files.length > 0)
         {
             int failed = 0;
-            for(File file : files)
+            for (File file : files)
             {
-                if(file.delete())
+                if (file.delete())
                 {
                     ChatMessage.localOutputT("watson.message.blockedit.deleted", file.getName());
                 }
@@ -382,7 +384,7 @@ public class DataManager implements IDirectoryCache
                 }
             }
             String message = "watson.message.blockedit.deleted_matching";
-            if(failed == 0)
+            if (failed == 0)
             {
                 ChatMessage.localOutputT(message, (files.length - failed), files.length, prefix);
             }
@@ -400,7 +402,7 @@ public class DataManager implements IDirectoryCache
     public static void expireBlockEditFiles(String date)
     {
         Matcher m = DATE_PATTERN.matcher(date);
-        if(m.matches())
+        if (m.matches())
         {
             Calendar expiry = Calendar.getInstance();
             long expiryTime;
@@ -424,11 +426,11 @@ public class DataManager implements IDirectoryCache
             int deleted = 0;
             int failed = 0;
             File[] files = getInstance().getBlockEditFileList("*");
-            for(File file : files)
+            for (File file : files)
             {
-                if(file.lastModified() < expiryTime)
+                if (file.lastModified() < expiryTime)
                 {
-                    if(file.delete())
+                    if (file.delete())
                     {
                         ++deleted;
                         ChatMessage.localOutputT("watson.message.blockedit.deleted", file.getName());
@@ -440,14 +442,14 @@ public class DataManager implements IDirectoryCache
                     }
                 }
             }
-            if(deleted + failed == 0)
+            if (deleted + failed == 0)
             {
                 ChatMessage.localOutputT("watson.message.blockedit.nothing_between", date);
             }
             else
             {
                 String message = "watson.message.blockedit.deleted_older";
-                if(failed == 0)
+                if (failed == 0)
                 {
                     ChatMessage.localOutputT(message, deleted, deleted + failed, date);
                 }

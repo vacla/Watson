@@ -3,6 +3,7 @@ package eu.minemania.watson.gui.widgets;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+
 import com.google.common.collect.ImmutableList;
 import eu.minemania.watson.gui.GuiEdits;
 import eu.minemania.watson.gui.Icons;
@@ -11,6 +12,7 @@ import eu.minemania.watson.selection.PlayereditSorter;
 import fi.dy.masa.malilib.gui.LeftRight;
 import fi.dy.masa.malilib.gui.widgets.WidgetListBase;
 import fi.dy.masa.malilib.gui.widgets.WidgetSearchBar;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -21,6 +23,7 @@ public class WidgetListEdits extends WidgetListBase<PlayereditEntry, WidgetEdits
     private final GuiEdits gui;
     private final PlayereditSorter sorter;
     private boolean scrollbarRestored;
+
     public WidgetListEdits(int x, int y, int width, int height, GuiEdits parent)
     {
         super(x, y, width, height, null);
@@ -36,9 +39,9 @@ public class WidgetListEdits extends WidgetListBase<PlayereditEntry, WidgetEdits
     }
 
     @Override
-    public void drawContents(int mouseX, int mouseY, float partialTicks)
+    public void drawContents(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
     {
-        super.drawContents(mouseX, mouseY, partialTicks);
+        super.drawContents(matrixStack, mouseX, mouseY, partialTicks);
         lastScrollbarPosition = this.scrollBar.getValue();
     }
 
@@ -54,7 +57,7 @@ public class WidgetListEdits extends WidgetListBase<PlayereditEntry, WidgetEdits
     {
         int height = this.browserEntryHeight;
 
-        if((usedHeight + height) > usableHeight)
+        if ((usedHeight + height) > usableHeight)
         {
             return null;
         }
@@ -80,7 +83,7 @@ public class WidgetListEdits extends WidgetListBase<PlayereditEntry, WidgetEdits
         ItemStack stack = entry.getStack();
         Identifier rl = Registry.ITEM.getId(stack.getItem());
 
-        if(rl != null)
+        if (rl != null)
         {
             return ImmutableList.of(stack.getName().getString().toLowerCase(), rl.toString().toLowerCase());
         }
@@ -95,7 +98,7 @@ public class WidgetListEdits extends WidgetListBase<PlayereditEntry, WidgetEdits
     {
         super.refreshBrowserEntries();
 
-        if(!this.scrollbarRestored && lastScrollbarPosition <= this.scrollBar.getMaxValue())
+        if (!this.scrollbarRestored && lastScrollbarPosition <= this.scrollBar.getMaxValue())
         {
             this.scrollBar.setValue(lastScrollbarPosition);
             this.scrollbarRestored = true;

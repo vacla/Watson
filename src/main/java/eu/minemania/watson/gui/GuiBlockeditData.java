@@ -3,6 +3,7 @@ package eu.minemania.watson.gui;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
+
 import eu.minemania.watson.db.TimeStamp;
 import eu.minemania.watson.db.data.BlockeditBase;
 import eu.minemania.watson.db.data.BlockeditEntry;
@@ -24,7 +25,7 @@ import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.gui.screen.Screen;
 
 public class GuiBlockeditData extends GuiListBase<BlockeditEntry, WidgetBlockeditEntry, WidgetListBlockedit>
-implements ICompletionListener
+        implements ICompletionListener
 {
     protected final BlockeditBase display;
     protected static final Pattern ABSOLUTE_TIME = Pattern.compile("(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{1,2}):(\\d{1,2})");
@@ -38,7 +39,7 @@ implements ICompletionListener
         this.display = display;
         this.title = StringUtils.translate(titleKey);
         this.useTitleHierarchy = false;
-        this.setBlitOffset(1);
+        this.setZOffset(1);
 
         WidgetBlockeditEntry.setMaxNameLength(display.getBlockeditAll());
     }
@@ -90,7 +91,7 @@ implements ICompletionListener
     {
         int width = 0;
 
-        for(ButtonType type : ButtonType.values())
+        for (ButtonType type : ButtonType.values())
         {
             width = Math.max(width, this.getStringWidth(type.getDisplayName()) + 10);
         }
@@ -163,14 +164,14 @@ implements ICompletionListener
             {
                 String textValue = textField.getText();
                 Matcher absolute = ABSOLUTE_TIME.matcher(textValue);
-                if(absolute.matches())
+                if (absolute.matches())
                 {
                     int month = Integer.parseInt(absolute.group(1));
                     int day = Integer.parseInt(absolute.group(2));
                     int hour = Integer.parseInt(absolute.group(3));
                     int minute = Integer.parseInt(absolute.group(4));
                     int second = Integer.parseInt(absolute.group(5));
-                    if(month != 0 || day != 0 || hour != 0 || minute != 0 || second != 0)
+                    if (month != 0 || day != 0 || hour != 0 || minute != 0 || second != 0)
                     {
                         parent.time = TimeStamp.timeDiff(month, day, hour, minute, second);
                     }
@@ -184,7 +185,8 @@ implements ICompletionListener
                     InfoUtils.showGuiMessage(MessageType.ERROR, "watson.gui.label.blockedit.info.format");
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 parent.time = 0;
             }
 
@@ -195,7 +197,7 @@ implements ICompletionListener
 
     protected enum ButtonType
     {
-        CLOSE  ("watson.gui.button.blockedit.close");
+        CLOSE("watson.gui.button.blockedit.close");
 
         private final String labelKey;
 
@@ -213,7 +215,7 @@ implements ICompletionListener
     @Override
     public void onTaskCompleted()
     {
-        if(GuiUtils.getCurrentScreen() == this)
+        if (GuiUtils.getCurrentScreen() == this)
         {
             WidgetBlockeditEntry.setMaxNameLength(this.display.getBlockeditAll());
             this.initGui();

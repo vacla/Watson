@@ -50,7 +50,7 @@ public class OreDB
 
     public void clear()
     {
-        for(TypedOreDB db : _db.values())
+        for (TypedOreDB db : _db.values())
         {
             db.clear();
         }
@@ -67,20 +67,20 @@ public class OreDB
     public void listDeposits(int page)
     {
         int depositCount = getOreDepositCount();
-        if(depositCount == 0)
+        if (depositCount == 0)
         {
             ChatMessage.localOutputT("watson.message.deposit.none");
         }
         else
         {
             int pages = (depositCount + Configs.Generic.PAGE_LINES.getIntegerValue() - 1) / Configs.Generic.PAGE_LINES.getIntegerValue();
-            if(page > pages)
+            if (page > pages)
             {
                 ChatMessage.localErrorT("watson.message.deposit.highest_page", pages);
             }
             else
             {
-                if(depositCount == 1)
+                if (depositCount == 1)
                 {
                     ChatMessage.localOutputT("watson.message.deposit.ore.1");
                 }
@@ -107,7 +107,7 @@ public class OreDB
                 if (page < pages)
                 {
                     ChatMessage.localOutputT("watson.message.blockedit.pages", page, pages);
-                    ChatMessage.localOutputT("watson.message.deposit.next_page", Configs.Generic.WATSON_PREFIX.getStringValue(), (page+1));
+                    ChatMessage.localOutputT("watson.message.deposit.next_page", Configs.Generic.WATSON_PREFIX.getStringValue(), (page + 1));
                 }
             }
         }
@@ -126,7 +126,7 @@ public class OreDB
 
     public void removeDeposits(String player)
     {
-        for(TypedOreDB db : _db.values())
+        for (TypedOreDB db : _db.values())
         {
             db.removeDeposits(player);
         }
@@ -145,7 +145,7 @@ public class OreDB
 
     public void tpIndex(int index)
     {
-        if(getOreDepositCount() == 0)
+        if (getOreDepositCount() == 0)
         {
             ChatMessage.localErrorT("watson.message.deposit.no_teleport");
         }
@@ -166,7 +166,7 @@ public class OreDB
         ServerTime.getInstance().queryServerTime(false);
         TypedOreDB diamonds = getDB(WatsonBlockRegistery.getInstance().getWatsonBlockByName("minecraft:diamond_ore"));
 
-        if(diamonds.getOreDepositCount() != 0)
+        if (diamonds.getOreDepositCount() != 0)
         {
             showRatio(diamonds.getOreDeposits().first(), diamonds.getOreDeposits().last());
             int count = 0;
@@ -176,16 +176,16 @@ public class OreDB
             for (OreDeposit deposit : diamonds.getOreDeposits())
             {
                 long depositTime = deposit.getKeyOreBlock().getEdit().time;
-                if(first == null)
+                if (first == null)
                 {
                     first = last = deposit;
                     count = 1;
                 }
                 else
                 {
-                    if(Math.abs(depositTime -lastTime) > 7 * 60 * 1000 || deposit == diamonds.getOreDeposits().last())
+                    if (Math.abs(depositTime - lastTime) > 7 * 60 * 1000 || deposit == diamonds.getOreDeposits().last())
                     {
-                        if(deposit == diamonds.getOreDeposits().last())
+                        if (deposit == diamonds.getOreDeposits().last())
                         {
                             last = deposit;
                         }
@@ -238,7 +238,7 @@ public class OreDB
         try
         {
             WatsonBlock mergedBlock = edit.block;
-            if(!edit.isCreated() && isOre(mergedBlock))
+            if (!edit.isCreated() && isOre(mergedBlock))
             {
                 TypedOreDB db = getDB(mergedBlock);
                 db.addBlockEdit(edit);
@@ -253,14 +253,14 @@ public class OreDB
 
     public void drawDepositLabels(double dx, double dy, double dz)
     {
-        if(Configs.Generic.LABEL_SHOWN.getBooleanValue())
+        if (Configs.Generic.LABEL_SHOWN.getBooleanValue())
         {
             int id = 1;
             StringBuilder label = new StringBuilder();
             for (OreDeposit deposit : getOreDepositSequence())
             {
                 OreBlock block = deposit.getKeyOreBlock();
-                if(block.getEdit().playereditSet.isVisible())
+                if (block.getEdit().playereditSet.isVisible())
                 {
                     label.setLength(0);
                     label.ensureCapacity(4);
@@ -290,7 +290,7 @@ public class OreDB
         String beforeTime = TimeStamp.formatQueryTime(endTime.getTimeInMillis());
 
         String query = String.format("/lb player %s since %s before %s sum b block stone diamond_ore", player, sinceTime, beforeTime);
-        if(Configs.Generic.DEBUG.getBooleanValue())
+        if (Configs.Generic.DEBUG.getBooleanValue())
         {
             Watson.logger.info(query);
         }
@@ -309,7 +309,7 @@ public class OreDB
 
     protected int limitOreDepositIndex(int index)
     {
-        if(index < 1)
+        if (index < 1)
         {
             return getOreDepositCount();
         }
@@ -325,20 +325,20 @@ public class OreDB
 
     protected ArrayList<OreDeposit> getOreDepositSequence()
     {
-        if(_lastTimeOrderedDeposits != Configs.Generic.TIME_ORDERED_DEPOSITS.getBooleanValue())
+        if (_lastTimeOrderedDeposits != Configs.Generic.TIME_ORDERED_DEPOSITS.getBooleanValue())
         {
             _oreDepositSequenceChanged = true;
         }
-        if(_oreDepositSequenceChanged)
+        if (_oreDepositSequenceChanged)
         {
             _oreDepositSequenceChanged = false;
             _lastTimeOrderedDeposits = Configs.Generic.TIME_ORDERED_DEPOSITS.getBooleanValue();
             _oreDepositSequence.clear();
-            for(TypedOreDB db : _db.values())
+            for (TypedOreDB db : _db.values())
             {
                 _oreDepositSequence.addAll(db.getOreDeposits());
             }
-            if(Configs.Generic.TIME_ORDERED_DEPOSITS.getBooleanValue())
+            if (Configs.Generic.TIME_ORDERED_DEPOSITS.getBooleanValue())
             {
                 _oreDepositSequence.sort((o1, o2) -> Long.signum(o1.getEarliestEdit().time - o2.getEarliestEdit().time));
             }

@@ -3,6 +3,7 @@ package eu.minemania.watson.gui.widgets;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+
 import com.google.common.collect.ImmutableList;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.PlayereditSet;
@@ -19,7 +20,7 @@ public class WidgetListLoadedPlayeredits extends WidgetListBase<PlayereditSet, W
     private final LoadedPlayereditSorter sorter;
 
     public WidgetListLoadedPlayeredits(int x, int y, int width, int height,
-            ISelectionListener<PlayereditSet> selectionListener, GuiPlayereditLoadedList parent)
+                                       ISelectionListener<PlayereditSet> selectionListener, GuiPlayereditLoadedList parent)
     {
         super(x, y, width, height, selectionListener);
 
@@ -47,7 +48,7 @@ public class WidgetListLoadedPlayeredits extends WidgetListBase<PlayereditSet, W
     {
         String name = entry.getPlayer().toLowerCase();
 
-        if(name != null)
+        if (name != null)
         {
             return ImmutableList.of(name);
         }
@@ -59,7 +60,7 @@ public class WidgetListLoadedPlayeredits extends WidgetListBase<PlayereditSet, W
 
     @Override
     protected WidgetPlayereditEntry createListEntryWidget(int x, int y, int listIndex, boolean isOdd,
-            PlayereditSet entry)
+                                                          PlayereditSet entry)
     {
         return new WidgetPlayereditEntry(x, y, this.browserEntryWidth, this.getBrowserEntryHeightFor(entry), isOdd, entry, listIndex, this);
     }

@@ -2,6 +2,7 @@ package eu.minemania.watson.analysis;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
@@ -14,23 +15,24 @@ import eu.minemania.watson.scheduler.tasks.AddBlockEditTask;
 import eu.minemania.watson.selection.EditSelection;
 import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.text.HoverEvent;
-import net.minecraft.text.Text;
+import net.minecraft.text.MutableText;
 
 //----------------------------------------------------------------------------
+
 /**
  * An {@link Analysis} implementation that recognises inspector and lookup
  * results from CoreProtect.
- * 
+ * <p>
  * CoreProtect inspector results look like this:
- * 
+ *
  * <pre>
  * ----- CoreProtect ----- (x2/y63/z-6)
  * 0.00/h ago - totemo placed #4 (Cobblestone).
  * 1.36/h ago - totemo removed #4 (Cobblestone).
  * </pre>
- * 
+ * <p>
  * Lookup results look like this:
- * 
+ *
  * <pre>
  * ----- CoreProtect Lookup Results -----
  * 0.01/h ago - §3totemo removed #4 (Cobblestone).
@@ -100,22 +102,22 @@ public class CoreProtectAnalysis extends Analysis
         });
     }
 
-    void busy(Text chat, Matcher m)
+    void busy(MutableText chat, Matcher m)
     {
-        if(_looping && Configs.Generic.AUTO_PAGE.getBooleanValue() && Configs.Generic.DISABLE_CP_MESSAGES.getBooleanValue())
+        if (_looping && Configs.Generic.AUTO_PAGE.getBooleanValue() && Configs.Generic.DISABLE_CP_MESSAGES.getBooleanValue())
         {
             ChatMessage.localErrorT("watson.message.cp.auto_page.error");
         }
         reset();
     }
 
-    void details(Text chat, Matcher m)
+    void details(MutableText chat, Matcher m)
     {
         _lookupDetails = false;
         HoverEvent hover = chat.getSiblings().get(0).getStyle().getHoverEvent();
-        if(hover != null && hover.getValue() != null)
+        if (hover != null && hover.getValue(hover.getAction()) != null)
         {
-            String text = hover.getValue().getString().replaceAll("\u00A7.", "");
+            String text = ((MutableText) hover.getValue(hover.getAction())).getString().replaceAll("\u00A7.", "");
             _millis = parseTimeExpression(text);
         }
         else
@@ -126,13 +128,13 @@ public class CoreProtectAnalysis extends Analysis
         _action = m.group(3);
         String block = m.group(4);
         _loop = 1;
-        if(m.group(5) != null)
+        if (m.group(5) != null)
         {
             block = m.group(4).split(" ")[1];
             _loop = Integer.parseInt(m.group(5));
         }
         _block = WatsonBlockRegistery.getInstance().getWatsonBlockByName(block);
-        if(_isLookup)
+        if (_isLookup)
         {
             // Record that we can use these details at the next
             // coreprotect.lookupcoords only.
@@ -140,12 +142,12 @@ public class CoreProtectAnalysis extends Analysis
         }
         else
         {
-            if(DataManager.getFilters().isAcceptedPlayer(_player))
+            if (DataManager.getFilters().isAcceptedPlayer(_player))
             {
                 BlockEdit edit = new BlockEdit(_millis, _player, _action, _x, _y, _z, _block, _world, _loop);
                 SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, _firstInspectorResult));
 
-                if(_firstInspectorResult)
+                if (_firstInspectorResult)
                 {
                     _firstInspectorResult = false;
                 }
@@ -153,13 +155,13 @@ public class CoreProtectAnalysis extends Analysis
         }
     }
 
-    void detailsSign(Text chat, Matcher m)
+    void detailsSign(MutableText chat, Matcher m)
     {
         _lookupDetails = false;
-        HoverEvent hover =  chat.getSiblings().get(0).getStyle().getHoverEvent();
-        if(hover != null && hover.getValue() != null)
+        HoverEvent hover = chat.getSiblings().get(0).getStyle().getHoverEvent();
+        if (hover != null && hover.getValue(hover.getAction()) != null)
         {
-            String text = hover.getValue().getString().replaceAll("\u00A7.", "");
+            String text = ((MutableText) hover.getValue(hover.getAction())).getString().replaceAll("\u00A7.", "");
             _millis = parseTimeExpression(text);
         }
         else
@@ -176,19 +178,19 @@ public class CoreProtectAnalysis extends Analysis
         }
         _world = null;
         _block = WatsonBlockRegistery.getInstance().getWatsonBlockByName(block);
-        if(DataManager.getFilters().isAcceptedPlayer(_player))
+        if (DataManager.getFilters().isAcceptedPlayer(_player))
         {
             BlockEdit edit = new BlockEdit(_millis, _player, _action, _x, _y, _z, _block, _world, 1);
             SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, _firstInspectorResult));
 
-            if(_firstInspectorResult)
+            if (_firstInspectorResult)
             {
                 _firstInspectorResult = false;
             }
         }
     }
 
-    void inspectorCoords(Text chat, Matcher m)
+    void inspectorCoords(MutableText chat, Matcher m)
     {
         _isLookup = false;
         _x = Integer.parseInt(m.group(1));
@@ -199,10 +201,10 @@ public class CoreProtectAnalysis extends Analysis
         _firstInspectorResult = true;
     }
 
-    void lookupCoords(Text chat, Matcher m)
+    void lookupCoords(MutableText chat, Matcher m)
     {
         _isLookup = true;
-        if(_lookupDetails)
+        if (_lookupDetails)
         {
             _x = Integer.parseInt(m.group(1));
             _y = Integer.parseInt(m.group(2));
@@ -217,37 +219,37 @@ public class CoreProtectAnalysis extends Analysis
         }
     }
 
-    void lookupHeader(Text chat, Matcher m)
+    void lookupHeader(MutableText chat, Matcher m)
     {
         _isLookup = true;
     }
 
-    void noResult(Text chat, Matcher m)
+    void noResult(MutableText chat, Matcher m)
     {
         reset();
     }
 
-    void page(Text chat, Matcher m)
+    void page(MutableText chat, Matcher m)
     {
         int currentPage = Integer.parseInt(m.group(1));
         int pageCount = Integer.parseInt(m.group(2));
 
-        if(Configs.Generic.AUTO_PAGE.getBooleanValue() && currentPage > _currentPage)
+        if (Configs.Generic.AUTO_PAGE.getBooleanValue() && currentPage > _currentPage)
         {
             if (pageCount <= Configs.Generic.MAX_AUTO_PAGES.getIntegerValue())
             {
                 _currentPage = currentPage;
                 _pageCount = pageCount;
-                if(_looping)
+                if (_looping)
                 {
-                    if(Configs.Generic.DISABLE_CP_MESSAGES.getBooleanValue())
+                    if (Configs.Generic.DISABLE_CP_MESSAGES.getBooleanValue())
                     {
                         InfoUtils.printActionbarMessage("watson.message.cp.auto_page.page", _currentPage, _pageCount);
-                        if(_currentPage == 1)
+                        if (_currentPage == 1)
                         {
                             ChatMessage.localOutputT("watson.message.cp.auto_page.start", _pageCount);
                         }
-                        else if(_currentPage == _pageCount)
+                        else if (_currentPage == _pageCount)
                         {
                             ChatMessage.localOutputT("watson.message.cp.auto_page.finished");
                         }
@@ -260,13 +262,13 @@ public class CoreProtectAnalysis extends Analysis
                 reset();
             }
         }
-        if(_currentPage == _pageCount)
+        if (_currentPage == _pageCount)
         {
             reset();
         }
     }
 
-    void search(Text chat, Matcher m)
+    void search(MutableText chat, Matcher m)
     {
         _looping = true;
     }
@@ -274,7 +276,7 @@ public class CoreProtectAnalysis extends Analysis
     private long parseTimeExpression(String time)
     {
         Matcher absolute = ABSOLUTE_TIME.matcher(time);
-        if(absolute.matches())
+        if (absolute.matches())
         {
             int year = Integer.parseInt(absolute.group(1));
             int month = Integer.parseInt(absolute.group(2));
@@ -288,15 +290,20 @@ public class CoreProtectAnalysis extends Analysis
         else
         {
             Matcher relative = HOURS_AGO_TIME.matcher(time);
-            if(relative.matches())
+            if (relative.matches())
             {
                 String timed = relative.group(1).replace(",", ".");
                 float hours;
-                if(relative.group(2).contains("d")) {
+                if (relative.group(2).contains("d"))
+                {
                     hours = Float.parseFloat(timed) / 24;
-                } else if(relative.group(2).contains("m")) {
+                }
+                else if (relative.group(2).contains("m"))
+                {
                     hours = Float.parseFloat(timed) * 60;
-                } else {
+                }
+                else
+                {
                     hours = Float.parseFloat(timed);
                 }
                 long millis = System.currentTimeMillis() - (long) (hours * MS_PER_HOUR);
@@ -312,7 +319,7 @@ public class CoreProtectAnalysis extends Analysis
     {
         if (_currentPage != 0 && _currentPage < _pageCount)
         {
-            if(_currentPage == 1)
+            if (_currentPage == 1)
             {
                 ChatMessage.getInstance().serverChat(String.format("/co l %d:%d", 1, Configs.Generic.AMOUNT_ROWS.getIntegerValue()), _currentPage == 1);
             }

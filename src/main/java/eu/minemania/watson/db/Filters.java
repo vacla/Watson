@@ -11,7 +11,7 @@ public class Filters
 
     public void list()
     {
-        if(_filters.size() == 0)
+        if (_filters.size() == 0)
         {
             ChatMessage.localOutputT("watson.message.filters.filters_edits");
         }
@@ -19,7 +19,7 @@ public class Filters
         {
             ChatMessage.localOutputT("watson.message.filters.edits_accepted");
             StringBuilder message = new StringBuilder(" ");
-            for(String player : _filters)
+            for (String player : _filters)
             {
                 message.append(' ');
                 message.append(player);
@@ -45,7 +45,7 @@ public class Filters
     public void removePlayer(String player)
     {
         player = player.toLowerCase();
-        if(_filters.contains(player))
+        if (_filters.contains(player))
         {
             ChatMessage.localOutputT("watson.message.filters.filter_removed", player);
             _filters.remove(player);

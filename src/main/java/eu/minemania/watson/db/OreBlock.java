@@ -40,19 +40,19 @@ public class OreBlock implements Comparable<OreBlock>
     @Override
     public int compareTo(OreBlock other)
     {
-        if(getLocation().getY() != other.getLocation().getY())
+        if (getLocation().getY() != other.getLocation().getY())
         {
             return getLocation().getY() - other.getLocation().getY();
         }
-        else if(getEdit().time != other.getEdit().time)
+        else if (getEdit().time != other.getEdit().time)
         {
             return Long.signum(getEdit().time - other.getEdit().time);
         }
-        else if(getLocation().getX() != other.getLocation().getX())
+        else if (getLocation().getX() != other.getLocation().getX())
         {
             return getLocation().getX() - other.getLocation().getX();
         }
-        else if(getLocation().getZ() != other.getLocation().getZ())
+        else if (getLocation().getZ() != other.getLocation().getZ())
         {
             return getLocation().getZ() - other.getLocation().getZ();
         }

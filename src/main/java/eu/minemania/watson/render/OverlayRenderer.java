@@ -76,7 +76,7 @@ public class OverlayRenderer
         final float scaled = MathHelper.clamp((float) scale, 0.01f, 1f);
         MinecraftClient mc = MinecraftClient.getInstance();
         Entity entity = mc.getCameraEntity();
-        if(entity != null)
+        if (entity != null)
         {
             RenderUtils.drawTextPlate(Arrays.asList(text), x, y, z, entity.yaw, entity.pitch, scaled, Configs.Generic.BILLBOARD_FOREGROUND.getIntegerValue(), Configs.Generic.BILLBOARD_BACKGROUND.getIntegerValue(), true);
         }

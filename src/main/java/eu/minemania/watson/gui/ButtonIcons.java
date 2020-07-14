@@ -7,7 +7,7 @@ import net.minecraft.util.Identifier;
 
 public enum ButtonIcons implements IGuiIcon
 {
-    CONFIGURATION (0, 0, 14, 14);
+    CONFIGURATION(0, 0, 14, 14);
 
     public static final Identifier TEXTURE = new Identifier(Reference.MOD_ID, "textures/gui/gui_widgets.png");
 
@@ -53,12 +53,12 @@ public enum ButtonIcons implements IGuiIcon
     {
         int u = this.u;
 
-        if(enabled)
+        if (enabled)
         {
             u += this.w;
         }
 
-        if(selected)
+        if (selected)
         {
             u += this.w;
         }

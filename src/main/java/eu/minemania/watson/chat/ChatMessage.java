@@ -6,7 +6,7 @@ import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.LiteralText;
-import net.minecraft.text.Text;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 
@@ -44,7 +44,7 @@ public class ChatMessage
     public void serverChat(String message, boolean firstMessage)
     {
         _serverChatQueue.add(message);
-        if(firstMessage)
+        if (firstMessage)
         {
             _lastServerChatTime = System.currentTimeMillis();
         }
@@ -52,7 +52,7 @@ public class ChatMessage
 
     public void immediateServerChat(String message)
     {
-        if(message != null)
+        if (message != null)
         {
             sendToServerChat(message);
         }
@@ -63,27 +63,27 @@ public class ChatMessage
         sendToLocalChat(new LiteralText(message), watsonMessage);
     }
 
-    public static void sendToLocalChat(Text inputmessage, boolean watsonMessage)
+    public static void sendToLocalChat(MutableText inputmessage, boolean watsonMessage)
     {
-        Text message = Configs.Generic.USE_CHAT_HIGHLIGHTS.getBooleanValue() ? Highlight.setHighlightChatMessage("chat.type.text", inputmessage, watsonMessage) : inputmessage;
+        MutableText message = Configs.Generic.USE_CHAT_HIGHLIGHTS.getBooleanValue() ? Highlight.setHighlightChatMessage("chat.type.text", inputmessage, watsonMessage) : inputmessage;
         MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(message);
     }
 
     public static void sendToLocalChat(Formatting color, Formatting style, String message, boolean watsonMessage)
     {
         LiteralText chat = new LiteralText(message);
-        if(color != null && style == null)
+        if (color != null && style == null)
         {
             chat.formatted(color);
         }
-        else if(color != null)
+        else if (color != null)
         {
             chat.formatted(color, style);
         }
         sendToLocalChat(chat, watsonMessage);
     }
 
-    public static void sendToLocalChat(Formatting color, Text message, boolean watsonMessage)
+    public static void sendToLocalChat(Formatting color, MutableText message, boolean watsonMessage)
     {
         message.formatted(color);
         sendToLocalChat(message, watsonMessage);
@@ -104,10 +104,10 @@ public class ChatMessage
 
     public void processServerChatQueue()
     {
-        if(!_serverChatQueue.isEmpty())
+        if (!_serverChatQueue.isEmpty())
         {
             long now = System.currentTimeMillis();
-            if(now - _lastServerChatTime >= (long) (1000 * Configs.Generic.CHAT_TIMEOUT.getDoubleValue()))
+            if (now - _lastServerChatTime >= (long) (1000 * Configs.Generic.CHAT_TIMEOUT.getDoubleValue()))
             {
                 _lastServerChatTime = now;
                 String message = _serverChatQueue.poll();

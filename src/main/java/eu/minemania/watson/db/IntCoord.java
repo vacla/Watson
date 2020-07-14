@@ -61,7 +61,7 @@ public class IntCoord
     @Override
     public boolean equals(Object obj)
     {
-        if(obj == this)
+        if (obj == this)
         {
             return true;
         }

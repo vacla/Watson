@@ -13,6 +13,7 @@ import fi.dy.masa.malilib.gui.button.IButtonActionListener;
 import fi.dy.masa.malilib.gui.widgets.WidgetListEntryBase;
 import fi.dy.masa.malilib.render.RenderUtils;
 import fi.dy.masa.malilib.util.StringUtils;
+import net.minecraft.client.util.math.MatrixStack;
 
 public class WidgetPlayereditEntry extends WidgetListEntryBase<PlayereditSet>
 {
@@ -22,7 +23,7 @@ public class WidgetPlayereditEntry extends WidgetListEntryBase<PlayereditSet>
     private final int buttonsStartX;
 
     public WidgetPlayereditEntry(int x, int y, int width, int height, boolean isOdd,
-            PlayereditSet playeredit, int listIndex, WidgetListLoadedPlayeredits parent)
+                                 PlayereditSet playeredit, int listIndex, WidgetListLoadedPlayeredits parent)
     {
         super(x, y, width, height, playeredit, listIndex);
 
@@ -60,15 +61,15 @@ public class WidgetPlayereditEntry extends WidgetListEntryBase<PlayereditSet>
     }
 
     @Override
-    public void render(int mouseX, int mouseY, boolean selected)
+    public void render(int mouseX, int mouseY, boolean selected, MatrixStack matrixStack)
     {
         RenderUtils.color(1f, 1f, 1f, 1f);
 
-        if(selected || this.isMouseOver(mouseX, mouseY))
+        if (selected || this.isMouseOver(mouseX, mouseY))
         {
             RenderUtils.drawRect(this.x, this.y, this.width, this.height, 0x70FFFFFF);
         }
-        else if(this.isOdd)
+        else if (this.isOdd)
         {
             RenderUtils.drawRect(this.x, this.y, this.width, this.height, 0x20FFFFFF);
         }
@@ -78,18 +79,18 @@ public class WidgetPlayereditEntry extends WidgetListEntryBase<PlayereditSet>
         }
 
         String playerName = this.entry.getPlayer();
-        this.drawString(this.x + 20, this.y + 7, 0xFFFFFFFF, playerName);
+        this.drawString(this.x + 20, this.y + 7, 0xFFFFFFFF, playerName, matrixStack);
 
         RenderUtils.color(1f, 1f, 1f, 1f);
         RenderSystem.disableBlend();
 
         String text = StringUtils.translate("watson.gui.button.playeredit.hover", this.entry.getBlockEditCount());
 
-        this.drawSubWidgets(mouseX, mouseY);
+        this.drawSubWidgets(mouseX, mouseY, matrixStack);
 
-        if(GuiBase.isMouseOver(mouseX, mouseY, this.x, this.y, this.buttonsStartX - 12, this.height))
+        if (GuiBase.isMouseOver(mouseX, mouseY, this.x, this.y, this.buttonsStartX - 12, this.height))
         {
-            RenderUtils.drawHoverText(mouseX, mouseY, ImmutableList.of(text));
+            RenderUtils.drawHoverText(mouseX, mouseY, ImmutableList.of(text), matrixStack);
         }
 
         RenderUtils.disableDiffuseLighting();
@@ -117,14 +118,14 @@ public class WidgetPlayereditEntry extends WidgetListEntryBase<PlayereditSet>
                 GuiEdits gui = new GuiEdits(editList);
                 GuiBase.openGui(gui);
             }
-            else if(this.type == Type.REMOVE)
+            else if (this.type == Type.REMOVE)
             {
                 PlayereditSet entry = this.widget.entry;
 
                 DataManager.getEditSelection().getBlockEditSet().removeEdits(entry.getPlayer());
                 this.widget.parent.refreshEntries();
             }
-            else if(this.type == Type.VISIBLE)
+            else if (this.type == Type.VISIBLE)
             {
                 PlayereditSet entry = this.widget.playeredit;
 

@@ -35,7 +35,7 @@ public class BlockEditSet
     public synchronized int load(File file) throws Exception
     {
 
-        try(BufferedReader reader = new BufferedReader(new FileReader(file)))
+        try (BufferedReader reader = new BufferedReader(new FileReader(file)))
         {
             Pattern editPattern = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})\\|(\\d{2}):(\\d{2}):(\\d{2})\\|(\\w+)\\|(\\w+)\\|(minecraft:\\w+)\\|(-?\\d+)\\|(\\d+)\\|(-?\\d+)\\|(\\w+)\\|(\\d+)");
             Pattern annoPattern = Pattern.compile("#(-?\\d+)\\|(\\d+)\\|(-?\\d+)\\|(\\w+)\\|(.*)");
@@ -46,7 +46,7 @@ public class BlockEditSet
             while ((line = reader.readLine()) != null)
             {
                 Matcher edit = editPattern.matcher(line);
-                if(edit.matches())
+                if (edit.matches())
                 {
                     int year = Integer.parseInt(edit.group(1));
                     int month = Integer.parseInt(edit.group(2)) - 1;
@@ -73,7 +73,7 @@ public class BlockEditSet
                 else
                 {
                     Matcher anno = annoPattern.matcher(line);
-                    if(anno.matches())
+                    if (anno.matches())
                     {
                         int x = Integer.parseInt(anno.group(1));
                         int y = Integer.parseInt(anno.group(2));
@@ -88,7 +88,7 @@ public class BlockEditSet
             if (blockEdit != null)
             {
                 EditSelection selection = DataManager.getEditSelection();
-                if(selection != null)
+                if (selection != null)
                 {
                     selection.selectBlockEdit(blockEdit);
                 }
@@ -101,15 +101,15 @@ public class BlockEditSet
     public synchronized int save(File file) throws IOException
     {
 
-        try(PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(file))))
+        try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(file))))
         {
             int editCount = 0;
-            for(PlayereditSet editsForPlayer : _playerEdits.values())
+            for (PlayereditSet editsForPlayer : _playerEdits.values())
             {
                 editCount += editsForPlayer.save(writer);
             }
 
-            for(Annotation annotation : _annotations)
+            for (Annotation annotation : _annotations)
             {
                 writer.format("#%d|%d|%d|%s|%s\n", annotation.getX(), annotation.getY(), annotation.getZ(), annotation.getWorld(), annotation.getText());
             }
@@ -126,17 +126,17 @@ public class BlockEditSet
 
     public synchronized BlockEdit findEdit(int x, int y, int z, String player)
     {
-        if(player != null)
+        if (player != null)
         {
             PlayereditSet editsForPlayer = _playerEdits.get(player.toLowerCase());
             return editsForPlayer != null ? editsForPlayer.findEdit(x, y, z) : null;
         }
         else
         {
-            for(PlayereditSet editsForPlayer : _playerEdits.values())
+            for (PlayereditSet editsForPlayer : _playerEdits.values())
             {
                 BlockEdit edit = editsForPlayer.findEdit(x, y, z);
-                if(edit != null)
+                if (edit != null)
                 {
                     return edit;
                 }
@@ -153,27 +153,23 @@ public class BlockEditSet
 
     public synchronized boolean addBlockEdit(BlockEdit edit, boolean updateVariables)
     {
-        if(DataManager.getFilters().isAcceptedPlayer(edit.player))
+        if (DataManager.getFilters().isAcceptedPlayer(edit.player))
         {
-            if(updateVariables)
+            if (updateVariables)
             {
                 EditSelection selection = DataManager.getEditSelection();
                 selection.selectBlockEdit(edit);
             }
             String lowerName = edit.player.toLowerCase();
             PlayereditSet editsForPlayer = _playerEdits.get(lowerName);
-            if(editsForPlayer == null)
+            if (editsForPlayer == null)
             {
                 editsForPlayer = new PlayereditSet(edit.player);
                 _playerEdits.put(lowerName, editsForPlayer);
             }
 
             editsForPlayer.addBlockEdit(edit);
-            MinecraftClient mc = MinecraftClient.getInstance();
-            if(!mc.world.getLevelProperties().getGameMode().isCreative() || Configs.Generic.GROUPING_ORES_IN_CREATIVE.getBooleanValue())
-            {
-                _oreDB.addBlockEdit(edit);
-            }
+            _oreDB.addBlockEdit(edit);
 
             return true;
         }
@@ -185,14 +181,14 @@ public class BlockEditSet
 
     public synchronized void listEdits()
     {
-        if(_playerEdits.size() == 0)
+        if (_playerEdits.size() == 0)
         {
             ChatMessage.localOutputT("watson.message.edits.none_world");
         }
         else
         {
             ChatMessage.localOutputT("watson.message.edits.edits_list");
-            for(PlayereditSet editsByPlayer : _playerEdits.values())
+            for (PlayereditSet editsByPlayer : _playerEdits.values())
             {
                 ChatMessage.localOutputT("watson.message.edits.edit", editsByPlayer.getPlayer(), editsByPlayer.getBlockEditCount(), StringUtils.translate(editsByPlayer.isVisible() ? "watson.message.setting.shown" : "watson.message.setting.hidden"));
             }
@@ -203,7 +199,7 @@ public class BlockEditSet
     {
         player = player.toLowerCase();
         PlayereditSet editsByPlayer = _playerEdits.get(player);
-        if(editsByPlayer != null)
+        if (editsByPlayer != null)
         {
             editsByPlayer.setVisible(visible);
             ChatMessage.localOutputT("watson.message.edits.visibility", editsByPlayer.getBlockEditCount(), editsByPlayer.getPlayer(), StringUtils.translate(editsByPlayer.isVisible() ? "watson.message.setting.shown" : "watson.message.setting.hidden"));
@@ -218,13 +214,13 @@ public class BlockEditSet
     {
         player = player.toLowerCase();
         PlayereditSet editsByPlayer = _playerEdits.get(player);
-        if(editsByPlayer != null)
+        if (editsByPlayer != null)
         {
             _playerEdits.remove(player.toLowerCase());
             getOreDB().removeDeposits(player);
             boolean selection = DataManager.getEditSelection().getSelection().playereditSet == editsByPlayer;
             ChatMessage.localOutputT("watson.message.edits.edit_removed", editsByPlayer.getBlockEditCount(), editsByPlayer.getPlayer());
-            if(_playerEdits.isEmpty() || selection)
+            if (_playerEdits.isEmpty() || selection)
             {
                 DataManager.getEditSelection().clearSelection();
             }
@@ -237,9 +233,9 @@ public class BlockEditSet
 
     public synchronized void drawOutlines()
     {
-        if(Configs.Generic.OUTLINE_SHOWN.getBooleanValue())
+        if (Configs.Generic.OUTLINE_SHOWN.getBooleanValue())
         {
-            for(PlayereditSet editsForPlayer : _playerEdits.values())
+            for (PlayereditSet editsForPlayer : _playerEdits.values())
             {
                 editsForPlayer.drawOutlines();
             }
@@ -248,13 +244,13 @@ public class BlockEditSet
 
     public synchronized void drawVectors()
     {
-        if(Configs.Generic.VECTOR_SHOWN.getBooleanValue())
+        if (Configs.Generic.VECTOR_SHOWN.getBooleanValue())
         {
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder buffer = tessellator.getBuffer();
             buffer.begin(GL11.GL_LINES, VertexFormats.POSITION_COLOR);
             int nextColorIndex1 = 0;
-            for(PlayereditSet editsForPlayer : _playerEdits.values())
+            for (PlayereditSet editsForPlayer : _playerEdits.values())
             {
                 editsForPlayer.drawVectors(OverlayRenderer.KELLY_COLORS[nextColorIndex1], buffer);
                 nextColorIndex1 = (nextColorIndex1 + 1) % OverlayRenderer.KELLY_COLORS.length;
@@ -265,9 +261,9 @@ public class BlockEditSet
 
     public synchronized void drawAnnotations(double dx, double dy, double dz)
     {
-        if(Configs.Generic.ANNOTATION_SHOWN.getBooleanValue() && !_annotations.isEmpty())
+        if (Configs.Generic.ANNOTATION_SHOWN.getBooleanValue() && !_annotations.isEmpty())
         {
-            for(Annotation annotation : _annotations)
+            for (Annotation annotation : _annotations)
             {
                 annotation.draw(dx, dy, dz);
             }

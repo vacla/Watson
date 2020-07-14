@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.TreeSet;
+
 import org.lwjgl.opengl.GL11;
 import eu.minemania.watson.config.Configs;
 import fi.dy.masa.malilib.util.Color4f;
@@ -37,9 +38,9 @@ public class PlayereditSet
 
     public synchronized BlockEdit findEdit(int x, int y, int z)
     {
-        for(BlockEdit edit : _edits)
+        for (BlockEdit edit : _edits)
         {
-            if(edit.x == x && edit.y == y && edit.z == z)
+            if (edit.x == x && edit.y == y && edit.z == z)
             {
                 return edit;
             }
@@ -80,9 +81,9 @@ public class PlayereditSet
 
     public synchronized void drawOutlines()
     {
-        if(isVisible())
+        if (isVisible())
         {
-            for(BlockEdit edit : _edits)
+            for (BlockEdit edit : _edits)
             {
                 Tessellator tessellator = Tessellator.getInstance();
                 BufferBuilder buffer = tessellator.getBuffer();
@@ -97,7 +98,7 @@ public class PlayereditSet
 
     public synchronized void drawVectors(int intcolor, BufferBuilder buffer)
     {
-        if(Configs.Generic.VECTOR_SHOWN.getBooleanValue() && isVisible() && !_edits.isEmpty())
+        if (Configs.Generic.VECTOR_SHOWN.getBooleanValue() && isVisible() && !_edits.isEmpty())
         {
             Color4f color = Color4f.fromColor(intcolor, 1f);
 
@@ -105,15 +106,15 @@ public class PlayereditSet
             Vec3d unitY = new Vec3d(0, 1, 0);
 
             Iterator<BlockEdit> it = _edits.iterator();
-            if(it.hasNext())
+            if (it.hasNext())
             {
                 BlockEdit prev = it.next();
-                while(it.hasNext())
+                while (it.hasNext())
                 {
                     BlockEdit next = it.next();
 
                     boolean show = (next.isCreated() && Configs.Generic.LINKED_CREATION.getBooleanValue()) || (!next.isCreated() && Configs.Generic.LINKED_DESTRUCTION.getBooleanValue());
-                    if(show)
+                    if (show)
                     {
                         Vec3d pPos = new Vec3d(prev.x + 0.5, prev.y + 0.5, prev.z + 0.5);
                         Vec3d nPos = new Vec3d(next.x + 0.5, next.y + 0.5, next.z + 0.5);
@@ -130,7 +131,7 @@ public class PlayereditSet
                             // the total vector length. Scale the arrow in proportion to the
                             // square root of the length up to a maximum size.
                             double arrowSize = UNIT_VECTOR_ARROW_SIZE * Math.sqrt(length);
-                            if(arrowSize > MAX_ARROW_SIZE)
+                            if (arrowSize > MAX_ARROW_SIZE)
                             {
                                 arrowSize = MAX_ARROW_SIZE;
                             }
@@ -143,7 +144,7 @@ public class PlayereditSet
                             // If the vector is colinear with the Y axis, use the X axis for
                             // the cross products to derive the fin directions.
                             Vec3d fin1;
-                            if(Math.abs(unitY.dotProduct(diff)) > 0.9 * length)
+                            if (Math.abs(unitY.dotProduct(diff)) > 0.9 * length)
                             {
                                 fin1 = unitX.crossProduct(diff).normalize();
                             }
@@ -176,7 +177,7 @@ public class PlayereditSet
     {
         Calendar calendar = Calendar.getInstance();
         int editCount = 0;
-        for(BlockEdit edit : _edits)
+        for (BlockEdit edit : _edits)
         {
             calendar.setTimeInMillis(edit.time);
             int year = calendar.get(Calendar.YEAR);

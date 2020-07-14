@@ -50,7 +50,7 @@ public class GuiConfigs extends GuiConfigsBase
     {
         ConfigGuiTab tab = DataManager.getConfigGuiTab();
 
-        if(tab == ConfigGuiTab.GENERIC || tab == ConfigGuiTab.LISTS)
+        if (tab == ConfigGuiTab.GENERIC || tab == ConfigGuiTab.LISTS)
         {
             return 140;
         }
@@ -70,19 +70,19 @@ public class GuiConfigs extends GuiConfigsBase
         List<? extends IConfigBase> configs;
         ConfigGuiTab tab = DataManager.getConfigGuiTab();
 
-        if(tab == ConfigGuiTab.GENERIC)
+        if (tab == ConfigGuiTab.GENERIC)
         {
             configs = Configs.Generic.OPTIONS;
         }
-        else if(tab == ConfigGuiTab.LISTS)
+        else if (tab == ConfigGuiTab.LISTS)
         {
             configs = Configs.Lists.OPTIONS;
         }
-        else if(tab == ConfigGuiTab.ANALYSIS)
+        else if (tab == ConfigGuiTab.ANALYSIS)
         {
             configs = Configs.Analysis.OPTIONS;
         }
-        else if(tab == ConfigGuiTab.HOTKEYS)
+        else if (tab == ConfigGuiTab.HOTKEYS)
         {
             configs = Hotkeys.HOTKEY_LIST;
         }
@@ -124,10 +124,10 @@ public class GuiConfigs extends GuiConfigsBase
 
     public enum ConfigGuiTab
     {
-        GENERIC ("watson.gui.button.config_gui.generic"),
-        LISTS ("watson.gui.button.config_gui.lists"),
-        ANALYSIS ("watson.gui.button.config_gui.analysis"),
-        HOTKEYS ("watson.gui.button.config_gui.hotkeys");
+        GENERIC("watson.gui.button.config_gui.generic"),
+        LISTS("watson.gui.button.config_gui.lists"),
+        ANALYSIS("watson.gui.button.config_gui.analysis"),
+        HOTKEYS("watson.gui.button.config_gui.hotkeys");
 
         private final String translationKey;
 

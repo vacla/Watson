@@ -1,6 +1,7 @@
 package eu.minemania.watson.config;
 
 import javax.annotation.Nullable;
+
 import fi.dy.masa.malilib.config.options.ConfigString;
 import fi.dy.masa.malilib.util.StringUtils;
 
@@ -24,7 +25,7 @@ public class ConfigStringExt extends ConfigString
 
     public Object[] getCommentArgs()
     {
-        if(this.commentArgs != null)
+        if (this.commentArgs != null)
         {
             return this.commentArgs;
         }

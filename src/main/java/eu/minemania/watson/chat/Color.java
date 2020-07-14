@@ -10,7 +10,7 @@ public enum Color
     darkblue(Formatting.DARK_BLUE),
     darkgreen(Formatting.DARK_GREEN),
     darkaqua(Formatting.DARK_AQUA),
-    darkred(Formatting.DARK_RED), 
+    darkred(Formatting.DARK_RED),
     darkpurple(Formatting.DARK_PURPLE),
     gold(Formatting.GOLD),
     grey(Formatting.GRAY),
@@ -56,7 +56,7 @@ public enum Color
     public static Color getByTextFormatColor(Formatting colorTextFormat)
     {
         Color color = _byTextFormatColor.get(colorTextFormat);
-        if(color == null)
+        if (color == null)
         {
             throw new IllegalArgumentException("invalid color code: " + colorTextFormat.toString());
         }
@@ -65,9 +65,9 @@ public enum Color
 
     public static Color getByColorOrName(String colorOrName)
     {
-        if(colorOrName.contains("Formatting."))
+        if (colorOrName.contains("Formatting."))
         {
-            return getByTextFormatColor((Formatting)(Object)colorOrName);
+            return getByTextFormatColor((Formatting) (Object) colorOrName);
         }
         else
         {

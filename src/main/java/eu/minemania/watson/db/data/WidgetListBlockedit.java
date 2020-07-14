@@ -2,10 +2,12 @@ package eu.minemania.watson.db.data;
 
 import java.util.Collection;
 import java.util.List;
+
 import com.google.common.collect.ImmutableList;
 import eu.minemania.watson.gui.GuiBlockeditData;
 import eu.minemania.watson.selection.PlayereditUtils;
 import fi.dy.masa.malilib.gui.widgets.WidgetListBase;
+import net.minecraft.client.util.math.MatrixStack;
 
 public class WidgetListBlockedit extends WidgetListBase<BlockeditEntry, WidgetBlockeditEntry>
 {
@@ -24,9 +26,9 @@ public class WidgetListBlockedit extends WidgetListBase<BlockeditEntry, WidgetBl
     }
 
     @Override
-    public void drawContents(int mouseX, int mouseY, float partialTicks)
+    public void drawContents(MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks)
     {
-        super.drawContents(mouseX, mouseY, partialTicks);
+        super.drawContents(matrixStack, mouseX, mouseY, partialTicks);
         lastScrollbarPosition = this.scrollBar.getValue();
     }
 
@@ -42,7 +44,7 @@ public class WidgetListBlockedit extends WidgetListBase<BlockeditEntry, WidgetBl
     {
         int height = this.browserEntryHeight;
 
-        if((usedHeight + height) > usableHeight)
+        if ((usedHeight + height) > usableHeight)
         {
             return null;
         }
@@ -61,7 +63,7 @@ public class WidgetListBlockedit extends WidgetListBase<BlockeditEntry, WidgetBl
     {
         for (BlockeditEntry entry : entries)
         {
-            if(this.gui.getTime() == 0 || this.entryMatchesFilter(entry, ""))
+            if (this.gui.getTime() == 0 || this.entryMatchesFilter(entry, ""))
             {
                 this.listContents.add(entry);
             }
@@ -99,7 +101,7 @@ public class WidgetListBlockedit extends WidgetListBase<BlockeditEntry, WidgetBl
     {
         super.refreshBrowserEntries();
 
-        if(!this.scrollbarRestored && lastScrollbarPosition <= this.scrollBar.getMaxValue())
+        if (!this.scrollbarRestored && lastScrollbarPosition <= this.scrollBar.getMaxValue())
         {
             this.scrollBar.setValue(lastScrollbarPosition);
             this.scrollbarRestored = true;

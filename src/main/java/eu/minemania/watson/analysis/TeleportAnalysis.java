@@ -6,7 +6,7 @@ import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.BlockEdit;
 import eu.minemania.watson.selection.EditSelection;
-import net.minecraft.text.Text;
+import net.minecraft.text.MutableText;
 
 public class TeleportAnalysis extends Analysis
 {
@@ -18,7 +18,7 @@ public class TeleportAnalysis extends Analysis
         });
     }
 
-    void lbTp(Text chat, Matcher m)
+    void lbTp(MutableText chat, Matcher m)
     {
         try
         {

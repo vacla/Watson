@@ -18,7 +18,8 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.server.command.CommandSource;
 
 @Mixin(CommandSuggestor.class)
-public class MixinCommandSuggestor {
+public class MixinCommandSuggestor
+{
     @Final
     @Shadow
     private TextFieldWidget textField;
@@ -31,7 +32,8 @@ public class MixinCommandSuggestor {
     private boolean wasClientCommand = false;
 
     @Inject(method = "refresh", at = @At("RETURN"))
-    public void onRefresh(CallbackInfo ci) {
+    public void onRefresh(CallbackInfo ci)
+    {
         boolean isClientCommand;
         if (parse == null)
         {
@@ -45,13 +47,13 @@ public class MixinCommandSuggestor {
             isClientCommand = ClientCommandManager.isClientSideCommand(command);
         }
 
-        if(isClientCommand && !wasClientCommand)
+        if (isClientCommand && !wasClientCommand)
         {
             wasClientCommand = true;
             oldMaxLength = ((ITextFieldWidget) textField).clientcommands_getMaxLength();
             textField.setMaxLength(Math.max(oldMaxLength, 32500));
         }
-        else if(!isClientCommand && wasClientCommand)
+        else if (!isClientCommand && wasClientCommand)
         {
             wasClientCommand = false;
             textField.setMaxLength(oldMaxLength);

@@ -19,7 +19,7 @@ public class SyncTaskQueue
 
     public void runTasks()
     {
-        for (;;)
+        for (; ; )
         {
             Runnable task = _taskQueue.poll();
             if (task == null)
@@ -28,5 +28,5 @@ public class SyncTaskQueue
             }
             task.run();
         }
-    }	  
+    }
 }

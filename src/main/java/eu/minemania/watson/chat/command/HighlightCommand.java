@@ -25,7 +25,7 @@ import net.minecraft.text.LiteralText;
 public class HighlightCommand extends WatsonCommandBase
 {
     private static final SuggestionProvider<ServerCommandSource> SUGGESTION_COLOR = (p_201404_0_, p_201404_1_) -> CommandSource.suggestMatching(FakeCommandSource.getColor(), p_201404_1_);
-    private static final SuggestionProvider<ServerCommandSource> SUGGESTION_STYLE = (p_201404_0_, p_201404_1_) ->  CommandSource.suggestMatching(FakeCommandSource.getStyle(), p_201404_1_);
+    private static final SuggestionProvider<ServerCommandSource> SUGGESTION_STYLE = (p_201404_0_, p_201404_1_) -> CommandSource.suggestMatching(FakeCommandSource.getStyle(), p_201404_1_);
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher)
     {
@@ -44,25 +44,25 @@ public class HighlightCommand extends WatsonCommandBase
 
     private static int help(CommandContext<ServerCommandSource> context)
     {
-        if(!Configs.Generic.USE_CHAT_HIGHLIGHTS.getBooleanValue())
+        if (!Configs.Generic.USE_CHAT_HIGHLIGHTS.getBooleanValue())
         {
             InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.highlight.disabled");
             return 1;
         }
         int cmdCount = 0;
         CommandDispatcher<ServerCommandSource> dispatcher = Command.commandDispatcher;
-        for(CommandNode<ServerCommandSource> command : dispatcher.getRoot().getChildren())
+        for (CommandNode<ServerCommandSource> command : dispatcher.getRoot().getChildren())
         {
             String cmdName = command.getName();
-            if(ClientCommandManager.isClientSideCommand(cmdName))
+            if (ClientCommandManager.isClientSideCommand(cmdName))
             {
                 Map<CommandNode<ServerCommandSource>, String> usage = dispatcher.getSmartUsage(command, context.getSource());
-                for(String u : usage.values())
+                for (String u : usage.values())
                 {
                     ClientCommandManager.sendFeedback(new LiteralText("/" + cmdName + " " + u));
                 }
                 cmdCount += usage.size();
-                if(usage.size() == 0)
+                if (usage.size() == 0)
                 {
                     ClientCommandManager.sendFeedback(new LiteralText("/" + cmdName));
                     cmdCount++;

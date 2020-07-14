@@ -14,7 +14,7 @@ public class EditListPlayeredit extends PlayereditBase
 
         this.playeredit = playeredit;
 
-        if(reCreate)
+        if (reCreate)
         {
             this.reCreatePlayeredits();
         }

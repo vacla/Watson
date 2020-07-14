@@ -454,7 +454,7 @@ public class WatsonCommand extends WatsonCommandBase
         {
             page = 1;
         }
-        if(player == null)
+        if (player == null)
         {
             DataManager.listBlockEditFiles("*", page);
         }
@@ -485,11 +485,11 @@ public class WatsonCommand extends WatsonCommandBase
             filename = null;
         }
 
-        if(player != null)
+        if (player != null)
         {
             DataManager.deleteBlockEditFiles(player);
         }
-        else if(filename != null)
+        else if (filename != null)
         {
             DataManager.deleteBlockEditFiles(filename);
         }
@@ -527,11 +527,11 @@ public class WatsonCommand extends WatsonCommandBase
             filename = null;
         }
 
-        if(player != null)
+        if (player != null)
         {
             DataManager.loadBlockEditFile(player);
         }
-        else if(filename != null)
+        else if (filename != null)
         {
             DataManager.loadBlockEditFile(filename);
         }
@@ -567,7 +567,7 @@ public class WatsonCommand extends WatsonCommandBase
             Configs.Generic.ENABLED.toggleBooleanValue();
             displayed = Configs.Generic.ENABLED.getBooleanValue();
         }
-        if(displayed)
+        if (displayed)
         {
             InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.watson.enabled");
         }
@@ -621,7 +621,7 @@ public class WatsonCommand extends WatsonCommandBase
         {
             seconds = getDouble(context, "seconds");
             seconds = Math.abs(seconds);
-            if(seconds < 1.0)
+            if (seconds < 1.0)
             {
                 seconds = 1.0;
             }
@@ -708,7 +708,7 @@ public class WatsonCommand extends WatsonCommandBase
         {
             seconds = getDouble(context, "seconds");
             seconds = Math.abs(seconds);
-            if(seconds < 0.0)
+            if (seconds < 0.0)
             {
                 seconds = 0.0;
             }
@@ -887,7 +887,7 @@ public class WatsonCommand extends WatsonCommandBase
             Configs.Generic.TIME_ORDERED_DEPOSITS.toggleBooleanValue();
             displayed = Configs.Generic.TIME_ORDERED_DEPOSITS.getBooleanValue();
         }
-        if(displayed)
+        if (displayed)
         {
             InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.time_ordered_deposits.enabled");
         }
@@ -937,18 +937,18 @@ public class WatsonCommand extends WatsonCommandBase
     {
         int cmdCount = 0;
         CommandDispatcher<ServerCommandSource> dispatcher = Command.commandDispatcher;
-        for(CommandNode<ServerCommandSource> command : dispatcher.getRoot().getChildren())
+        for (CommandNode<ServerCommandSource> command : dispatcher.getRoot().getChildren())
         {
             String cmdName = command.getName();
-            if(ClientCommandManager.isClientSideCommand(cmdName))
+            if (ClientCommandManager.isClientSideCommand(cmdName))
             {
                 Map<CommandNode<ServerCommandSource>, String> usage = dispatcher.getSmartUsage(command, context.getSource());
-                for(String u : usage.values())
+                for (String u : usage.values())
                 {
                     ClientCommandManager.sendFeedback(new LiteralText("/" + cmdName + " " + u));
                 }
                 cmdCount += usage.size();
-                if(usage.size() == 0)
+                if (usage.size() == 0)
                 {
                     ClientCommandManager.sendFeedback(new LiteralText("/" + cmdName));
                     cmdCount++;

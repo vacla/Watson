@@ -4,6 +4,7 @@ import fi.dy.masa.malilib.config.options.ConfigHotkey;
 import fi.dy.masa.malilib.hotkeys.KeybindSettings;
 
 import java.util.List;
+
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -22,7 +23,7 @@ public class Hotkeys
     public static final ConfigHotkey KEYBIND_TP_PREV = new ConfigHotkey("tpprev", "", "watson.description.hotkey.keybind_tp_prev");
     public static final ConfigHotkey KEYBIND_WATSON_CLEAR = new ConfigHotkey("watsonClear", "", "watson.description.hotkey.keybind_watson_clear");
     public static final ConfigHotkey OPEN_GUI_MAIN_MENU = new ConfigHotkey("openGuiMainMenu", "L", KeybindSettings.RELEASE_EXCLUSIVE, "watson.description.hotkey.open_gui_main_menu");
-    public static final ConfigHotkey OPEN_GUI_SETTINGS = new ConfigHotkey("openGuiSettings", "L,C",  "watson.description.hotkey.open_gui_settings");
+    public static final ConfigHotkey OPEN_GUI_SETTINGS = new ConfigHotkey("openGuiSettings", "L,C", "watson.description.hotkey.open_gui_settings");
 
     public static final List<ConfigHotkey> HOTKEY_LIST = ImmutableList.of(
             KEYBIND_AUTO_PAGE,
@@ -37,5 +38,5 @@ public class Hotkeys
             KEYBIND_WATSON_CLEAR,
             OPEN_GUI_MAIN_MENU,
             OPEN_GUI_SETTINGS
-            );
+    );
 }

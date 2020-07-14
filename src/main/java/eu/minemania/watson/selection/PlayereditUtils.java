@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.db.BlockEdit;
@@ -31,7 +32,7 @@ public class PlayereditUtils
     {
         Object2IntOpenHashMap<WatsonBlock> countsTotal = new Object2IntOpenHashMap<>();
 
-        for(BlockEdit edit : playeredit.getBlockEdits())
+        for (BlockEdit edit : playeredit.getBlockEdits())
         {
             countsTotal.addTo(edit.block, edit.amount);
         }
@@ -42,28 +43,28 @@ public class PlayereditUtils
     public static List<PlayereditEntry> getPlayereditList(Object2IntOpenHashMap<WatsonBlock> countsTotal, PlayereditSet playeredit)
     {
         List<PlayereditEntry> list = new ArrayList<>();
-        if(!countsTotal.isEmpty())
+        if (!countsTotal.isEmpty())
         {
             Object2IntOpenHashMap<ItemType> itemTypesTotal = new Object2IntOpenHashMap<>();
 
             convertNameToStack(countsTotal, itemTypesTotal);
 
-            for(ItemType type : itemTypesTotal.keySet())
+            for (ItemType type : itemTypesTotal.keySet())
             {
                 List<BlockEdit> watsonBlocks = new ArrayList<>();
-                for(BlockEdit edit : playeredit.getBlockEdits())
+                for (BlockEdit edit : playeredit.getBlockEdits())
                 {
                     String typeName = type.getStack().getItem().toString();
                     String blockName = getItemStack(edit.block.getName()).getItem().toString();
-                    if(!typeName.contains("minecraft:"))
+                    if (!typeName.contains("minecraft:"))
                     {
-                        typeName = "minecraft:"+typeName;
+                        typeName = "minecraft:" + typeName;
                     }
-                    if(!blockName.contains("minecraft:"))
+                    if (!blockName.contains("minecraft:"))
                     {
-                        blockName = "minecraft:"+blockName;
+                        blockName = "minecraft:" + blockName;
                     }
-                    if(blockName.equals(typeName))
+                    if (blockName.equals(typeName))
                     {
                         watsonBlocks.add(edit);
                     }
@@ -78,9 +79,9 @@ public class PlayereditUtils
     public static List<BlockeditEntry> createDisplayListFor(List<BlockEdit> blockedit)
     {
         List<BlockeditEntry> list = new ArrayList<>();
-        if(!blockedit.isEmpty())
+        if (!blockedit.isEmpty())
         {
-            for(BlockEdit edit : blockedit)
+            for (BlockEdit edit : blockedit)
             {
                 list.add(new BlockeditEntry(edit));
             }
@@ -91,11 +92,11 @@ public class PlayereditUtils
 
     private static void convertNameToStack(Object2IntOpenHashMap<WatsonBlock> watsonBlockIn, Object2IntOpenHashMap<ItemType> itemTypeOut)
     {
-        for(WatsonBlock block : watsonBlockIn.keySet())
+        for (WatsonBlock block : watsonBlockIn.keySet())
         {
             ItemStack stack = getItemStack(block.getName());
 
-            if(!stack.isEmpty())
+            if (!stack.isEmpty())
             {
                 ItemType type = new ItemType(stack);
                 itemTypeOut.addTo(type, watsonBlockIn.getInt(block));
@@ -106,17 +107,17 @@ public class PlayereditUtils
     public static ItemStack getItemStack(String blocks)
     {
         Block block = Registry.BLOCK.get(Identifier.tryParse(blocks));
-        if(block != Blocks.AIR)
+        if (block != Blocks.AIR)
         {
-            if(block.equals(Blocks.WATER))
+            if (block.equals(Blocks.WATER))
             {
                 return new ItemStack(Items.WATER_BUCKET);
             }
-            else if(block.equals(Blocks.LAVA))
+            else if (block.equals(Blocks.LAVA))
             {
                 return new ItemStack(Items.LAVA_BUCKET);
             }
-            else if(!block.equals(Blocks.BEDROCK))
+            else if (!block.equals(Blocks.BEDROCK))
             {
                 return new ItemStack(block);
             }
@@ -124,69 +125,69 @@ public class PlayereditUtils
         else
         {
             Item item = Registry.ITEM.get(Identifier.tryParse(blocks));
-            if(item != Items.AIR)
+            if (item != Items.AIR)
             {
                 return new ItemStack(item);
             }
             Optional<EntityType<?>> entityType = EntityType.get(blocks);
-            if(entityType.isPresent())
+            if (entityType.isPresent())
             {
                 EntityType<?> entity = entityType.get();
-                if(entity.equals(EntityType.PAINTING))
+                if (entity.equals(EntityType.PAINTING))
                 {
                     return new ItemStack(Items.PAINTING);
                 }
-                else if(entity.equals(EntityType.LEASH_KNOT))
+                else if (entity.equals(EntityType.LEASH_KNOT))
                 {
                     return new ItemStack(Items.LEAD);
                 }
-                else if(entity.equals(EntityType.ITEM_FRAME))
+                else if (entity.equals(EntityType.ITEM_FRAME))
                 {
                     return new ItemStack(Items.ITEM_FRAME);
                 }
-                else if(entity.equals(EntityType.MINECART))
+                else if (entity.equals(EntityType.MINECART))
                 {
                     return new ItemStack(Items.MINECART);
                 }
-                else if(entity.equals(EntityType.CHEST_MINECART))
+                else if (entity.equals(EntityType.CHEST_MINECART))
                 {
                     return new ItemStack(Items.CHEST_MINECART);
                 }
-                else if(entity.equals(EntityType.FURNACE_MINECART))
+                else if (entity.equals(EntityType.FURNACE_MINECART))
                 {
                     return new ItemStack(Items.FURNACE_MINECART);
                 }
-                else if(entity.equals(EntityType.HOPPER_MINECART))
+                else if (entity.equals(EntityType.HOPPER_MINECART))
                 {
                     return new ItemStack(Items.HOPPER_MINECART);
                 }
-                else if(entity.equals(EntityType.TNT_MINECART))
+                else if (entity.equals(EntityType.TNT_MINECART))
                 {
                     return new ItemStack(Items.TNT_MINECART);
                 }
-                else if(entity.equals(EntityType.BOAT))
+                else if (entity.equals(EntityType.BOAT))
                 {
                     return new ItemStack(Items.OAK_BOAT);
                 }
-                else if(entity.equals(EntityType.ARMOR_STAND))
+                else if (entity.equals(EntityType.ARMOR_STAND))
                 {
                     return new ItemStack(Items.ARMOR_STAND);
                 }
-                else if(entity.equals(EntityType.END_CRYSTAL))
+                else if (entity.equals(EntityType.END_CRYSTAL))
                 {
                     return new ItemStack(Items.END_CRYSTAL);
                 }
                 else
                 {
-                    if(entity.equals(EntityType.PLAYER))
+                    if (entity.equals(EntityType.PLAYER))
                     {
                         return new ItemStack(SpawnEggItem.forEntity(EntityType.VILLAGER));
                     }
                     SpawnEggItem spawnEgg = SpawnEggItem.forEntity(entity);
-                    if(spawnEgg == null)
+                    if (spawnEgg == null)
                     {
                         InfoUtils.showGuiMessage(MessageType.WARNING, "watson.error.entity.not_found", entity.getName().getString());
-                        if(Configs.Generic.DEBUG.getBooleanValue())
+                        if (Configs.Generic.DEBUG.getBooleanValue())
                         {
                             Watson.logger.warn(StringUtils.translate("watson.error.blockentity.not_found", blocks));
                         }
@@ -199,7 +200,7 @@ public class PlayereditUtils
         }
 
         InfoUtils.showGuiMessage(MessageType.WARNING, "watson.error.blockentity.not_found", blocks);
-        if(Configs.Generic.DEBUG.getBooleanValue())
+        if (Configs.Generic.DEBUG.getBooleanValue())
         {
             Watson.logger.warn(StringUtils.translate("watson.error.blockentity.not_found", blocks));
         }
@@ -217,41 +218,41 @@ public class PlayereditUtils
         int minute = calendar.get(Calendar.MINUTE);
         int second = calendar.get(Calendar.SECOND);
 
-        if(edit == Edit.ACTION)
+        if (edit == Edit.ACTION)
         {
-            if(blockedit.block.getName().equals("minecraft:player"))
+            if (blockedit.block.getName().equals("minecraft:player"))
             {
                 return StringUtils.translate("watson.gui.label.blockedit.list.chat");
             }
-            else if(blockedit.block.getName().equals("minecraft:oak_sign") && !blockedit.action.equals("broke") && !blockedit.action.equals("placed"))
+            else if (blockedit.block.getName().equals("minecraft:oak_sign") && !blockedit.action.equals("broke") && !blockedit.action.equals("placed"))
             {
                 return StringUtils.translate("watson.gui.label.blockedit.list.sign");
             }
             return blockedit.action;
         }
-        else if(edit == Edit.TIME)
+        else if (edit == Edit.TIME)
         {
             return StringUtils.translate("watson.gui.label.blockedit.list.time", day, month, year, hour, minute, second);
         }
-        else if(edit == Edit.COORDS)
+        else if (edit == Edit.COORDS)
         {
             return StringUtils.translate("watson.gui.label.blockedit.list.coords", blockedit.x, blockedit.y, blockedit.z);
         }
-        else if(edit == Edit.WORLD)
+        else if (edit == Edit.WORLD)
         {
             return blockedit.world;
         }
-        else if(edit == Edit.AMOUNT)
+        else if (edit == Edit.AMOUNT)
         {
             return String.valueOf(blockedit.amount);
         }
-        else if(edit == Edit.DESCRIPTION)
+        else if (edit == Edit.DESCRIPTION)
         {
-            if(blockedit.block.getName().equals("minecraft:player"))
+            if (blockedit.block.getName().equals("minecraft:player"))
             {
                 return blockedit.action;
             }
-            else if(blockedit.block.getName().equals("minecraft:oak_sign") && !blockedit.action.equals("broke") && !blockedit.action.equals("placed"))
+            else if (blockedit.block.getName().equals("minecraft:oak_sign") && !blockedit.action.equals("broke") && !blockedit.action.equals("placed"))
             {
                 return blockedit.action.trim();
             }

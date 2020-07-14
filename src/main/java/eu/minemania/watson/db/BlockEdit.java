@@ -1,6 +1,7 @@
 package eu.minemania.watson.db;
 
 import java.util.Optional;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.render.RenderUtils;
@@ -52,9 +53,9 @@ public class BlockEdit
     {
         Block blocks = Registry.BLOCK.get(Identifier.tryParse(block.getName()));
         float lineWidth = block.getLineWidth();
-        if(!blocks.getName().asString().equals("Air"))
+        if (!blocks.getName().asString().equals("Air"))
         {
-            if(Configs.Generic.ORE_OUTLINE_THICKER.getBooleanValue() && blocks instanceof OreBlock)
+            if (Configs.Generic.ORE_OUTLINE_THICKER.getBooleanValue() && blocks instanceof OreBlock)
             {
                 lineWidth = Configs.Generic.ORE_LINEWIDTH.getIntegerValue();
             }
@@ -71,22 +72,22 @@ public class BlockEdit
 
     private void renderBlocks(BufferBuilder buffer, Block blocks)
     {
-        if(!block.getName().equals("minecraft:grass") && !block.getName().equals("minecraft:water") && 
+        if (!block.getName().equals("minecraft:grass") && !block.getName().equals("minecraft:water") &&
                 !block.getName().equals("minecraft:lava"))
         {
             BlockState state = blocks.getDefaultState();
             BakedModel model = this.blockModelShapes.getModel(state);
-            if(Configs.Lists.SMALLER_RENDER_BOX.getStrings().contains(block.getName()))
+            if (Configs.Lists.SMALLER_RENDER_BOX.getStrings().contains(block.getName()))
             {
                 fi.dy.masa.malilib.render.RenderUtils.drawBlockBoundingBoxOutlinesBatchedLines(new BlockPos(x, y, z), block.getColor(), -0.25, buffer);
             }
             else
             {
-                if(!isOreDrawn())
+                if (isOreNotDrawn())
                 {
-                    if(blocks instanceof SignBlock || blocks instanceof WallSignBlock)
+                    if (blocks instanceof SignBlock || blocks instanceof WallSignBlock)
                     {
-                        RenderUtils.drawItemFramePaintingOutlinesBatched(x, y, z, block.getColor(), buffer);
+                        RenderUtils.drawSpecialOutlinesBatched(x, y, z, block, buffer, true);
                     }
                     else
                     {
@@ -94,24 +95,27 @@ public class BlockEdit
                     }
                 }
             }
-            if(!drawn && blocks instanceof OreBlock)
+            if (!drawn && blocks instanceof OreBlock)
             {
                 drawn = true;
             }
         }
         else
         {
-            RenderUtils.drawFullBlockOutlinesBatched(x, y, z, block.getColor(), buffer);
+            if (isOreNotDrawn())
+            {
+                RenderUtils.drawFullBlockOutlinesBatched(x, y, z, block.getColor(), buffer);
+            }
         }
     }
 
     private void renderEntities(BufferBuilder buffer, Optional<EntityType<?>> entity)
     {
-        if(entity.isPresent())
+        if (entity.isPresent())
         {
-            if(block.getName().equals("minecraft:item_frame") || block.getName().equals("minecraft:painting"))
+            if (block.getName().equals("minecraft:item_frame") || block.getName().equals("minecraft:painting"))
             {
-                RenderUtils.drawItemFramePaintingOutlinesBatched(x, y, z, block.getColor(), buffer);
+                RenderUtils.drawSpecialOutlinesBatched(x, y, z, block, buffer, false);
             }
             else
             {
@@ -120,17 +124,17 @@ public class BlockEdit
         }
     }
 
-    private boolean isOreDrawn()
+    private boolean isOreNotDrawn()
     {
-        for(BlockEdit blockEdit : playereditSet._edits)
+        for (BlockEdit blockEdit : playereditSet._edits)
         {
-            if(Configs.Generic.ONLY_ORE_BLOCK.getBooleanValue() && blockEdit.x == x && blockEdit.y == y && blockEdit.z == z && blockEdit.drawn)
+            if (Configs.Generic.ONLY_ORE_BLOCK.getBooleanValue() && blockEdit.x == x && blockEdit.y == y && blockEdit.z == z && blockEdit.drawn)
             {
-                return this != blockEdit;
+                return this == blockEdit;
             }
         }
 
-        return false;
+        return true;
     }
 
     public boolean isCreated()

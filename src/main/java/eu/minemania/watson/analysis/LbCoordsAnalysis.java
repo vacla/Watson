@@ -14,7 +14,7 @@ import eu.minemania.watson.db.WatsonBlock;
 import eu.minemania.watson.db.WatsonBlockRegistery;
 import eu.minemania.watson.scheduler.SyncTaskQueue;
 import eu.minemania.watson.scheduler.tasks.AddBlockEditTask;
-import net.minecraft.text.Text;
+import net.minecraft.text.MutableText;
 import net.minecraft.util.Formatting;
 
 public class LbCoordsAnalysis extends Analysis
@@ -25,7 +25,7 @@ public class LbCoordsAnalysis extends Analysis
     protected int _lastX, _lastY, _lastZ;
     protected int _currentPage = 0;
     protected int _pageCount = 0;
-    protected String _world; 
+    protected String _world;
 
     public LbCoordsAnalysis()
     {
@@ -70,7 +70,7 @@ public class LbCoordsAnalysis extends Analysis
         addMatchedChatHandler(Configs.Analysis.LB_HEADER_BLOCK, headerHandler);
     }
 
-    void lbCoord(Text chat, Matcher m)
+    void lbCoord(MutableText chat, Matcher m)
     {
         try
         {
@@ -140,17 +140,17 @@ public class LbCoordsAnalysis extends Analysis
         }
     }
 
-    void lbKills(Text chat, Matcher m)
+    void lbKills(MutableText chat, Matcher m)
     {
         _world = m.group(1);
     }
 
-    void lbCoordPosition(Text chat, Matcher m)
+    void lbCoordPosition(MutableText chat, Matcher m)
     {
         _world = m.group(1);
     }
 
-    void lbCoordKills(Text chat, Matcher m)
+    void lbCoordKills(MutableText chat, Matcher m)
     {
         try
         {
@@ -205,7 +205,7 @@ public class LbCoordsAnalysis extends Analysis
         }
     }
 
-    void lbCoordReplaced(Text chat, Matcher m)
+    void lbCoordReplaced(MutableText chat, Matcher m)
     {
         try
         {
@@ -258,7 +258,7 @@ public class LbCoordsAnalysis extends Analysis
         }
     }
 
-    void lbPage(Text chat, Matcher m)
+    void lbPage(MutableText chat, Matcher m)
     {
         int currentPage = Integer.parseInt(m.group(1));
         int pageCount = Integer.parseInt(m.group(2));
@@ -274,7 +274,7 @@ public class LbCoordsAnalysis extends Analysis
         }
     }
 
-    void lbHeader(Text chat, Matcher m)
+    void lbHeader(MutableText chat, Matcher m)
     {
         _currentPage = _pageCount = 0;
     }

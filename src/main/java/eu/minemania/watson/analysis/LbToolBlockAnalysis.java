@@ -11,7 +11,7 @@ import eu.minemania.watson.db.WatsonBlockRegistery;
 import eu.minemania.watson.scheduler.SyncTaskQueue;
 import eu.minemania.watson.scheduler.tasks.AddBlockEditTask;
 import eu.minemania.watson.selection.EditSelection;
-import net.minecraft.text.Text;
+import net.minecraft.text.MutableText;
 
 public class LbToolBlockAnalysis extends Analysis
 {
@@ -39,7 +39,7 @@ public class LbToolBlockAnalysis extends Analysis
         });
     }
 
-    void lbPosition(Text chat, Matcher m)
+    void lbPosition(MutableText chat, Matcher m)
     {
         _x = Integer.parseInt(m.group(1));
         _y = Integer.parseInt(m.group(2));
@@ -51,9 +51,9 @@ public class LbToolBlockAnalysis extends Analysis
         _expectingFirstEdit = true;
     }
 
-    void lbEdit(Text chat, Matcher m)
+    void lbEdit(MutableText chat, Matcher m)
     {
-        if((System.currentTimeMillis() - _lbPositionTime) < POSITION_TIMEOUT_MILLIS)
+        if ((System.currentTimeMillis() - _lbPositionTime) < POSITION_TIMEOUT_MILLIS)
         {
             int[] ymd = TimeStamp.parseYMD(m.group(1));
             int hour = Integer.parseInt(m.group(2));
@@ -68,9 +68,9 @@ public class LbToolBlockAnalysis extends Analysis
         }
     }
 
-    void lbEditReplaced(Text chat, Matcher m)
+    void lbEditReplaced(MutableText chat, Matcher m)
     {
-        if((System.currentTimeMillis() - _lbPositionTime) < POSITION_TIMEOUT_MILLIS)
+        if ((System.currentTimeMillis() - _lbPositionTime) < POSITION_TIMEOUT_MILLIS)
         {
             int[] ymd = TimeStamp.parseYMD(m.group(1));
             int hour = Integer.parseInt(m.group(2));
@@ -87,12 +87,12 @@ public class LbToolBlockAnalysis extends Analysis
 
     protected void addBlockEdit(long millis, String player, String action, WatsonBlock type, String world)
     {
-        if(DataManager.getFilters().isAcceptedPlayer(player))
+        if (DataManager.getFilters().isAcceptedPlayer(player))
         {
             BlockEdit edit = new BlockEdit(millis, player, action, _x, _y, _z, type, world, 1);
             SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, _expectingFirstEdit));
 
-            if(_expectingFirstEdit)
+            if (_expectingFirstEdit)
             {
                 _expectingFirstEdit = false;
             }

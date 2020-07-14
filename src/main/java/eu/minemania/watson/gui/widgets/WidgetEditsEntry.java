@@ -2,6 +2,7 @@ package eu.minemania.watson.gui.widgets;
 
 import java.util.List;
 import javax.annotation.Nullable;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import eu.minemania.watson.db.data.EditListBlockedit;
 import eu.minemania.watson.gui.GuiBlockeditData;
@@ -16,11 +17,12 @@ import fi.dy.masa.malilib.gui.button.IButtonActionListener;
 import fi.dy.masa.malilib.gui.widgets.WidgetListEntrySortable;
 import fi.dy.masa.malilib.render.RenderUtils;
 import fi.dy.masa.malilib.util.StringUtils;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 
 public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
 {
-    private static final String[] HEADERS = new String[] {
+    private static final String[] HEADERS = new String[]{
             "watson.gui.label.edits.title.item",
             "watson.gui.label.edits.title.total"
     };
@@ -29,9 +31,12 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
 
     private final PlayereditBase edits;
     private final WidgetListEdits listWidget;
-    @Nullable private final PlayereditEntry entry;
-    @Nullable private final String header1;
-    @Nullable private final String header2;
+    @Nullable
+    private final PlayereditEntry entry;
+    @Nullable
+    private final String header1;
+    @Nullable
+    private final String header2;
     private final boolean isOdd;
 
     public WidgetEditsEntry(int x, int y, int width, int height, boolean isOdd, PlayereditBase edits, @Nullable PlayereditEntry entry, int listIndex, WidgetListEdits listWidget)
@@ -44,7 +49,7 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
         this.listWidget = listWidget;
         this.edits = edits;
 
-        if(this.entry != null)
+        if (this.entry != null)
         {
             this.header1 = null;
             this.header2 = null;
@@ -73,7 +78,7 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
         maxNameLength = StringUtils.getStringWidth(GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[0]) + GuiBase.TXT_RST);
         maxCountLength = StringUtils.getStringWidth(GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[1]) + GuiBase.TXT_RST);
 
-        for(PlayereditEntry entry : edits)
+        for (PlayereditEntry entry : edits)
         {
             maxNameLength = Math.max(maxNameLength, StringUtils.getStringWidth(entry.getStack().getName().getString()));
             maxCountLength = Math.max(maxCountLength, StringUtils.getStringWidth(String.valueOf(entry.getCountTotal())));
@@ -93,12 +98,16 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
         int x2 = x1 + maxNameLength + 40;
         int x3 = x2 + maxCountLength + 20;
 
-        switch(column)
+        switch (column)
         {
-            case 0: return x1;
-            case 1: return x2;
-            case 2: return x3;
-            default: return x1;
+            case 0:
+                return x1;
+            case 1:
+                return x2;
+            case 2:
+                return x3;
+            default:
+                return x1;
         }
     }
 
@@ -117,19 +126,19 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
     @Override
     protected boolean onMouseClickedImpl(int mouseX, int mouseY, int mouseButton)
     {
-        if(super.onMouseClickedImpl(mouseX, mouseY, mouseButton))
+        if (super.onMouseClickedImpl(mouseX, mouseY, mouseButton))
         {
             return true;
         }
 
-        if(this.entry != null)
+        if (this.entry != null)
         {
             return false;
         }
 
         int column = this.getMouseOverColumn(mouseX, mouseY);
 
-        switch(column)
+        switch (column)
         {
             case 0:
                 this.edits.setSortCriteria(SortCriteria.NAME);
@@ -147,13 +156,13 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
     }
 
     @Override
-    public void render(int mouseX, int mouseY, boolean selected)
+    public void render(int mouseX, int mouseY, boolean selected, MatrixStack matrixStack)
     {
-        if(this.header1 == null && (selected || this.isMouseOver(mouseX, mouseY)))
+        if (this.header1 == null && (selected || this.isMouseOver(mouseX, mouseY)))
         {
             RenderUtils.drawRect(this.x, this.y, this.width, this.height, 0xA0707070);
         }
-        else if(this.isOdd)
+        else if (this.isOdd)
         {
             RenderUtils.drawRect(this.x, this.y, this.width, this.height, 0xA0101010);
         }
@@ -167,21 +176,21 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
         int y = this.y + 7;
         int color = 0xFFFFFFFF;
 
-        if(this.header1 != null)
+        if (this.header1 != null)
         {
-            if(!this.listWidget.getSearchBarWidget().isSearchOpen())
+            if (!this.listWidget.getSearchBarWidget().isSearchOpen())
             {
-                this.drawString(x1, y, color, this.header1);
-                this.drawString(x2, y, color, this.header2);
+                this.drawString(x1, y, color, this.header1, matrixStack);
+                this.drawString(x2, y, color, this.header2, matrixStack);
 
                 this.renderColumnHeader(mouseX, mouseY, Icons.ARROW_DOWN, Icons.ARROW_UP);
             }
         }
-        else if(this.entry != null)
+        else if (this.entry != null)
         {
             int count = this.entry.getCountTotal();
-            this.drawString(x1 + 20, y, color, this.entry.getStack().getName().getString());
-            this.drawString(x2, y, color, String.valueOf(count));
+            this.drawString(x1 + 20, y, color, this.entry.getStack().getName().getString(), matrixStack);
+            this.drawString(x2, y, color, String.valueOf(count), matrixStack);
 
             RenderSystem.pushMatrix();
             RenderSystem.disableLighting();
@@ -189,20 +198,20 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
 
             y = this.y + 3;
             RenderUtils.drawRect(x1, y, 16, 16, 0x20FFFFFF);
-            this.mc.getItemRenderer().renderGuiItem(this.mc.player, this.entry.getStack(), x1, y);
+            this.mc.getItemRenderer().renderInGuiWithOverrides(this.mc.player, this.entry.getStack(), x1, y);
 
             RenderSystem.disableBlend();
             RenderUtils.disableDiffuseLighting();
             RenderSystem.popMatrix();
 
-            super.render(mouseX, mouseY, selected);
+            super.render(mouseX, mouseY, selected, matrixStack);
         }
     }
 
     @Override
-    public void postRenderHovered(int mouseX, int mouseY, boolean selected)
+    public void postRenderHovered(int mouseX, int mouseY, boolean selected, MatrixStack matrixStack)
     {
-        if(this.entry != null)
+        if (this.entry != null)
         {
             RenderSystem.pushMatrix();
             RenderSystem.translatef(0, 0, 200);
@@ -222,7 +231,7 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
             int x = mouseX + 10;
             int y = mouseY - 10;
 
-            if(x + totalWidth - 20 >= this.width)
+            if (x + totalWidth - 20 >= this.width)
             {
                 x -= totalWidth + 20;
             }
@@ -235,19 +244,19 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
             int y1 = y;
             y += 4;
 
-            this.drawString(x1, y, 0xFFFFFFFF, header1);
-            this.drawString(x2 + 20, y, 0xFFFFFFFF, stackName);
+            this.drawString(x1, y, 0xFFFFFFFF, header1, matrixStack);
+            this.drawString(x2 + 20, y, 0xFFFFFFFF, stackName, matrixStack);
             y += 16;
 
-            this.drawString(x1, y, 0xFFFFFFFF, header2);
-            this.drawString(x2, y, 0xFFFFFFFF, strTotal);
+            this.drawString(x1, y, 0xFFFFFFFF, header2, matrixStack);
+            this.drawString(x2, y, 0xFFFFFFFF, strTotal, matrixStack);
 
             RenderUtils.drawRect(x2, y1, 16, 16, 0x20FFFFFF);
 
             RenderSystem.disableLighting();
             RenderUtils.enableDiffuseLightingGui3D();
 
-            this.mc.getItemRenderer().renderGuiItem(mc.player, stack, x2, y1);
+            this.mc.getItemRenderer().renderInGuiWithOverrides(mc.player, stack, x2, y1);
 
             RenderUtils.disableDiffuseLighting();
             RenderSystem.popMatrix();
@@ -275,7 +284,7 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
         @Override
         public void actionPerformedWithButton(ButtonBase button, int mouseButton)
         {
-            if(this.type == ButtonType.BLOCKS)
+            if (this.type == ButtonType.BLOCKS)
             {
                 EditListBlockedit editList = new EditListBlockedit(this.entry.getBlocks(), true);
                 GuiBase.openGui(new GuiBlockeditData(editList, this.entry.getStack().getTranslationKey(), listWidget.getParent()));
@@ -284,7 +293,7 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
 
         public enum ButtonType
         {
-            BLOCKS ("watson.gui.button.edits.blocks");
+            BLOCKS("watson.gui.button.edits.blocks");
 
             private final String translationKey;
 

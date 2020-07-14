@@ -1,6 +1,7 @@
 package eu.minemania.watson.selection;
 
 import java.util.Comparator;
+
 import eu.minemania.watson.db.PlayereditSet;
 import eu.minemania.watson.gui.GuiPlayereditLoadedList;
 
@@ -18,7 +19,7 @@ public class LoadedPlayereditSorter implements Comparator<PlayereditSet>
     {
         int nameCompare = entry1.getPlayer().compareTo(entry2.getPlayer());
 
-        if(parent.isChecked())
+        if (parent.isChecked())
         {
             return entry1.getBlockEditCount() == entry2.getBlockEditCount() ? nameCompare : ((entry1.getBlockEditCount() > entry2.getBlockEditCount()) ? -1 : 1);
         }

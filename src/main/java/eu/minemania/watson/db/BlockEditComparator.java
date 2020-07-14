@@ -7,7 +7,7 @@ public class BlockEditComparator implements Comparator<BlockEdit>
     @Override
     public int compare(BlockEdit l, BlockEdit r)
     {
-        if(l.time < r.time)
+        if (l.time < r.time)
         {
             return -1;
         }
@@ -17,7 +17,7 @@ public class BlockEditComparator implements Comparator<BlockEdit>
         }
         else
         {
-            if(!l.isCreated() && r.isCreated())
+            if (!l.isCreated() && r.isCreated())
             {
                 return -1;
             }
@@ -28,7 +28,7 @@ public class BlockEditComparator implements Comparator<BlockEdit>
             else
             {
                 int dx = l.x - r.x;
-                if(dx != 0)
+                if (dx != 0)
                 {
                     return dx;
                 }

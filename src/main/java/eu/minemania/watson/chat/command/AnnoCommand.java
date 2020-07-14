@@ -47,18 +47,18 @@ public class AnnoCommand extends WatsonCommandBase
     {
         int cmdCount = 0;
         CommandDispatcher<ServerCommandSource> dispatcher = Command.commandDispatcher;
-        for(CommandNode<ServerCommandSource> command : dispatcher.getRoot().getChildren())
+        for (CommandNode<ServerCommandSource> command : dispatcher.getRoot().getChildren())
         {
             String cmdName = command.getName();
-            if(ClientCommandManager.isClientSideCommand(cmdName))
+            if (ClientCommandManager.isClientSideCommand(cmdName))
             {
                 Map<CommandNode<ServerCommandSource>, String> usage = dispatcher.getSmartUsage(command, context.getSource());
-                for(String u : usage.values())
+                for (String u : usage.values())
                 {
                     ClientCommandManager.sendFeedback(new LiteralText("/" + cmdName + " " + u));
                 }
                 cmdCount += usage.size();
-                if(usage.size() == 0)
+                if (usage.size() == 0)
                 {
                     ClientCommandManager.sendFeedback(new LiteralText("/" + cmdName));
                     cmdCount++;
@@ -75,7 +75,7 @@ public class AnnoCommand extends WatsonCommandBase
 
         localOutputT(context.getSource(), "watson.message.anno.list.size", annotations.size());
         int index = 1;
-        for(Annotation annotation : annotations)
+        for (Annotation annotation : annotations)
         {
             localOutputT(context.getSource(), "watson.message.anno.annot", index, annotation.getX(), annotation.getY(), annotation.getZ(), annotation.getWorld(), annotation.getText());
             ++index;
@@ -99,7 +99,7 @@ public class AnnoCommand extends WatsonCommandBase
         ArrayList<Annotation> annotations = edits.getAnnotations();
 
         int index = getInteger(context, "index");
-        if(index < annotations.size())
+        if (index < annotations.size())
         {
             Annotation annotation = annotations.get(index);
             Teleport.teleport(annotation.getX(), annotation.getY(), annotation.getZ());
@@ -117,7 +117,7 @@ public class AnnoCommand extends WatsonCommandBase
         ArrayList<Annotation> annotations = edits.getAnnotations();
 
         int index = getInteger(context, "index") - 1;
-        if(index < annotations.size())
+        if (index < annotations.size())
         {
             annotations.remove(index);
             InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.anno.remove", index + 1);
@@ -136,7 +136,7 @@ public class AnnoCommand extends WatsonCommandBase
         Integer y = (Integer) vars.get("y");
         Integer z = (Integer) vars.get("z");
         String world = (String) vars.get("world");
-        if(x == null || y == null || z == null || world == null)
+        if (x == null || y == null || z == null || world == null)
         {
             InfoUtils.showInGameMessage(MessageType.ERROR, "watson.error.anno.position");
         }

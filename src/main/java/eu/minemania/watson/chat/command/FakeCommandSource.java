@@ -13,9 +13,10 @@ public class FakeCommandSource extends ServerCommandSource
 {
     private static final List<String> colors = Arrays.asList("black", "darkblue", "darkgreen", "darkaqua", "darkred", "darkpurple", "gold", "grey", "gray", "darkgrey", "darkgray", "blue", "green", "aqua", "red", "lightpurple", "yellow", "white");
     private static final List<String> styles = Arrays.asList("+", "/", "_", "-", "?");
+
     public FakeCommandSource(ClientPlayerEntity player)
     {
-        super(player, player.getPosVector(), player.getRotationClient(), null, 0, player.getEntityName(), player.getName(), null, player);
+        super(player, player.getPos(), player.getRotationClient(), null, 0, player.getEntityName(), player.getName(), null, player);
     }
 
     @Override

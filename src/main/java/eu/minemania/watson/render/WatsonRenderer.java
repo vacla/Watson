@@ -40,17 +40,21 @@ public class WatsonRenderer
 
     public void piecewiseRenderEntities(MinecraftClient mc, MatrixStack matrices, VertexConsumerProvider vertexConsumers)
     {
-        if(this.mc == null)
+        if (this.mc == null)
         {
             this.mc = mc;
         }
-        if(Configs.Generic.DISPLAYED.getBooleanValue() && this.mc.getCameraEntity() != null && Configs.Generic.OUTLINE_SHOWN.getBooleanValue())
+        if (Configs.Generic.DISPLAYED.getBooleanValue() && this.mc.getCameraEntity() != null && Configs.Generic.OUTLINE_SHOWN.getBooleanValue())
         {
             this.mc.getProfiler().push("watson_entities");
+            EditSelection selection = DataManager.getEditSelection();
+            BlockEditSet edits = selection.getBlockEditSet();
             RenderSystem.pushMatrix();
-            RenderSystem.disableLighting();
+            RenderUtils.disableDiffuseLighting();
             RenderSystem.disableCull();
+
             RenderUtils.setupBlend();
+
             RenderSystem.disableTexture();
             RenderUtils.color(1f, 1f, 1f, 1f);
             RenderSystem.glMultiTexCoord2f(GL13.GL_TEXTURE1, 240.0F, 240.0F);
@@ -58,25 +62,28 @@ public class WatsonRenderer
             boolean foggy = GL11.glIsEnabled(GL11.GL_FOG);
             RenderSystem.disableFog();
             RenderSystem.disableDepthTest();
-            EditSelection selection = DataManager.getEditSelection();
-            BlockEditSet edits = selection.getBlockEditSet();
+
 
             Vec3d cameraPos = this.mc.gameRenderer.getCamera().getPos();
-            RenderSystem.translated(-cameraPos.getX(),-cameraPos.getY(),-cameraPos.getZ());
+            RenderSystem.translated(-cameraPos.getX(), -cameraPos.getY(), -cameraPos.getZ());
             edits.drawOutlines();
             edits.drawVectors();
             selection.drawSelection();
 
-            if(foggy)
+            if (foggy)
             {
                 RenderSystem.enableFog();
             }
             RenderSystem.enableDepthTest();
             RenderSystem.depthMask(true);
             RenderSystem.enableTexture();
+
             RenderSystem.disableBlend();
+
             RenderSystem.enableCull();
-            RenderSystem.enableLighting();
+
+            RenderUtils.enableDiffuseLightingForLevel(matrices);
+
             RenderSystem.popMatrix();
             this.mc.getProfiler().pop();
         }

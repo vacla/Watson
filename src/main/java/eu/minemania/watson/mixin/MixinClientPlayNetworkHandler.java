@@ -18,19 +18,22 @@ import net.minecraft.network.ClientConnection;
 import net.minecraft.server.command.ServerCommandSource;
 
 @Mixin(ClientPlayNetworkHandler.class)
-public abstract class MixinClientPlayNetworkHandler {
-	@Shadow
-	private CommandDispatcher<ServerCommandSource> commandDispatcher;
+public abstract class MixinClientPlayNetworkHandler
+{
+    @Shadow
+    private CommandDispatcher<ServerCommandSource> commandDispatcher;
 
-	@SuppressWarnings("unchecked")
-	@Inject(method = "<init>", at = @At("RETURN"))
-	public void onInit(MinecraftClient mc, Screen screen, ClientConnection connection, GameProfile profile, CallbackInfo ci) {
-		Command.registerCommands((CommandDispatcher<ServerCommandSource>) (Object) commandDispatcher);
-	}
+    @SuppressWarnings("unchecked")
+    @Inject(method = "<init>", at = @At("RETURN"))
+    public void onInit(MinecraftClient mc, Screen screen, ClientConnection connection, GameProfile profile, CallbackInfo ci)
+    {
+        Command.registerCommands((CommandDispatcher<ServerCommandSource>) (Object) commandDispatcher);
+    }
 
-	@SuppressWarnings("unchecked")
-	@Inject(method = "onCommandTree", at = @At("TAIL"))
-	public void onOnCommandTree(CommandTreeS2CPacket packet, CallbackInfo ci) {
-		Command.registerCommands((CommandDispatcher<ServerCommandSource>) (Object) commandDispatcher);
-	}
+    @SuppressWarnings("unchecked")
+    @Inject(method = "onCommandTree", at = @At("TAIL"))
+    public void onOnCommandTree(CommandTreeS2CPacket packet, CallbackInfo ci)
+    {
+        Command.registerCommands((CommandDispatcher<ServerCommandSource>) (Object) commandDispatcher);
+    }
 }

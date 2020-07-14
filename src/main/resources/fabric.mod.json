@@ -1,42 +1,36 @@
 {
-    "schemaVersion": 1,
-    "id": "watson",
-    "name": "Watson",
-    "version": "${mod_version}",
-
-    "description": "Updated Watson that displays LogBlock and CoreProtect query results in 3D.",
-    "authors": [
-        "Arnevdl29"
+  "schemaVersion": 1,
+  "id": "watson",
+  "name": "Watson",
+  "version": "${mod_version}",
+  "description": "Updated Watson that displays LogBlock and CoreProtect query results in 3D.",
+  "authors": [
+    "Arnevdl29"
+  ],
+  "contact": {
+    "homepage": "",
+    "issues": "https://github.com/vacla/Watson/issues",
+    "sources": "https://github.com/vacla/Watson",
+    "twitter": "https://twitter.com/ArneLangenbergh",
+    "discord": "https://discord.gg/VTHVVgt"
+  },
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "main": [
+      "eu.minemania.watson.Watson"
     ],
-    "contact": {
-        "homepage": "",
-        "issues": "https://github.com/vacla/Watson/issues",
-        "sources": "https://github.com/vacla/Watson",
-        "twitter": "https://twitter.com/ArneLangenbergh",
-        "discord": "https://discord.gg/VTHVVgt"
-    },
-
-    "license": "MIT",
-
-    "environment": "client",
-    "entrypoints": {
-        "main": [
-            "eu.minemania.watson.Watson"
-        ],
-        "modmenu": [
-            "eu.minemania.watson.compat.modmenu.ModMenuImpl"
-        ]
-    },
-
-    "mixins": [
-        "mixins.watson.json"
-    ],
-
-    "depends": {
-        "malilib": ">=0.10.0-dev.21"
-    },
-
-    "custom": {
-        "modmenu:clientsideOnly": true
-    }
+    "modmenu": [
+      "eu.minemania.watson.compat.modmenu.ModMenuImpl"
+    ]
+  },
+  "mixins": [
+    "mixins.watson.json"
+  ],
+  "depends": {
+    "malilib": ">=0.10.0-dev.21"
+  },
+  "custom": {
+    "modmenu:clientsideOnly": true
+  }
 }

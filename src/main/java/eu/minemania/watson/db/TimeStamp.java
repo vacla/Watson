@@ -28,15 +28,15 @@ public class TimeStamp
     public static long toMillis(int year, int month, int dayOfMonth, int hour, int minute, int second, String timezone)
     {
         TimeZone zone = null;
-        if(timezone.equals(""))
+        if (timezone.equals(""))
         {
             zone = TimeZone.getDefault();
         }
-        else if(!ZoneId.getAvailableZoneIds().contains(timezone))
+        else if (!ZoneId.getAvailableZoneIds().contains(timezone))
         {
             zone = TimeZone.getTimeZone(ZoneId.of(Timezone.valueOf(timezone).getOffset()));
         }
-        if(zone == null)
+        if (zone == null)
         {
             zone = TimeZone.getTimeZone(timezone);
         }
@@ -63,7 +63,7 @@ public class TimeStamp
     public static String formatQueryTime(long millis)
     {
         _time.setTimeInMillis(millis);
-        return String.format("%d.%d.%d %02d:%02d:%02d", _time.get(Calendar.DAY_OF_MONTH), _time.get(Calendar.MONTH) + 1, _time.get(Calendar.YEAR), _time.get(Calendar.HOUR_OF_DAY),	_time.get(Calendar.MINUTE), _time.get(Calendar.SECOND));
+        return String.format("%d.%d.%d %02d:%02d:%02d", _time.get(Calendar.DAY_OF_MONTH), _time.get(Calendar.MONTH) + 1, _time.get(Calendar.YEAR), _time.get(Calendar.HOUR_OF_DAY), _time.get(Calendar.MINUTE), _time.get(Calendar.SECOND));
     }
 
     public static int[] parseYMD(String date)
@@ -96,7 +96,8 @@ public class TimeStamp
             time.add(Calendar.SECOND, -second);
             return time.getTimeInMillis();
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             return 0;
         }
     }

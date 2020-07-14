@@ -33,7 +33,7 @@ public class TypedOreDB
 
     public OreDeposit getOreDeposit(int index)
     {
-        if(index<1)
+        if (index < 1)
         {
             index = getOreDepositCount();
         }
@@ -41,14 +41,14 @@ public class TypedOreDB
         {
             index = 1;
         }
-        if(index > getOreDepositCount() / 2)
+        if (index > getOreDepositCount() / 2)
         {
             int currentIndex = getOreDepositCount();
             Iterator<OreDeposit> it = _oreDeposits.descendingIterator();
             while (it.hasNext())
             {
                 OreDeposit deposit = it.next();
-                if(currentIndex == index)
+                if (currentIndex == index)
                 {
                     return deposit;
                 }
@@ -59,9 +59,9 @@ public class TypedOreDB
         else
         {
             int currentIndex = 1;
-            for(OreDeposit deposit : _oreDeposits)
+            for (OreDeposit deposit : _oreDeposits)
             {
-                if(currentIndex == index)
+                if (currentIndex == index)
                 {
                     return deposit;
                 }
@@ -81,7 +81,7 @@ public class TypedOreDB
             _oreBlocks.put(coord, block);
 
             TreeSet<OreDeposit> deposits = getAdjacentDeposits(coord);
-            if(deposits.size() == 0)
+            if (deposits.size() == 0)
             {
                 OreDeposit deposit = new OreDeposit();
                 deposit.addOreBlock(block);
@@ -97,14 +97,14 @@ public class TypedOreDB
             else
             {
                 ArrayList<OreBlock> blocks = new ArrayList<>();
-                for(OreDeposit deposit : deposits)
+                for (OreDeposit deposit : deposits)
                 {
                     _oreDeposits.remove(deposit);
                     blocks.addAll(deposit.getOreBlocks());
                 }
                 OreDeposit merged = new OreDeposit();
                 merged.addOreBlock(block);
-                for(OreBlock b : blocks)
+                for (OreBlock b : blocks)
                 {
                     merged.addOreBlock(b);
                 }
@@ -118,14 +118,14 @@ public class TypedOreDB
         ArrayList<BlockEdit> retainedEdits = new ArrayList<>();
         for (OreBlock block : _oreBlocks.values())
         {
-            if(!block.getEdit().player.equalsIgnoreCase(player))
+            if (!block.getEdit().player.equalsIgnoreCase(player))
             {
                 retainedEdits.add(block.getEdit());
             }
         }
         _oreBlocks.clear();
         _oreDeposits.clear();
-        for(BlockEdit edit : retainedEdits)
+        for (BlockEdit edit : retainedEdits)
         {
             addBlockEdit(edit);
         }
@@ -142,17 +142,17 @@ public class TypedOreDB
         IntCoord adjacent = new IntCoord();
         for (int dx = -1; dx <= 1; ++dx)
         {
-            for(int dy = -1; dy <= 1; ++dy)
+            for (int dy = -1; dy <= 1; ++dy)
             {
-                for(int dz = -1; dz <= 1; ++dz)
+                for (int dz = -1; dz <= 1; ++dz)
                 {
-                    if(dx != 0 || dy != 0 || dz != 0)
+                    if (dx != 0 || dy != 0 || dz != 0)
                     {
                         adjacent.setX(location.getX() + dx);
                         adjacent.setY(location.getY() + dy);
                         adjacent.setZ(location.getZ() + dz);
                         OreBlock neighbour = getOreBlock(adjacent);
-                        if(neighbour != null)
+                        if (neighbour != null)
                         {
                             deposits.add(neighbour.getDeposit());
                         }
