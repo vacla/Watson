@@ -21,7 +21,6 @@ import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.render.OverlayRenderer;
 import eu.minemania.watson.selection.EditSelection;
 import fi.dy.masa.malilib.util.StringUtils;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
@@ -218,11 +217,16 @@ public class BlockEditSet
         {
             _playerEdits.remove(player.toLowerCase());
             getOreDB().removeDeposits(player);
-            boolean selection = DataManager.getEditSelection().getSelection().playereditSet == editsByPlayer;
-            ChatMessage.localOutputT("watson.message.edits.edit_removed", editsByPlayer.getBlockEditCount(), editsByPlayer.getPlayer());
-            if (_playerEdits.isEmpty() || selection)
+            EditSelection edit = DataManager.getEditSelection();
+            if (edit.getSelection() != null)
             {
-                DataManager.getEditSelection().clearSelection();
+                boolean selection = edit.getSelection().playereditSet == editsByPlayer;
+
+                ChatMessage.localOutputT("watson.message.edits.edit_removed", editsByPlayer.getBlockEditCount(), editsByPlayer.getPlayer());
+                if (_playerEdits.isEmpty() || selection)
+                {
+                    DataManager.getEditSelection().clearSelection();
+                }
             }
         }
         else

@@ -43,9 +43,7 @@ import net.minecraft.text.MutableText;
  */
 public class CoreProtectAnalysis extends Analysis
 {
-    protected static final int MS_PER_HOUR = 60 * 60 * 1000;
     protected static final Pattern ABSOLUTE_TIME = Pattern.compile("(\\d{1,4})-(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{2}):(\\d{2}) (\\w+)");
-    protected static final Pattern HOURS_AGO_TIME = Pattern.compile("(\\d+.\\d+)/(\\w) ago");
     protected boolean _isLookup = false;
     protected boolean _firstInspectorResult = false;
     protected boolean _lookupDetails = false;
@@ -285,34 +283,12 @@ public class CoreProtectAnalysis extends Analysis
             int minute = Integer.parseInt(absolute.group(5));
             int second = Integer.parseInt(absolute.group(6));
             String timezone = absolute.group(7);
-            return TimeStamp.toMillis(year, month, day, hour, minute, second, timezone);
+            return TimeStamp.toMillis(year, month, day, hour, minute, second, timezone, time);
         }
         else
         {
-            Matcher relative = HOURS_AGO_TIME.matcher(time);
-            if (relative.matches())
-            {
-                String timed = relative.group(1).replace(",", ".");
-                float hours;
-                if (relative.group(2).contains("d"))
-                {
-                    hours = Float.parseFloat(timed) / 24;
-                }
-                else if (relative.group(2).contains("m"))
-                {
-                    hours = Float.parseFloat(timed) * 60;
-                }
-                else
-                {
-                    hours = Float.parseFloat(timed);
-                }
-                long millis = System.currentTimeMillis() - (long) (hours * MS_PER_HOUR);
-
-                millis -= millis % (MS_PER_HOUR / 100);
-                return millis;
-            }
+            return TimeStamp.timeCP(time);
         }
-        return 0;
     }
 
     private void requestNextPage()

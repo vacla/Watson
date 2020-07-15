@@ -3,11 +3,15 @@ package eu.minemania.watson.db;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TimeStamp
 {
     protected static Calendar _time = Calendar.getInstance();
     protected static Calendar _reference;
+    protected static final int MS_PER_HOUR = 60 * 60 * 1000;
+    protected static final Pattern HOURS_AGO_TIME = Pattern.compile("(\\d+.\\d+)/(\\w) ago");
 
     static
     {
@@ -25,22 +29,37 @@ public class TimeStamp
         return _time.getTimeInMillis();
     }
 
-    public static long toMillis(int year, int month, int dayOfMonth, int hour, int minute, int second, String timezone)
+    public static long toMillis(int year, int month, int dayOfMonth, int hour, int minute, int second, String timezone, String timeCP)
     {
-        TimeZone zone = null;
-        if (timezone.equals(""))
+        if(timezone.equals("") && timeCP.equals(""))
         {
-            zone = TimeZone.getDefault();
+            _time.set(year, month - 1, dayOfMonth, hour, minute, second);
+            return _time.getTimeInMillis();
         }
-        else if (!ZoneId.getAvailableZoneIds().contains(timezone))
+        TimeZone zone = null;
+        if (!ZoneId.getAvailableZoneIds().contains(timezone))
         {
-            zone = TimeZone.getTimeZone(ZoneId.of(Timezone.valueOf(timezone).getOffset()));
+            try
+            {
+                Timezone time = Timezone.valueOf(timezone);
+                zone = TimeZone.getTimeZone(ZoneId.of(time.getOffset()));
+            }
+            catch (Exception e)
+            {
+                if(!timeCP.equals(""))
+                {
+                    return timeCP(timeCP);
+                }
+            }
         }
         if (zone == null)
         {
             zone = TimeZone.getTimeZone(timezone);
         }
-        _time.setTimeZone(zone);
+        if(!timezone.equals(""))
+        {
+            _time.setTimeZone(zone);
+        }
         _time.set(year, month - 1, dayOfMonth, hour, minute, second);
         return _time.getTimeInMillis();
     }
@@ -51,7 +70,7 @@ public class TimeStamp
         {
             ymd[0] += 2000;
         }
-        return (ymd[0] == 0) ? toMillis(ymd[1], ymd[2], hour, minute, second) : toMillis(ymd[0], ymd[1], ymd[2], hour, minute, second, "");
+        return (ymd[0] == 0) ? toMillis(ymd[1], ymd[2], hour, minute, second) : toMillis(ymd[0], ymd[1], ymd[2], hour, minute, second, "", "");
     }
 
     public static String formatMonthDayTime(long millis)
@@ -102,13 +121,40 @@ public class TimeStamp
         }
     }
 
+    public static long timeCP(String time)
+    {
+        Matcher relative = HOURS_AGO_TIME.matcher(time);
+        if (relative.matches())
+        {
+            String timed = relative.group(1).replace(",", ".");
+            float hours;
+            if (relative.group(2).contains("d"))
+            {
+                hours = Float.parseFloat(timed) / 24;
+            }
+            else if (relative.group(2).contains("m"))
+            {
+                hours = Float.parseFloat(timed) * 60;
+            }
+            else
+            {
+                hours = Float.parseFloat(timed);
+            }
+            long millis = System.currentTimeMillis() - (long) (hours * MS_PER_HOUR);
+
+            millis -= millis % (MS_PER_HOUR / 100);
+            return millis;
+        }
+        return 0;
+    }
+
     public enum Timezone
     {
         CEST("GMT+2"),
         PDT("GMT-7"),
         BST("GMT+1"),
         EDT("GMT-4"),
-        CDT("GMT-45"),
+        CDT("GMT-5"),
         MDT("GMT-6"),
         AEDT("GMT+11"),
         ACDT("GMT+10:30"),
@@ -159,7 +205,8 @@ public class TimeStamp
         WGST("GMT-2"),
         WST("GMT+13"),
         YAKST("GMT+10"),
-        YEKST("GMT+6");
+        YEKST("GMT+6"),
+        MSK("GMT+3");
 
         private final String offset;
 

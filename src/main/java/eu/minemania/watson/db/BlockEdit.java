@@ -5,11 +5,8 @@ import java.util.Optional;
 import com.mojang.blaze3d.systems.RenderSystem;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.render.RenderUtils;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.block.*;
 import net.minecraft.block.OreBlock;
-import net.minecraft.block.SignBlock;
-import net.minecraft.block.WallSignBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.model.BakedModel;
@@ -95,7 +92,7 @@ public class BlockEdit
                     }
                 }
             }
-            if (!drawn && blocks instanceof OreBlock)
+            if (!drawn && (blocks instanceof OreBlock || blocks.is(Blocks.ANCIENT_DEBRIS) || blocks.is(Blocks.GILDED_BLACKSTONE)))
             {
                 drawn = true;
             }

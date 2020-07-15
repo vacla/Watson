@@ -37,6 +37,8 @@ public class OreDB
         _db.put(types.getWatsonBlockByName("minecraft:redstone_ore"), new TypedOreDB(200));
         _db.put(types.getWatsonBlockByName("minecraft:coal_ore"), new TypedOreDB(800));
         _db.put(types.getWatsonBlockByName("minecraft:nether_quartz_ore"), new TypedOreDB(400));
+        _db.put(types.getWatsonBlockByName("minecraft:ancient_debris"), new TypedOreDB(200));
+        _db.put(types.getWatsonBlockByName("minecraft:gilded_blackstone"), new TypedOreDB(200));
 
         _chatColors.put(types.getWatsonBlockByName("minecraft:diamond_ore"), Color.aqua);
         _chatColors.put(types.getWatsonBlockByName("minecraft:emerald_ore"), Color.green);
@@ -46,6 +48,8 @@ public class OreDB
         _chatColors.put(types.getWatsonBlockByName("minecraft:redstone_ore"), Color.darkred);
         _chatColors.put(types.getWatsonBlockByName("minecraft:coal_ore"), Color.darkgray);
         _chatColors.put(types.getWatsonBlockByName("minecraft:nether_quartz_ore"), Color.white);
+        _chatColors.put(types.getWatsonBlockByName("minecraft:ancient_debris"), Color.gray);
+        _chatColors.put(types.getWatsonBlockByName("minecraft:gilded_blackstone"), Color.yellow);
     }
 
     public void clear()
