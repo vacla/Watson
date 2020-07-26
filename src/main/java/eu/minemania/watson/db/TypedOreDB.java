@@ -2,7 +2,6 @@ package eu.minemania.watson.db;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.TreeSet;
 
 public class TypedOreDB
@@ -31,49 +30,9 @@ public class TypedOreDB
         return _oreDeposits.size();
     }
 
-    public OreDeposit getOreDeposit(int index)
-    {
-        if (index < 1)
-        {
-            index = getOreDepositCount();
-        }
-        else if (index > getOreDepositCount())
-        {
-            index = 1;
-        }
-        if (index > getOreDepositCount() / 2)
-        {
-            int currentIndex = getOreDepositCount();
-            Iterator<OreDeposit> it = _oreDeposits.descendingIterator();
-            while (it.hasNext())
-            {
-                OreDeposit deposit = it.next();
-                if (currentIndex == index)
-                {
-                    return deposit;
-                }
-                --currentIndex;
-            }
-            throw new IllegalArgumentException("index > TypedOreDB.getOreDepositCount()");
-        }
-        else
-        {
-            int currentIndex = 1;
-            for (OreDeposit deposit : _oreDeposits)
-            {
-                if (currentIndex == index)
-                {
-                    return deposit;
-                }
-                ++currentIndex;
-            }
-            throw new IllegalStateException("shouldn't happen");
-        }
-    }
-
     public void addBlockEdit(BlockEdit edit)
     {
-        IntCoord coord = new IntCoord(edit.x, edit.y, edit.z);
+        IntCoord coord = new IntCoord(edit.x, edit.y, edit.z, edit.world);
         OreBlock block = getOreBlock(coord);
         if (block == null)
         {

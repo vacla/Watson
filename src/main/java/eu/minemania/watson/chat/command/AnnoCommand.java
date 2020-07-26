@@ -98,11 +98,11 @@ public class AnnoCommand extends WatsonCommandBase
         BlockEditSet edits = DataManager.getEditSelection().getBlockEditSet();
         ArrayList<Annotation> annotations = edits.getAnnotations();
 
-        int index = getInteger(context, "index");
+        int index = getInteger(context, "index") - 1;
         if (index < annotations.size())
         {
             Annotation annotation = annotations.get(index);
-            Teleport.teleport(annotation.getX(), annotation.getY(), annotation.getZ());
+            Teleport.teleport(annotation.getX(), annotation.getY(), annotation.getZ(), annotation.getWorld());
         }
         else
         {

@@ -185,7 +185,7 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
         {
             if (this.type == WidgetBlockeditEntry.ButtonListenerTeleport.ButtonType.TELEPORT)
             {
-                Teleport.teleport(entry.getEdit().x, entry.getEdit().y, entry.getEdit().z);
+                Teleport.teleport(entry.getEdit().x, entry.getEdit().y, entry.getEdit().z, entry.getEdit().world);
             }
         }
 

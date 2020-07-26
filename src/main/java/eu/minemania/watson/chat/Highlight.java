@@ -118,7 +118,10 @@ public class Highlight
                 if (i[0] > 0)
                 {
                     chat.append(string);
-                    Watson.logger.info(i[0] + ": " + chat);
+                    if(Configs.Generic.DEBUG.getBooleanValue())
+                    {
+                        Watson.logger.info(i[0] + ": " + chat);
+                    }
                     if (i[0] == 1 && string.contains("[") && string.contains("]"))
                     {
                         prefixStyle[0] = style;

@@ -158,7 +158,7 @@ public class OreDB
             _tpIndex = index = limitOreDepositIndex(index);
             OreDeposit deposit = getOreDeposit(index);
             IntCoord coord = deposit.getKeyOreBlock().getLocation();
-            Teleport.teleport(coord.getX(), coord.getY(), coord.getZ());
+            Teleport.teleport(coord.getX(), coord.getY(), coord.getZ(), coord.getWorld());
             ChatMessage.localOutputT("watson.message.deposit.teleport", index);
             EditSelection selection = DataManager.getEditSelection();
             selection.selectBlockEdit(deposit.getKeyOreBlock().getEdit());

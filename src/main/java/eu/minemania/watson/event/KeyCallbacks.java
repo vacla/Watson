@@ -332,7 +332,7 @@ public class KeyCallbacks
                 {
                     if (edits.getSelection() != null)
                     {
-                        Teleport.teleport(edits.getSelection().x, edits.getSelection().y, edits.getSelection().z);
+                        Teleport.teleport(edits.getSelection().x, edits.getSelection().y, edits.getSelection().z, edits.getSelection().world);
                         return true;
                     }
                 }

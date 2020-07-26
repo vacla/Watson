@@ -36,7 +36,7 @@
   "watson.description.config.ss_key_custom": "Custom screenshot key",
   "watson.description.config.ss_player_directory": "Subdirectory named after the currently selected player is created to hold screenshots of his edits if enabled",
   "watson.description.config.ss_player_suffix": "Name of current selected player is appended to screenshot files",
-  "watson.description.config.teleport_command": "Sets teleport command\n{d} for integers\n{g} for decimal numbers",
+  "watson.description.config.teleport_command": "Sets teleport command\nThe different format to use inside the placeholders are:\ni for integer or d for decimal numbers\nPlaceholders to use are:\n{x:format}, {y:format}, {z,format}, {world}",
   "watson.description.config.time_ordered_deposits": "If true, ore deposits should be numeric labeled when mined\nWhen false it gets ordered in descending order of rareness of the ore",
   "watson.description.config.use_chat_highlights": "If true, chat highlighter will be enabled",
   "watson.description.config.vector_length": "The current displayed vector length",

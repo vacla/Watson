@@ -36,7 +36,7 @@
   "watson.description.config.ss_key_custom": "Пользовательский ключ скриншота",
   "watson.description.config.ss_player_directory": "Если включено, то названный подкаталог в честь выбранного в данный момент игрока, создается для хранения скриншотов его правок",
   "watson.description.config.ss_player_suffix": "Имя текущего выбранного игрока добавляется к файлам скриншотов",
-  "watson.description.config.teleport_command": "Устанавливает команду телепортации\n{d} для целых чисел\n{g} для десятичных чисел",
+  "watson.description.config.teleport_command": "Устанавливает команду телепорта\nФорматы для использования в заполнителях:\ni для целых или d для десятичных чисел\nЗаполнители для использования:\n{x:формат}, {y:формат}, {z:формат}, {world}",
   "watson.description.config.time_ordered_deposits": "Если включено, то рудные месторождения должны иметь цифровую маркировку при добыче\nЕсли выключено, она упорядочивается в порядке убывания редкости руды",
   "watson.description.config.use_chat_highlights": "Если включено, то подстветка чата будет отображаться",
   "watson.description.config.vector_length": "Текущая отображаемая длина вектора",

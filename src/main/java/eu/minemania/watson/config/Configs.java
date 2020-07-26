@@ -76,7 +76,7 @@ public class Configs implements IConfigHandler
         public static final ConfigBoolean SS_KEY_CUSTOM = new ConfigBoolean("ssKeyCustom", false, "watson.description.config.ss_key_custom");
         public static final ConfigBoolean SS_PLAYER_DIRECTORY = new ConfigBoolean("ssPlayerDirectory", true, "watson.description.config.ss_player_directory");
         public static final ConfigBoolean SS_PLAYER_SUFFIX = new ConfigBoolean("ssPlayerSuffix", true, "watson.description.config.ss_player_suffix");
-        public static final ConfigString TELEPORT_COMMAND = new ConfigString("teleportCommand", "/tppos {d} {d} {d}", "watson.description.config.teleport_command");
+        public static final ConfigString TELEPORT_COMMAND = new ConfigString("teleportCommand", "/tppos {x:d} {y:d} {z:d} {world}", "watson.description.config.teleport_command");
         public static final ConfigBoolean TIME_ORDERED_DEPOSITS = new ConfigBoolean("timeOrderedDeposits", false, "watson.description.config.time_ordered_deposits");
         public static final ConfigBoolean USE_CHAT_HIGHLIGHTS = new ConfigBoolean("useChatHighlights", false, "watson.description.config.use_chat_highlights");
         public static final ConfigDouble VECTOR_LENGTH = new ConfigDouble("vectorFloat", 4.0f, 4.0f, 10.0f, "watson.description.config.vector_length");
