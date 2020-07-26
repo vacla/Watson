@@ -28,7 +28,7 @@ public class GuiMainMenu extends GuiBase
         int width = this.getButtonWidth();
 
         this.createChangeMenuButton(x, y, width, ButtonListenerChangeMenu.ButtonType.CONFIGURATION);
-        if(mc.player != null)
+        if (mc.player != null)
         {
             y += 22;
             this.createChangeMenuButton(x, y, width, ButtonListenerChangeMenu.ButtonType.PLAYEREDIT_LOADED);

@@ -158,7 +158,7 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
             String world = PlayereditUtils.blockString(this.entry.getEdit(), PlayereditUtils.Edit.WORLD);
             String amount = PlayereditUtils.blockString(this.entry.getEdit(), PlayereditUtils.Edit.AMOUNT);
             String description = PlayereditUtils.blockString(this.entry.getEdit(), PlayereditUtils.Edit.DESCRIPTION);
-            if(x6 + StringUtils.getStringWidth(description) > width - this.entry.getButton().getWidth() + 15)
+            if (x6 + StringUtils.getStringWidth(description) > width - this.entry.getButton().getWidth() + 15)
             {
                 description = this.textRenderer.trimToWidth(description, width - x6 - this.entry.getButton().getWidth() + 5).concat("...");
             }
@@ -209,7 +209,7 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
                 this.drawString(x1, y, 0xFFFFFFFF, header, matrixStack);
                 y += 16;
 
-                for(int i = 0; i < descriptions.size(); i++)
+                for (int i = 0; i < descriptions.size(); i++)
                 {
                     this.drawString(x1, y + (i * 8) - 7, 0xFFFFFFFF, descriptions.get(i), matrixStack);
                 }

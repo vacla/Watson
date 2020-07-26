@@ -31,7 +31,7 @@ public class TimeStamp
 
     public static long toMillis(int year, int month, int dayOfMonth, int hour, int minute, int second, String timezone, String hoverTime, String timeCP)
     {
-        if(timezone.equals("") && timeCP.equals("") && hoverTime.equals(""))
+        if (timezone.equals("") && timeCP.equals("") && hoverTime.equals(""))
         {
             _time.set(year, month - 1, dayOfMonth, hour, minute, second);
             return _time.getTimeInMillis();
@@ -46,7 +46,7 @@ public class TimeStamp
             }
             catch (Exception e)
             {
-                if(!timeCP.equals(""))
+                if (!timeCP.equals(""))
                 {
                     return timeCP(timeCP);
                 }
@@ -56,7 +56,7 @@ public class TimeStamp
         {
             zone = TimeZone.getTimeZone(timezone);
         }
-        if(!timezone.equals(""))
+        if (!timezone.equals(""))
         {
             _time.setTimeZone(zone);
         }

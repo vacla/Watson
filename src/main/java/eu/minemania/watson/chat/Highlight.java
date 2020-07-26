@@ -118,7 +118,7 @@ public class Highlight
                 if (i[0] > 0)
                 {
                     chat.append(string);
-                    if(Configs.Generic.DEBUG.getBooleanValue())
+                    if (Configs.Generic.DEBUG.getBooleanValue())
                     {
                         Watson.logger.info(i[0] + ": " + chat);
                     }
