@@ -29,15 +29,15 @@ public class TimeStamp
         return _time.getTimeInMillis();
     }
 
-    public static long toMillis(int year, int month, int dayOfMonth, int hour, int minute, int second, String timezone, String timeCP)
+    public static long toMillis(int year, int month, int dayOfMonth, int hour, int minute, int second, String timezone, String hoverTime, String timeCP)
     {
-        if(timezone.equals("") && timeCP.equals(""))
+        if(timezone.equals("") && timeCP.equals("") && hoverTime.equals(""))
         {
             _time.set(year, month - 1, dayOfMonth, hour, minute, second);
             return _time.getTimeInMillis();
         }
         TimeZone zone = null;
-        if (!ZoneId.getAvailableZoneIds().contains(timezone))
+        if (!hoverTime.equals("") && !ZoneId.getAvailableZoneIds().contains(timezone))
         {
             try
             {
@@ -70,7 +70,7 @@ public class TimeStamp
         {
             ymd[0] += 2000;
         }
-        return (ymd[0] == 0) ? toMillis(ymd[1], ymd[2], hour, minute, second) : toMillis(ymd[0], ymd[1], ymd[2], hour, minute, second, "", "");
+        return (ymd[0] == 0) ? toMillis(ymd[1], ymd[2], hour, minute, second) : toMillis(ymd[0], ymd[1], ymd[2], hour, minute, second, "", "", "");
     }
 
     public static String formatMonthDayTime(long millis)
@@ -166,6 +166,7 @@ public class TimeStamp
         CHADT("GMT+13:45"),
         CHOST("GMT+9"),
         CIDST("GMT-4"),
+        CLT("GMT-4"),
         CLST("GMT-3"),
         EASST("GMT-5"),
         EEST("GMT+3"),
@@ -210,7 +211,7 @@ public class TimeStamp
 
         private final String offset;
 
-        private Timezone(String offset)
+        Timezone(String offset)
         {
             this.offset = offset;
         }

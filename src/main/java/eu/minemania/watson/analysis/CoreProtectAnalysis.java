@@ -116,11 +116,11 @@ public class CoreProtectAnalysis extends Analysis
         if (hover != null && hover.getValue(hover.getAction()) != null)
         {
             String text = ((MutableText) hover.getValue(hover.getAction())).getString().replaceAll("\u00A7.", "");
-            _millis = parseTimeExpression(text);
+            _millis = parseTimeExpression(text, m.group(1));
         }
         else
         {
-            _millis = parseTimeExpression(m.group(1));
+            _millis = parseTimeExpression("", m.group(1));
         }
         _player = m.group(2);
         _action = m.group(3);
@@ -160,11 +160,11 @@ public class CoreProtectAnalysis extends Analysis
         if (hover != null && hover.getValue(hover.getAction()) != null)
         {
             String text = ((MutableText) hover.getValue(hover.getAction())).getString().replaceAll("\u00A7.", "");
-            _millis = parseTimeExpression(text);
+            _millis = parseTimeExpression(text, m.group(1));
         }
         else
         {
-            _millis = parseTimeExpression(m.group(1));
+            _millis = parseTimeExpression("", m.group(1));
         }
         _player = m.group(2);
         _action = m.group(3);
@@ -271,9 +271,9 @@ public class CoreProtectAnalysis extends Analysis
         _looping = true;
     }
 
-    private long parseTimeExpression(String time)
+    private long parseTimeExpression(String hoverTime, String time)
     {
-        Matcher absolute = ABSOLUTE_TIME.matcher(time);
+        Matcher absolute = ABSOLUTE_TIME.matcher(hoverTime);
         if (absolute.matches())
         {
             int year = Integer.parseInt(absolute.group(1));
@@ -283,7 +283,7 @@ public class CoreProtectAnalysis extends Analysis
             int minute = Integer.parseInt(absolute.group(5));
             int second = Integer.parseInt(absolute.group(6));
             String timezone = absolute.group(7);
-            return TimeStamp.toMillis(year, month, day, hour, minute, second, timezone, time);
+            return TimeStamp.toMillis(year, month, day, hour, minute, second, timezone, hoverTime, time);
         }
         else
         {

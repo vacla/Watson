@@ -1,8 +1,10 @@
 package eu.minemania.watson.db.data;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nullable;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import eu.minemania.watson.client.Teleport;
 import eu.minemania.watson.selection.PlayereditUtils;
 import fi.dy.masa.malilib.gui.GuiBase;
@@ -55,6 +57,8 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
         this.columnCount = 1;
         this.entry = entry;
         this.isOdd = isOdd;
+        int posX = x + width;
+        int posY = y + 1;
 
         if (this.entry != null)
         {
@@ -64,6 +68,7 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
             this.header4 = null;
             this.header5 = null;
             this.header6 = null;
+            this.entry.setButton(this.createButtonGeneric(posX, posY, WidgetBlockeditEntry.ButtonListenerTeleport.ButtonType.TELEPORT));
         }
         else
         {
@@ -74,18 +79,13 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
             this.header5 = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[4]) + GuiBase.TXT_RST;
             this.header6 = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[5]) + GuiBase.TXT_RST;
         }
-
-        int posX = x + width;
-        int posY = y + 1;
-
-        posX = this.createButtonGeneric(posX, posY, WidgetBlockeditEntry.ButtonListenerTeleport.ButtonType.TELEPORT);
     }
 
-    private int createButtonGeneric(int xRight, int y, WidgetBlockeditEntry.ButtonListenerTeleport.ButtonType type)
+    private ButtonBase createButtonGeneric(int xRight, int y, WidgetBlockeditEntry.ButtonListenerTeleport.ButtonType type)
     {
         String label = type.getDisplayName();
         WidgetBlockeditEntry.ButtonListenerTeleport listener = new WidgetBlockeditEntry.ButtonListenerTeleport(type, this.entry);
-        return this.addButton(new ButtonGeneric(xRight, y, -1, true, label), listener).getX();
+        return this.addButton(new ButtonGeneric(xRight, y, -1, true, label), listener);
     }
 
     public static void setMaxNameLength(List<BlockeditEntry> edits)
@@ -158,6 +158,10 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
             String world = PlayereditUtils.blockString(this.entry.getEdit(), PlayereditUtils.Edit.WORLD);
             String amount = PlayereditUtils.blockString(this.entry.getEdit(), PlayereditUtils.Edit.AMOUNT);
             String description = PlayereditUtils.blockString(this.entry.getEdit(), PlayereditUtils.Edit.DESCRIPTION);
+            if(x6 + StringUtils.getStringWidth(description) > width - this.entry.getButton().getWidth() + 15)
+            {
+                description = this.textRenderer.trimToWidth(description, width - x6 - this.entry.getButton().getWidth() + 5).concat("...");
+            }
             this.drawString(x1, y, 0xFFFFFFFF, action, matrixStack);
             this.drawString(x2, y, 0xFFFFFFFF, time, matrixStack);
             this.drawString(x3, y, 0xFFFFFFFF, coords, matrixStack);
@@ -166,6 +170,51 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
             this.drawString(x6, y, 0xFFFFFFFF, description, matrixStack);
 
             super.render(mouseX, mouseY, selected, matrixStack);
+        }
+    }
+
+    @Override
+    public void postRenderHovered(int mouseX, int mouseY, boolean selected, MatrixStack matrixStack)
+    {
+        if (this.entry != null)
+        {
+            String descriptionText = PlayereditUtils.blockString(this.entry.getEdit(), PlayereditUtils.Edit.DESCRIPTION);
+            if (mouseX > this.getColumnPosX(5) && this.getColumnPosX(5) + StringUtils.getStringWidth(descriptionText) > width - this.entry.getButton().getWidth() + 15)
+            {
+                RenderSystem.pushMatrix();
+                RenderSystem.translatef(0, 0, 200);
+                String header = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[5]);
+                int w1 = this.getStringWidth(header);
+                int w2 = this.width - 100;
+                int totalWidth = Math.max(w1, w2);
+                List<String> descriptions = new ArrayList<>();
+                StringUtils.splitTextToLines(descriptions, descriptionText, totalWidth);
+                for (String description : descriptions)
+                {
+                    w1 = Math.max(w1, StringUtils.getStringWidth(description));
+                }
+                int x = mouseX + 10;
+                int y = mouseY - 10;
+                if (x + w1 - 20 >= this.width)
+                {
+                    x -= w1 + 40;
+                }
+
+                int x1 = x + 10;
+
+                RenderUtils.drawOutlinedBox(x, y, w1 + 20, 60, 0xFF000000, GuiBase.COLOR_HORIZONTAL_BAR);
+                y += 6;
+                y += 4;
+
+                this.drawString(x1, y, 0xFFFFFFFF, header, matrixStack);
+                y += 16;
+
+                for(int i = 0; i < descriptions.size(); i++)
+                {
+                    this.drawString(x1, y + (i * 8) - 7, 0xFFFFFFFF, descriptions.get(i), matrixStack);
+                }
+                RenderSystem.popMatrix();
+            }
         }
     }
 
