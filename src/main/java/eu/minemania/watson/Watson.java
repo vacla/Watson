@@ -6,14 +6,14 @@ import org.apache.logging.log4j.Logger;
 import fi.dy.masa.malilib.MaLiLibReference;
 import fi.dy.masa.malilib.event.InitializationHandler;
 import fi.dy.masa.malilib.util.StringUtils;
-import net.fabricmc.api.ModInitializer;
+import net.fabricmc.api.ClientModInitializer;
 
-public class Watson implements ModInitializer
+public class Watson implements ClientModInitializer
 {
     public static final Logger logger = LogManager.getLogger(Reference.MOD_ID);
 
     @Override
-    public void onInitialize()
+    public void onInitializeClient()
     {
         try
         {
