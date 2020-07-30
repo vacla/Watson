@@ -69,7 +69,7 @@ public class PlayereditUtils
                         watsonBlocks.add(edit);
                     }
                 }
-                list.add(new PlayereditEntry(type.getStack().copy(), itemTypesTotal.getInt(type), watsonBlocks));
+                list.add(new PlayereditEntry(type.getStack().copy(), 0, 0, 0, 0, itemTypesTotal.getInt(type), watsonBlocks));
             }
         }
 

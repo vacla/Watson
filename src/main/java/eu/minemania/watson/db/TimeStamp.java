@@ -12,6 +12,8 @@ public class TimeStamp
     protected static Calendar _reference;
     protected static final int MS_PER_HOUR = 60 * 60 * 1000;
     protected static final Pattern HOURS_AGO_TIME = Pattern.compile("(\\d+.\\d+)/(\\w) ago");
+    protected static final Pattern DATE_HOUR = Pattern.compile("(\\d+)-(\\d+) (\\d+):(\\d+)");
+    protected static final Pattern ABSOLUTE_TIME = Pattern.compile("(\\d{1,4})-(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{2}):(\\d{2})(?: (\\w+))?");
 
     static
     {
@@ -31,13 +33,13 @@ public class TimeStamp
 
     public static long toMillis(int year, int month, int dayOfMonth, int hour, int minute, int second, String timezone, String hoverTime, String timeCP)
     {
-        if (timezone.equals("") && timeCP.equals("") && hoverTime.equals(""))
+        if (!hoverTime.isEmpty() && timezone.isEmpty())
         {
             _time.set(year, month - 1, dayOfMonth, hour, minute, second);
             return _time.getTimeInMillis();
         }
         TimeZone zone = null;
-        if (!hoverTime.equals("") && !ZoneId.getAvailableZoneIds().contains(timezone))
+        if (!hoverTime.isEmpty() && !ZoneId.getAvailableZoneIds().contains(timezone))
         {
             try
             {
@@ -145,7 +147,40 @@ public class TimeStamp
             millis -= millis % (MS_PER_HOUR / 100);
             return millis;
         }
+        relative = DATE_HOUR.matcher(time);
+        if(relative.matches())
+        {
+            int month = Integer.parseInt(relative.group(1));
+            int day = Integer.parseInt(relative.group(2));
+            int hour = Integer.parseInt(relative.group(3));
+            int min = Integer.parseInt(relative.group(4));
+            return toMillis(month, day, hour, min, 0);
+        }
         return 0;
+    }
+
+    public static long parseTimeExpression(String hoverTime, String time)
+    {
+        Matcher absolute = ABSOLUTE_TIME.matcher(hoverTime);
+        if (absolute.matches())
+        {
+            int year = Integer.parseInt(absolute.group(1));
+            int month = Integer.parseInt(absolute.group(2));
+            int day = Integer.parseInt(absolute.group(3));
+            int hour = Integer.parseInt(absolute.group(4));
+            int minute = Integer.parseInt(absolute.group(5));
+            int second = Integer.parseInt(absolute.group(6));
+            String timezone = "";
+            if (absolute.group(7) != null)
+            {
+                timezone = absolute.group(7);
+            }
+            return TimeStamp.toMillis(year, month, day, hour, minute, second, timezone, hoverTime, time);
+        }
+        else
+        {
+            return TimeStamp.timeCP(time);
+        }
     }
 
     public enum Timezone

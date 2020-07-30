@@ -24,10 +24,18 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
 {
     private static final String[] HEADERS = new String[]{
             "watson.gui.label.edits.title.item",
+            "watson.gui.label.edits.title.broken",
+            "watson.gui.label.edits.title.placed",
+            "watson.gui.label.edits.title.contadded",
+            "watson.gui.label.edits.title.contremoved",
             "watson.gui.label.edits.title.total"
     };
     private static int maxNameLength;
-    private static int maxCountLength;
+    private static int maxBrokenLength;
+    private static int maxPlacedLength;
+    private static int maxContAddedLength;
+    private static int maxContRemovedLength;
+    private static int maxTotalLength;
 
     private final PlayereditBase edits;
     private final WidgetListEdits listWidget;
@@ -37,6 +45,14 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
     private final String header1;
     @Nullable
     private final String header2;
+    @Nullable
+    private final String header3;
+    @Nullable
+    private final String header4;
+    @Nullable
+    private final String header5;
+    @Nullable
+    private final String header6;
     private final boolean isOdd;
 
     public WidgetEditsEntry(int x, int y, int width, int height, boolean isOdd, PlayereditBase edits, @Nullable PlayereditEntry entry, int listIndex, WidgetListEdits listWidget)
@@ -53,11 +69,19 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
         {
             this.header1 = null;
             this.header2 = null;
+            this.header3 = null;
+            this.header4 = null;
+            this.header5 = null;
+            this.header6 = null;
         }
         else
         {
             this.header1 = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[0]) + GuiBase.TXT_RST;
             this.header2 = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[1]) + GuiBase.TXT_RST;
+            this.header3 = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[2]) + GuiBase.TXT_RST;
+            this.header4 = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[3]) + GuiBase.TXT_RST;
+            this.header5 = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[4]) + GuiBase.TXT_RST;
+            this.header6 = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[5]) + GuiBase.TXT_RST;
         }
 
         int posX = x + width;
@@ -76,12 +100,20 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
     public static void setMaxNameLength(List<PlayereditEntry> edits)
     {
         maxNameLength = StringUtils.getStringWidth(GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[0]) + GuiBase.TXT_RST);
-        maxCountLength = StringUtils.getStringWidth(GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[1]) + GuiBase.TXT_RST);
+        maxBrokenLength = StringUtils.getStringWidth(GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[1]) + GuiBase.TXT_RST);
+        maxPlacedLength = StringUtils.getStringWidth(GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[2]) + GuiBase.TXT_RST);
+        maxContAddedLength = StringUtils.getStringWidth(GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[3]) + GuiBase.TXT_RST);
+        maxContRemovedLength = StringUtils.getStringWidth(GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[4]) + GuiBase.TXT_RST);
+        maxTotalLength = StringUtils.getStringWidth(GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[5]) + GuiBase.TXT_RST);
 
         for (PlayereditEntry entry : edits)
         {
             maxNameLength = Math.max(maxNameLength, StringUtils.getStringWidth(entry.getStack().getName().getString()));
-            maxCountLength = Math.max(maxCountLength, StringUtils.getStringWidth(String.valueOf(entry.getCountTotal())));
+            maxBrokenLength = Math.max(maxBrokenLength, StringUtils.getStringWidth(String.valueOf(entry.getCountBroken())));
+            maxPlacedLength = Math.max(maxPlacedLength, StringUtils.getStringWidth(String.valueOf(entry.getCountPlaced())));
+            maxContAddedLength = Math.max(maxContAddedLength, StringUtils.getStringWidth(String.valueOf(entry.getCountContAdded())));
+            maxContRemovedLength = Math.max(maxContRemovedLength, StringUtils.getStringWidth(String.valueOf(entry.getCountContRemoved())));
+            maxTotalLength = Math.max(maxTotalLength, StringUtils.getStringWidth(String.valueOf(entry.getCountTotal())));
         }
     }
 
@@ -96,7 +128,11 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
     {
         int x1 = this.x + 4;
         int x2 = x1 + maxNameLength + 40;
-        int x3 = x2 + maxCountLength + 20;
+        int x3 = x2 + maxBrokenLength + 20;
+        int x4 = x3 + maxPlacedLength + 20;
+        int x5 = x4 + maxContAddedLength + 20;
+        int x6 = x5 + maxContRemovedLength + 20;
+        int x7 = x6 + maxTotalLength + 20;
 
         switch (column)
         {
@@ -106,6 +142,14 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
                 return x2;
             case 2:
                 return x3;
+            case 3:
+                return x4;
+            case 4:
+                return x5;
+            case 5:
+                return x6;
+            case 6:
+                return x7;
             default:
                 return x1;
         }
@@ -173,6 +217,10 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
 
         int x1 = this.getColumnPosX(0);
         int x2 = this.getColumnPosX(1);
+        int x3 = this.getColumnPosX(2);
+        int x4 = this.getColumnPosX(3);
+        int x5 = this.getColumnPosX(4);
+        int x6 = this.getColumnPosX(5);
         int y = this.y + 7;
         int color = 0xFFFFFFFF;
 
@@ -182,15 +230,22 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
             {
                 this.drawString(x1, y, color, this.header1, matrixStack);
                 this.drawString(x2, y, color, this.header2, matrixStack);
+                this.drawString(x3, y, color, this.header3, matrixStack);
+                this.drawString(x4, y, color, this.header4, matrixStack);
+                this.drawString(x5, y, color, this.header5, matrixStack);
+                this.drawString(x6, y, color, this.header6, matrixStack);
 
                 this.renderColumnHeader(mouseX, mouseY, Icons.ARROW_DOWN, Icons.ARROW_UP);
             }
         }
         else if (this.entry != null)
         {
-            int count = this.entry.getCountTotal();
             this.drawString(x1 + 20, y, color, this.entry.getStack().getName().getString(), matrixStack);
-            this.drawString(x2, y, color, String.valueOf(count), matrixStack);
+            this.drawString(x2, y, color, String.valueOf(this.entry.getCountBroken()), matrixStack);
+            this.drawString(x3, y, color, String.valueOf(this.entry.getCountPlaced()), matrixStack);
+            this.drawString(x4, y, color, String.valueOf(this.entry.getCountContAdded()), matrixStack);
+            this.drawString(x5, y, color, String.valueOf(this.entry.getCountContRemoved()), matrixStack);
+            this.drawString(x6, y, color, String.valueOf(this.entry.getCountTotal()), matrixStack);
 
             RenderSystem.pushMatrix();
             RenderSystem.disableLighting();

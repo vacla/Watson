@@ -52,6 +52,7 @@ public class Configs implements IConfigHandler
         public static final ConfigDouble CHAT_TIMEOUT = new ConfigDouble("chatTimeoutSeconds", 1, 0.1, 5, "watson.description.config.chat_timeout");
         public static final ConfigBoolean DEBUG = new ConfigBoolean("debugWatson", false, "watson.description.config.debug");
         public static final ConfigBoolean DISABLE_CP_MESSAGES = new ConfigBoolean("disableCPMessages", false, "watson.description.config.coreprotect_messages");
+        public static final ConfigBoolean DISABLE_LB_MESSAGES = new ConfigBoolean("disableLBMessages", false, "watson.description.config.logblock_messages");
         public static final ConfigBoolean DISPLAYED = new ConfigBoolean("displayed", true, "watson.description.config.displayed");
         public static final ConfigBoolean ENABLED = new ConfigBoolean("enabled", true, "watson.description.config.enabled");
         public static final ConfigBoolean GROUPING_ORES_IN_CREATIVE = new ConfigBoolean("groupingOresInCreative", true, "watson.description.config.grouping_ores_in_creative");
@@ -92,6 +93,7 @@ public class Configs implements IConfigHandler
                 CHAT_TIMEOUT,
                 DEBUG,
                 DISABLE_CP_MESSAGES,
+                DISABLE_LB_MESSAGES,
                 DISPLAYED,
                 ENABLED,
                 GROUPING_ORES_IN_CREATIVE,
@@ -154,14 +156,8 @@ public class Configs implements IConfigHandler
         public static final ConfigStringExt CP_SEARCH = new ConfigStringExt("cp search", "^CoreProtect - Lookup searching. Please wait...$", "watson.description.config.analysis").setCommentArgs("cp search");
         public static final ConfigStringExt DUTYMODE_DISABLE = new ConfigStringExt("duty mode disable", "^\\[Duties\\] Duty mode disabled.*", "watson.description.config.analysis").setCommentArgs("duty mode disable");
         public static final ConfigStringExt DUTYMODE_ENABLE = new ConfigStringExt("duty mode enable", "^\\[Duties\\] Duty mode enabled.*", "watson.description.config.analysis").setCommentArgs("duty mode enable");
-        public static final ConfigStringExt LB_POSITION = new ConfigStringExt("lb position", "^Block changes in the last \\d+ \\w+ at (-?\\d+):(-?\\d+):(-?\\d+) in (.+):$", "watson.description.config.analysis").setCommentArgs("lb position");
-        public static final ConfigStringExt LB_KILLS = new ConfigStringExt("lb kills", "^Kills in the last \\d+ \\w+ in (.+):$", "watson.description.config.analysis").setCommentArgs("lb kills");
-        public static final ConfigStringExt LB_COORD_POSITION = new ConfigStringExt("lb coord position", "^Block changes in the last \\d+ \\w+ in (.+):$", "watson.description.config.analysis").setCommentArgs("lb coord position");
-        public static final ConfigStringExt LB_EDIT = new ConfigStringExt("lb edit", "^\\[((?:\\d{2,4}-)?\\d{2}-\\d{2}) (\\d{2}):(\\d{2})(?::?)(\\d{2})?\\] (\\w+) (created|destroyed) ((?: |\\w)+)( \\[.*\\] \\[.*\\\\] \\[.*\\] \\[.*\\])?$", "watson.description.config.analysis").setCommentArgs("lb edit");
-        public static final ConfigStringExt LB_EDIT_REPLACED = new ConfigStringExt("lb edit replaced", "^\\[((?:\\d{2,4}-)?\\d{2}-\\d{2}) (\\d{2}):(\\d{2})(?::?)(\\d{2})?\\] (\\w+) replaced ((?: |\\w)+) with ((?: |\\w)+)$", "watson.description.config.analysis").setCommentArgs("lb edit replaced");
-        public static final ConfigStringExt LB_COORD = new ConfigStringExt("lb coord", "^\\((\\d+)\\) \\[((?:\\d{2,4}-)?\\d{2}-\\d{2}) (\\d{2}):(\\d{2})(?::?)(\\d{2})?\\] (\\w+) (created|destroyed) ([a-zA-Z_]+)(?: \\[(?<sign1>.*)\\] \\[(?<sign2>.*)\\] \\[(?<sign3>.*)\\] \\[(?<sign4>.*)\\])? at (-?\\d+), (\\d+), (-?\\d+)$", "watson.description.config.analysis").setCommentArgs("lb coord");
-        public static final ConfigStringExt LB_COORD_KILLS = new ConfigStringExt("lb coord kills", "^\\((\\d+)\\) \\[((?:\\\\d{2,4}-)?\\d{2}-\\d{2}) (\\d{2}):(\\d{2})(?::?)(\\d{2})?\\] (\\w+) killed (\\w+) at (-?\\d+):(\\d+):(-?\\d+) with (.*)$", "watson.description.config.analysis").setCommentArgs("lb coord kills");
-        public static final ConfigStringExt LB_COORD_REPLACED = new ConfigStringExt("lb coord replaced", "^\\((\\d+)\\) ((?:\\d{2,4}-)?\\d{2}-\\d{2}) (\\d{2}):(\\d{2})(?::?)(\\d{2})?\\] (\\w+) replaced ([a-zA-Z_]+) with ([a-zA-Z_]+) at (-?\\d+):(\\d+):(-?\\d+)$", "watson.description.config.analysis").setCommentArgs("lb coord replaced");
+        public static final ConfigStringExt LB_POSITION = new ConfigStringExt("lb position", "^(?:[\\w ]+) in the last \\d+ \\w+ (?:at (-?\\d+):(-?\\d+):(-?\\d+) |within .+ blocks of location )?in (.+):$", "watson.description.config.analysis").setCommentArgs("lb position");
+        public static final ConfigStringExt LB_DATA = new ConfigStringExt("lb data", "(?:\\((\\d+)\\) )?\\[((?:\\d{2,4}-)?\\d{2}-\\d{2} \\d{2}:\\d{2})] (\\w+) (\\w+\\s?\\w) ((?:(\\d+)x )?[A-Z_]+)(?:(?: with)? (\\w+[A-Z]))?(?:(?: to )? \\[(.*[^\\[\\]])] \\[(.*[^\\[\\]])] \\[(.*[^\\[\\]])] \\[(.*[^\\[\\]])])?(?: at (-?\\d+), (\\d+), (-?\\d+)| (?:from|into) \\w+)?(?: with (\\w+))?", "watson.description.config.analysis").setCommentArgs("lb data");
         public static final ConfigStringExt LB_TP = new ConfigStringExt("lb tp", "^Teleported to (-?\\d+):(\\d+):(-?\\d+)$", "watson.description.config.analysis").setCommentArgs("lb tp");
         public static final ConfigStringExt LB_PAGE = new ConfigStringExt("lb page", "^Page (\\d+)/(\\d+)$", "watson.description.config.analysis").setCommentArgs("lb page");
         public static final ConfigStringExt LB_HEADER_NO_RESULTS = new ConfigStringExt("lb header no results", "^No results found\\.$", "watson.description.config.analysis").setCommentArgs("lb header no results");
@@ -170,10 +166,10 @@ public class Configs implements IConfigHandler
         public static final ConfigStringExt LB_HEADER_SUM_BLOCKS = new ConfigStringExt("lb header sum blocks", "^Created - Destroyed - Block$", "watson.description.config.analysis").setCommentArgs("lb header sum blocks");
         public static final ConfigStringExt LB_HEADER_SUM_PLAYERS = new ConfigStringExt("lb header sum players", "^Created - Destroyed - Player$", "watson.description.config.analysis").setCommentArgs("lb header sum players");
         public static final ConfigStringExt LB_HEADER_SEARCHING = new ConfigStringExt("lb header searching", "^Searching Block changes from player \\w+ in the last \\d+ minutes (?:within \\d+ blocks of you )?in .+:$", "watson.description.config.analysis").setCommentArgs("lb header searching");
-        public static final ConfigStringExt LB_HEADER_RATIO = new ConfigStringExt("lb header ratio", "^Stone and diamond ore changes from player \\w+ between (\\d+) and (\\d+) minutes ago in .+ summed up by blocks:$", "watson.description.config.analysis").setCommentArgs("lb header ratio");
+        public static final ConfigStringExt LB_HEADER_RATIO = new ConfigStringExt("lb header ratio", "^STONE and DIAMOND_ORE changes from player \\w+ between (\\d+) and (\\d+) minutes ago in .+ summed up by blocks:$", "watson.description.config.analysis").setCommentArgs("lb header ratio");
         public static final ConfigStringExt LB_HEADER_RATIO_CURRENT = new ConfigStringExt("lb header ratio current", "^Stone and diamond ore changes from player \\w+ in the last (\\d+) minutes in .+ summed up by blocks:$", "watson.description.config.analysis").setCommentArgs("lb header ratio current");
         public static final ConfigStringExt LB_HEADER_TIME_CHECK = new ConfigStringExt("lb header time check", "Block changes from player \\w+ between (\\d+) and \\d+ minutes ago in .+:", "watson.description.config.analysis").setCommentArgs("lb header time check");
-        public static final ConfigStringExt LB_HEADER_BLOCK = new ConfigStringExt("lb header block", "^(?: |,|\\w)+ (?:destructions|changes) from player \\w+ (?:in the last \\d+ minutes |between \\d+ and \\d+ minutes ago |more than -?\\d+ minutes ago )?(?:within \\d+ blocks of you )?in .+(?: summed up by (players|blocks))?:$", "watson.description.config.analysis").setCommentArgs("lb header block");
+        public static final ConfigStringExt LB_HEADER_BLOCK = new ConfigStringExt("lb header block", "^(?!STONE and DIAMOND_ORE)(?: |,|\\w)+ from player \\w+ (?:in the last \\d+ minutes |between \\d+ and \\d+ minutes ago |more than -?\\d+ minutes ago )?(?:within \\d+ blocks of you )?in .+ summed up by (?:players|blocks):$", "watson.description.config.analysis").setCommentArgs("lb header block");
         public static final ConfigStringExt LB_SUM = new ConfigStringExt("lb sum", "^(\\d+)[ ]{6,}(\\d+)[ ]{6,}((?:\\w| )+)$", "watson.description.config.analysis").setCommentArgs("lb sum");
         public static final ConfigStringExt MODMODE_DISABLE = new ConfigStringExt("modmode disable", "^You are no longer in ModMode!$", "watson.description.config.analysis").setCommentArgs("modmode disable");
         public static final ConfigStringExt MODMODE_ENABLE = new ConfigStringExt("modmode enable", "^You are now in ModMode!$", "watson.description.config.analysis").setCommentArgs("modmode enable");
@@ -191,12 +187,7 @@ public class Configs implements IConfigHandler
                 CP_SEARCH,
                 DUTYMODE_DISABLE,
                 DUTYMODE_ENABLE,
-                LB_COORD,
-                LB_COORD_KILLS,
-                LB_COORD_POSITION,
-                LB_COORD_REPLACED,
-                LB_EDIT,
-                LB_EDIT_REPLACED,
+                LB_DATA,
                 LB_HEADER_BLOCK,
                 LB_HEADER_BLOCKS,
                 LB_HEADER_CHANGES,
@@ -207,7 +198,6 @@ public class Configs implements IConfigHandler
                 LB_HEADER_SUM_BLOCKS,
                 LB_HEADER_SUM_PLAYERS,
                 LB_HEADER_TIME_CHECK,
-                LB_KILLS,
                 LB_PAGE,
                 LB_POSITION,
                 LB_SUM,

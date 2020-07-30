@@ -13,11 +13,7 @@ public class ChatProcessor
 
     private ChatProcessor()
     {
-        addChatHandler(new LbCoordsAnalysis());
-        addChatHandler(new LbToolBlockAnalysis());
-        addChatHandler(new TeleportAnalysis());
-        addChatHandler(new RatioAnalysis());
-        addChatHandler(ServerTime.getInstance());
+        addChatHandler(new LogBlockAnalysis());
 
         addChatHandler(new ModModeAnalysis());
         addChatHandler(new RegionInfoAnalysis());

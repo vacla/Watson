@@ -46,12 +46,7 @@ public class KeyCallbacks
         Configs.Analysis.DUTYMODE_ENABLE.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.MODMODE_DISABLE.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.MODMODE_ENABLE.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.LB_COORD.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.LB_COORD_KILLS.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.LB_COORD_POSITION.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.LB_COORD_REPLACED.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.LB_EDIT.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.LB_EDIT_REPLACED.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.LB_DATA.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.LB_HEADER_BLOCK.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.LB_HEADER_BLOCKS.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.LB_HEADER_CHANGES.setValueChangeCallback(valueChangeStringCallback);
@@ -62,7 +57,6 @@ public class KeyCallbacks
         Configs.Analysis.LB_HEADER_SUM_BLOCKS.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.LB_HEADER_SUM_PLAYERS.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.LB_HEADER_TIME_CHECK.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.LB_KILLS.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.LB_PAGE.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.LB_POSITION.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.LB_SUM.setValueChangeCallback(valueChangeStringCallback);
@@ -144,30 +138,6 @@ public class KeyCallbacks
             {
                 Analysis.removeMatchedChatHandler(Configs.Analysis.MODMODE_ENABLE);
             }
-            else if (config == Configs.Analysis.LB_COORD)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_COORD);
-            }
-            else if (config == Configs.Analysis.LB_COORD_KILLS)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_COORD_KILLS);
-            }
-            else if (config == Configs.Analysis.LB_COORD_POSITION)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_COORD_POSITION);
-            }
-            else if (config == Configs.Analysis.LB_COORD_REPLACED)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_COORD_REPLACED);
-            }
-            else if (config == Configs.Analysis.LB_EDIT)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_EDIT);
-            }
-            else if (config == Configs.Analysis.LB_EDIT_REPLACED)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_EDIT_REPLACED);
-            }
             else if (config == Configs.Analysis.LB_HEADER_BLOCK)
             {
                 Analysis.removeMatchedChatHandler(Configs.Analysis.LB_HEADER_BLOCK);
@@ -207,10 +177,6 @@ public class KeyCallbacks
             else if (config == Configs.Analysis.LB_HEADER_TIME_CHECK)
             {
                 Analysis.removeMatchedChatHandler(Configs.Analysis.LB_HEADER_TIME_CHECK);
-            }
-            else if (config == Configs.Analysis.LB_KILLS)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_KILLS);
             }
             else if (config == Configs.Analysis.LB_PAGE)
             {
