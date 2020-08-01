@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.TreeSet;
 
+import eu.minemania.watson.data.DataManager;
 import org.lwjgl.opengl.GL11;
 import eu.minemania.watson.config.Configs;
 import fi.dy.masa.malilib.util.Color4f;
@@ -85,13 +86,16 @@ public class PlayereditSet
         {
             for (BlockEdit edit : _edits)
             {
-                Tessellator tessellator = Tessellator.getInstance();
-                BufferBuilder buffer = tessellator.getBuffer();
-                buffer.begin(GL11.GL_LINES, VertexFormats.POSITION_COLOR);
+                if (DataManager.getWorldPlugin().isEmpty() || DataManager.getWorldPlugin().equals(edit.world))
+                {
+                    Tessellator tessellator = Tessellator.getInstance();
+                    BufferBuilder buffer = tessellator.getBuffer();
+                    buffer.begin(GL11.GL_LINES, VertexFormats.POSITION_COLOR);
 
-                edit.drawOutline(buffer);
+                    edit.drawOutline(buffer);
 
-                tessellator.draw();
+                    tessellator.draw();
+                }
             }
         }
     }
@@ -109,10 +113,27 @@ public class PlayereditSet
             if (it.hasNext())
             {
                 BlockEdit prev = it.next();
+                if (!DataManager.getWorldPlugin().isEmpty() && !DataManager.getWorldPlugin().equals(prev.world))
+                {
+                    while (it.hasNext() && !DataManager.getWorldPlugin().equals(prev.world))
+                    {
+                        prev = it.next();
+                    }
+                }
                 while (it.hasNext())
                 {
                     BlockEdit next = it.next();
-
+                    if (!DataManager.getWorldPlugin().isEmpty() && !DataManager.getWorldPlugin().equals(next.world))
+                    {
+                        while (it.hasNext() && !DataManager.getWorldPlugin().equals(next.world))
+                        {
+                            next = it.next();
+                        }
+                        if (!DataManager.getWorldPlugin().equals(next.world))
+                        {
+                            return;
+                        }
+                    }
                     boolean show = (next.isCreated() && Configs.Generic.LINKED_CREATION.getBooleanValue()) || (!next.isCreated() && Configs.Generic.LINKED_DESTRUCTION.getBooleanValue());
                     if (show)
                     {

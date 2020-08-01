@@ -52,6 +52,11 @@ public class PlayereditUtils
             for (ItemType type : itemTypesTotal.keySet())
             {
                 List<BlockEdit> watsonBlocks = new ArrayList<>();
+                int placed = 0;
+                int broken = 0;
+                int contAdded = 0;
+                int contRemoved = 0;
+
                 for (BlockEdit edit : playeredit.getBlockEdits())
                 {
                     String typeName = type.getStack().getItem().toString();
@@ -66,10 +71,26 @@ public class PlayereditUtils
                     }
                     if (blockName.equals(typeName))
                     {
+                        if (edit.isCreated())
+                        {
+                            placed += edit.amount;
+                        }
+                        else if (edit.isBroken())
+                        {
+                            broken += edit.amount;
+                        }
+                        else if (edit.isContAdded())
+                        {
+                            contAdded += edit.amount;
+                        }
+                        else if (edit.isContRemoved())
+                        {
+                            contRemoved += edit.amount;
+                        }
                         watsonBlocks.add(edit);
                     }
                 }
-                list.add(new PlayereditEntry(type.getStack().copy(), 0, 0, 0, 0, itemTypesTotal.getInt(type), watsonBlocks));
+                list.add(new PlayereditEntry(type.getStack().copy(), broken, placed, contAdded, contRemoved, itemTypesTotal.getInt(type), watsonBlocks));
             }
         }
 

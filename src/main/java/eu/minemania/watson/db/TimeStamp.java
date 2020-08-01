@@ -148,7 +148,7 @@ public class TimeStamp
             return millis;
         }
         relative = DATE_HOUR.matcher(time);
-        if(relative.matches())
+        if (relative.matches())
         {
             int month = Integer.parseInt(relative.group(1));
             int day = Integer.parseInt(relative.group(2));

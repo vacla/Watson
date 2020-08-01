@@ -42,6 +42,7 @@ public class DataManager implements IDirectoryCache
     private static ConfigGuiTab configGuiTab = ConfigGuiTab.GENERIC;
     private static boolean canSave;
     private static long clientTickStart;
+    private static String worldName;
 
     private final EditSelection editselection = new EditSelection();
 
@@ -95,6 +96,16 @@ public class DataManager implements IDirectoryCache
     public static Filters getFilters()
     {
         return getInstance().filters;
+    }
+
+    public static void setWorldPlugin(String world)
+    {
+        worldName = world;
+    }
+
+    public static String getWorldPlugin()
+    {
+        return worldName;
     }
 
     @Override

@@ -5,6 +5,8 @@ import javax.annotation.Nullable;
 import eu.minemania.watson.analysis.CoreProtectAnalysis;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
+import eu.minemania.watson.network.ClientPacketChannelHandler;
+import eu.minemania.watson.network.PluginWorldPacketHandler;
 import eu.minemania.watson.render.OverlayRenderer;
 import fi.dy.masa.malilib.interfaces.IWorldLoadListener;
 import net.minecraft.client.MinecraftClient;
@@ -19,10 +21,15 @@ public class WorldLoadListener implements IWorldLoadListener
         if (worldBefore != null)
         {
             DataManager.save();
-            if (worldAfter == null && DataManager.getEditSelection().getSelection() != null)
+            if (worldAfter == null)
             {
-                DataManager.getEditSelection().clearBlockEditSet();
-                CoreProtectAnalysis.reset();
+                ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginWorldPacketHandler.INSTANCE);
+                PluginWorldPacketHandler.INSTANCE.reset();
+                if (DataManager.getEditSelection().getSelection() != null)
+                {
+                    DataManager.getEditSelection().clearBlockEditSet();
+                    CoreProtectAnalysis.reset();
+                }
             }
         }
         else
@@ -40,6 +47,7 @@ public class WorldLoadListener implements IWorldLoadListener
         if (worldBefore == null && worldAfter != null && Configs.Generic.ENABLED.getBooleanValue())
         {
             DataManager.onClientTickStart();
+            ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginWorldPacketHandler.INSTANCE);
         }
         if (worldAfter != null)
         {

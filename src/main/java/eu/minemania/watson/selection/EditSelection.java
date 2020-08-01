@@ -73,7 +73,7 @@ public class EditSelection
 
     public void selectPosition(int x, int y, int z, String world, int amount)
     {
-        if (_selection == null || _selection.x != x || _selection.y != y || _selection.z != z || _selection.world != world || _selection.amount != amount)
+        if (_selection == null || _selection.x != x || _selection.y != y || _selection.z != z || !_selection.world.equals(world) || _selection.amount != amount)
         {
             _selection = new BlockEdit(0, "", "selection", x, y, z, null, world, amount);
         }
@@ -109,7 +109,7 @@ public class EditSelection
 
     public void drawSelection()
     {
-        if (_selection != null && Configs.Generic.SELECTION_SHOWN.getBooleanValue())
+        if (_selection != null && Configs.Generic.SELECTION_SHOWN.getBooleanValue() && (DataManager.getWorldPlugin().isEmpty() || DataManager.getWorldPlugin().equals(_selection.world)))
         {
             Tessellator tesselator = Tessellator.getInstance();
             BufferBuilder buffer = tesselator.getBuffer();

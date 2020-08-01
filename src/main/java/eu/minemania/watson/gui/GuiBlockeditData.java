@@ -197,7 +197,7 @@ public class GuiBlockeditData extends GuiListBase<BlockeditEntry, WidgetBlockedi
 
     protected enum ButtonType
     {
-        CLOSE("watson.gui.button.blockedit.close");
+        CLOSE("watson.gui.button.change_menu.close");
 
         private final String labelKey;
 

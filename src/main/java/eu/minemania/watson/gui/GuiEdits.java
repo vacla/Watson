@@ -1,10 +1,10 @@
 package eu.minemania.watson.gui;
 
-import eu.minemania.watson.gui.GuiMainMenu.ButtonListenerChangeMenu;
 import eu.minemania.watson.gui.widgets.WidgetEditsEntry;
 import eu.minemania.watson.gui.widgets.WidgetListEdits;
 import eu.minemania.watson.selection.PlayereditBase;
 import eu.minemania.watson.selection.PlayereditEntry;
+import fi.dy.masa.malilib.gui.GuiBase;
 import fi.dy.masa.malilib.gui.GuiListBase;
 import fi.dy.masa.malilib.gui.button.ButtonBase;
 import fi.dy.masa.malilib.gui.button.ButtonGeneric;
@@ -12,13 +12,14 @@ import fi.dy.masa.malilib.gui.button.IButtonActionListener;
 import fi.dy.masa.malilib.interfaces.ICompletionListener;
 import fi.dy.masa.malilib.util.GuiUtils;
 import fi.dy.masa.malilib.util.StringUtils;
+import net.minecraft.client.gui.screen.Screen;
 
 public class GuiEdits extends GuiListBase<PlayereditEntry, WidgetEditsEntry, WidgetListEdits>
         implements ICompletionListener
 {
     private final PlayereditBase edits;
 
-    public GuiEdits(PlayereditBase edits)
+    public GuiEdits(PlayereditBase edits, Screen parent)
     {
         super(10, 44);
 
@@ -26,6 +27,7 @@ public class GuiEdits extends GuiListBase<PlayereditEntry, WidgetEditsEntry, Wid
         this.edits.setCompletionListener(this);
         this.title = this.edits.getTitle();
         this.useTitleHierarchy = false;
+        this.setParent(parent);
 
         WidgetEditsEntry.setMaxNameLength(edits.getPlayereditsAll());
     }
@@ -71,12 +73,9 @@ public class GuiEdits extends GuiListBase<PlayereditEntry, WidgetEditsEntry, Wid
         }
 
         y = this.height - 36;
-        ButtonListenerChangeMenu.ButtonType type = ButtonListenerChangeMenu.ButtonType.MAIN_MENU;
-        label = StringUtils.translate(type.getLabelKey());
-        buttonWidth = this.getStringWidth(label) + 20;
-        x = this.width - buttonWidth - 10;
-        button = new ButtonGeneric(x, y, buttonWidth, 20, label);
-        this.addButton(button, new ButtonListenerChangeMenu(type, this.getParent()));
+        ButtonListener.Type type = ButtonListener.Type.CLOSE;
+        buttonWidth = this.getStringWidth(type.getDisplayName()) + 10;
+        this.createButton(12, y, buttonWidth, type);
     }
 
     private int createButton(int x, int y, int width, ButtonListener.Type type)
@@ -136,6 +135,9 @@ public class GuiEdits extends GuiListBase<PlayereditEntry, WidgetEditsEntry, Wid
 
             switch (this.type)
             {
+                case CLOSE:
+                    GuiBase.openGui(this.parent.getParent());
+                    break;
                 case REFRESH_LIST:
                     edits.reCreatePlayeredits();
                     break;
@@ -146,6 +148,7 @@ public class GuiEdits extends GuiListBase<PlayereditEntry, WidgetEditsEntry, Wid
 
         public enum Type
         {
+            CLOSE("watson.gui.button.change_menu.close"),
             REFRESH_LIST("watson.gui.button.edits.refresh_list");
 
             private final String translationKey;

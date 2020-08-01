@@ -264,14 +264,17 @@ public class OreDB
             for (OreDeposit deposit : getOreDepositSequence())
             {
                 OreBlock block = deposit.getKeyOreBlock();
-                if (block.getEdit().playereditSet.isVisible())
+                if (DataManager.getWorldPlugin().isEmpty() || DataManager.getWorldPlugin().equals(block._location.getWorld()))
                 {
-                    label.setLength(0);
-                    label.ensureCapacity(4);
-                    label.append(id);
-                    OverlayRenderer.drawBillboard(block.getLocation().getX() - dx + 0.5, block.getLocation().getY() - dy + 0.5, block.getLocation().getZ() - dz + 0.5, 0.03, label.toString());
+                    if (block.getEdit().playereditSet.isVisible())
+                    {
+                        label.setLength(0);
+                        label.ensureCapacity(4);
+                        label.append(id);
+                        OverlayRenderer.drawBillboard(block.getLocation().getX() - dx + 0.5, block.getLocation().getY() - dy + 0.5, block.getLocation().getZ() - dz + 0.5, 0.03, label.toString());
+                    }
+                    ++id;
                 }
-                ++id;
             }
         }
     }

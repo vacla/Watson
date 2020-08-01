@@ -59,7 +59,7 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
     {
         super(x, y, width, height, entry, listIndex);
 
-        this.columnCount = 2;
+        this.columnCount = 6;
         this.entry = entry;
         this.isOdd = isOdd;
         this.listWidget = listWidget;
@@ -187,7 +187,7 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
             case 0:
                 this.edits.setSortCriteria(SortCriteria.NAME);
                 break;
-            case 1:
+            case 5:
                 this.edits.setSortCriteria(SortCriteria.COUNT_TOTAL);
                 break;
             default:
@@ -272,7 +272,7 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
             RenderSystem.translatef(0, 0, 200);
 
             String header1 = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[0]);
-            String header2 = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[1]);
+            String header2 = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[5]);
 
             ItemStack stack = this.entry.getStack();
             String stackName = stack.getName().getString();

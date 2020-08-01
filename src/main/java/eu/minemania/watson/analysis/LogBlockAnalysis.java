@@ -105,7 +105,7 @@ public class LogBlockAnalysis extends Analysis
         try
         {
             int index = 0;
-            if(m.group(1) != null)
+            if (m.group(1) != null)
             {
                 index = Integer.parseInt(m.group(1));
             }
@@ -135,13 +135,13 @@ public class LogBlockAnalysis extends Analysis
             String action = m.group(4);
             String totalItemBlockName = m.group(5);
             int count = 1;
-            if(totalItemBlockName.contains(" "))
+            if (totalItemBlockName.contains(" "))
             {
                 count = Integer.parseInt(m.group(6));
                 totalItemBlockName = totalItemBlockName.split(" ")[1];
             }
             String replacedBlock = "";
-            if(m.group(7) != null)
+            if (m.group(7) != null)
             {
                 replacedBlock = m.group(7);
             }
@@ -149,7 +149,7 @@ public class LogBlockAnalysis extends Analysis
             String sign2 = null;
             String sign3 = null;
             String sign4 = null;
-            if(m.group(8) != null)
+            if (m.group(8) != null)
             {
                 sign1 = m.group(8);
                 sign2 = m.group(9);
@@ -160,11 +160,11 @@ public class LogBlockAnalysis extends Analysis
             int coordY = 0;
             int coordZ = 0;
             MutableText teleportText = new TranslatableText("watson.gui.label.blockedit.list.teleport");
-            if(m.group(12) != null)
+            if (m.group(12) != null)
             {
                 AtomicBoolean coordTeleport = new AtomicBoolean(false);
                 chat.visit((style, text) -> {
-                    if(coordTeleport.get())
+                    if (coordTeleport.get())
                     {
                         teleportText.setStyle(style);
                         coordTeleport.set(false);
@@ -177,13 +177,13 @@ public class LogBlockAnalysis extends Analysis
                 coordZ = Integer.parseInt(m.group(14));
             }
             String weapon = "";
-            if(m.group(15) != null)
+            if (m.group(15) != null)
             {
                 weapon = m.group(15);
             }
 
             WatsonBlock type;
-            if(!action.equals("killed"))
+            if (!action.equals("killed"))
             {
                 type = WatsonBlockRegistery.getInstance().getWatsonBlockByName(totalItemBlockName);
             }
@@ -207,11 +207,11 @@ public class LogBlockAnalysis extends Analysis
                 if (!type.getName().equals("minecraft:stone"))
                 {
                     MutableText output = new LiteralText("");
-                    if(action.equals("killed"))
+                    if (action.equals("killed"))
                     {
                         output.append(String.format("(%2d) %s (%d,%d,%d) %s %s %s > %s ", index, dateTime, coordX, coordY, coordZ, _world, player, weapon, totalItemBlockName));
                     }
-                    else if(action.equals("replaced"))
+                    else if (action.equals("replaced"))
                     {
                         WatsonBlock newtype = WatsonBlockRegistery.getInstance().getWatsonBlockByName(replacedBlock);
                         output.append(String.format("(%2d) %s (%d,%d,%d) %s %s %s %s ", index, dateTime, coordX, coordY, coordZ, type.getName(), action, newtype.getName(), player));
@@ -325,7 +325,7 @@ public class LogBlockAnalysis extends Analysis
                 Highlight.toggleReturnBoolean();
                 ChatMessage.sendToLocalChat(chat, true);
                 ChatMessage.localOutput(period, true);
-                if(!message.isEmpty())
+                if (!message.isEmpty())
                 {
                     ChatMessage.localOutputT(message);
                 }
@@ -362,6 +362,7 @@ public class LogBlockAnalysis extends Analysis
             _echoNextNoResults = false;
         }
     }
+
     void lbTp(MutableText chat, Matcher m)
     {
         try

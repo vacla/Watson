@@ -17,7 +17,7 @@
   "license": "MIT",
   "environment": "client",
   "entrypoints": {
-    "main": [
+    "client": [
       "eu.minemania.watson.Watson"
     ],
     "modmenu": [

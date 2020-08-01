@@ -55,6 +55,10 @@ public abstract class PlayereditBase implements IPlayeredit
     public enum SortCriteria
     {
         NAME,
+        BROKEN,
+        PLACED,
+        CONT_ADDED,
+        CONT_REMOVED,
         COUNT_TOTAL;
 
         public static SortCriteria fromStringStatic(String name)

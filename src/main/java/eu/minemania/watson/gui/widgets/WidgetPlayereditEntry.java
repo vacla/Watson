@@ -113,9 +113,8 @@ public class WidgetPlayereditEntry extends WidgetListEntryBase<PlayereditSet>
         {
             if (this.type == Type.OPEN_BLOCKLIST)
             {
-
                 EditListPlayeredit editList = new EditListPlayeredit(this.widget.playeredit, true);
-                GuiEdits gui = new GuiEdits(editList);
+                GuiEdits gui = new GuiEdits(editList, this.widget.parent.getParent());
                 GuiBase.openGui(gui);
             }
             else if (this.type == Type.REMOVE)

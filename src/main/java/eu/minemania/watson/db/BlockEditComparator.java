@@ -27,6 +27,21 @@ public class BlockEditComparator implements Comparator<BlockEdit>
             }
             else
             {
+                if (l.x == r.x && l.y == r.y && l.z == r.z)
+                {
+                    if (!(l.isContAdded() || l.isContRemoved()) && (r.isContAdded() || r.isContRemoved()))
+                    {
+                        return -1;
+                    }
+                    else if ((l.isContAdded() || l.isContRemoved()) && !(r.isContAdded() || r.isContRemoved()))
+                    {
+                        return +1;
+                    }
+                    else if ((l.isContAdded() || l.isContRemoved()) && (r.isContAdded() || r.isContRemoved()))
+                    {
+                        return +1;
+                    }
+                }
                 int dx = l.x - r.x;
                 if (dx != 0)
                 {

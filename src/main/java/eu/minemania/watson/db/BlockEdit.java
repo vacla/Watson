@@ -138,4 +138,19 @@ public class BlockEdit
     {
         return this.action.equals("placed") || this.action.equals("created");
     }
+
+    public boolean isBroken()
+    {
+        return this.action.equals("broke") || this.action.equals("destroyed");
+    }
+
+    public boolean isContAdded()
+    {
+        return this.action.equals("added") || this.action.equals("put");
+    }
+
+    public boolean isContRemoved()
+    {
+        return this.action.equals("removed") || this.action.equals("took");
+    }
 }
