@@ -42,7 +42,7 @@ public class DataManager implements IDirectoryCache
     private static ConfigGuiTab configGuiTab = ConfigGuiTab.GENERIC;
     private static boolean canSave;
     private static long clientTickStart;
-    private static String worldName;
+    private static String worldName = "";
 
     private final EditSelection editselection = new EditSelection();
 
