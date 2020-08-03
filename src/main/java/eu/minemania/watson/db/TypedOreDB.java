@@ -110,6 +110,7 @@ public class TypedOreDB
                         adjacent.setX(location.getX() + dx);
                         adjacent.setY(location.getY() + dy);
                         adjacent.setZ(location.getZ() + dz);
+                        adjacent.setWorld(location.getWorld());
                         OreBlock neighbour = getOreBlock(adjacent);
                         if (neighbour != null)
                         {

@@ -168,7 +168,10 @@ public class BlockEditSet
             }
 
             editsForPlayer.addBlockEdit(edit);
-            _oreDB.addBlockEdit(edit);
+            if (Configs.Generic.GROUPING_ORES_IN_CREATIVE.getBooleanValue())
+            {
+                _oreDB.addBlockEdit(edit);
+            }
 
             return true;
         }
