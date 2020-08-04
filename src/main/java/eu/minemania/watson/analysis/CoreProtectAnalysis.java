@@ -1,7 +1,6 @@
 package eu.minemania.watson.analysis;
 
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.config.Configs;
@@ -173,7 +172,7 @@ public class CoreProtectAnalysis extends Analysis
             block = "minecraft:player";
             _x = _y = _z = 2;
         }
-        _world = null;
+        _world = DataManager.getWorldPlugin().equals("") ? "" : DataManager.getWorldPlugin();
         _block = WatsonBlockRegistery.getInstance().getWatsonBlockByName(block);
         if (DataManager.getFilters().isAcceptedPlayer(_player))
         {
@@ -193,6 +192,7 @@ public class CoreProtectAnalysis extends Analysis
         _x = Integer.parseInt(m.group(1));
         _y = Integer.parseInt(m.group(2));
         _z = Integer.parseInt(m.group(3));
+        _world = DataManager.getWorldPlugin().equals("") ? "" : DataManager.getWorldPlugin();
         EditSelection selection = DataManager.getEditSelection();
         selection.selectPosition(_x, _y, _z, _world, 1);
         _firstInspectorResult = true;
@@ -207,7 +207,6 @@ public class CoreProtectAnalysis extends Analysis
             _y = Integer.parseInt(m.group(2));
             _z = Integer.parseInt(m.group(3));
             _world = m.group(4);
-            // https://github.com/totemo/watson/issues/23
 
             BlockEdit edit = new BlockEdit(_millis, _player, _action, _x, _y, _z, _block, _world, _loop);
             SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, true));
@@ -230,7 +229,10 @@ public class CoreProtectAnalysis extends Analysis
     {
         int currentPage = Integer.parseInt(m.group(1));
         int pageCount = Integer.parseInt(m.group(2));
-
+        if (currentPage == 1)
+        {
+            _looping = true;
+        }
         if (Configs.Generic.AUTO_PAGE.getBooleanValue() && currentPage > _currentPage)
         {
             if (pageCount <= Configs.Generic.MAX_AUTO_PAGES.getIntegerValue())
@@ -259,7 +261,7 @@ public class CoreProtectAnalysis extends Analysis
                 reset();
             }
         }
-        if (_currentPage == _pageCount)
+        if (_currentPage == _pageCount || !Configs.Generic.AUTO_PAGE.getBooleanValue())
         {
             reset();
         }
