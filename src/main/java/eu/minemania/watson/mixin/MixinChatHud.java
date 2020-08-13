@@ -53,7 +53,7 @@ public abstract class MixinChatHud
         return componentln;
     }
 
-    @Inject(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", shift = Shift.BEFORE, target = "Lnet/minecraft/client/gui/hud/ChatHud;addMessage(Lnet/minecraft/text/StringRenderable;IIZ)V"), cancellable = true)
+    @Inject(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At(value = "INVOKE", shift = Shift.BEFORE, target = "Lnet/minecraft/client/gui/hud/ChatHud;addMessage(Lnet/minecraft/text/Text;IIZ)V"), cancellable = true)
     public void onDelete(CallbackInfo ci)
     {
         if (delete)
