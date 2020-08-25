@@ -50,7 +50,7 @@ public class BlockEdit
     {
         Block blocks = Registry.BLOCK.get(Identifier.tryParse(block.getName()));
         float lineWidth = block.getLineWidth();
-        if (!blocks.getName().asString().equals("Air"))
+        if (!blocks.getName().getString().toLowerCase().contains("air"))
         {
             if (Configs.Generic.ORE_OUTLINE_THICKER.getBooleanValue() && blocks instanceof OreBlock)
             {
