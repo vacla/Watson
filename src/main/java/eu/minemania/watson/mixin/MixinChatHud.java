@@ -19,7 +19,7 @@ public abstract class MixinChatHud
 {
     private boolean delete;
 
-    @ModifyVariable(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At("HEAD"))
+    @ModifyVariable(method = "addMessage(Lnet/minecraft/text/Text;I)V", at = @At("HEAD"), argsOnly = true)
     private Text chatHighlighter(Text componentln)
     {
         delete = false;
