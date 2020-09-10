@@ -62,7 +62,7 @@ public class WatsonCommand extends WatsonCommandBase
                                 .then(argument("length", floatArg()).executes(WatsonCommand::vector_length))))
                 .then(literal("label").executes(WatsonCommand::label)
                         .then(argument("displayed", bool()).executes(WatsonCommand::label)))
-                .then(literal("tp").executes(WatsonCommand::teleport_next)
+                .then(literal("tp")
                         .then(literal("next").executes(WatsonCommand::teleport_next))
                         .then(literal("previous").executes(WatsonCommand::teleport_prev))
                         .then(argument("index", integer()).executes(WatsonCommand::teleport)))
@@ -350,7 +350,7 @@ public class WatsonCommand extends WatsonCommandBase
 
     private static int teleport_prev(CommandContext<ServerCommandSource> context)
     {
-        DataManager.getEditSelection().getBlockEditSet().getOreDB().tpNext();
+        DataManager.getEditSelection().getBlockEditSet().getOreDB().tpPrev();
         return 1;
     }
 

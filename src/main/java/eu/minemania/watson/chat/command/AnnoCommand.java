@@ -35,7 +35,9 @@ public class AnnoCommand extends WatsonCommandBase
                 .then(literal("list").executes(AnnoCommand::list))
                 .then(literal("clear").executes(AnnoCommand::clear))
                 .then(literal("tp")
-                        .then(argument("index", integer(1)).executes(AnnoCommand::teleport)))
+                        .then(literal("next").executes(AnnoCommand::teleport_next))
+                        .then(literal("previous").executes(AnnoCommand::teleport_prev))
+                        .then(argument("index", integer()).executes(AnnoCommand::teleport)))
                 .then(literal("remove")
                         .then(argument("index", integer(1)).executes(AnnoCommand::remove)))
                 .then(literal("add")
@@ -93,21 +95,22 @@ public class AnnoCommand extends WatsonCommandBase
         return 1;
     }
 
+    private static int teleport_next(CommandContext<ServerCommandSource> context)
+    {
+        DataManager.getEditSelection().getBlockEditSet().tpNextAnno();
+        return 1;
+    }
+
+    private static int teleport_prev(CommandContext<ServerCommandSource> context)
+    {
+        DataManager.getEditSelection().getBlockEditSet().tpPrevAnno();
+        return 1;
+    }
+
     private static int teleport(CommandContext<ServerCommandSource> context)
     {
-        BlockEditSet edits = DataManager.getEditSelection().getBlockEditSet();
-        ArrayList<Annotation> annotations = edits.getAnnotations();
-
-        int index = getInteger(context, "index") - 1;
-        if (index < annotations.size())
-        {
-            Annotation annotation = annotations.get(index);
-            Teleport.teleport(annotation.getX(), annotation.getY(), annotation.getZ(), annotation.getWorld());
-        }
-        else
-        {
-            localErrorT(context.getSource(), "watson.error.anno.out_range");
-        }
+        int index = getInteger(context, "index");
+        DataManager.getEditSelection().getBlockEditSet().tpIndexAnno(index);
         return 1;
     }
 

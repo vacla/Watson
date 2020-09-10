@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import eu.minemania.watson.client.Teleport;
 import org.lwjgl.opengl.GL11;
 
 import eu.minemania.watson.chat.ChatMessage;
@@ -27,9 +28,10 @@ import net.minecraft.client.render.VertexFormats;
 
 public class BlockEditSet
 {
-    protected LinkedHashMap<String, PlayereditSet> _playerEdits = new LinkedHashMap<>();
-    protected ArrayList<Annotation> _annotations = new ArrayList<>();
-    protected OreDB _oreDB = new OreDB();
+    protected LinkedHashMap<String, PlayereditSet> playerEdits = new LinkedHashMap<>();
+    protected ArrayList<Annotation> annotations = new ArrayList<>();
+    protected OreDB oreDB = new OreDB();
+    protected int tpIndexAnno = 0;
 
     public synchronized int load(File file) throws Exception
     {
@@ -79,7 +81,7 @@ public class BlockEditSet
                         int z = Integer.parseInt(anno.group(3));
                         String world = anno.group(4);
                         String text = anno.group(5);
-                        _annotations.add(new Annotation(x, y, z, world, text));
+                        annotations.add(new Annotation(x, y, z, world, text));
                     }
                 }
             }
@@ -103,12 +105,12 @@ public class BlockEditSet
         try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(file))))
         {
             int editCount = 0;
-            for (PlayereditSet editsForPlayer : _playerEdits.values())
+            for (PlayereditSet editsForPlayer : playerEdits.values())
             {
                 editCount += editsForPlayer.save(writer);
             }
 
-            for (Annotation annotation : _annotations)
+            for (Annotation annotation : annotations)
             {
                 writer.format("#%d|%d|%d|%s|%s\n", annotation.getX(), annotation.getY(), annotation.getZ(), annotation.getWorld(), annotation.getText());
             }
@@ -118,21 +120,21 @@ public class BlockEditSet
 
     public synchronized void clear()
     {
-        _playerEdits.clear();
-        _annotations.clear();
-        _oreDB.clear();
+        playerEdits.clear();
+        annotations.clear();
+        oreDB.clear();
     }
 
     public synchronized BlockEdit findEdit(int x, int y, int z, String player)
     {
         if (player != null)
         {
-            PlayereditSet editsForPlayer = _playerEdits.get(player.toLowerCase());
+            PlayereditSet editsForPlayer = playerEdits.get(player.toLowerCase());
             return editsForPlayer != null ? editsForPlayer.findEdit(x, y, z) : null;
         }
         else
         {
-            for (PlayereditSet editsForPlayer : _playerEdits.values())
+            for (PlayereditSet editsForPlayer : playerEdits.values())
             {
                 BlockEdit edit = editsForPlayer.findEdit(x, y, z);
                 if (edit != null)
@@ -160,17 +162,17 @@ public class BlockEditSet
                 selection.selectBlockEdit(edit);
             }
             String lowerName = edit.player.toLowerCase();
-            PlayereditSet editsForPlayer = _playerEdits.get(lowerName);
+            PlayereditSet editsForPlayer = playerEdits.get(lowerName);
             if (editsForPlayer == null)
             {
                 editsForPlayer = new PlayereditSet(edit.player);
-                _playerEdits.put(lowerName, editsForPlayer);
+                playerEdits.put(lowerName, editsForPlayer);
             }
 
             editsForPlayer.addBlockEdit(edit);
             if (Configs.Generic.GROUPING_ORES_IN_CREATIVE.getBooleanValue())
             {
-                _oreDB.addBlockEdit(edit);
+                oreDB.addBlockEdit(edit);
             }
 
             return true;
@@ -183,14 +185,14 @@ public class BlockEditSet
 
     public synchronized void listEdits()
     {
-        if (_playerEdits.size() == 0)
+        if (playerEdits.size() == 0)
         {
             ChatMessage.localOutputT("watson.message.edits.none_world");
         }
         else
         {
             ChatMessage.localOutputT("watson.message.edits.edits_list");
-            for (PlayereditSet editsByPlayer : _playerEdits.values())
+            for (PlayereditSet editsByPlayer : playerEdits.values())
             {
                 ChatMessage.localOutputT("watson.message.edits.edit", editsByPlayer.getPlayer(), editsByPlayer.getBlockEditCount(), StringUtils.translate(editsByPlayer.isVisible() ? "watson.message.setting.shown" : "watson.message.setting.hidden"));
             }
@@ -200,7 +202,7 @@ public class BlockEditSet
     public synchronized void setEditVisibility(String player, boolean visible)
     {
         player = player.toLowerCase();
-        PlayereditSet editsByPlayer = _playerEdits.get(player);
+        PlayereditSet editsByPlayer = playerEdits.get(player);
         if (editsByPlayer != null)
         {
             editsByPlayer.setVisible(visible);
@@ -215,10 +217,10 @@ public class BlockEditSet
     public synchronized void removeEdits(String player)
     {
         player = player.toLowerCase();
-        PlayereditSet editsByPlayer = _playerEdits.get(player);
+        PlayereditSet editsByPlayer = playerEdits.get(player);
         if (editsByPlayer != null)
         {
-            _playerEdits.remove(player.toLowerCase());
+            playerEdits.remove(player.toLowerCase());
             getOreDB().removeDeposits(player);
             EditSelection edit = DataManager.getEditSelection();
             if (edit.getSelection() != null)
@@ -226,7 +228,7 @@ public class BlockEditSet
                 boolean selection = edit.getSelection().playereditSet == editsByPlayer;
 
                 ChatMessage.localOutputT("watson.message.edits.edit_removed", editsByPlayer.getBlockEditCount(), editsByPlayer.getPlayer());
-                if (_playerEdits.isEmpty() || selection)
+                if (playerEdits.isEmpty() || selection)
                 {
                     DataManager.getEditSelection().clearSelection();
                 }
@@ -242,7 +244,7 @@ public class BlockEditSet
     {
         if (Configs.Generic.OUTLINE_SHOWN.getBooleanValue())
         {
-            for (PlayereditSet editsForPlayer : _playerEdits.values())
+            for (PlayereditSet editsForPlayer : playerEdits.values())
             {
                 editsForPlayer.drawOutlines();
             }
@@ -257,7 +259,7 @@ public class BlockEditSet
             BufferBuilder buffer = tessellator.getBuffer();
             buffer.begin(GL11.GL_LINES, VertexFormats.POSITION_COLOR);
             int nextColorIndex1 = 0;
-            for (PlayereditSet editsForPlayer : _playerEdits.values())
+            for (PlayereditSet editsForPlayer : playerEdits.values())
             {
                 editsForPlayer.drawVectors(OverlayRenderer.KELLY_COLORS[nextColorIndex1], buffer);
                 nextColorIndex1 = (nextColorIndex1 + 1) % OverlayRenderer.KELLY_COLORS.length;
@@ -268,9 +270,9 @@ public class BlockEditSet
 
     public synchronized void drawAnnotations(double dx, double dy, double dz)
     {
-        if (Configs.Generic.ANNOTATION_SHOWN.getBooleanValue() && !_annotations.isEmpty())
+        if (Configs.Generic.ANNOTATION_SHOWN.getBooleanValue() && !annotations.isEmpty())
         {
-            for (Annotation annotation : _annotations)
+            for (Annotation annotation : annotations)
             {
                 annotation.draw(dx, dy, dz);
             }
@@ -279,16 +281,49 @@ public class BlockEditSet
 
     public ArrayList<Annotation> getAnnotations()
     {
-        return _annotations;
+        return annotations;
     }
 
     public OreDB getOreDB()
     {
-        return _oreDB;
+        return oreDB;
     }
 
     public LinkedHashMap<String, PlayereditSet> getPlayereditSet()
     {
-        return _playerEdits;
+        return playerEdits;
+    }
+
+    public void tpNextAnno()
+    {
+        tpIndexAnno(tpIndexAnno + 1);
+    }
+
+    public void tpPrevAnno()
+    {
+        tpIndexAnno(tpIndexAnno - 1);
+    }
+
+    public void tpIndexAnno(int index)
+    {
+        if(annotations.isEmpty())
+        {
+            ChatMessage.localErrorT("watson.error.anno.out_range");
+        }
+        else
+        {
+            if (index < 1)
+            {
+                index = annotations.size();
+            }
+            else if (index > annotations.size())
+            {
+                index = 1;
+            }
+            tpIndexAnno = index;
+            Annotation annotation = getAnnotations().get(index - 1);
+            Teleport.teleport(annotation.getX(), annotation.getY(), annotation.getZ(), annotation.getWorld());
+            ChatMessage.localOutputT("watson.message.anno.teleport", index);
+        }
     }
 }

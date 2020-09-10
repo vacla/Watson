@@ -71,7 +71,9 @@ public class KeyCallbacks
         Hotkeys.KEYBIND_SCREENSHOT.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.KEYBIND_TP_CURSOR.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.KEYBIND_TP_NEXT.getKeybind().setCallback(callbackHotkeys);
+        Hotkeys.KEYBIND_TP_NEXT_ANNO.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.KEYBIND_TP_PREV.getKeybind().setCallback(callbackHotkeys);
+        Hotkeys.KEYBIND_TP_PREV_ANNO.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.KEYBIND_WATSON_CLEAR.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.OPEN_GUI_MAIN_MENU.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.OPEN_GUI_SETTINGS.getKeybind().setCallback(callbackHotkeys);
@@ -302,14 +304,24 @@ public class KeyCallbacks
                         return true;
                     }
                 }
-                if (key == Hotkeys.KEYBIND_TP_NEXT.getKeybind())
+                else if (key == Hotkeys.KEYBIND_TP_NEXT.getKeybind())
                 {
                     edits.getBlockEditSet().getOreDB().tpNext();
+                    return true;
+                }
+                else if (key == Hotkeys.KEYBIND_TP_NEXT_ANNO.getKeybind())
+                {
+                    edits.getBlockEditSet().tpNextAnno();
                     return true;
                 }
                 else if (key == Hotkeys.KEYBIND_TP_PREV.getKeybind())
                 {
                     edits.getBlockEditSet().getOreDB().tpPrev();
+                    return true;
+                }
+                else if (key == Hotkeys.KEYBIND_TP_PREV_ANNO.getKeybind())
+                {
+                    edits.getBlockEditSet().tpPrevAnno();
                     return true;
                 }
                 else if (key == Hotkeys.KEYBIND_WATSON_CLEAR.getKeybind())
