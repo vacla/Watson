@@ -20,9 +20,9 @@ public class Hotkeys
     public static final ConfigHotkey KEYBIND_SCREENSHOT = new ConfigHotkey("screenshot", "F12", "watson.description.hotkey.keybind_screenshot");
     public static final ConfigHotkey KEYBIND_TP_CURSOR = new ConfigHotkey("tpcursor", "", "watson.description.hotkey.keybind_tp_cursor");
     public static final ConfigHotkey KEYBIND_TP_NEXT = new ConfigHotkey("tpnext", "", "watson.description.hotkey.keybind_tp_next");
-    public static final ConfigHotkey KEYBIND_TP_NEXT_ANNO = new ConfigHotkey("tpnext", "", "watson.description.hotkey.keybind_tp_next_anno");
+    public static final ConfigHotkey KEYBIND_TP_NEXT_ANNO = new ConfigHotkey("tpnextanno", "", "watson.description.hotkey.keybind_tp_next_anno");
     public static final ConfigHotkey KEYBIND_TP_PREV = new ConfigHotkey("tpprev", "", "watson.description.hotkey.keybind_tp_prev");
-    public static final ConfigHotkey KEYBIND_TP_PREV_ANNO = new ConfigHotkey("tpprev", "", "watson.description.hotkey.keybind_tp_prev_anno");
+    public static final ConfigHotkey KEYBIND_TP_PREV_ANNO = new ConfigHotkey("tpprevanno", "", "watson.description.hotkey.keybind_tp_prev_anno");
     public static final ConfigHotkey KEYBIND_WATSON_CLEAR = new ConfigHotkey("watsonClear", "", "watson.description.hotkey.keybind_watson_clear");
     public static final ConfigHotkey OPEN_GUI_MAIN_MENU = new ConfigHotkey("openGuiMainMenu", "L", KeybindSettings.RELEASE_EXCLUSIVE, "watson.description.hotkey.open_gui_main_menu");
     public static final ConfigHotkey OPEN_GUI_SETTINGS = new ConfigHotkey("openGuiSettings", "L,C", "watson.description.hotkey.open_gui_settings");
