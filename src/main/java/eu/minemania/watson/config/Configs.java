@@ -57,6 +57,9 @@ public class Configs implements IConfigHandler
         public static final ConfigBoolean ENABLED = new ConfigBoolean("enabled", true, "watson.description.config.enabled");
         public static final ConfigBoolean GROUPING_ORES_IN_CREATIVE = new ConfigBoolean("groupingOresInCreative", true, "watson.description.config.grouping_ores_in_creative");
         public static final ConfigBoolean HIGHLIGHT_CASE_SENSITIVE = new ConfigBoolean("highlightCaseSensitive", true, "watson.description.config.highlight_case_sensitive");
+        public static final ConfigString HIGHLIGHT_SOUND = new ConfigString("highlightSound", "", "watson.description.config.highlight_sound");
+        public static final ConfigBoolean HIGHLIGHT_SOUND_ENABLE = new ConfigBoolean("highlightSoundEnable", false, "watson.description.config.highlight_sound_enable");
+        public static final ConfigDouble HIGHLIGHT_SOUND_VOLUME = new ConfigDouble("highlightSoundVolume", 1, 0, 1, "watson.description.config.highlight_sound_volume");
         public static final ConfigBoolean LABEL_SHOWN = new ConfigBoolean("labelshown", true, "watson.description.config.label_shown");
         public static final ConfigBoolean LINKED_CREATION = new ConfigBoolean("linkedcreation", false, "watson.description.config.linked_creation");
         public static final ConfigBoolean LINKED_DESTRUCTION = new ConfigBoolean("linkeddestruction", false, "watson.description.config.linked_description");
@@ -98,6 +101,9 @@ public class Configs implements IConfigHandler
                 ENABLED,
                 GROUPING_ORES_IN_CREATIVE,
                 HIGHLIGHT_CASE_SENSITIVE,
+                HIGHLIGHT_SOUND,
+                HIGHLIGHT_SOUND_ENABLE,
+                HIGHLIGHT_SOUND_VOLUME,
                 LABEL_SHOWN,
                 LINKED_CREATION,
                 LINKED_DESTRUCTION,

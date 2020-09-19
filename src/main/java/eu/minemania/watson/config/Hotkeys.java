@@ -13,6 +13,7 @@ import com.google.common.collect.ImmutableList;
 public class Hotkeys
 {
     public static final ConfigHotkey KEYBIND_AUTO_PAGE = new ConfigHotkey("autopage", "", "watson.description.hotkey.keybind_auto_page");
+    public static final ConfigHotkey KEYBIND_COMMAND_CO_INSPECT = new ConfigHotkey("coreInspect", "", "watson.description.hotkey.keybind_command_co_inspect");
     public static final ConfigHotkey KEYBIND_CURSOR_NEXT = new ConfigHotkey("cursornext", "", "watson.description.hotkey.keybind_cursor_next");
     public static final ConfigHotkey KEYBIND_CURSOR_PREV = new ConfigHotkey("cursorprev", "", "watson.description.hotkey.keybind_cursor_prev");
     public static final ConfigHotkey KEYBIND_QUERY_AFTER = new ConfigHotkey("queryafter", "", "watson.description.hotkey.keybind_query_after");
@@ -29,6 +30,7 @@ public class Hotkeys
 
     public static final List<ConfigHotkey> HOTKEY_LIST = ImmutableList.of(
             KEYBIND_AUTO_PAGE,
+            KEYBIND_COMMAND_CO_INSPECT,
             KEYBIND_CURSOR_NEXT,
             KEYBIND_CURSOR_PREV,
             KEYBIND_QUERY_AFTER,

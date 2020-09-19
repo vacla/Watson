@@ -1,6 +1,7 @@
 package eu.minemania.watson.event;
 
 import eu.minemania.watson.analysis.Analysis;
+import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.chat.Highlight;
 import eu.minemania.watson.chat.command.Command;
 import eu.minemania.watson.client.Screenshot;
@@ -64,6 +65,7 @@ public class KeyCallbacks
         Configs.Analysis.WG_REGIONS.setValueChangeCallback(valueChangeStringCallback);
 
         Hotkeys.KEYBIND_AUTO_PAGE.getKeybind().setCallback(new KeyCallbackToggleBoolean(Configs.Generic.AUTO_PAGE));
+        Hotkeys.KEYBIND_COMMAND_CO_INSPECT.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.KEYBIND_CURSOR_NEXT.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.KEYBIND_CURSOR_PREV.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.KEYBIND_QUERY_AFTER.getKeybind().setCallback(callbackHotkeys);
@@ -262,7 +264,15 @@ public class KeyCallbacks
             }
             else if (Configs.Generic.ENABLED.getBooleanValue())
             {
-                if (key == Hotkeys.KEYBIND_CURSOR_NEXT.getKeybind())
+                if (key == Hotkeys.KEYBIND_COMMAND_CO_INSPECT.getKeybind())
+                {
+                    if (Configs.Generic.PLUGIN.getStringValue().equals("CoreProtect"))
+                    {
+                        ChatMessage.sendToServerChat("/co i");
+                        return true;
+                    }
+                }
+                else if (key == Hotkeys.KEYBIND_CURSOR_NEXT.getKeybind())
                 {
                     if (edits.getSelection() != null && edits.getSelection().playereditSet != null)
                     {

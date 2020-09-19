@@ -7,7 +7,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.*;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 import org.apache.commons.lang3.tuple.MutablePair;
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
@@ -292,12 +295,12 @@ public class Highlight
             }
             else
             {
-                endMessage = (MutableText) message;
+                endMessage = message;
             }
         }
         else
         {
-            endMessage = (MutableText) message;
+            endMessage = message;
         }
         if (Configs.Generic.DEBUG.getBooleanValue())
         {
@@ -315,6 +318,7 @@ public class Highlight
      */
     private static String highlight(String chatText)
     {
+        boolean madeSound = false;
         for (MutablePair<String, MutablePair<Formatting, Formatting>> item_highlight : highlights)
         {
             int case_sensitive = Configs.Generic.HIGHLIGHT_CASE_SENSITIVE.getBooleanValue() ? 0 : Pattern.CASE_INSENSITIVE;
@@ -322,6 +326,21 @@ public class Highlight
             Matcher matcher = pattern.matcher(chatText);
             if (matcher.find())
             {
+                if (!madeSound && Configs.Generic.HIGHLIGHT_SOUND_ENABLE.getBooleanValue())
+                {
+                    madeSound = true;
+                    String sound = Configs.Generic.HIGHLIGHT_SOUND.getStringValue();
+                    try
+                    {
+                        SoundEvent soundEvent = Registry.SOUND_EVENT.get(new Identifier(sound));
+                        float soundVolume = (float) Configs.Generic.HIGHLIGHT_SOUND_VOLUME.getDoubleValue();
+                        mc.player.playSound(soundEvent, soundVolume, 1f);
+                    }
+                    catch (Exception e)
+                    {
+                        ChatMessage.localErrorT("watson.error.highlight_sound", sound);
+                    }
+                }
                 matcher.reset();
                 while (matcher.find())
                 {

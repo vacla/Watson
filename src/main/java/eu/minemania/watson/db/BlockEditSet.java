@@ -306,7 +306,7 @@ public class BlockEditSet
 
     public void tpIndexAnno(int index)
     {
-        if(annotations.isEmpty())
+        if (annotations.isEmpty())
         {
             ChatMessage.localErrorT("watson.error.anno.out_range");
         }
