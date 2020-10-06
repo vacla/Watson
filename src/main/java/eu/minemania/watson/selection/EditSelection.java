@@ -1,23 +1,31 @@
 package eu.minemania.watson.selection;
 
-import java.util.Calendar;
-import java.util.HashMap;
-
+import eu.minemania.watson.client.Teleport;
+import eu.minemania.watson.db.BlockEdit;
+import eu.minemania.watson.db.BlockEditComparator;
+import eu.minemania.watson.db.BlockEditSet;
+import eu.minemania.watson.db.PlayereditSet;
 import fi.dy.masa.malilib.util.WorldUtils;
+import net.minecraft.command.argument.EntityAnchorArgumentType;
+import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
-
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
-import eu.minemania.watson.db.BlockEdit;
-import eu.minemania.watson.db.BlockEditSet;
 import fi.dy.masa.malilib.gui.Message.MessageType;
 import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.TreeSet;
 
 public class EditSelection
 {
@@ -209,6 +217,68 @@ public class EditSelection
         else
         {
             InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.info.no_player_time");
+        }
+    }
+
+    public void replay(String since, double speed, int radius, ServerCommandSource source)
+    {
+        TreeSet<BlockEdit> edits = new TreeSet<>(new BlockEditComparator());
+        long timing = DataManager.getTimeDiff(since);
+
+        if (timing == -1)
+        {
+            InfoUtils.showInGameMessage(MessageType.ERROR, "watson.message.edits.none_edits", "here");
+            return;
+        }
+
+        for (PlayereditSet playereditSet : DataManager.getEditSelection().getBlockEditSet().getPlayereditSet().values())
+        {
+            for (BlockEdit edit : playereditSet.getBlockEdits())
+            {
+                if (timing <= edit.time)
+                {
+                    Vec3d editPos = new Vec3d(edit.x, edit.y, edit.z);
+                    if (source.getEntity().getPos().isInRange(editPos, radius))
+                    {
+                        edits.add(edit);
+                    }
+                }
+            }
+        }
+
+        if (!edits.isEmpty())
+        {
+            MinecraftClient mc = MinecraftClient.getInstance();
+            Thread t = new Thread(() -> {
+                for (BlockEdit edit : edits)
+                {
+                    try
+                    {
+                        double randX = MathHelper.clamp(edit.x + mc.player.getRandom().nextDouble() * 16.0D, edit.x - 3, edit.x + 3);
+                        double randY = MathHelper.clamp(edit.y + (double) (mc.player.getRandom().nextInt(16)), edit.y - 3, edit.y + 3);
+                        double randZ = MathHelper.clamp(edit.z + mc.player.getRandom().nextDouble() * 16.0D, edit.z - 3, edit.z + 3);
+                        mc.player.startFallFlying();
+                        mc.getNetworkHandler().sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
+                        Teleport.teleport(randX, randY, randZ, edit.world);
+                        Thread.sleep(50L);
+                        mc.player.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, new Vec3d(edit.x, edit.y, edit.z));
+                        mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.LookOnly(mc.player.yaw, mc.player.pitch, false));
+                        selectPosition(edit.x, edit.y, edit.z, edit.world, edit.amount);
+                        mc.player.stopFallFlying();
+                        mc.getNetworkHandler().sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
+                        Thread.sleep((long) (10000L / speed) - 50L);
+                    }
+                    catch (InterruptedException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            t.start();
+        }
+        else
+        {
+            InfoUtils.showInGameMessage(MessageType.ERROR, "watson.message.edits.none_world");
         }
     }
 }

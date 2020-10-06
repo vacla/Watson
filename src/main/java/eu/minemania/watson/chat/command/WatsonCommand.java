@@ -141,7 +141,11 @@ public class WatsonCommand extends WatsonCommandBase
                                 .then(argument("length", floatArg(0)).executes(WatsonCommand::config_vector_length)))
                         .then(literal("chat_highlights").executes(WatsonCommand::config_chat_highlights)
                                 .then(argument("enabled", bool()).executes(WatsonCommand::config_chat_highlights)))
-                        .then(literal("help").executes(WatsonCommand::help)));
+                        .then(literal("help").executes(WatsonCommand::help)))
+                .then(literal("replay")
+                        .then(argument("radius", integer(1))
+                                .then(argument("speed", doubleArg(1))
+                                        .then(argument("since", greedyString()).executes(WatsonCommand::replay)))));
         dispatcher.register(watson);
     }
 
@@ -956,5 +960,39 @@ public class WatsonCommand extends WatsonCommandBase
             }
         }
         return cmdCount;
+    }
+
+    private static int replay(CommandContext<ServerCommandSource> context)
+    {
+        String since = "";
+        double speed = 0;
+        int radius = 0;
+
+        try
+        {
+            since = getString(context, "since");
+            speed = getDouble(context, "speed");
+            radius = getInteger(context, "radius");
+        }
+        catch (Exception e)
+        {
+            String error;
+            if (since.isEmpty())
+            {
+                error = "since";
+            }
+            else if (speed == 0)
+            {
+                error = "speed";
+            }
+            else
+            {
+                error = "radius";
+            }
+            localErrorT(context.getSource(), "watson.error.command.replay." + error);
+        }
+
+        DataManager.getEditSelection().replay(since, speed, radius, context.getSource());
+        return 1;
     }
 }

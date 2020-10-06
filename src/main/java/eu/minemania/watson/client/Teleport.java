@@ -9,7 +9,7 @@ import eu.minemania.watson.config.Configs;
 
 public class Teleport
 {
-    public static void teleport(int x, int y, int z, String world)
+    public static void teleport(double x, double y, double z, String world)
     {
         String format = Configs.Generic.TELEPORT_COMMAND.getStringValue();
         Pattern pattern = Pattern.compile("(?:\\{((?:\\w)*):?((?:\\w)*)})");

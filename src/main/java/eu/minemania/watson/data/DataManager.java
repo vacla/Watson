@@ -22,10 +22,13 @@ import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.db.BlockEditSet;
 import eu.minemania.watson.db.Filters;
+import eu.minemania.watson.db.TimeStamp;
 import eu.minemania.watson.gui.GuiConfigs.ConfigGuiTab;
 import eu.minemania.watson.selection.EditSelection;
+import fi.dy.masa.malilib.gui.Message;
 import fi.dy.masa.malilib.gui.interfaces.IDirectoryCache;
 import fi.dy.masa.malilib.util.FileUtils;
+import fi.dy.masa.malilib.util.InfoUtils;
 import fi.dy.masa.malilib.util.JsonUtils;
 import fi.dy.masa.malilib.util.StringUtils;
 import fi.dy.masa.malilib.util.WorldUtils;
@@ -37,6 +40,7 @@ public class DataManager implements IDirectoryCache
     private static final DataManager INSTANCE = new DataManager();
 
     protected static final Pattern DATE_PATTERN = Pattern.compile("^(\\d{4})-(\\d{1,2})-(\\d{1,2})$");
+    protected static final Pattern ABSOLUTE_TIME = Pattern.compile("(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{1,2}):(\\d{1,2})");
     private static final Map<String, File> LAST_DIRECTORIES = new HashMap<>();
 
     private static ConfigGuiTab configGuiTab = ConfigGuiTab.GENERIC;
@@ -481,6 +485,32 @@ public class DataManager implements IDirectoryCache
         File[] files = getPlayereditsBaseDirectory().listFiles(new CaseInsensitivePrefixFileFilter(prefix));
         Arrays.sort(files);
         return files;
+    }
+
+    public static long getTimeDiff(String time)
+    {
+        Matcher absolute = ABSOLUTE_TIME.matcher(time);
+        if (absolute.matches())
+        {
+            int month = Integer.parseInt(absolute.group(1));
+            int day = Integer.parseInt(absolute.group(2));
+            int hour = Integer.parseInt(absolute.group(3));
+            int minute = Integer.parseInt(absolute.group(4));
+            int second = Integer.parseInt(absolute.group(5));
+            if (month != 0 || day != 0 || hour != 0 || minute != 0 || second != 0)
+            {
+                return TimeStamp.timeDiff(month, day, hour, minute, second);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        else
+        {
+            InfoUtils.showGuiOrInGameMessage(Message.MessageType.ERROR, "watson.gui.label.blockedit.info.format");
+            return -1;
+        }
     }
 
     public static class CaseInsensitivePrefixFileFilter implements FileFilter
