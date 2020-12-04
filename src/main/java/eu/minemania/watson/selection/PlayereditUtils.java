@@ -245,7 +245,7 @@ public class PlayereditUtils
             {
                 return StringUtils.translate("watson.gui.label.blockedit.list.chat");
             }
-            else if (blockedit.block.getName().equals("minecraft:oak_sign") && !blockedit.action.equals("broke") && !blockedit.action.equals("placed"))
+            else if (blockedit.block.getName().equals("minecraft:oak_sign") && !blockedit.action.equals("broke") && !blockedit.action.equals("placed") && !blockedit.action.equals("remove") && !blockedit.action.equals("place"))
             {
                 return StringUtils.translate("watson.gui.label.blockedit.list.sign");
             }

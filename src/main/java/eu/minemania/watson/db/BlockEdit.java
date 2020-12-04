@@ -86,6 +86,10 @@ public class BlockEdit
                     {
                         RenderUtils.drawSpecialOutlinesBatched(x, y, z, block, buffer, true);
                     }
+                    else if (blocks instanceof ChestBlock)
+                    {
+                        RenderUtils.drawFullBlockOutlinesBatched(x, y, z, block.getColor(), buffer);
+                    }
                     else
                     {
                         RenderUtils.drawBlockModelOutlinesBatched(model, state, new BlockPos(x, y, z), block.getColor(), buffer);
@@ -119,6 +123,10 @@ public class BlockEdit
                 RenderUtils.drawFullBlockOutlinesBatched(x, y, z, block.getColor(), buffer);
             }
         }
+        else
+        {
+            RenderUtils.drawFullBlockOutlinesBatched(x, y, z, block.getColor(), buffer);
+        }
     }
 
     private boolean isOreNotDrawn()
@@ -151,6 +159,6 @@ public class BlockEdit
 
     public boolean isContRemoved()
     {
-        return this.action.equals("removed") || this.action.equals("took");
+        return this.action.equals("removed") || this.action.equals("took") || this.action.equals("remove");
     }
 }

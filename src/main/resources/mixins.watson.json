@@ -8,6 +8,7 @@
     "MixinClientPlayNetworkHandler",
     "MixinCommandSuggestor",
     "MixinPlayerEntity",
+    "MixinScreen",
     "MixinTextFieldWidget"
   ],
   "injectors": {

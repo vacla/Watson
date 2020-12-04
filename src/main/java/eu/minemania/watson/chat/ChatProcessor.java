@@ -19,6 +19,8 @@ public class ChatProcessor
         addChatHandler(new RegionInfoAnalysis());
 
         addChatHandler(new CoreProtectAnalysis());
+
+        addChatHandler(new PrismAnalysis());
     }
 
     public static ChatProcessor getInstance()

@@ -164,7 +164,7 @@ public class DataManager implements IDirectoryCache
                 {
                     configGuiTab = ConfigGuiTab.valueOf(root.get("config_gui_tab").getAsString());
                 }
-                catch (Exception e)
+                catch (Exception ignored)
                 {
                 }
 
@@ -527,5 +527,14 @@ public class DataManager implements IDirectoryCache
         {
             return file.isFile() && file.canRead() && (_lowerPrefix.length() == 0 || file.getName().toLowerCase().startsWith(_lowerPrefix));
         }
+    }
+
+    public static String onSendChatMessage(String message)
+    {
+        if(message.contains("/pr l") && !message.contains("-extended"))
+        {
+            return message + " -extended";
+        }
+        return message;
     }
 }

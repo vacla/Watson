@@ -14,6 +14,9 @@ public class TimeStamp
     protected static final Pattern HOURS_AGO_TIME = Pattern.compile("(\\d+.\\d+)/(\\w) ago");
     protected static final Pattern DATE_HOUR = Pattern.compile("(\\d+)-(\\d+) (\\d+):(\\d+)");
     protected static final Pattern ABSOLUTE_TIME = Pattern.compile("(\\d{1,4})-(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{2}):(\\d{2})(?: (\\w+))?");
+    protected static final Pattern TIME_PRISM = Pattern.compile("(?:(?<day>\\d+)d)?(?:(?<hour>\\d+)h)?(?:(?<min>\\d+)m)?\\sago");
+    protected static final Pattern TIME_SINGLE_PRISM = Pattern.compile("(?<year>\\d{1,4})/(?<month>\\d{1,2})/(?<day>\\d{1,2}) (?<hour>\\d{1,2}):(?<min>\\d{2}):(?<sec>\\d{2})(?<merid>\\w+)?");
+    protected static final Pattern DATE_HOUR_SECOND = Pattern.compile("(?<month>\\d+)-(?<day>\\d+) (?<hour>\\d+):(?<min>\\d+):(?<sec>\\d+)");
 
     static
     {
@@ -162,6 +165,9 @@ public class TimeStamp
     public static long parseTimeExpression(String hoverTime, String time)
     {
         Matcher absolute = ABSOLUTE_TIME.matcher(hoverTime);
+        Matcher prismTime = TIME_PRISM.matcher(time);
+        Matcher prismSingleTime = TIME_SINGLE_PRISM.matcher(time);
+        Matcher logblockHover = DATE_HOUR_SECOND.matcher(hoverTime);
         if (absolute.matches())
         {
             int year = Integer.parseInt(absolute.group(1));
@@ -176,6 +182,57 @@ public class TimeStamp
                 timezone = absolute.group(7);
             }
             return TimeStamp.toMillis(year, month, day, hour, minute, second, timezone, hoverTime, time);
+        }
+        else if (prismTime.matches())
+        {
+            int day = 0;
+            int hour = 0;
+            int min = 0;
+            try {
+                day = Integer.parseInt(prismTime.group("day"));
+            } catch (Exception ignored) {}
+            try {
+                hour = Integer.parseInt(prismTime.group("hour"));
+            } catch (Exception ignored) {}
+            try {
+                min = Integer.parseInt(prismTime.group("min"));
+            } catch (Exception ignored) {}
+
+            return TimeStamp.timeDiff(0, day, hour, min, 0);
+        }
+        else if (time.equals("just now"))
+        {
+            Calendar timed = Calendar.getInstance();
+            timed.add(Calendar.SECOND, -10);
+            return timed.getTimeInMillis();
+        }
+        else if (prismSingleTime.matches())
+        {
+            int year = Integer.parseInt(prismSingleTime.group("year"));
+            int month = Integer.parseInt(prismSingleTime.group("month"));
+            int day = Integer.parseInt(prismSingleTime.group("day"));
+            int hour = Integer.parseInt(prismSingleTime.group("hour"));
+            int minute = Integer.parseInt(prismSingleTime.group("min"));
+            int second = Integer.parseInt(prismSingleTime.group("sec"));
+            String merid = prismSingleTime.group("merid");
+            if (merid.equals("pm"))
+            {
+                hour += 12;
+            }
+            if (year != 0 && year < 100)
+            {
+                year += 2000;
+            }
+            return TimeStamp.toMillis(year, month, day, hour, minute, second, "", "", "");
+        }
+        else if (logblockHover.matches())
+        {
+            int month = Integer.parseInt(logblockHover.group("month"));
+            int day = Integer.parseInt(logblockHover.group("day"));
+            int hour = Integer.parseInt(logblockHover.group("hour"));
+            int minute = Integer.parseInt(logblockHover.group("min"));
+            int second = Integer.parseInt(logblockHover.group("sec"));
+            return toMillis(month, day, hour, minute, second);
         }
         else
         {

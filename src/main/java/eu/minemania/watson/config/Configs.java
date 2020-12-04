@@ -53,6 +53,7 @@ public class Configs implements IConfigHandler
         public static final ConfigBoolean DEBUG = new ConfigBoolean("debugWatson", false, "watson.description.config.debug");
         public static final ConfigBoolean DISABLE_CP_MESSAGES = new ConfigBoolean("disableCPMessages", false, "watson.description.config.coreprotect_messages");
         public static final ConfigBoolean DISABLE_LB_MESSAGES = new ConfigBoolean("disableLBMessages", false, "watson.description.config.logblock_messages");
+        public static final ConfigBoolean DISABLE_PR_MESSAGES = new ConfigBoolean("disablePRMessages", false, "watson.description.config.prism_messages");
         public static final ConfigBoolean DISPLAYED = new ConfigBoolean("displayed", true, "watson.description.config.displayed");
         public static final ConfigBoolean ENABLED = new ConfigBoolean("enabled", true, "watson.description.config.enabled");
         public static final ConfigBoolean GROUPING_ORES_IN_CREATIVE = new ConfigBoolean("groupingOresInCreative", true, "watson.description.config.grouping_ores_in_creative");
@@ -97,6 +98,7 @@ public class Configs implements IConfigHandler
                 DEBUG,
                 DISABLE_CP_MESSAGES,
                 DISABLE_LB_MESSAGES,
+                DISABLE_PR_MESSAGES,
                 DISPLAYED,
                 ENABLED,
                 GROUPING_ORES_IN_CREATIVE,
@@ -179,6 +181,9 @@ public class Configs implements IConfigHandler
         public static final ConfigStringExt LB_SUM = new ConfigStringExt("lb sum", "^(\\d+)[ ]{6,}(\\d+)[ ]{6,}((?:\\w| )+)$", "watson.description.config.analysis").setCommentArgs("lb sum");
         public static final ConfigStringExt MODMODE_DISABLE = new ConfigStringExt("modmode disable", "^You are no longer in ModMode!$", "watson.description.config.analysis").setCommentArgs("modmode disable");
         public static final ConfigStringExt MODMODE_ENABLE = new ConfigStringExt("modmode enable", "^You are now in ModMode!$", "watson.description.config.analysis").setCommentArgs("modmode enable");
+        public static final ConfigStringExt PRISM_DATA = new ConfigStringExt("prism data", ".*?[-+] \\[([0-9]+)\\] (?<instigator>.*) (?<cause>killed|picked up|placed|grew|ignited|set a fire|used|threw potion|sheared|dispensed|blew up|formed|poured|broke|filled a|accessed|ate|(?:un)?leashed|launched|hung|wrote|entered|exited|removed|dropped|inserted) (?<target>.*) (?<when>just now|(?:\\d+d)?(?:\\d+h)?(?:\\d+m)?\\sago) \\(a:(?<action>.*)\\)\\s - \\d+ - (?<date>\\d+\\/\\d+\\/\\d+) (?<time>\\d+:\\d+:\\d+\\w+) - (?<world>\\w+) @ (?<x>-?\\d+) (?<y>-?\\d+) (?<z>-?\\d+).*?", "watson.description.config.analysis").setCommentArgs("prism data");
+        public static final ConfigStringExt PRISM_PAGE = new ConfigStringExt("prism page", "Prism \\/\\/ Showing \\d+ results\\. Page (?<current>\\d+) of (?<max>\\d+)", "watson.description.config.analysis").setCommentArgs("prism page");
+        public static final ConfigStringExt PRISM_PAGINATION = new ConfigStringExt("prism pagination", "(?:\\s+\\[<< Prev] \\|)?\\s+\\[Next >>\\]", "watson.description.config.analysis").setCommentArgs("prism pagination");
         public static final ConfigStringExt WG_REGIONS = new ConfigStringExt("wg regions", "^Applicable regions: ([a-zA-Z0-9_-]+(?:, [a-zA-Z0-9_-]+)*)$", "watson.description.config.analysis").setCommentArgs("wg regions");
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
@@ -210,6 +215,9 @@ public class Configs implements IConfigHandler
                 LB_TP,
                 MODMODE_DISABLE,
                 MODMODE_ENABLE,
+                PRISM_DATA,
+                PRISM_PAGE,
+                PRISM_PAGINATION,
                 WG_REGIONS
         );
     }
