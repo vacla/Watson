@@ -24,15 +24,15 @@ public class Teleport
                     format = format.replaceFirst(text, world);
                     break;
                 case "x":
-                    Number nx = (matcher.group(2).equals("d") ? (Number) (x + 0.5) : x);
+                    Number nx = (matcher.group(2).equals("d") ? (Number) (x + 0.5) : (int)x);
                     format = format.replaceFirst(text, String.valueOf(nx));
                     break;
                 case "y":
-                    Number ny = (matcher.group(2).equals("d") ? (Number) (y + 0.5) : y);
+                    Number ny = (matcher.group(2).equals("d") ? (Number) (y + 0.5) : (int)y);
                     format = format.replaceFirst(text, String.valueOf(ny));
                     break;
                 case "z":
-                    Number nz = (matcher.group(2).equals("d") ? (Number) (z + 0.5) : z);
+                    Number nz = (matcher.group(2).equals("d") ? (Number) (z + 0.5) : (int)z);
                     format = format.replaceFirst(text, String.valueOf(nz));
                     break;
             }
