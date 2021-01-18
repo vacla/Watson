@@ -1,7 +1,7 @@
 package eu.minemania.watson.analysis;
 
 import eu.minemania.watson.Watson;
-import eu.minemania.watson.chat.ChatMessage;
+import eu.minemania.watson.client.Paginator;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.BlockEdit;
@@ -15,8 +15,6 @@ import java.util.regex.Matcher;
 
 public class PrismAnalysis extends Analysis
 {
-    protected int _currentPage = 0;
-    protected int _pageCount = 0;
     protected String _world;
     protected int _x;
     protected int _y;
@@ -33,7 +31,7 @@ public class PrismAnalysis extends Analysis
             return sendMessage();
         });
         addMatchedChatHandler(Configs.Analysis.PRISM_PAGINATION, (chat, m) -> {
-            prPagination();
+            Paginator.getInstance().prRequestNextPage();
             return sendMessage();
         });
     }
@@ -196,25 +194,12 @@ public class PrismAnalysis extends Analysis
 
         if (pageCount <= Configs.Generic.MAX_AUTO_PAGES.getIntegerValue())
         {
-            _currentPage = currentPage;
-            _pageCount = pageCount;
+            Paginator.getInstance().setCurrentPage(currentPage);
+            Paginator.getInstance().setPageCount(pageCount);
         }
         else
         {
-            _currentPage = _pageCount = 0;
-        }
-    }
-
-    private void prPagination()
-    {
-        if (Configs.Generic.AUTO_PAGE.getBooleanValue())
-        {
-            if (_currentPage != 0 && _currentPage < _pageCount && _pageCount <= Configs.Generic.MAX_AUTO_PAGES.getIntegerValue())
-            {
-                ChatMessage.sendToServerChat("/pr page n");
-
-                _currentPage = _pageCount = 0;
-            }
+            Paginator.getInstance().reset();
         }
     }
 

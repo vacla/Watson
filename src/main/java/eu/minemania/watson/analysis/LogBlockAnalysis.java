@@ -10,6 +10,7 @@ import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.chat.Color;
 import eu.minemania.watson.chat.Highlight;
 import eu.minemania.watson.chat.IMatchedChatHandler;
+import eu.minemania.watson.client.Paginator;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.BlockEdit;
@@ -29,8 +30,6 @@ public class LogBlockAnalysis extends Analysis
     protected int _colourIndex = _COLOUR_CYCLE.length - 1;
     protected static final float _COLOUR_PROXIMITY_LIMIT = 4.0f;
     protected int _lastX, _lastY, _lastZ;
-    protected int _currentPage = 0;
-    protected int _pageCount = 0;
     protected String _world;
     protected int _x;
     protected int _y;
@@ -232,7 +231,7 @@ public class LogBlockAnalysis extends Analysis
             {
                 recolor(chat, color);
             }
-            requestNextPage();
+            Paginator.getInstance().lbRequestNextPage();
         }
         catch (Exception ex)
         {
@@ -376,7 +375,7 @@ public class LogBlockAnalysis extends Analysis
             BlockEdit edit = selection.getBlockEditSet().findEdit(x, y, z, player);
             selection.selectBlockEdit(edit);
         }
-        catch (Exception e)
+        catch (Exception ignored)
         {
         }
     }
@@ -412,18 +411,18 @@ public class LogBlockAnalysis extends Analysis
 
         if (pageCount <= Configs.Generic.MAX_AUTO_PAGES.getIntegerValue())
         {
-            _currentPage = currentPage;
-            _pageCount = pageCount;
+            Paginator.getInstance().setCurrentPage(currentPage);
+            Paginator.getInstance().setPageCount(pageCount);
         }
         else
         {
-            _currentPage = _pageCount = 0;
+            Paginator.getInstance().reset();
         }
     }
 
     void lbHeader(MutableText chat, Matcher m)
     {
-        _currentPage = _pageCount = 0;
+        Paginator.getInstance().reset();
     }
 
     private void reset()
@@ -433,19 +432,6 @@ public class LogBlockAnalysis extends Analysis
         _stoneCount = _diamondCount = 0;
         _stoneTime = _diamondTime = 0;
         _sinceMinutes = _beforeMinutes = 0;
-    }
-
-    private void requestNextPage()
-    {
-        if (Configs.Generic.AUTO_PAGE.getBooleanValue())
-        {
-            if (_currentPage != 0 && _currentPage < _pageCount && _pageCount <= Configs.Generic.MAX_AUTO_PAGES.getIntegerValue())
-            {
-                ChatMessage.sendToServerChat(String.format("/lb page %d", _currentPage + 1));
-
-                _currentPage = _pageCount = 0;
-            }
-        }
     }
 
     private Formatting getChatColorFormat(int x, int y, int z)

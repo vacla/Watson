@@ -65,6 +65,7 @@ public class Configs implements IConfigHandler
         public static final ConfigBoolean LINKED_CREATION = new ConfigBoolean("linkedcreation", false, "watson.description.config.linked_creation");
         public static final ConfigBoolean LINKED_DESTRUCTION = new ConfigBoolean("linkeddestruction", false, "watson.description.config.linked_description");
         public static final ConfigInteger MAX_AUTO_PAGES = new ConfigInteger("maxAutoPages", 100, "watson.description.config.max_auto_pages");
+        public static final ConfigInteger MAX_AUTO_PAGES_LOOP = new ConfigInteger("maxAutoPagesLoop", 100, "watson.description.config.max_auto_pages_loop");
         public static final ConfigBoolean ONLY_ORE_BLOCK = new ConfigBoolean("onlyOreBlock", false, "watson.description.config.only_ore_block");
         public static final ConfigInteger ORE_LINEWIDTH = new ConfigInteger("oreLinewidth", 3, 1, 10, "watson.description.config.ore_linewidth");
         public static final ConfigBoolean ORE_OUTLINE_THICKER = new ConfigBoolean("oreOutlineThicker", false, "watson.description.config.ore_outline_thicker");
@@ -110,6 +111,7 @@ public class Configs implements IConfigHandler
                 LINKED_CREATION,
                 LINKED_DESTRUCTION,
                 MAX_AUTO_PAGES,
+                MAX_AUTO_PAGES_LOOP,
                 ONLY_ORE_BLOCK,
                 ORE_LINEWIDTH,
                 ORE_OUTLINE_THICKER,

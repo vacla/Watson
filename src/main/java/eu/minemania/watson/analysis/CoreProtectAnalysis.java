@@ -3,6 +3,7 @@ package eu.minemania.watson.analysis;
 import java.util.regex.Matcher;
 
 import eu.minemania.watson.chat.ChatMessage;
+import eu.minemania.watson.client.Paginator;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.BlockEdit;
@@ -54,8 +55,7 @@ public class CoreProtectAnalysis extends Analysis
     protected String _player;
     protected WatsonBlock _block;
     protected int _loop;
-    protected static int _currentPage = 0;
-    protected static int _pageCount = 0;
+
     protected static boolean _looping;
 
     public CoreProtectAnalysis()
@@ -233,27 +233,27 @@ public class CoreProtectAnalysis extends Analysis
         {
             _looping = true;
         }
-        if (Configs.Generic.AUTO_PAGE.getBooleanValue() && currentPage > _currentPage)
+        if (Configs.Generic.AUTO_PAGE.getBooleanValue() && currentPage > Paginator.getInstance().getCurrentPage())
         {
             if (pageCount <= Configs.Generic.MAX_AUTO_PAGES.getIntegerValue())
             {
-                _currentPage = currentPage;
-                _pageCount = pageCount;
+                Paginator.getInstance().setCurrentPage(currentPage);
+                Paginator.getInstance().setPageCount(pageCount);
                 if (_looping)
                 {
                     if (Configs.Generic.DISABLE_CP_MESSAGES.getBooleanValue())
                     {
-                        InfoUtils.printActionbarMessage("watson.message.cp.auto_page.page", _currentPage, _pageCount);
-                        if (_currentPage == 1)
+                        InfoUtils.printActionbarMessage("watson.message.cp.auto_page.page", currentPage, pageCount);
+                        if (currentPage == 1)
                         {
-                            ChatMessage.localOutputT("watson.message.cp.auto_page.start", _pageCount);
+                            ChatMessage.localOutputT("watson.message.cp.auto_page.start", pageCount);
                         }
-                        else if (_currentPage == _pageCount)
+                        else if (currentPage == pageCount)
                         {
                             ChatMessage.localOutputT("watson.message.cp.auto_page.finished");
                         }
                     }
-                    requestNextPage();
+                    Paginator.getInstance().cpRequestNextPage();
                 }
             }
             else
@@ -261,7 +261,7 @@ public class CoreProtectAnalysis extends Analysis
                 reset();
             }
         }
-        if (_currentPage == _pageCount || !Configs.Generic.AUTO_PAGE.getBooleanValue())
+        if (currentPage == pageCount || !Configs.Generic.AUTO_PAGE.getBooleanValue())
         {
             reset();
         }
@@ -272,22 +272,10 @@ public class CoreProtectAnalysis extends Analysis
         _looping = true;
     }
 
-    private void requestNextPage()
-    {
-        if (_currentPage != 0 && _currentPage < _pageCount)
-        {
-            if (_currentPage == 1)
-            {
-                ChatMessage.getInstance().serverChat(String.format("/co l %d:%d", 1, Configs.Generic.AMOUNT_ROWS.getIntegerValue()), _currentPage == 1);
-            }
-            ChatMessage.getInstance().serverChat(String.format("/co l %d:%d", _currentPage + 1, Configs.Generic.AMOUNT_ROWS.getIntegerValue()), _currentPage == 1);
-        }
-    }
-
     public static void reset()
     {
         _looping = false;
-        _currentPage = _pageCount = 0;
+        Paginator.getInstance().reset();
     }
 
     private boolean sendMessage()
