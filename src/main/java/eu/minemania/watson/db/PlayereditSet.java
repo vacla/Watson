@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.TreeSet;
 
 import eu.minemania.watson.data.DataManager;
+import eu.minemania.watson.selection.PlayereditUtils;
 import org.lwjgl.opengl.GL11;
 import eu.minemania.watson.config.Configs;
 import fi.dy.masa.malilib.util.Color4f;
@@ -67,7 +68,11 @@ public class PlayereditSet
 
     public synchronized int getBlockEditCount()
     {
-        return _edits.size();
+        int totalEdits = 0;
+        for (BlockEdit edit : _edits) {
+            totalEdits += (int)PlayereditUtils.getInstance().getRevertAction(edit, 0, 1);
+        }
+        return totalEdits;
     }
 
     public void setVisible(boolean visible)
@@ -92,7 +97,7 @@ public class PlayereditSet
                     BufferBuilder buffer = tessellator.getBuffer();
                     buffer.begin(GL11.GL_LINES, VertexFormats.POSITION_COLOR);
 
-                    edit.drawOutline(buffer);
+                    PlayereditUtils.getInstance().getRevertAction(edit, null, edit.drawOutline(buffer));
 
                     tessellator.draw();
                 }

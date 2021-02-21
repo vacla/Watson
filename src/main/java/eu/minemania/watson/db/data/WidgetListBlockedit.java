@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
+import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.gui.GuiBlockeditData;
 import eu.minemania.watson.selection.PlayereditUtils;
 import fi.dy.masa.malilib.gui.widgets.WidgetListBase;
@@ -63,7 +64,7 @@ public class WidgetListBlockedit extends WidgetListBase<BlockeditEntry, WidgetBl
     {
         for (BlockeditEntry entry : entries)
         {
-            if (this.gui.getTime() == 0 || this.entryMatchesFilter(entry, ""))
+            if ((this.gui.getTime() == 0 && this.gui.getYHeight() == 0 && !Configs.Generic.ACTION_REVERSE.getBooleanValue()) || this.entryMatchesFilter(entry, ""))
             {
                 this.listContents.add(entry);
             }
@@ -86,14 +87,38 @@ public class WidgetListBlockedit extends WidgetListBase<BlockeditEntry, WidgetBl
     @Override
     protected List<String> getEntryStringsForFilter(BlockeditEntry entry)
     {
+        if (this.gui.getYHeight() != 0 && this.gui.getYHeightDropDownSelection() != null)
+        {
+            switch (this.gui.getYHeightDropDownSelection()) {
+                case ABOVE:
+                    if (entry.getEdit().y > this.gui.getYHeight())
+                    {
+                        return ImmutableList.of(PlayereditUtils.blockString(entry.getEdit(), PlayereditUtils.Edit.DESCRIPTION));
+                    }
+                    break;
+                case BELOW:
+                    if (entry.getEdit().y < this.gui.getYHeight())
+                    {
+                        return ImmutableList.of(PlayereditUtils.blockString(entry.getEdit(), PlayereditUtils.Edit.DESCRIPTION));
+                    }
+                    break;
+                case EQUAL:
+                    if (entry.getEdit().y == this.gui.getYHeight())
+                    {
+                        return ImmutableList.of(PlayereditUtils.blockString(entry.getEdit(), PlayereditUtils.Edit.DESCRIPTION));
+                    }
+                    break;
+            }
+        }
         if (this.gui.getTime() != 0 && entry.getEdit().time >= this.gui.getTime())
         {
             return ImmutableList.of(PlayereditUtils.blockString(entry.getEdit(), PlayereditUtils.Edit.DESCRIPTION));
         }
-        else
+        if (Configs.Generic.ACTION_REVERSE.getBooleanValue())
         {
-            return ImmutableList.of();
+            return (List<String>) PlayereditUtils.getInstance().getRevertAction(entry.getEdit(), ImmutableList.of(), ImmutableList.of(PlayereditUtils.blockString(entry.getEdit(), PlayereditUtils.Edit.DESCRIPTION)));
         }
+        return ImmutableList.of();
     }
 
     @Override
@@ -112,7 +137,7 @@ public class WidgetListBlockedit extends WidgetListBase<BlockeditEntry, WidgetBl
     @Override
     protected boolean hasFilter()
     {
-        return this.gui.getTime() != 0;
+        return this.gui.getTime() != 0 || this.gui.getYHeight() != 0 || Configs.Generic.ACTION_REVERSE.getBooleanValue();
     }
 
     @Override

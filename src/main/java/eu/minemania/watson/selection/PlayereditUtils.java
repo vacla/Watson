@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
+import eu.minemania.watson.data.Actions;
+import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.BlockEdit;
 import eu.minemania.watson.db.PlayereditSet;
 import eu.minemania.watson.db.WatsonBlock;
@@ -28,6 +30,13 @@ import net.minecraft.util.registry.Registry;
 
 public class PlayereditUtils
 {
+    private static PlayereditUtils INSTANCE = new PlayereditUtils();
+
+    public static PlayereditUtils getInstance()
+    {
+        return INSTANCE;
+    }
+
     public static List<PlayereditEntry> createPlayereditListFor(PlayereditSet playeredit)
     {
         Object2IntOpenHashMap<WatsonBlock> countsTotal = new Object2IntOpenHashMap<>();
@@ -56,41 +65,48 @@ public class PlayereditUtils
                 int broken = 0;
                 int contAdded = 0;
                 int contRemoved = 0;
+                int totalCount = 0;
 
                 for (BlockEdit edit : playeredit.getBlockEdits())
                 {
-                    String typeName = type.getStack().getItem().toString();
-                    String blockName = getItemStack(edit.block.getName()).getItem().toString();
-                    if (!typeName.contains("minecraft:"))
+                    if ((boolean) getInstance().getRevertAction(edit, false, true))
                     {
-                        typeName = "minecraft:" + typeName;
-                    }
-                    if (!blockName.contains("minecraft:"))
-                    {
-                        blockName = "minecraft:" + blockName;
-                    }
-                    if (blockName.equals(typeName))
-                    {
-                        if (edit.isCreated())
+                        String typeName = type.getStack().getItem().toString();
+                        String blockName = getItemStack(edit.block.getName()).getItem().toString();
+                        if (!typeName.contains("minecraft:"))
                         {
-                            placed += edit.amount;
+                            typeName = "minecraft:" + typeName;
                         }
-                        else if (edit.isBroken())
+                        if (!blockName.contains("minecraft:"))
                         {
-                            broken += edit.amount;
+                            blockName = "minecraft:" + blockName;
                         }
-                        else if (edit.isContAdded())
+                        if (blockName.equals(typeName))
                         {
-                            contAdded += edit.amount;
+                            if (edit.isCreated())
+                            {
+                                placed += edit.amount;
+                            }
+                            else if (edit.isBroken())
+                            {
+                                broken += edit.amount;
+                            }
+                            else if (edit.isContAdded())
+                            {
+                                contAdded += edit.amount;
+                            }
+                            else if (edit.isContRemoved())
+                            {
+                                contRemoved += edit.amount;
+                            }
+                            watsonBlocks.add(edit);
                         }
-                        else if (edit.isContRemoved())
-                        {
-                            contRemoved += edit.amount;
-                        }
-                        watsonBlocks.add(edit);
                     }
                 }
-                list.add(new PlayereditEntry(type.getStack().copy(), broken, placed, contAdded, contRemoved, itemTypesTotal.getInt(type), watsonBlocks));
+                for (BlockEdit edit : watsonBlocks) {
+                    totalCount += edit.amount;
+                }
+                list.add(new PlayereditEntry(type.getStack().copy(), broken, placed, contAdded, contRemoved, totalCount, watsonBlocks));
             }
         }
 
@@ -281,6 +297,30 @@ public class PlayereditUtils
         }
 
         return StringUtils.translate("watson.gui.label.blockedit.list.blocks", blockedit.x, blockedit.y, blockedit.z, day, month, year, hour, minute, second, blockedit.world, blockedit.amount, blockedit.action);
+    }
+
+    public <T> Object getRevertAction(BlockEdit blockedit, T returnDisabled, T returnEnabled)
+    {
+        if (Configs.Generic.ACTION_REVERSE.getBooleanValue())
+        {
+            for (PlayereditSet playereditSet : DataManager.getEditSelection().getBlockEditSet().getPlayereditSet().values())
+            {
+                for (BlockEdit blockEditHistory : playereditSet.getBlockEdits())
+                {
+                    if (blockEditHistory.x == blockedit.x && blockEditHistory.y == blockedit.y &&
+                            blockEditHistory.z == blockedit.z && !blockEditHistory.player.equals(blockedit.player) &&
+                            blockEditHistory.time > blockedit.time)
+                    {
+                        Actions.getReverseAction(blockEditHistory, blockedit);
+                        if (blockedit.disabled)
+                        {
+                            return returnDisabled;
+                        }
+                    }
+                }
+            }
+        }
+        return returnEnabled;
     }
 
     public enum Edit

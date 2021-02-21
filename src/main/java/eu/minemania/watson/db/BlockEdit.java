@@ -28,6 +28,7 @@ public class BlockEdit
     public WatsonBlock block;
     public String world;
     public PlayereditSet playereditSet;
+    public boolean disabled;
     private final BlockRenderManager blockModelShapes;
     protected boolean drawn;
 
@@ -46,7 +47,7 @@ public class BlockEdit
         this.blockModelShapes = mc.getBlockRenderManager();
     }
 
-    public void drawOutline(BufferBuilder buffer)
+    public Object drawOutline(BufferBuilder buffer)
     {
         Block blocks = Registry.BLOCK.get(Identifier.tryParse(block.getName()));
         float lineWidth = block.getLineWidth();
@@ -65,6 +66,7 @@ public class BlockEdit
             Optional<EntityType<?>> entity = EntityType.get(block.getName());
             renderEntities(buffer, entity);
         }
+        return null;
     }
 
     private void renderBlocks(BufferBuilder buffer, Block blocks)

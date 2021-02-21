@@ -8,6 +8,7 @@ import eu.minemania.watson.client.Screenshot;
 import eu.minemania.watson.client.Teleport;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.config.Hotkeys;
+import eu.minemania.watson.data.Actions;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.BlockEdit;
 import eu.minemania.watson.gui.GuiConfigs;
@@ -33,6 +34,7 @@ public class KeyCallbacks
 
         Configs.Generic.WATSON_PREFIX.setValueChangeCallback(valueChangeStringCallback);
         Configs.Lists.HIGHLIGHT.setValueChangeCallback(valueChangeStringListCallback);
+        Configs.Lists.OVERRIDING_ACTIONS.setValueChangeCallback(valueChangeStringListCallback);
 
         Configs.Analysis.CP_BUSY.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.CP_DETAILS.setValueChangeCallback(valueChangeStringCallback);
@@ -222,6 +224,10 @@ public class KeyCallbacks
             if (config == Configs.Lists.HIGHLIGHT)
             {
                 Highlight.setHighlightList(Configs.Lists.HIGHLIGHT.getStrings());
+            }
+            else if (config == Configs.Lists.OVERRIDING_ACTIONS)
+            {
+                Actions.setActionsList(Configs.Lists.OVERRIDING_ACTIONS.getStrings());
             }
         }
     }

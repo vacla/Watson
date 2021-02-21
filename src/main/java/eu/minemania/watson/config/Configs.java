@@ -1,5 +1,6 @@
 package eu.minemania.watson.config;
 
+import eu.minemania.watson.data.Actions;
 import fi.dy.masa.malilib.config.IConfigHandler;
 
 import java.io.File;
@@ -44,6 +45,7 @@ public class Configs implements IConfigHandler
      */
     public static class Generic
     {
+        public static final ConfigBoolean ACTION_REVERSE = new ConfigBoolean("actionReverse", false, "watson.description.config.action_reverse");
         public static final ConfigInteger AMOUNT_ROWS = new ConfigInteger("amountRowes", 5, "watson.description.config.amount_rows");
         public static final ConfigBoolean ANNOTATION_SHOWN = new ConfigBoolean("annotationShown", true, "watson.description.config.annotation_shown");
         public static final ConfigBoolean AUTO_PAGE = new ConfigBoolean("autopage", true, "watson.description.config.auto_page");
@@ -90,6 +92,7 @@ public class Configs implements IConfigHandler
         public static final ConfigString WATSON_PREFIX = new ConfigString("watsonPrefix", "watson", "watson.description.config.watson_prefix");
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
+                ACTION_REVERSE,
                 AMOUNT_ROWS,
                 ANNOTATION_SHOWN,
                 AUTO_PAGE,
@@ -143,11 +146,13 @@ public class Configs implements IConfigHandler
     public static class Lists
     {
         public static final ConfigStringList HIGHLIGHT = new ConfigStringList("highlight", ImmutableList.of(), "watson.description.config.highlight");
+        public static final ConfigStringList OVERRIDING_ACTIONS = new ConfigStringList("overriding actions", ImmutableList.of(), "watson.description.config.overriding_actions");
         public static final ConfigStringList SMALLER_RENDER_BOX = new ConfigStringList("Smaller render box", ImmutableList.of("minecraft:stone", "minecraft:gravel", "minecraft:dirt", "minecraft:diorite", "minecraft:sand", "minecraft:andesite", "minecraft:granite"), "watson.description.config.smaller_render_box");
         public static final ConfigStringList WATSON_BLOCKS = new ConfigStringList("watson blocks", setWatsonBlockData(), "watson.description.config.watson_blocks");
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
                 HIGHLIGHT,
+                OVERRIDING_ACTIONS,
                 SMALLER_RENDER_BOX,
                 WATSON_BLOCKS
         );
@@ -248,6 +253,7 @@ public class Configs implements IConfigHandler
 
         Highlight.setHighlightList(Lists.HIGHLIGHT.getStrings());
         WatsonBlockRegistery.setWatsonBlockList(Lists.WATSON_BLOCKS.getStrings());
+        Actions.setActionsList(Lists.OVERRIDING_ACTIONS.getStrings());
     }
 
     private static ImmutableList<String> setWatsonBlockData()
