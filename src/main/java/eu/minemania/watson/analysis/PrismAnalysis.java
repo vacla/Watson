@@ -52,7 +52,7 @@ public class PrismAnalysis extends Analysis
             }
             String player = m.group("instigator");
             StringBuilder action = new StringBuilder(m.group("action"));
-            String totalItemBlockName = m.group("target");
+            String totalItemBlockName = m.group("target").trim();
             int count = 1;
             if (totalItemBlockName.contains(" "))
             {
@@ -93,7 +93,7 @@ public class PrismAnalysis extends Analysis
                     }
                     totalItemBlockName = text.toString();
                 }
-                else
+                else if (!totalItemBlockName.startsWith("/"))
                 {
                     if (totalItemBlockName.contains("Sheep"))
                     {

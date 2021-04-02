@@ -8,6 +8,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import eu.minemania.watson.chat.IChatHandler;
 import eu.minemania.watson.chat.IMatchedChatHandler;
+import eu.minemania.watson.config.Configs;
 import fi.dy.masa.malilib.config.options.ConfigString;
 import net.minecraft.text.MutableText;
 
@@ -19,11 +20,23 @@ public class Analysis implements IChatHandler
     {
         String unformatted = chat.getString();
         unformatted = unformatted.replaceAll("\u00A7.", "");
+        if (Configs.Generic.DEBUG.getBooleanValue())
+        {
+            System.out.println("unformatted: " + unformatted);
+        }
         for (Entry<String, IMatchedChatHandler> entry : m.entries())
         {
+            if (Configs.Generic.DEBUG.getBooleanValue())
+            {
+                System.out.println("key: " + entry.getKey());
+            }
             Matcher m = Pattern.compile(entry.getKey()).matcher(unformatted);
             if (m.matches())
             {
+                if (Configs.Generic.DEBUG.getBooleanValue())
+                {
+                    System.out.println("key matched: " + entry.getKey());
+                }
                 return entry.getValue().onMatchedChat(chat, m);
             }
         }

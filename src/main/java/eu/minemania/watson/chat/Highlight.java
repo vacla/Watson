@@ -107,7 +107,7 @@ public class Highlight
         {
             return message;
         }
-        if (serverBrand.contains("spigot") || serverBrand.contains("paper") || serverBrand.contains("tuinity"))
+        if (serverBrand.contains("spigot") || serverBrand.contains("paper") || serverBrand.contains("tuinity") || serverBrand.contains("velocity"))
         {
             if (Configs.Generic.DEBUG.getBooleanValue())
             {
@@ -145,10 +145,15 @@ public class Highlight
             if (chat.toString().contains("<") && chat.toString().contains(">") && !chat.toString().startsWith("/") && (!chat.toString().startsWith("§") && chat.charAt(2) != '/'))
             {
                 int startUsername = chat.indexOf("<") + 1;
-                int endUsername = chat.indexOf(">");
+                int endUsername = chat.substring(startUsername).indexOf(">") + startUsername;
                 if (chat.toString().contains("[") && chat.toString().contains("]") && chat.indexOf("]") < startUsername - 1 && ((startUsername - 2) - (chat.indexOf("]")) <= 5))
                 {
-                    prefix = new LiteralText(chat.substring(chat.indexOf("["), chat.indexOf("]") + 1));
+                    int start = chat.indexOf("[");
+                    if (start < startUsername)
+                    {
+                        start = 0;
+                    }
+                    prefix = new LiteralText(chat.substring(start, chat.indexOf("]") + 1));
                 }
                 if (!prefix.equals(new LiteralText("")) || chat.toString().startsWith("<"))
                 {
