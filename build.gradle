@@ -43,7 +43,7 @@ dependencies {
 	modCompile "net.fabricmc:fabric-loader:" + config.fabric_loader_version
 	compile "com.google.code.findbugs:jsr305:3.0.2"
 	
-    modCompile "fi.dy.masa.malilib:malilib-fabric-" + config.minecraft_version_out + ":" + config.malilib_version
+    modCompile "fi.dy.masa.malilib:malilib-fabric-" + config.minecraft_version_malilib + ":" + config.malilib_version
     modCompile "io.github.prospector:modmenu:" + config.mod_menu_version
 }
 
