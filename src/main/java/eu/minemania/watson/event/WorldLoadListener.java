@@ -6,6 +6,7 @@ import eu.minemania.watson.analysis.CoreProtectAnalysis;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.network.ClientPacketChannelHandler;
+import eu.minemania.watson.network.PluginDeltaLoggerPacketHandler;
 import eu.minemania.watson.network.PluginWorldPacketHandler;
 import eu.minemania.watson.render.OverlayRenderer;
 import fi.dy.masa.malilib.interfaces.IWorldLoadListener;
@@ -24,7 +25,9 @@ public class WorldLoadListener implements IWorldLoadListener
             if (worldAfter == null)
             {
                 ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginWorldPacketHandler.INSTANCE);
+                ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginDeltaLoggerPacketHandler.INSTANCE);
                 PluginWorldPacketHandler.INSTANCE.reset();
+                PluginDeltaLoggerPacketHandler.INSTANCE.reset();
                 if (DataManager.getEditSelection().getSelection() != null)
                 {
                     DataManager.getEditSelection().clearBlockEditSet();
@@ -48,6 +51,7 @@ public class WorldLoadListener implements IWorldLoadListener
         {
             DataManager.onClientTickStart();
             ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginWorldPacketHandler.INSTANCE);
+            ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginDeltaLoggerPacketHandler.INSTANCE);
         }
         if (worldAfter != null)
         {
