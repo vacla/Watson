@@ -44,7 +44,7 @@ public class WatsonRenderer
         {
             this.mc = mc;
         }
-        if (Configs.Generic.DISPLAYED.getBooleanValue() && this.mc.getCameraEntity() != null && Configs.Generic.OUTLINE_SHOWN.getBooleanValue())
+        if (Configs.Generic.DISPLAYED.getBooleanValue() && this.mc.getCameraEntity() != null && Configs.Outlines.OUTLINE_SHOWN.getBooleanValue())
         {
             this.mc.getProfiler().push("watson_entities");
             EditSelection selection = DataManager.getEditSelection();

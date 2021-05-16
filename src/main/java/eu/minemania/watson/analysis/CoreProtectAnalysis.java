@@ -100,7 +100,7 @@ public class CoreProtectAnalysis extends Analysis
 
     void busy(MutableText chat, Matcher m)
     {
-        if (_looping && Configs.Generic.AUTO_PAGE.getBooleanValue() && Configs.Generic.DISABLE_CP_MESSAGES.getBooleanValue())
+        if (_looping && Configs.Plugin.AUTO_PAGE.getBooleanValue() && Configs.Messages.DISABLE_CP_MESSAGES.getBooleanValue())
         {
             ChatMessage.localErrorT("watson.message.cp.auto_page.error");
         }
@@ -233,15 +233,15 @@ public class CoreProtectAnalysis extends Analysis
         {
             _looping = true;
         }
-        if (Configs.Generic.AUTO_PAGE.getBooleanValue() && currentPage > Paginator.getInstance().getCurrentPage())
+        if (Configs.Plugin.AUTO_PAGE.getBooleanValue() && currentPage > Paginator.getInstance().getCurrentPage())
         {
-            if (pageCount <= Configs.Generic.MAX_AUTO_PAGES.getIntegerValue())
+            if (pageCount <= Configs.Plugin.MAX_AUTO_PAGES.getIntegerValue())
             {
                 Paginator.getInstance().setCurrentPage(currentPage);
                 Paginator.getInstance().setPageCount(pageCount);
                 if (_looping)
                 {
-                    if (Configs.Generic.DISABLE_CP_MESSAGES.getBooleanValue())
+                    if (Configs.Messages.DISABLE_CP_MESSAGES.getBooleanValue())
                     {
                         InfoUtils.printActionbarMessage("watson.message.cp.auto_page.page", currentPage, pageCount);
                         if (currentPage == 1)
@@ -261,7 +261,7 @@ public class CoreProtectAnalysis extends Analysis
                 reset();
             }
         }
-        if (currentPage == pageCount || !Configs.Generic.AUTO_PAGE.getBooleanValue())
+        if (currentPage == pageCount || !Configs.Plugin.AUTO_PAGE.getBooleanValue())
         {
             reset();
         }
@@ -280,6 +280,6 @@ public class CoreProtectAnalysis extends Analysis
 
     private boolean sendMessage()
     {
-        return !_looping || !Configs.Generic.AUTO_PAGE.getBooleanValue() || !Configs.Generic.DISABLE_CP_MESSAGES.getBooleanValue();
+        return !_looping || !Configs.Plugin.AUTO_PAGE.getBooleanValue() || !Configs.Messages.DISABLE_CP_MESSAGES.getBooleanValue();
     }
 }

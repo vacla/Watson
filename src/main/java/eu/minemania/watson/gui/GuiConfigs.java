@@ -31,6 +31,11 @@ public class GuiConfigs extends GuiConfigsBase
         int y = 26;
 
         x += this.createButton(x, y, -1, ConfigGuiTab.GENERIC);
+        x += this.createButton(x, y, -1, ConfigGuiTab.MESSAGES);
+        x += this.createButton(x, y, -1, ConfigGuiTab.OUTLINES);
+        x += this.createButton(x, y, -1, ConfigGuiTab.PLUGIN);
+        x += this.createButton(x, y, -1, ConfigGuiTab.HIGHLIGHTS);
+        x += this.createButton(x, y, -1, ConfigGuiTab.EDITS);
         x += this.createButton(x, y, -1, ConfigGuiTab.LISTS);
         x += this.createButton(x, y, -1, ConfigGuiTab.ANALYSIS);
         x += this.createButton(x, y, -1, ConfigGuiTab.HOTKEYS);
@@ -73,6 +78,26 @@ public class GuiConfigs extends GuiConfigsBase
         if (tab == ConfigGuiTab.GENERIC)
         {
             configs = Configs.Generic.OPTIONS;
+        }
+        else if (tab == ConfigGuiTab.MESSAGES)
+        {
+            configs = Configs.Messages.OPTIONS;
+        }
+        else if (tab == ConfigGuiTab.OUTLINES)
+        {
+            configs = Configs.Outlines.OPTIONS;
+        }
+        else if (tab == ConfigGuiTab.PLUGIN)
+        {
+            configs = Configs.Plugin.OPTIONS;
+        }
+        else if (tab == ConfigGuiTab.HIGHLIGHTS)
+        {
+            configs = Configs.Highlights.OPTIONS;
+        }
+        else if (tab == ConfigGuiTab.EDITS)
+        {
+            configs = Configs.Edits.OPTIONS;
         }
         else if (tab == ConfigGuiTab.LISTS)
         {
@@ -125,6 +150,11 @@ public class GuiConfigs extends GuiConfigsBase
     public enum ConfigGuiTab
     {
         GENERIC("watson.gui.button.config_gui.generic"),
+        MESSAGES("watson.gui.button.config_gui.messages"),
+        OUTLINES("watson.gui.button.config_gui.outlines"),
+        PLUGIN("watson.gui.button.config_gui.plugin"),
+        HIGHLIGHTS("watson.gui.button.config_gui.highlights"),
+        EDITS("watson.gui.button.config_gui.edits"),
         LISTS("watson.gui.button.config_gui.lists"),
         ANALYSIS("watson.gui.button.config_gui.analysis"),
         HOTKEYS("watson.gui.button.config_gui.hotkeys");

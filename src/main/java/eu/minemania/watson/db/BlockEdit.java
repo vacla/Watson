@@ -53,9 +53,9 @@ public class BlockEdit
         float lineWidth = block.getLineWidth();
         if (!blocks.getName().getString().toLowerCase().contains("air"))
         {
-            if (Configs.Generic.ORE_OUTLINE_THICKER.getBooleanValue() && blocks instanceof OreBlock)
+            if (Configs.Outlines.ORE_OUTLINE_THICKER.getBooleanValue() && blocks instanceof OreBlock)
             {
-                lineWidth = Configs.Generic.ORE_LINEWIDTH.getIntegerValue();
+                lineWidth = Configs.Outlines.ORE_LINEWIDTH.getIntegerValue();
             }
             RenderSystem.lineWidth(lineWidth);
             renderBlocks(buffer, blocks);
@@ -135,7 +135,7 @@ public class BlockEdit
     {
         for (BlockEdit blockEdit : playereditSet._edits)
         {
-            if (Configs.Generic.ONLY_ORE_BLOCK.getBooleanValue() && blockEdit.x == x && blockEdit.y == y && blockEdit.z == z && blockEdit.drawn)
+            if (Configs.Outlines.ONLY_ORE_BLOCK.getBooleanValue() && blockEdit.x == x && blockEdit.y == y && blockEdit.z == z && blockEdit.drawn)
             {
                 return this == blockEdit;
             }

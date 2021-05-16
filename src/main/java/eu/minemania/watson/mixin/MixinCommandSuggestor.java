@@ -15,7 +15,7 @@ import eu.minemania.watson.chat.command.ClientCommandManager;
 import eu.minemania.watson.interfaces.ITextFieldWidget;
 import net.minecraft.client.gui.screen.CommandSuggestor;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.server.command.CommandSource;
+import net.minecraft.command.CommandSource;
 
 @Mixin(CommandSuggestor.class)
 public class MixinCommandSuggestor

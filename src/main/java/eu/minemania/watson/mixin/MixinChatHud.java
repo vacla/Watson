@@ -31,7 +31,7 @@ public abstract class MixinChatHud
         boolean allowChat = ChatProcessor.getInstance().onChat((MutableText) componentln);
         if (allowChat)
         {
-            if (Configs.Generic.USE_CHAT_HIGHLIGHTS.getBooleanValue())
+            if (Configs.Highlights.USE_CHAT_HIGHLIGHTS.getBooleanValue())
             {
                 if (componentln instanceof TranslatableText)
                 {

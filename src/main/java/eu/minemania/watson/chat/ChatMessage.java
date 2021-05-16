@@ -65,7 +65,7 @@ public class ChatMessage
 
     public static void sendToLocalChat(MutableText inputmessage, boolean watsonMessage)
     {
-        MutableText message = Configs.Generic.USE_CHAT_HIGHLIGHTS.getBooleanValue() ? Highlight.setHighlightChatMessage("chat.type.text", inputmessage, watsonMessage) : inputmessage;
+        MutableText message = Configs.Highlights.USE_CHAT_HIGHLIGHTS.getBooleanValue() ? Highlight.setHighlightChatMessage("chat.type.text", inputmessage, watsonMessage) : inputmessage;
         MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(message);
     }
 

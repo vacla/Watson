@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
+import eu.minemania.watson.db.LocalAnnotation;
 import fi.dy.masa.malilib.render.RenderUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
@@ -69,6 +70,7 @@ public class OverlayRenderer
 
         DataManager.getEditSelection().getBlockEditSet().getOreDB().drawDepositLabels(cameraPos.x, cameraPos.y, cameraPos.z);
         DataManager.getEditSelection().getBlockEditSet().drawAnnotations(cameraPos.x, cameraPos.y, cameraPos.z);
+        LocalAnnotation.getInstance().drawAnnotations(cameraPos.x, cameraPos.y, cameraPos.z);
     }
 
     public static void drawBillboard(double x, double y, double z, double scale, String text)

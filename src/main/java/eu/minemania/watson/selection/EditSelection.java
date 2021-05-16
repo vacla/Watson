@@ -117,7 +117,7 @@ public class EditSelection
 
     public void drawSelection()
     {
-        if (_selection != null && Configs.Generic.SELECTION_SHOWN.getBooleanValue() && (DataManager.getWorldPlugin().isEmpty() || DataManager.getWorldPlugin().equals(_selection.world)))
+        if (_selection != null && Configs.Edits.SELECTION_SHOWN.getBooleanValue() && (DataManager.getWorldPlugin().isEmpty() || DataManager.getWorldPlugin().equals(_selection.world)))
         {
             Tessellator tesselator = Tessellator.getInstance();
             BufferBuilder buffer = tesselator.getBuffer();
@@ -158,7 +158,7 @@ public class EditSelection
     {
         if (_variables.containsKey("player") && _variables.containsKey("time"))
         {
-            if (Configs.Generic.PLUGIN.getStringValue().equals("LogBlock"))
+            if (Configs.Plugin.PLUGIN.getStringValue().equals("LogBlock"))
             {
                 _calendar.setTimeInMillis((Long) _variables.get("time"));
                 int day = _calendar.get(Calendar.DAY_OF_MONTH);
@@ -191,7 +191,7 @@ public class EditSelection
     {
         if (_variables.containsKey("player") && _variables.containsKey("time"))
         {
-            if (Configs.Generic.PLUGIN.getStringValue().equals("LogBlock"))
+            if (Configs.Plugin.PLUGIN.getStringValue().equals("LogBlock"))
             {
                 _calendar.setTimeInMillis((Long) _variables.get("time"));
                 int day = _calendar.get(Calendar.DAY_OF_MONTH);

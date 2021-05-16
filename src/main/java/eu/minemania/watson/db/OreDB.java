@@ -77,7 +77,7 @@ public class OreDB
         }
         else
         {
-            int pages = (depositCount + Configs.Generic.PAGE_LINES.getIntegerValue() - 1) / Configs.Generic.PAGE_LINES.getIntegerValue();
+            int pages = (depositCount + Configs.Plugin.PAGE_LINES.getIntegerValue() - 1) / Configs.Plugin.PAGE_LINES.getIntegerValue();
             if (page > pages)
             {
                 ChatMessage.localErrorT("watson.message.deposit.highest_page", pages);
@@ -94,8 +94,8 @@ public class OreDB
                 }
 
                 ArrayList<OreDeposit> deposits = getOreDepositSequence();
-                int first = 1 + (page - 1) * Configs.Generic.PAGE_LINES.getIntegerValue();
-                int last = Math.min(first + Configs.Generic.PAGE_LINES.getIntegerValue() - 1, getOreDepositCount());
+                int first = 1 + (page - 1) * Configs.Plugin.PAGE_LINES.getIntegerValue();
+                int last = Math.min(first + Configs.Plugin.PAGE_LINES.getIntegerValue() - 1, getOreDepositCount());
                 for (int id = first; id <= last; ++id)
                 {
                     OreDeposit deposit = deposits.get(id - 1);
@@ -257,7 +257,7 @@ public class OreDB
 
     public void drawDepositLabels(double dx, double dy, double dz)
     {
-        if (Configs.Generic.LABEL_SHOWN.getBooleanValue())
+        if (Configs.Edits.LABEL_SHOWN.getBooleanValue())
         {
             int id = 1;
             StringBuilder label = new StringBuilder();
@@ -332,20 +332,20 @@ public class OreDB
 
     protected ArrayList<OreDeposit> getOreDepositSequence()
     {
-        if (_lastTimeOrderedDeposits != Configs.Generic.TIME_ORDERED_DEPOSITS.getBooleanValue())
+        if (_lastTimeOrderedDeposits != Configs.Edits.TIME_ORDERED_DEPOSITS.getBooleanValue())
         {
             _oreDepositSequenceChanged = true;
         }
         if (_oreDepositSequenceChanged)
         {
             _oreDepositSequenceChanged = false;
-            _lastTimeOrderedDeposits = Configs.Generic.TIME_ORDERED_DEPOSITS.getBooleanValue();
+            _lastTimeOrderedDeposits = Configs.Edits.TIME_ORDERED_DEPOSITS.getBooleanValue();
             _oreDepositSequence.clear();
             for (TypedOreDB db : _db.values())
             {
                 _oreDepositSequence.addAll(db.getOreDeposits());
             }
-            if (Configs.Generic.TIME_ORDERED_DEPOSITS.getBooleanValue())
+            if (Configs.Edits.TIME_ORDERED_DEPOSITS.getBooleanValue())
             {
                 _oreDepositSequence.sort((o1, o2) -> Long.signum(o1.getEarliestEdit().time - o2.getEarliestEdit().time));
             }

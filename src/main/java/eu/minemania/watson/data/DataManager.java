@@ -355,7 +355,7 @@ public class DataManager implements IDirectoryCache
                 ChatMessage.localOutputT("watson.message.blockedit.match_file.more", files.length);
             }
 
-            int pages = (files.length + Configs.Generic.PAGE_LINES.getIntegerValue() - 1) / Configs.Generic.PAGE_LINES.getIntegerValue();
+            int pages = (files.length + Configs.Plugin.PAGE_LINES.getIntegerValue() - 1) / Configs.Plugin.PAGE_LINES.getIntegerValue();
             if (page > pages)
             {
                 ChatMessage.localErrorT("watson.message.blockedit.highest_page", page);
@@ -364,8 +364,8 @@ public class DataManager implements IDirectoryCache
             {
                 ChatMessage.localOutputT("watson.message.blockedit.pages", page, pages);
 
-                int start = (page - 1) * Configs.Generic.PAGE_LINES.getIntegerValue();
-                int end = Math.min(files.length, page * Configs.Generic.PAGE_LINES.getIntegerValue());
+                int start = (page - 1) * Configs.Plugin.PAGE_LINES.getIntegerValue();
+                int end = Math.min(files.length, page * Configs.Plugin.PAGE_LINES.getIntegerValue());
 
                 for (int i = start; i < end; ++i)
                 {

@@ -170,7 +170,7 @@ public class BlockEditSet
             }
 
             editsForPlayer.addBlockEdit(edit);
-            if (Configs.Generic.GROUPING_ORES_IN_CREATIVE.getBooleanValue())
+            if (Configs.Edits.GROUPING_ORES_IN_CREATIVE.getBooleanValue())
             {
                 oreDB.addBlockEdit(edit);
             }
@@ -242,7 +242,7 @@ public class BlockEditSet
 
     public synchronized void drawOutlines()
     {
-        if (Configs.Generic.OUTLINE_SHOWN.getBooleanValue())
+        if (Configs.Outlines.OUTLINE_SHOWN.getBooleanValue())
         {
             for (PlayereditSet editsForPlayer : playerEdits.values())
             {
@@ -253,7 +253,7 @@ public class BlockEditSet
 
     public synchronized void drawVectors()
     {
-        if (Configs.Generic.VECTOR_SHOWN.getBooleanValue())
+        if (Configs.Edits.VECTOR_SHOWN.getBooleanValue())
         {
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder buffer = tessellator.getBuffer();

@@ -46,97 +46,135 @@ public class Configs implements IConfigHandler
     public static class Generic
     {
         public static final ConfigBoolean ACTION_REVERSE = new ConfigBoolean("actionReverse", false, "watson.description.config.action_reverse");
-        public static final ConfigInteger AMOUNT_ROWS = new ConfigInteger("amountRowes", 5, "watson.description.config.amount_rows");
         public static final ConfigBoolean ANNOTATION_SHOWN = new ConfigBoolean("annotationShown", true, "watson.description.config.annotation_shown");
-        public static final ConfigBoolean AUTO_PAGE = new ConfigBoolean("autopage", true, "watson.description.config.auto_page");
         public static final ConfigColor BILLBOARD_BACKGROUND = new ConfigColor("billboardBackground", "0xA8000000", "watson.description.config.billboard_background");
         public static final ConfigColor BILLBOARD_FOREGROUND = new ConfigColor("billboardForeground", "0x7FFFFFFF", "watson.description.config.billboard_foreground");
         public static final ConfigDouble CHAT_TIMEOUT = new ConfigDouble("chatTimeoutSeconds", 1, 0.1, 5, "watson.description.config.chat_timeout");
         public static final ConfigBoolean DEBUG = new ConfigBoolean("debugWatson", false, "watson.description.config.debug");
-        public static final ConfigBoolean DISABLE_CP_MESSAGES = new ConfigBoolean("disableCPMessages", false, "watson.description.config.coreprotect_messages");
-        public static final ConfigBoolean DISABLE_LB_MESSAGES = new ConfigBoolean("disableLBMessages", false, "watson.description.config.logblock_messages");
-        public static final ConfigBoolean DISABLE_PR_MESSAGES = new ConfigBoolean("disablePRMessages", false, "watson.description.config.prism_messages");
         public static final ConfigBoolean DISPLAYED = new ConfigBoolean("displayed", true, "watson.description.config.displayed");
         public static final ConfigBoolean ENABLED = new ConfigBoolean("enabled", true, "watson.description.config.enabled");
-        public static final ConfigBoolean GROUPING_ORES_IN_CREATIVE = new ConfigBoolean("groupingOresInCreative", true, "watson.description.config.grouping_ores_in_creative");
-        public static final ConfigBoolean HIGHLIGHT_CASE_SENSITIVE = new ConfigBoolean("highlightCaseSensitive", true, "watson.description.config.highlight_case_sensitive");
-        public static final ConfigString HIGHLIGHT_SOUND = new ConfigString("highlightSound", "", "watson.description.config.highlight_sound");
-        public static final ConfigBoolean HIGHLIGHT_SOUND_ENABLE = new ConfigBoolean("highlightSoundEnable", false, "watson.description.config.highlight_sound_enable");
-        public static final ConfigDouble HIGHLIGHT_SOUND_VOLUME = new ConfigDouble("highlightSoundVolume", 1, 0, 1, "watson.description.config.highlight_sound_volume");
-        public static final ConfigBoolean LABEL_SHOWN = new ConfigBoolean("labelshown", true, "watson.description.config.label_shown");
-        public static final ConfigBoolean LINKED_CREATION = new ConfigBoolean("linkedcreation", false, "watson.description.config.linked_creation");
-        public static final ConfigBoolean LINKED_DESTRUCTION = new ConfigBoolean("linkeddestruction", false, "watson.description.config.linked_description");
-        public static final ConfigInteger MAX_AUTO_PAGES = new ConfigInteger("maxAutoPages", 100, "watson.description.config.max_auto_pages");
-        public static final ConfigInteger MAX_AUTO_PAGES_LOOP = new ConfigInteger("maxAutoPagesLoop", 100, "watson.description.config.max_auto_pages_loop");
-        public static final ConfigBoolean ONLY_ORE_BLOCK = new ConfigBoolean("onlyOreBlock", false, "watson.description.config.only_ore_block");
-        public static final ConfigInteger ORE_LINEWIDTH = new ConfigInteger("oreLinewidth", 3, 1, 10, "watson.description.config.ore_linewidth");
-        public static final ConfigBoolean ORE_OUTLINE_THICKER = new ConfigBoolean("oreOutlineThicker", false, "watson.description.config.ore_outline_thicker");
-        public static final ConfigBoolean OUTLINE_SHOWN = new ConfigBoolean("outlineshown", true, "watson.description.config.outline_shown");
-        public static final ConfigInteger PAGE_LINES = new ConfigInteger("pagelines", 50, "watson.description.config.page_lines");
-        public static final ConfigOptionList PLUGIN = new ConfigOptionList("plugin", Plugins.NULL, "watson.description.config.plugin");
-        public static final ConfigInteger POST_COUNT = new ConfigInteger("postCount", 45, "watson.description.config.post_count");
-        public static final ConfigInteger PRE_COUNT = new ConfigInteger("precount", 45, "watson.description.config.pre_count");
-        public static final ConfigBoolean RECOLOR_QUERY_RESULTS = new ConfigBoolean("recolourQueryResults", true, "watson.description.config.recolor_query_results");
-        public static final ConfigBoolean REFORMAT_QUERY_RESULTS = new ConfigBoolean("reformatQueryResults", true, "watson.description.config.reformat_query_results");
-        public static final ConfigDouble REGION_INFO_TIMEOUT = new ConfigDouble("regionInfoTimeoutSeconds", 5.0, 1.0, 9.0, "watson.description.config.region_info_timeout");
-        public static final ConfigBoolean SELECTION_SHOWN = new ConfigBoolean("selectionShown", true, "watson.description.config.selection_shown");
         public static final ConfigString SS_DATE_DIRECTORY = new ConfigString("ssDateDirectory", "yyyy-MM-dd HH:mm:ss", "watson.description.config.ss_date_directory");
         public static final ConfigBoolean SS_KEY_CUSTOM = new ConfigBoolean("ssKeyCustom", false, "watson.description.config.ss_key_custom");
         public static final ConfigBoolean SS_PLAYER_DIRECTORY = new ConfigBoolean("ssPlayerDirectory", true, "watson.description.config.ss_player_directory");
         public static final ConfigBoolean SS_PLAYER_SUFFIX = new ConfigBoolean("ssPlayerSuffix", true, "watson.description.config.ss_player_suffix");
         public static final ConfigString TELEPORT_COMMAND = new ConfigString("teleportCommand", "/tppos {x:d} {y:d} {z:d} {world}", "watson.description.config.teleport_command");
-        public static final ConfigBoolean TIME_ORDERED_DEPOSITS = new ConfigBoolean("timeOrderedDeposits", false, "watson.description.config.time_ordered_deposits");
-        public static final ConfigBoolean USE_CHAT_HIGHLIGHTS = new ConfigBoolean("useChatHighlights", false, "watson.description.config.use_chat_highlights");
-        public static final ConfigDouble VECTOR_LENGTH = new ConfigDouble("vectorFloat", 4.0f, 4.0f, 10.0f, "watson.description.config.vector_length");
-        public static final ConfigBoolean VECTOR_SHOWN = new ConfigBoolean("vectorShown", true, "watson.description.config.vector_shown");
         public static final ConfigString WATSON_PREFIX = new ConfigString("watsonPrefix", "watson", "watson.description.config.watson_prefix");
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
                 ACTION_REVERSE,
-                AMOUNT_ROWS,
                 ANNOTATION_SHOWN,
-                AUTO_PAGE,
                 BILLBOARD_BACKGROUND,
                 BILLBOARD_FOREGROUND,
                 CHAT_TIMEOUT,
                 DEBUG,
-                DISABLE_CP_MESSAGES,
-                DISABLE_LB_MESSAGES,
-                DISABLE_PR_MESSAGES,
                 DISPLAYED,
                 ENABLED,
-                GROUPING_ORES_IN_CREATIVE,
-                HIGHLIGHT_CASE_SENSITIVE,
-                HIGHLIGHT_SOUND,
-                HIGHLIGHT_SOUND_ENABLE,
-                HIGHLIGHT_SOUND_VOLUME,
-                LABEL_SHOWN,
-                LINKED_CREATION,
-                LINKED_DESTRUCTION,
-                MAX_AUTO_PAGES,
-                MAX_AUTO_PAGES_LOOP,
-                ONLY_ORE_BLOCK,
-                ORE_LINEWIDTH,
-                ORE_OUTLINE_THICKER,
-                OUTLINE_SHOWN,
-                PAGE_LINES,
-                PLUGIN,
-                POST_COUNT,
-                PRE_COUNT,
-                RECOLOR_QUERY_RESULTS,
-                REFORMAT_QUERY_RESULTS,
-                REGION_INFO_TIMEOUT,
-                SELECTION_SHOWN,
                 SS_DATE_DIRECTORY,
                 SS_KEY_CUSTOM,
                 SS_PLAYER_DIRECTORY,
                 SS_PLAYER_SUFFIX,
                 TELEPORT_COMMAND,
-                TIME_ORDERED_DEPOSITS,
-                USE_CHAT_HIGHLIGHTS,
-                VECTOR_LENGTH,
-                VECTOR_SHOWN,
                 WATSON_PREFIX
+        );
+    }
+
+    public static class Messages
+    {
+        public static final ConfigBoolean DISABLE_CP_MESSAGES = new ConfigBoolean("disableCPMessages", false, "watson.description.config.coreprotect_messages");
+        public static final ConfigBoolean DISABLE_JOIN_MESSAGES = new ConfigBoolean("disableJoinMessages", false, "watson.description.config.watson_join_messages");
+        public static final ConfigBoolean DISABLE_LB_MESSAGES = new ConfigBoolean("disableLBMessages", false, "watson.description.config.logblock_messages");
+        public static final ConfigBoolean DISABLE_PR_MESSAGES = new ConfigBoolean("disablePRMessages", false, "watson.description.config.prism_messages");
+
+        public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
+                DISABLE_CP_MESSAGES,
+                DISABLE_JOIN_MESSAGES,
+                DISABLE_LB_MESSAGES,
+                DISABLE_PR_MESSAGES
+        );
+    }
+
+    public static class Outlines
+    {
+        public static final ConfigBoolean ONLY_ORE_BLOCK = new ConfigBoolean("onlyOreBlock", false, "watson.description.config.only_ore_block");
+        public static final ConfigInteger ORE_LINEWIDTH = new ConfigInteger("oreLinewidth", 3, 1, 10, "watson.description.config.ore_linewidth");
+        public static final ConfigBoolean ORE_OUTLINE_THICKER = new ConfigBoolean("oreOutlineThicker", false, "watson.description.config.ore_outline_thicker");
+        public static final ConfigBoolean OUTLINE_SHOWN = new ConfigBoolean("outlineshown", true, "watson.description.config.outline_shown");
+
+        public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
+                ONLY_ORE_BLOCK,
+                ORE_LINEWIDTH,
+                ORE_OUTLINE_THICKER,
+                OUTLINE_SHOWN
+        );
+    }
+
+    public static class Plugin
+    {
+        public static final ConfigInteger AMOUNT_ROWS = new ConfigInteger("amountRowes", 5, "watson.description.config.amount_rows");
+        public static final ConfigBoolean AUTO_PAGE = new ConfigBoolean("autopage", true, "watson.description.config.auto_page");
+
+        public static final ConfigInteger MAX_AUTO_PAGES = new ConfigInteger("maxAutoPages", 100, "watson.description.config.max_auto_pages");
+        public static final ConfigInteger MAX_AUTO_PAGES_LOOP = new ConfigInteger("maxAutoPagesLoop", 100, "watson.description.config.max_auto_pages_loop");
+        public static final ConfigInteger PAGE_LINES = new ConfigInteger("pagelines", 50, "watson.description.config.page_lines");
+        public static final ConfigOptionList PLUGIN = new ConfigOptionList("plugin", Plugins.NULL, "watson.description.config.plugin");
+        public static final ConfigBoolean RECOLOR_QUERY_RESULTS = new ConfigBoolean("recolourQueryResults", true, "watson.description.config.recolor_query_results");
+        public static final ConfigBoolean REFORMAT_QUERY_RESULTS = new ConfigBoolean("reformatQueryResults", true, "watson.description.config.reformat_query_results");
+        public static final ConfigDouble REGION_INFO_TIMEOUT = new ConfigDouble("regionInfoTimeoutSeconds", 5.0, 1.0, 9.0, "watson.description.config.region_info_timeout");
+
+        public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
+                AMOUNT_ROWS,
+                AUTO_PAGE,
+                MAX_AUTO_PAGES,
+                MAX_AUTO_PAGES_LOOP,
+                PAGE_LINES,
+                PLUGIN,
+                RECOLOR_QUERY_RESULTS,
+                REFORMAT_QUERY_RESULTS,
+                REGION_INFO_TIMEOUT
+        );
+    }
+
+    public static class Highlights
+    {
+        public static final ConfigBoolean HIGHLIGHT_CASE_SENSITIVE = new ConfigBoolean("highlightCaseSensitive", true, "watson.description.config.highlight_case_sensitive");
+        public static final ConfigString HIGHLIGHT_SOUND = new ConfigString("highlightSound", "", "watson.description.config.highlight_sound");
+        public static final ConfigBoolean HIGHLIGHT_SOUND_ENABLE = new ConfigBoolean("highlightSoundEnable", false, "watson.description.config.highlight_sound_enable");
+        public static final ConfigDouble HIGHLIGHT_SOUND_VOLUME = new ConfigDouble("highlightSoundVolume", 1, 0, 1, "watson.description.config.highlight_sound_volume");
+        public static final ConfigBoolean USE_CHAT_HIGHLIGHTS = new ConfigBoolean("useChatHighlights", false, "watson.description.config.use_chat_highlights");
+
+        public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
+                HIGHLIGHT_CASE_SENSITIVE,
+                HIGHLIGHT_SOUND,
+                HIGHLIGHT_SOUND_ENABLE,
+                HIGHLIGHT_SOUND_VOLUME,
+                USE_CHAT_HIGHLIGHTS
+        );
+    }
+
+    public static class Edits
+    {
+        public static final ConfigBoolean GROUPING_ORES_IN_CREATIVE = new ConfigBoolean("groupingOresInCreative", true, "watson.description.config.grouping_ores_in_creative");
+        public static final ConfigBoolean LABEL_SHOWN = new ConfigBoolean("labelshown", true, "watson.description.config.label_shown");
+        public static final ConfigBoolean LINKED_CREATION = new ConfigBoolean("linkedcreation", false, "watson.description.config.linked_creation");
+        public static final ConfigBoolean LINKED_DESTRUCTION = new ConfigBoolean("linkeddestruction", false, "watson.description.config.linked_description");
+        public static final ConfigInteger POST_COUNT = new ConfigInteger("postCount", 45, "watson.description.config.post_count");
+        public static final ConfigInteger PRE_COUNT = new ConfigInteger("precount", 45, "watson.description.config.pre_count");
+        public static final ConfigBoolean SELECTION_SHOWN = new ConfigBoolean("selectionShown", true, "watson.description.config.selection_shown");
+        public static final ConfigBoolean TIME_ORDERED_DEPOSITS = new ConfigBoolean("timeOrderedDeposits", false, "watson.description.config.time_ordered_deposits");
+        public static final ConfigDouble VECTOR_LENGTH = new ConfigDouble("vectorFloat", 4.0f, 4.0f, 10.0f, "watson.description.config.vector_length");
+        public static final ConfigBoolean VECTOR_SHOWN = new ConfigBoolean("vectorShown", true, "watson.description.config.vector_shown");
+
+        public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
+                GROUPING_ORES_IN_CREATIVE,
+                LABEL_SHOWN,
+                LINKED_CREATION,
+                LINKED_DESTRUCTION,
+                POST_COUNT,
+                PRE_COUNT,
+                SELECTION_SHOWN,
+                TIME_ORDERED_DEPOSITS,
+                VECTOR_LENGTH,
+                VECTOR_SHOWN
         );
     }
 
@@ -245,6 +283,11 @@ public class Configs implements IConfigHandler
                 JsonObject root = element.getAsJsonObject();
 
                 ConfigUtils.readConfigBase(root, "Generic", Generic.OPTIONS);
+                ConfigUtils.readConfigBase(root, "Messages", Messages.OPTIONS);
+                ConfigUtils.readConfigBase(root, "Outlines", Outlines.OPTIONS);
+                ConfigUtils.readConfigBase(root, "Plugin", Plugin.OPTIONS);
+                ConfigUtils.readConfigBase(root, "Highlights", Highlights.OPTIONS);
+                ConfigUtils.readConfigBase(root, "Edits", Edits.OPTIONS);
                 ConfigUtils.readConfigBase(root, "Analysis", Analysis.OPTIONS);
                 ConfigUtils.readConfigBase(root, "Lists", Lists.OPTIONS);
                 ConfigUtils.readConfigBase(root, "Hotkeys", Hotkeys.HOTKEY_LIST);
@@ -301,6 +344,11 @@ public class Configs implements IConfigHandler
             JsonObject root = new JsonObject();
 
             ConfigUtils.writeConfigBase(root, "Generic", Generic.OPTIONS);
+            ConfigUtils.writeConfigBase(root, "Messages", Messages.OPTIONS);
+            ConfigUtils.writeConfigBase(root, "Outlines", Outlines.OPTIONS);
+            ConfigUtils.writeConfigBase(root, "Plugin", Plugin.OPTIONS);
+            ConfigUtils.writeConfigBase(root, "Highlights", Highlights.OPTIONS);
+            ConfigUtils.writeConfigBase(root, "Edits", Edits.OPTIONS);
             ConfigUtils.writeConfigBase(root, "Analysis", Analysis.OPTIONS);
             ConfigUtils.writeConfigBase(root, "Lists", Lists.OPTIONS);
             ConfigUtils.writeConfigBase(root, "Hotkeys", Hotkeys.HOTKEY_LIST);

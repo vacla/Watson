@@ -191,7 +191,7 @@ public class WatsonCommand extends WatsonCommandBase
         }
         catch (Exception e)
         {
-            count = Configs.Generic.PRE_COUNT.getIntegerValue();
+            count = Configs.Edits.PRE_COUNT.getIntegerValue();
         }
         DataManager.getEditSelection().queryPreEdits(count);
         return 1;
@@ -206,7 +206,7 @@ public class WatsonCommand extends WatsonCommandBase
         }
         catch (Exception e)
         {
-            count = Configs.Generic.POST_COUNT.getIntegerValue();
+            count = Configs.Edits.POST_COUNT.getIntegerValue();
         }
         DataManager.getEditSelection().queryPostEdits(count);
         return 1;
@@ -236,12 +236,12 @@ public class WatsonCommand extends WatsonCommandBase
         try
         {
             displayed = getBool(context, "displayed");
-            Configs.Generic.OUTLINE_SHOWN.setBooleanValue(displayed);
+            Configs.Outlines.OUTLINE_SHOWN.setBooleanValue(displayed);
         }
         catch (Exception e)
         {
-            Configs.Generic.OUTLINE_SHOWN.toggleBooleanValue();
-            displayed = Configs.Generic.OUTLINE_SHOWN.getBooleanValue();
+            Configs.Outlines.OUTLINE_SHOWN.toggleBooleanValue();
+            displayed = Configs.Outlines.OUTLINE_SHOWN.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
         InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.outline", StringUtils.translate(strSetting));
@@ -272,12 +272,12 @@ public class WatsonCommand extends WatsonCommandBase
         try
         {
             displayed = getBool(context, "displayed");
-            Configs.Generic.VECTOR_SHOWN.setBooleanValue(displayed);
+            Configs.Edits.VECTOR_SHOWN.setBooleanValue(displayed);
         }
         catch (Exception e)
         {
-            Configs.Generic.VECTOR_SHOWN.toggleBooleanValue();
-            displayed = Configs.Generic.VECTOR_SHOWN.getBooleanValue();
+            Configs.Edits.VECTOR_SHOWN.toggleBooleanValue();
+            displayed = Configs.Edits.VECTOR_SHOWN.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
         InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector", StringUtils.translate(strSetting));
@@ -290,12 +290,12 @@ public class WatsonCommand extends WatsonCommandBase
         try
         {
             displayed = getBool(context, "displayed");
-            Configs.Generic.LINKED_CREATION.setBooleanValue(displayed);
+            Configs.Edits.LINKED_CREATION.setBooleanValue(displayed);
         }
         catch (Exception e)
         {
-            Configs.Generic.LINKED_CREATION.toggleBooleanValue();
-            displayed = Configs.Generic.LINKED_CREATION.getBooleanValue();
+            Configs.Edits.LINKED_CREATION.toggleBooleanValue();
+            displayed = Configs.Edits.LINKED_CREATION.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
         InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector.creation", StringUtils.translate(strSetting));
@@ -308,12 +308,12 @@ public class WatsonCommand extends WatsonCommandBase
         try
         {
             displayed = getBool(context, "displayed");
-            Configs.Generic.LINKED_DESTRUCTION.setBooleanValue(displayed);
+            Configs.Edits.LINKED_DESTRUCTION.setBooleanValue(displayed);
         }
         catch (Exception e)
         {
-            Configs.Generic.LINKED_DESTRUCTION.toggleBooleanValue();
-            displayed = Configs.Generic.LINKED_DESTRUCTION.getBooleanValue();
+            Configs.Edits.LINKED_DESTRUCTION.toggleBooleanValue();
+            displayed = Configs.Edits.LINKED_DESTRUCTION.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
         InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector.destruction", StringUtils.translate(strSetting));
@@ -323,7 +323,7 @@ public class WatsonCommand extends WatsonCommandBase
     private static int vector_length(CommandContext<ServerCommandSource> context)
     {
         float length = getFloat(context, "length");
-        Configs.Generic.VECTOR_LENGTH.setDoubleValue(length);
+        Configs.Edits.VECTOR_LENGTH.setDoubleValue(length);
         InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector.length", length);
         return 1;
     }
@@ -334,12 +334,12 @@ public class WatsonCommand extends WatsonCommandBase
         try
         {
             displayed = getBool(context, "displayed");
-            Configs.Generic.LABEL_SHOWN.setBooleanValue(displayed);
+            Configs.Edits.LABEL_SHOWN.setBooleanValue(displayed);
         }
         catch (Exception e)
         {
-            Configs.Generic.LABEL_SHOWN.toggleBooleanValue();
-            displayed = Configs.Generic.LABEL_SHOWN.getBooleanValue();
+            Configs.Edits.LABEL_SHOWN.toggleBooleanValue();
+            displayed = Configs.Edits.LABEL_SHOWN.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
         InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.label", StringUtils.translate(strSetting));
@@ -606,12 +606,12 @@ public class WatsonCommand extends WatsonCommandBase
         try
         {
             displayed = getBool(context, "enabled");
-            Configs.Generic.AUTO_PAGE.setBooleanValue(displayed);
+            Configs.Plugin.AUTO_PAGE.setBooleanValue(displayed);
         }
         catch (Exception e)
         {
-            Configs.Generic.AUTO_PAGE.toggleBooleanValue();
-            displayed = Configs.Generic.AUTO_PAGE.getBooleanValue();
+            Configs.Plugin.AUTO_PAGE.toggleBooleanValue();
+            displayed = Configs.Plugin.AUTO_PAGE.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
         InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.auto_page", StringUtils.translate(strSetting));
@@ -629,11 +629,11 @@ public class WatsonCommand extends WatsonCommandBase
             {
                 seconds = 1.0;
             }
-            Configs.Generic.REGION_INFO_TIMEOUT.setDoubleValue(seconds);
+            Configs.Plugin.REGION_INFO_TIMEOUT.setDoubleValue(seconds);
         }
         catch (Exception e)
         {
-            seconds = Configs.Generic.REGION_INFO_TIMEOUT.getDoubleValue();
+            seconds = Configs.Plugin.REGION_INFO_TIMEOUT.getDoubleValue();
         }
         InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.region_info_timeout", seconds);
         return 1;
@@ -677,12 +677,12 @@ public class WatsonCommand extends WatsonCommandBase
         try
         {
             displayed = getBool(context, "enabled");
-            Configs.Generic.GROUPING_ORES_IN_CREATIVE.setBooleanValue(displayed);
+            Configs.Edits.GROUPING_ORES_IN_CREATIVE.setBooleanValue(displayed);
         }
         catch (Exception e)
         {
-            Configs.Generic.GROUPING_ORES_IN_CREATIVE.toggleBooleanValue();
-            displayed = Configs.Generic.GROUPING_ORES_IN_CREATIVE.getBooleanValue();
+            Configs.Edits.GROUPING_ORES_IN_CREATIVE.toggleBooleanValue();
+            displayed = Configs.Edits.GROUPING_ORES_IN_CREATIVE.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
         InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.group_ores_creative", StringUtils.translate(strSetting));
@@ -732,11 +732,11 @@ public class WatsonCommand extends WatsonCommandBase
         try
         {
             pages = getInteger(context, "pages");
-            Configs.Generic.MAX_AUTO_PAGES.setIntegerValue(pages);
+            Configs.Plugin.MAX_AUTO_PAGES.setIntegerValue(pages);
         }
         catch (Exception e)
         {
-            pages = Configs.Generic.MAX_AUTO_PAGES.getIntegerValue();
+            pages = Configs.Plugin.MAX_AUTO_PAGES.getIntegerValue();
         }
         InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.max_auto_page", pages);
         return 1;
@@ -748,11 +748,11 @@ public class WatsonCommand extends WatsonCommandBase
         try
         {
             count = getInteger(context, "count");
-            Configs.Generic.PRE_COUNT.setIntegerValue(count);
+            Configs.Edits.PRE_COUNT.setIntegerValue(count);
         }
         catch (Exception e)
         {
-            count = Configs.Generic.PRE_COUNT.getIntegerValue();
+            count = Configs.Edits.PRE_COUNT.getIntegerValue();
         }
         InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.pre_count", count);
         return 1;
@@ -764,11 +764,11 @@ public class WatsonCommand extends WatsonCommandBase
         try
         {
             count = getInteger(context, "count");
-            Configs.Generic.POST_COUNT.setIntegerValue(count);
+            Configs.Edits.POST_COUNT.setIntegerValue(count);
         }
         catch (Exception e)
         {
-            count = Configs.Generic.POST_COUNT.getIntegerValue();
+            count = Configs.Edits.POST_COUNT.getIntegerValue();
         }
         InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.post_count", count);
         return 1;
@@ -848,12 +848,12 @@ public class WatsonCommand extends WatsonCommandBase
         try
         {
             displayed = getBool(context, "enabled");
-            Configs.Generic.REFORMAT_QUERY_RESULTS.setBooleanValue(displayed);
+            Configs.Plugin.REFORMAT_QUERY_RESULTS.setBooleanValue(displayed);
         }
         catch (Exception e)
         {
-            Configs.Generic.REFORMAT_QUERY_RESULTS.toggleBooleanValue();
-            displayed = Configs.Generic.REFORMAT_QUERY_RESULTS.getBooleanValue();
+            Configs.Plugin.REFORMAT_QUERY_RESULTS.toggleBooleanValue();
+            displayed = Configs.Plugin.REFORMAT_QUERY_RESULTS.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
         InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.reformat_query_results", StringUtils.translate(strSetting));
@@ -866,12 +866,12 @@ public class WatsonCommand extends WatsonCommandBase
         try
         {
             displayed = getBool(context, "enabled");
-            Configs.Generic.RECOLOR_QUERY_RESULTS.setBooleanValue(displayed);
+            Configs.Plugin.RECOLOR_QUERY_RESULTS.setBooleanValue(displayed);
         }
         catch (Exception e)
         {
-            Configs.Generic.RECOLOR_QUERY_RESULTS.toggleBooleanValue();
-            displayed = Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue();
+            Configs.Plugin.RECOLOR_QUERY_RESULTS.toggleBooleanValue();
+            displayed = Configs.Plugin.RECOLOR_QUERY_RESULTS.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
         InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.recolor_query_results", StringUtils.translate(strSetting));
@@ -884,12 +884,12 @@ public class WatsonCommand extends WatsonCommandBase
         try
         {
             displayed = getBool(context, "enabled");
-            Configs.Generic.TIME_ORDERED_DEPOSITS.setBooleanValue(displayed);
+            Configs.Edits.TIME_ORDERED_DEPOSITS.setBooleanValue(displayed);
         }
         catch (Exception e)
         {
-            Configs.Generic.TIME_ORDERED_DEPOSITS.toggleBooleanValue();
-            displayed = Configs.Generic.TIME_ORDERED_DEPOSITS.getBooleanValue();
+            Configs.Edits.TIME_ORDERED_DEPOSITS.toggleBooleanValue();
+            displayed = Configs.Edits.TIME_ORDERED_DEPOSITS.getBooleanValue();
         }
         if (displayed)
         {
@@ -909,11 +909,11 @@ public class WatsonCommand extends WatsonCommandBase
         {
             length = getFloat(context, "length");
             length = Math.max(0.0f, length);
-            Configs.Generic.VECTOR_LENGTH.setDoubleValue(length);
+            Configs.Edits.VECTOR_LENGTH.setDoubleValue(length);
         }
         catch (Exception e)
         {
-            length = (float) Configs.Generic.VECTOR_LENGTH.getDoubleValue();
+            length = (float) Configs.Edits.VECTOR_LENGTH.getDoubleValue();
         }
         InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector.length", length);
         return 1;
@@ -925,12 +925,12 @@ public class WatsonCommand extends WatsonCommandBase
         try
         {
             displayed = getBool(context, "enabled");
-            Configs.Generic.USE_CHAT_HIGHLIGHTS.setBooleanValue(displayed);
+            Configs.Highlights.USE_CHAT_HIGHLIGHTS.setBooleanValue(displayed);
         }
         catch (Exception e)
         {
-            Configs.Generic.USE_CHAT_HIGHLIGHTS.toggleBooleanValue();
-            displayed = Configs.Generic.USE_CHAT_HIGHLIGHTS.getBooleanValue();
+            Configs.Highlights.USE_CHAT_HIGHLIGHTS.toggleBooleanValue();
+            displayed = Configs.Highlights.USE_CHAT_HIGHLIGHTS.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
         InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.chat_highlights", StringUtils.translate(strSetting));

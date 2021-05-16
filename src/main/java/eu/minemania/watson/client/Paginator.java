@@ -16,11 +16,11 @@ public class Paginator
 
     public void prRequestNextPage()
     {
-        if (Configs.Generic.AUTO_PAGE.getBooleanValue())
+        if (Configs.Plugin.AUTO_PAGE.getBooleanValue())
         {
-            if (currentPage != 0 && currentPage < pageCount && pageCount <= Configs.Generic.MAX_AUTO_PAGES.getIntegerValue())
+            if (currentPage != 0 && currentPage < pageCount && pageCount <= Configs.Plugin.MAX_AUTO_PAGES.getIntegerValue())
             {
-                if (currentPage >= Configs.Generic.MAX_AUTO_PAGES_LOOP.getIntegerValue()) {
+                if (currentPage >= Configs.Plugin.MAX_AUTO_PAGES_LOOP.getIntegerValue()) {
                     reset();
                     ChatMessage.localOutputT("watson.message.autopage.finished");
                     return;
@@ -34,11 +34,11 @@ public class Paginator
 
     public void lbRequestNextPage()
     {
-        if (Configs.Generic.AUTO_PAGE.getBooleanValue())
+        if (Configs.Plugin.AUTO_PAGE.getBooleanValue())
         {
-            if (currentPage != 0 && currentPage < pageCount && pageCount <= Configs.Generic.MAX_AUTO_PAGES.getIntegerValue())
+            if (currentPage != 0 && currentPage < pageCount && pageCount <= Configs.Plugin.MAX_AUTO_PAGES.getIntegerValue())
             {
-                if (currentPage >= Configs.Generic.MAX_AUTO_PAGES_LOOP.getIntegerValue()) {
+                if (currentPage >= Configs.Plugin.MAX_AUTO_PAGES_LOOP.getIntegerValue()) {
                     reset();
                     ChatMessage.localOutputT("watson.message.autopage.finished");
                     return;
@@ -54,16 +54,16 @@ public class Paginator
     {
         if (currentPage != 0 && currentPage < pageCount)
         {
-            if (currentPage >= Configs.Generic.MAX_AUTO_PAGES_LOOP.getIntegerValue()) {
+            if (currentPage >= Configs.Plugin.MAX_AUTO_PAGES_LOOP.getIntegerValue()) {
                 reset();
                 ChatMessage.localOutputT("watson.message.autopage.finished");
                 return;
             }
             if (currentPage == 1)
             {
-                ChatMessage.getInstance().serverChat(String.format("/co l %d:%d", 1, Configs.Generic.AMOUNT_ROWS.getIntegerValue()), currentPage == 1);
+                ChatMessage.getInstance().serverChat(String.format("/co l %d:%d", 1, Configs.Plugin.AMOUNT_ROWS.getIntegerValue()), currentPage == 1);
             }
-            ChatMessage.getInstance().serverChat(String.format("/co l %d:%d", currentPage + 1, Configs.Generic.AMOUNT_ROWS.getIntegerValue()), currentPage == 1);
+            ChatMessage.getInstance().serverChat(String.format("/co l %d:%d", currentPage + 1, Configs.Plugin.AMOUNT_ROWS.getIntegerValue()), currentPage == 1);
         }
     }
 

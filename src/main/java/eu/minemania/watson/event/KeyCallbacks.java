@@ -66,7 +66,7 @@ public class KeyCallbacks
         Configs.Analysis.LB_TP.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.WG_REGIONS.setValueChangeCallback(valueChangeStringCallback);
 
-        Hotkeys.KEYBIND_AUTO_PAGE.getKeybind().setCallback(new KeyCallbackToggleBoolean(Configs.Generic.AUTO_PAGE));
+        Hotkeys.KEYBIND_AUTO_PAGE.getKeybind().setCallback(new KeyCallbackToggleBoolean(Configs.Plugin.AUTO_PAGE));
         Hotkeys.KEYBIND_COMMAND_CO_INSPECT.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.KEYBIND_CURSOR_NEXT.getKeybind().setCallback(callbackHotkeys);
         Hotkeys.KEYBIND_CURSOR_PREV.getKeybind().setCallback(callbackHotkeys);
@@ -272,7 +272,7 @@ public class KeyCallbacks
             {
                 if (key == Hotkeys.KEYBIND_COMMAND_CO_INSPECT.getKeybind())
                 {
-                    if (Configs.Generic.PLUGIN.getStringValue().equals("CoreProtect"))
+                    if (Configs.Plugin.PLUGIN.getStringValue().equals("CoreProtect"))
                     {
                         ChatMessage.sendToServerChat("/co i");
                         return true;
@@ -302,14 +302,14 @@ public class KeyCallbacks
                         }
                     }
                 }
-                else if (key == Hotkeys.KEYBIND_QUERY_AFTER.getKeybind() && Configs.Generic.PLUGIN.getStringValue().equals("LogBlock"))
+                else if (key == Hotkeys.KEYBIND_QUERY_AFTER.getKeybind() && Configs.Plugin.PLUGIN.getStringValue().equals("LogBlock"))
                 {
-                    edits.queryPostEdits(Configs.Generic.POST_COUNT.getIntegerValue());
+                    edits.queryPostEdits(Configs.Edits.POST_COUNT.getIntegerValue());
                     return true;
                 }
-                else if (key == Hotkeys.KEYBIND_QUERY_BEFORE.getKeybind() && Configs.Generic.PLUGIN.getStringValue().equals("LogBlock"))
+                else if (key == Hotkeys.KEYBIND_QUERY_BEFORE.getKeybind() && Configs.Plugin.PLUGIN.getStringValue().equals("LogBlock"))
                 {
-                    edits.queryPreEdits(Configs.Generic.PRE_COUNT.getIntegerValue());
+                    edits.queryPreEdits(Configs.Edits.PRE_COUNT.getIntegerValue());
                     return true;
                 }
                 else if (key == Hotkeys.KEYBIND_TP_CURSOR.getKeybind())

@@ -65,7 +65,7 @@ public class ServerTime extends Analysis
         {
             if (_localMinusServerMinutes.get(serverIP) == null)
             {
-                if (Configs.Generic.PLUGIN.getOptionListValue().getStringValue().equals("LogBlock"))
+                if (Configs.Plugin.PLUGIN.getOptionListValue().getStringValue().equals("LogBlock"))
                 {
                     Calendar pastTime = getPastTime();
                     String date = String.format("%d.%d.%d", pastTime.get(Calendar.DAY_OF_MONTH), pastTime.get(Calendar.MONTH) + 1, pastTime.get(Calendar.YEAR));

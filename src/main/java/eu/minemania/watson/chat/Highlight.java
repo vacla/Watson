@@ -67,7 +67,7 @@ public class Highlight
             }, Style.EMPTY);
 
             setUsername(user[0], null);
-            endMessage = new TranslatableText(key, mc.player.getDisplayName(), Configs.Generic.USE_CHAT_HIGHLIGHTS.getBooleanValue() ? highlight(textChat.toString()) : textChat.toString());
+            endMessage = new TranslatableText(key, mc.player.getDisplayName(), Configs.Highlights.USE_CHAT_HIGHLIGHTS.getBooleanValue() ? highlight(textChat.toString()) : textChat.toString());
         }
         else
         {
@@ -326,19 +326,19 @@ public class Highlight
         boolean madeSound = false;
         for (MutablePair<String, MutablePair<Formatting, Formatting>> item_highlight : highlights)
         {
-            int case_sensitive = Configs.Generic.HIGHLIGHT_CASE_SENSITIVE.getBooleanValue() ? 0 : Pattern.CASE_INSENSITIVE;
+            int case_sensitive = Configs.Highlights.HIGHLIGHT_CASE_SENSITIVE.getBooleanValue() ? 0 : Pattern.CASE_INSENSITIVE;
             Pattern pattern = Pattern.compile(item_highlight.getLeft(), case_sensitive);
             Matcher matcher = pattern.matcher(chatText);
             if (matcher.find())
             {
-                if (!madeSound && Configs.Generic.HIGHLIGHT_SOUND_ENABLE.getBooleanValue())
+                if (!madeSound && Configs.Highlights.HIGHLIGHT_SOUND_ENABLE.getBooleanValue())
                 {
                     madeSound = true;
-                    String sound = Configs.Generic.HIGHLIGHT_SOUND.getStringValue();
+                    String sound = Configs.Highlights.HIGHLIGHT_SOUND.getStringValue();
                     try
                     {
                         SoundEvent soundEvent = Registry.SOUND_EVENT.get(new Identifier(sound));
-                        float soundVolume = (float) Configs.Generic.HIGHLIGHT_SOUND_VOLUME.getDoubleValue();
+                        float soundVolume = (float) Configs.Highlights.HIGHLIGHT_SOUND_VOLUME.getDoubleValue();
                         mc.player.playSound(soundEvent, soundVolume, 1f);
                     }
                     catch (Exception e)

@@ -200,8 +200,8 @@ public class LogBlockAnalysis extends Analysis
                     _expectingFirstEdit = false;
                 }
             }
-            Formatting color = Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue() ? getChatColorFormat(coordX, coordY, coordZ) : null;
-            if (Configs.Generic.REFORMAT_QUERY_RESULTS.getBooleanValue())
+            Formatting color = Configs.Plugin.RECOLOR_QUERY_RESULTS.getBooleanValue() ? getChatColorFormat(coordX, coordY, coordZ) : null;
+            if (Configs.Plugin.REFORMAT_QUERY_RESULTS.getBooleanValue())
             {
                 if (!type.getName().equals("minecraft:stone"))
                 {
@@ -384,7 +384,7 @@ public class LogBlockAnalysis extends Analysis
     {
         if (sendMessage())
         {
-            if (Configs.Generic.RECOLOR_QUERY_RESULTS.getBooleanValue())
+            if (Configs.Plugin.RECOLOR_QUERY_RESULTS.getBooleanValue())
             {
                 Highlight.toggleReturnBoolean();
                 ChatMessage.sendToLocalChat(color, text, true);
@@ -409,7 +409,7 @@ public class LogBlockAnalysis extends Analysis
         int currentPage = Integer.parseInt(m.group(1));
         int pageCount = Integer.parseInt(m.group(2));
 
-        if (pageCount <= Configs.Generic.MAX_AUTO_PAGES.getIntegerValue())
+        if (pageCount <= Configs.Plugin.MAX_AUTO_PAGES.getIntegerValue())
         {
             Paginator.getInstance().setCurrentPage(currentPage);
             Paginator.getInstance().setPageCount(pageCount);
@@ -454,6 +454,6 @@ public class LogBlockAnalysis extends Analysis
 
     private boolean sendMessage()
     {
-        return !Configs.Generic.DISABLE_LB_MESSAGES.getBooleanValue();
+        return !Configs.Messages.DISABLE_LB_MESSAGES.getBooleanValue();
     }
 }

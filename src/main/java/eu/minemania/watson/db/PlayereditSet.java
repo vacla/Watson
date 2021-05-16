@@ -107,7 +107,7 @@ public class PlayereditSet
 
     public synchronized void drawVectors(int intcolor, BufferBuilder buffer)
     {
-        if (Configs.Generic.VECTOR_SHOWN.getBooleanValue() && isVisible() && !_edits.isEmpty())
+        if (Configs.Edits.VECTOR_SHOWN.getBooleanValue() && isVisible() && !_edits.isEmpty())
         {
             Color4f color = Color4f.fromColor(intcolor, 1f);
 
@@ -139,7 +139,7 @@ public class PlayereditSet
                             return;
                         }
                     }
-                    boolean show = (next.isCreated() && Configs.Generic.LINKED_CREATION.getBooleanValue()) || (!next.isCreated() && Configs.Generic.LINKED_DESTRUCTION.getBooleanValue());
+                    boolean show = (next.isCreated() && Configs.Edits.LINKED_CREATION.getBooleanValue()) || (!next.isCreated() && Configs.Edits.LINKED_DESTRUCTION.getBooleanValue());
                     if (show)
                     {
                         Vec3d pPos = new Vec3d(prev.x + 0.5, prev.y + 0.5, prev.z + 0.5);
@@ -148,7 +148,7 @@ public class PlayereditSet
                         Vec3d diff = nPos.subtract(pPos);
                         // Compute length. We want to scale the arrow heads by the length, so can't avoid the sqrt() here
                         double length = diff.length();
-                        if (length >= (float) Configs.Generic.VECTOR_LENGTH.getDoubleValue())
+                        if (length >= (float) Configs.Edits.VECTOR_LENGTH.getDoubleValue())
                         {
                             buffer.vertex(pPos.x, pPos.y, pPos.z).color(color.r, color.g, color.b, color.a).next();
                             buffer.vertex(nPos.x, nPos.y, nPos.z).color(color.r, color.g, color.b, color.a).next();

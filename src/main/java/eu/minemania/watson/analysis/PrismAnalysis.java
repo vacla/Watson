@@ -192,7 +192,7 @@ public class PrismAnalysis extends Analysis
         int currentPage = Integer.parseInt(m.group("current"));
         int pageCount = Integer.parseInt(m.group("max"));
 
-        if (pageCount <= Configs.Generic.MAX_AUTO_PAGES.getIntegerValue())
+        if (pageCount <= Configs.Plugin.MAX_AUTO_PAGES.getIntegerValue())
         {
             Paginator.getInstance().setCurrentPage(currentPage);
             Paginator.getInstance().setPageCount(pageCount);
@@ -205,6 +205,6 @@ public class PrismAnalysis extends Analysis
 
     private boolean sendMessage()
     {
-        return !Configs.Generic.DISABLE_PR_MESSAGES.getBooleanValue();
+        return !Configs.Messages.DISABLE_PR_MESSAGES.getBooleanValue();
     }
 }

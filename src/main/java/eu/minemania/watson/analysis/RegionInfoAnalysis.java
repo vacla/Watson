@@ -23,7 +23,7 @@ public class RegionInfoAnalysis extends Analysis
     void wgRegions(MutableText chat, Matcher m)
     {
         long now = System.currentTimeMillis();
-        if (now - _lastCommandTime > (long) (Configs.Generic.REGION_INFO_TIMEOUT.getDoubleValue() * 1000))
+        if (now - _lastCommandTime > (long) (Configs.Plugin.REGION_INFO_TIMEOUT.getDoubleValue() * 1000))
         {
             int regionCount = 0;
             Matcher names = _regionNames.matcher(m.group(1));
@@ -33,7 +33,7 @@ public class RegionInfoAnalysis extends Analysis
                 ++regionCount;
             }
 
-            _lastCommandTime = now + (long) (1000 * Configs.Generic.REGION_INFO_TIMEOUT.getDefaultDoubleValue()) * Math.max(0, regionCount - 1);
+            _lastCommandTime = now + (long) (1000 * Configs.Plugin.REGION_INFO_TIMEOUT.getDefaultDoubleValue()) * Math.max(0, regionCount - 1);
         }
     }
 }

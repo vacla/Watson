@@ -18,7 +18,7 @@ import eu.minemania.watson.chat.Highlight;
 import eu.minemania.watson.config.Configs;
 import fi.dy.masa.malilib.gui.Message.MessageType;
 import fi.dy.masa.malilib.util.InfoUtils;
-import net.minecraft.server.command.CommandSource;
+import net.minecraft.command.CommandSource;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.LiteralText;
 
@@ -44,7 +44,7 @@ public class HighlightCommand extends WatsonCommandBase
 
     private static int help(CommandContext<ServerCommandSource> context)
     {
-        if (!Configs.Generic.USE_CHAT_HIGHLIGHTS.getBooleanValue())
+        if (!Configs.Highlights.USE_CHAT_HIGHLIGHTS.getBooleanValue())
         {
             InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.highlight.disabled");
             return 1;

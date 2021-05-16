@@ -220,5 +220,11 @@
   "watson.message.setting.hidden": "Скрыто",
   "watson.message.setting.on": "включен",
   "watson.message.setting.off": "выключен",
-  "watson.message.setting.shown": "Показано"
+  "watson.message.setting.shown": "Показано",
+  "watson.description.config.watson_join_messages": "Если true, он отключит сообщения о присоединении, отправляемые Watson.",
+  "watson.gui.button.config_gui.messages": "Сообщения",
+  "watson.gui.button.config_gui.outlines": "Контуры",
+  "watson.gui.button.config_gui.highlights": "Особенности",
+  "watson.gui.button.config_gui.edits": "Правки",
+  "watson.gui.button.config_gui.plugin": "Плагин"
 }
