@@ -105,7 +105,7 @@ public class OreDB
                     WatsonBlock watsonblock = edit.block;
                     String player = edit.player;
                     Formatting strike = edit.playereditSet.isVisible() ? null : Formatting.STRIKETHROUGH;
-                    String line = String.format("(%3d) %s (% 5d % 3d % 5d) %s [%2d] %s", id, TimeStamp.formatMonthDayTime(time), block.getLocation().getX(), block.getLocation().getY(), block.getLocation().getZ(), watsonblock.getName(), deposit.getBlockCount(), player);
+                    String line = String.format("(%3d) %s (%5d %3d %5d %s) %s [%2d] %s", id, TimeStamp.formatMonthDayTime(time), block.getLocation().getX(), block.getLocation().getY(), block.getLocation().getZ(), block.getLocation().getWorld(), watsonblock.getName(), deposit.getBlockCount(), player);
                     ChatMessage.sendToLocalChat(_chatColors.get(watsonblock).getColor(), strike, line, true);
                 }
                 if (page < pages)
