@@ -6,7 +6,9 @@ import eu.minemania.watson.analysis.CoreProtectAnalysis;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.network.ClientPacketChannelHandler;
+import eu.minemania.watson.network.deltalogger.PluginDeltaLoggerPlacementPacketHandler;
 import eu.minemania.watson.network.PluginWorldPacketHandler;
+import eu.minemania.watson.network.deltalogger.PluginDeltaLoggerTransactionPacketHandler;
 import eu.minemania.watson.render.OverlayRenderer;
 import fi.dy.masa.malilib.interfaces.IWorldLoadListener;
 import net.minecraft.client.MinecraftClient;
@@ -24,7 +26,11 @@ public class WorldLoadListener implements IWorldLoadListener
             if (worldAfter == null)
             {
                 ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginWorldPacketHandler.INSTANCE);
+                ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginDeltaLoggerPlacementPacketHandler.INSTANCE);
+                ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginDeltaLoggerTransactionPacketHandler.INSTANCE);
                 PluginWorldPacketHandler.INSTANCE.reset();
+                PluginDeltaLoggerPlacementPacketHandler.INSTANCE.reset();
+                PluginDeltaLoggerTransactionPacketHandler.INSTANCE.reset();
                 if (DataManager.getEditSelection().getSelection() != null)
                 {
                     DataManager.getEditSelection().clearBlockEditSet();
@@ -48,6 +54,8 @@ public class WorldLoadListener implements IWorldLoadListener
         {
             DataManager.onClientTickStart();
             ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginWorldPacketHandler.INSTANCE);
+            ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginDeltaLoggerPlacementPacketHandler.INSTANCE);
+            ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginDeltaLoggerTransactionPacketHandler.INSTANCE);
         }
         if (worldAfter != null)
         {
