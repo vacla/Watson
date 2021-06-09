@@ -11,9 +11,11 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 
 public class BlockEdit
@@ -98,7 +100,7 @@ public class BlockEdit
                     }
                 }
             }
-            if (!drawn && (blocks instanceof OreBlock || blocks.is(Blocks.ANCIENT_DEBRIS) || blocks.is(Blocks.GILDED_BLACKSTONE)))
+            if (!drawn && (blocks instanceof OreBlock || blocks.equals(Blocks.ANCIENT_DEBRIS) || blocks.equals(Blocks.GILDED_BLACKSTONE)))
             {
                 drawn = true;
             }

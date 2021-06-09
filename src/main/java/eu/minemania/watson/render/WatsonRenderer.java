@@ -1,5 +1,6 @@
 package eu.minemania.watson.render;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
@@ -22,15 +23,17 @@ public class WatsonRenderer
     private static final WatsonRenderer INSTANCE = new WatsonRenderer();
 
     private static final ShaderProgram SHADER_ALPHA = new ShaderProgram("watson", null, "shaders/alpha.frag");
+    public static final ShaderProgram SHADER_LINESTIPPLE = new ShaderProgram("watson", null, "shaders/linestipple.frag");
 
     private MinecraftClient mc;
 
     static
     {
         int program = SHADER_ALPHA.getProgram();
+        int oldProgram = GlStateManager._getInteger(GL20.GL_CURRENT_PROGRAM);
         GL20.glUseProgram(program);
         GL20.glUniform1i(GL20.glGetUniformLocation(program, "texture"), 0);
-        GL20.glUseProgram(0);
+        GL20.glUseProgram(oldProgram);
     }
 
     public static WatsonRenderer getInstance()
@@ -49,7 +52,7 @@ public class WatsonRenderer
             this.mc.getProfiler().push("watson_entities");
             EditSelection selection = DataManager.getEditSelection();
             BlockEditSet edits = selection.getBlockEditSet();
-            RenderSystem.pushMatrix();
+            matrices.push();
             RenderUtils.disableDiffuseLighting();
             RenderSystem.disableCull();
 
@@ -57,23 +60,25 @@ public class WatsonRenderer
 
             RenderSystem.disableTexture();
             RenderUtils.color(1f, 1f, 1f, 1f);
-            RenderSystem.glMultiTexCoord2f(GL13.GL_TEXTURE1, 240.0F, 240.0F);
+            //RenderSystem.glMultiTexCoord2f(GL13.GL_TEXTURE1, 240.0F, 240.0F);
             RenderSystem.depthMask(false);
-            boolean foggy = GL11.glIsEnabled(GL11.GL_FOG);
-            RenderSystem.disableFog();
+            //boolean foggy = GL11.glIsEnabled(GL11.GL_FOG);
+            //RenderSystem.disableFog();
             RenderSystem.disableDepthTest();
 
 
             Vec3d cameraPos = this.mc.gameRenderer.getCamera().getPos();
-            RenderSystem.translated(-cameraPos.getX(), -cameraPos.getY(), -cameraPos.getZ());
+            //matrices.peek().getModel().multiply(RenderSystem.getProjectionMatrix());
+            //matrices.translate(-cameraPos.getX(), -cameraPos.getY(), -cameraPos.getZ());
+            //RenderSystem.applyModelViewMatrix();
             edits.drawOutlines();
-            edits.drawVectors();
-            selection.drawSelection();
+            //edits.drawVectors();
+            //selection.drawSelection(matrices);
 
-            if (foggy)
+            /*if (foggy)
             {
                 RenderSystem.enableFog();
-            }
+            }*/
             RenderSystem.enableDepthTest();
             RenderSystem.depthMask(true);
             RenderSystem.enableTexture();
@@ -84,7 +89,8 @@ public class WatsonRenderer
 
             RenderUtils.enableDiffuseLightingForLevel(matrices);
 
-            RenderSystem.popMatrix();
+            matrices.pop();
+            ///RenderSystem.applyModelViewMatrix();
             this.mc.getProfiler().pop();
         }
     }

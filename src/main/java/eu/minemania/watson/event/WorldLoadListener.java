@@ -5,14 +5,18 @@ import javax.annotation.Nullable;
 import eu.minemania.watson.analysis.CoreProtectAnalysis;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
-import eu.minemania.watson.network.ClientPacketChannelHandler;
-import eu.minemania.watson.network.deltalogger.PluginDeltaLoggerPlacementPacketHandler;
 import eu.minemania.watson.network.PluginWorldPacketHandler;
-import eu.minemania.watson.network.deltalogger.PluginDeltaLoggerTransactionPacketHandler;
+import eu.minemania.watson.network.ledger.PluginDeltaLoggerTransactionPacketHandler;
+import eu.minemania.watson.network.ledger.PluginHandshakePacketHandler;
 import eu.minemania.watson.render.OverlayRenderer;
 import fi.dy.masa.malilib.interfaces.IWorldLoadListener;
+import fi.dy.masa.malilib.network.ClientPacketChannelHandler;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.util.Identifier;
+import org.apache.commons.compress.utils.Charsets;
 
 public class WorldLoadListener implements IWorldLoadListener
 {
@@ -26,10 +30,10 @@ public class WorldLoadListener implements IWorldLoadListener
             if (worldAfter == null)
             {
                 ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginWorldPacketHandler.INSTANCE);
-                ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginDeltaLoggerPlacementPacketHandler.INSTANCE);
+                ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginHandshakePacketHandler.INSTANCE);
                 ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginDeltaLoggerTransactionPacketHandler.INSTANCE);
                 PluginWorldPacketHandler.INSTANCE.reset();
-                PluginDeltaLoggerPlacementPacketHandler.INSTANCE.reset();
+                PluginHandshakePacketHandler.INSTANCE.reset();
                 PluginDeltaLoggerTransactionPacketHandler.INSTANCE.reset();
                 if (DataManager.getEditSelection().getSelection() != null)
                 {
@@ -54,12 +58,18 @@ public class WorldLoadListener implements IWorldLoadListener
         {
             DataManager.onClientTickStart();
             ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginWorldPacketHandler.INSTANCE);
-            ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginDeltaLoggerPlacementPacketHandler.INSTANCE);
+            ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginHandshakePacketHandler.INSTANCE);
             ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginDeltaLoggerTransactionPacketHandler.INSTANCE);
         }
         if (worldAfter != null)
         {
             DataManager.load();
         }
+    }
+
+    private void test() {
+        ServerPlayNetworking.registerGlobalReceiver(new Identifier("ledger:handshakeinfo"), ((server, player, handler, buf, responseSender) -> {
+            responseSender.sendPacket(new Identifier("ledger:handshakeinfo"), buf);
+        }));
     }
 }

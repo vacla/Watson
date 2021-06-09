@@ -1,4 +1,4 @@
-package eu.minemania.watson.network.deltalogger;
+package eu.minemania.watson.network.ledger;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
@@ -12,12 +12,13 @@ import eu.minemania.watson.scheduler.tasks.AddBlockEditTask;
 import fi.dy.masa.malilib.network.IPluginChannelHandler;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
 public class PluginDeltaLoggerTransactionPacketHandler implements IPluginChannelHandler
 {
-    public static final List<Identifier> CHANNELS = ImmutableList.of(new Identifier("deltalogger:transaction"));
+    public static final List<Identifier> CHANNELS = ImmutableList.of(new Identifier("ledger:action"));
 
     public static final PluginDeltaLoggerTransactionPacketHandler INSTANCE = new PluginDeltaLoggerTransactionPacketHandler();
 
@@ -44,7 +45,25 @@ public class PluginDeltaLoggerTransactionPacketHandler implements IPluginChannel
 
         if (this.registered)
         {
-            int x = buf.readInt();
+            System.out.println(buf.toString(Charsets.UTF_8));
+            //BlockPos pos = buf.readBlockPos();
+            //String type = buf.readString();
+            //Identifier dim = buf.readIdentifier();
+            //Identifier oldObj = buf.readIdentifier();
+            Identifier newObj = buf.readIdentifier();
+            String source = buf.readString();
+            //Long time = buf.readLong();
+            //String additional = buf.readString();
+
+            //System.out.println(pos.toString());
+            //System.out.println(type);
+            //System.out.println(dim.toString());
+            //System.out.println(oldObj.toString());
+            System.out.println(newObj.toString());
+            System.out.println(source);
+            //System.out.println(time);
+            //System.out.println(additional);
+            /*int x = buf.readInt();
             int y = buf.readInt();
             int z = buf.readInt();
             String player = buf.readString();
@@ -74,7 +93,13 @@ public class PluginDeltaLoggerTransactionPacketHandler implements IPluginChannel
             }
 
             BlockEdit edit = new BlockEdit(actualTime, player, action, x, y, z, block, world, amount);
-            SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, false));
+            SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, false));*/
         }
+    }
+
+    @Override
+    public PacketByteBuf onPacketSend()
+    {
+        return null;
     }
 }

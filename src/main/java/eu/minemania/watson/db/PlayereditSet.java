@@ -6,7 +6,10 @@ import java.util.Iterator;
 import java.util.TreeSet;
 
 import eu.minemania.watson.data.DataManager;
+import eu.minemania.watson.render.RenderUtils;
 import eu.minemania.watson.selection.PlayereditUtils;
+import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.util.math.MatrixStack;
 import org.lwjgl.opengl.GL11;
 import eu.minemania.watson.config.Configs;
 import fi.dy.masa.malilib.util.Color4f;
@@ -95,7 +98,7 @@ public class PlayereditSet
                 {
                     Tessellator tessellator = Tessellator.getInstance();
                     BufferBuilder buffer = tessellator.getBuffer();
-                    buffer.begin(GL11.GL_LINES, VertexFormats.POSITION_COLOR);
+                    RenderUtils.startDrawingLines(buffer);
 
                     PlayereditUtils.getInstance().getRevertAction(edit, null, edit.drawOutline(buffer));
 

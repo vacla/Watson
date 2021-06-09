@@ -47,7 +47,7 @@ public class OverlayRenderer
         loginTime = System.currentTimeMillis();
     }
 
-    public static void renderOverlays(MinecraftClient mc, float partialTicks)
+    public static void renderOverlays(MinecraftClient mc)
     {
         Entity entity = mc.getCameraEntity();
 
@@ -80,7 +80,7 @@ public class OverlayRenderer
         Entity entity = mc.getCameraEntity();
         if (entity != null)
         {
-            RenderUtils.drawTextPlate(Arrays.asList(text), x, y, z, entity.yaw, entity.pitch, scaled, Configs.Generic.BILLBOARD_FOREGROUND.getIntegerValue(), Configs.Generic.BILLBOARD_BACKGROUND.getIntegerValue(), true);
+            RenderUtils.drawTextPlate(Arrays.asList(text), x, y, z, entity.getYaw(), entity.getPitch(), scaled, Configs.Generic.BILLBOARD_FOREGROUND.getIntegerValue(), Configs.Generic.BILLBOARD_BACKGROUND.getIntegerValue(), true);
         }
     }
 }

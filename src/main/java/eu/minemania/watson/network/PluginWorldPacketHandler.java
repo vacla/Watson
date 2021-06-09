@@ -41,4 +41,10 @@ public class PluginWorldPacketHandler implements IPluginChannelHandler
             DataManager.setWorldPlugin(buf.toString(Charsets.UTF_8));
         }
     }
+
+    @Override
+    public PacketByteBuf onPacketSend()
+    {
+        return null;
+    }
 }

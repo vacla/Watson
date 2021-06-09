@@ -1,11 +1,18 @@
 package eu.minemania.watson.selection;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import eu.minemania.watson.client.Teleport;
 import eu.minemania.watson.db.BlockEdit;
 import eu.minemania.watson.db.BlockEditComparator;
 import eu.minemania.watson.db.BlockEditSet;
 import eu.minemania.watson.db.PlayereditSet;
+import eu.minemania.watson.render.RenderUtils;
+import eu.minemania.watson.render.WatsonRenderer;
 import fi.dy.masa.malilib.util.WorldUtils;
+import net.minecraft.client.gl.GlProgramManager;
+import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.command.argument.EntityAnchorArgumentType;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
@@ -23,6 +30,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormats;
+import org.lwjgl.opengl.GL20;
+
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.TreeSet;
@@ -115,14 +124,14 @@ public class EditSelection
         return edits;
     }
 
-    public void drawSelection()
+    public void drawSelection(MatrixStack matrixStack)
     {
         if (_selection != null && Configs.Edits.SELECTION_SHOWN.getBooleanValue() && (DataManager.getWorldPlugin().isEmpty() || DataManager.getWorldPlugin().equals(_selection.world)))
         {
             Tessellator tesselator = Tessellator.getInstance();
             BufferBuilder buffer = tesselator.getBuffer();
-            buffer.begin(GL11.GL_LINES, VertexFormats.POSITION_COLOR);
-            GL11.glLineWidth(4.0f);
+            RenderUtils.startDrawingLines(buffer);
+            RenderSystem.lineWidth(4.0F);
 
             final float halfSize = 0.3f;
             float x = _selection.x + 0.5f;
@@ -141,14 +150,14 @@ public class EditSelection
                 BlockEdit previous = _selection.playereditSet.getEditBefore(_selection);
                 if (previous != null)
                 {
-                    buffer.begin(GL11.GL_LINES, VertexFormats.POSITION_COLOR);
-                    GL11.glEnable(GL11.GL_LINE_STIPPLE);
-                    GL11.glLineStipple(8, (short) 0xAAAA);
-                    GL11.glLineWidth(3.0f);
+                    RenderUtils.startDrawingLines(buffer);
+                    int oldProgram = GlStateManager._getInteger(GL20.GL_CURRENT_PROGRAM);
+                    GlProgramManager.useProgram(WatsonRenderer.SHADER_LINESTIPPLE.getProgram());
+                    RenderSystem.lineWidth(3.0F);
                     buffer.vertex(previous.x + 0.5f, previous.y + 0.5f, previous.z + 0.5f).color(255 / 255f, 0 / 255f, 255 / 255f, 128).next();
                     buffer.vertex(x, y, z).color(255 / 255f, 0 / 255f, 255 / 255f, 128).next();
                     tesselator.draw();
-                    GL11.glDisable(GL11.GL_LINE_STIPPLE);
+                    GlProgramManager.useProgram(oldProgram);
                 }
             }
         }
@@ -262,7 +271,7 @@ public class EditSelection
                         Teleport.teleport(randX, randY, randZ, edit.world);
                         Thread.sleep(50L);
                         mc.player.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, new Vec3d(edit.x, edit.y, edit.z));
-                        mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.LookOnly(mc.player.yaw, mc.player.pitch, false));
+                        mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(mc.player.getYaw(), mc.player.getPitch(), false));
                         selectPosition(edit.x, edit.y, edit.z, edit.world, edit.amount);
                         mc.player.stopFallFlying();
                         mc.getNetworkHandler().sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));

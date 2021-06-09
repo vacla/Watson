@@ -247,17 +247,17 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
             this.drawString(x5, y, color, String.valueOf(this.entry.getCountContRemoved()), matrixStack);
             this.drawString(x6, y, color, String.valueOf(this.entry.getCountTotal()), matrixStack);
 
-            RenderSystem.pushMatrix();
-            RenderSystem.disableLighting();
+            matrixStack.push();
+            //RenderSystem.disableLighting();
             RenderUtils.enableDiffuseLightingGui3D();
 
             y = this.y + 3;
             RenderUtils.drawRect(x1, y, 16, 16, 0x20FFFFFF);
-            this.mc.getItemRenderer().renderInGuiWithOverrides(this.mc.player, this.entry.getStack(), x1, y);
+            this.mc.getItemRenderer().renderInGuiWithOverrides(this.entry.getStack(), x1, y);
 
             RenderSystem.disableBlend();
             RenderUtils.disableDiffuseLighting();
-            RenderSystem.popMatrix();
+            matrixStack.pop();
 
             super.render(mouseX, mouseY, selected, matrixStack);
         }
@@ -268,8 +268,9 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
     {
         if (this.entry != null)
         {
-            RenderSystem.pushMatrix();
-            RenderSystem.translatef(0, 0, 200);
+            matrixStack.push();
+            matrixStack.translate(0, 0, 200);
+            RenderSystem.applyModelViewMatrix();
 
             String header1 = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[0]);
             String header2 = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[5]);
@@ -308,13 +309,13 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
 
             RenderUtils.drawRect(x2, y1, 16, 16, 0x20FFFFFF);
 
-            RenderSystem.disableLighting();
+            //RenderSystem.disableLighting();
             RenderUtils.enableDiffuseLightingGui3D();
 
-            this.mc.getItemRenderer().renderInGuiWithOverrides(mc.player, stack, x2, y1);
+            this.mc.getItemRenderer().renderInGuiWithOverrides(stack, x2, y1);
 
             RenderUtils.disableDiffuseLighting();
-            RenderSystem.popMatrix();
+            matrixStack.pop();
         }
     }
 

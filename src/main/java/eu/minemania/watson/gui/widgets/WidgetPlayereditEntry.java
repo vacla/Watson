@@ -94,7 +94,7 @@ public class WidgetPlayereditEntry extends WidgetListEntryBase<PlayereditSet>
         }
 
         RenderUtils.disableDiffuseLighting();
-        RenderSystem.disableLighting();
+        //RenderSystem.disableLighting();
     }
 
     private static class ButtonListener implements IButtonActionListener

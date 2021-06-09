@@ -181,8 +181,9 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
             String descriptionText = PlayereditUtils.blockString(this.entry.getEdit(), PlayereditUtils.Edit.DESCRIPTION);
             if (mouseX > this.getColumnPosX(5) && this.getColumnPosX(5) + StringUtils.getStringWidth(descriptionText) > width - this.entry.getButton().getWidth() + 15)
             {
-                RenderSystem.pushMatrix();
-                RenderSystem.translatef(0, 0, 200);
+                matrixStack.push();
+                matrixStack.translate(0, 0, 200);
+                RenderSystem.applyModelViewMatrix();
                 String header = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[5]);
                 int w1 = this.getStringWidth(header);
                 int w2 = this.width - 100;
@@ -213,7 +214,7 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
                 {
                     this.drawString(x1, y + (i * 8) - 7, 0xFFFFFFFF, descriptions.get(i), matrixStack);
                 }
-                RenderSystem.popMatrix();
+                matrixStack.pop();
             }
         }
     }

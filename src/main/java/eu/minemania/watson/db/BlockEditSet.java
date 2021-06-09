@@ -14,6 +14,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import eu.minemania.watson.client.Teleport;
+import eu.minemania.watson.render.RenderUtils;
+import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
 
 import eu.minemania.watson.chat.ChatMessage;
@@ -257,7 +261,7 @@ public class BlockEditSet
         {
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder buffer = tessellator.getBuffer();
-            buffer.begin(GL11.GL_LINES, VertexFormats.POSITION_COLOR);
+            RenderUtils.startDrawingLines(buffer);
             int nextColorIndex1 = 0;
             for (PlayereditSet editsForPlayer : playerEdits.values())
             {
