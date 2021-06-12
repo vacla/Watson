@@ -8,14 +8,11 @@ import java.util.TreeSet;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.render.RenderUtils;
 import eu.minemania.watson.selection.PlayereditUtils;
-import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import org.lwjgl.opengl.GL11;
 import eu.minemania.watson.config.Configs;
 import fi.dy.masa.malilib.util.Color4f;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormats;
 import net.minecraft.util.math.Vec3d;
 
 public class PlayereditSet
@@ -88,7 +85,7 @@ public class PlayereditSet
         return _visible;
     }
 
-    public synchronized void drawOutlines()
+    public synchronized void drawOutlines(MatrixStack matrices)
     {
         if (isVisible())
         {
@@ -100,7 +97,7 @@ public class PlayereditSet
                     BufferBuilder buffer = tessellator.getBuffer();
                     RenderUtils.startDrawingLines(buffer);
 
-                    PlayereditUtils.getInstance().getRevertAction(edit, null, edit.drawOutline(buffer));
+                    PlayereditUtils.getInstance().getRevertAction(edit, null, edit.drawOutline(buffer, matrices));
 
                     tessellator.draw();
                 }

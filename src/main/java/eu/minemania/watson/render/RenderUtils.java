@@ -8,16 +8,11 @@ import eu.minemania.watson.db.WatsonBlock;
 import fi.dy.masa.malilib.util.Color4f;
 import fi.dy.masa.malilib.util.PositionUtils;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.VertexFormat;
-import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.*;
 import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.model.BakedQuad;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Matrix4f;
 
 public class RenderUtils
 {
@@ -31,43 +26,42 @@ public class RenderUtils
     }
 
     public static void drawFullBlockOutlinesBatched(float x, float y, float z, Color4f color, BufferBuilder buffer)
-    {//System.out.println(x + " " + y + " " + z);
-        Matrix4f matrixStack = RenderSystem.getModelViewStack().peek().getModel();
-        buffer.vertex(matrixStack, x, y, z).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack, x + 1F, y, z).color(color.r, color.g, color.b, color.a).next();
+    {
+        buffer.vertex(x, y, z).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x + 1F, y, z).color(color.r, color.g, color.b, color.a).next();
 
-        buffer.vertex(matrixStack, x, y, z).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack, x, y, z + 1F).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x, y, z).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x, y, z + 1F).color(color.r, color.g, color.b, color.a).next();
 
-        buffer.vertex(matrixStack, x, y, z + 1F).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack, x + 1F, y, z + 1F).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x, y, z + 1F).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x + 1F, y, z + 1F).color(color.r, color.g, color.b, color.a).next();
 
-        buffer.vertex(matrixStack, x + 1F, y, z).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack, x + 1F, y, z + 1F).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x + 1F, y, z).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x + 1F, y, z + 1F).color(color.r, color.g, color.b, color.a).next();
 
-        buffer.vertex(matrixStack, x, y + 1F, z).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack, x + 1F, y + 1F, z).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x, y + 1F, z).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x + 1F, y + 1F, z).color(color.r, color.g, color.b, color.a).next();
 
-        buffer.vertex(matrixStack, x, y + 1F, z).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack, x, y + 1F, z + 1F).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x, y + 1F, z).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x, y + 1F, z + 1F).color(color.r, color.g, color.b, color.a).next();
 
-        buffer.vertex(matrixStack, x, y + 1F, z + 1F).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack, x + 1F, y + 1F, z + 1F).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x, y + 1F, z + 1F).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x + 1F, y + 1F, z + 1F).color(color.r, color.g, color.b, color.a).next();
 
-        buffer.vertex(matrixStack, x + 1F, y + 1F, z).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack, x + 1F, y + 1F, z + 1F).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x + 1F, y + 1F, z).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x + 1F, y + 1F, z + 1F).color(color.r, color.g, color.b, color.a).next();
 
-        buffer.vertex(matrixStack, x, y, z).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack, x, y + 1F, z).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x, y, z).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x, y + 1F, z).color(color.r, color.g, color.b, color.a).next();
 
-        buffer.vertex(matrixStack, x + 1F, y, z).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack, x + 1F, y + 1F, z).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x + 1F, y, z).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x + 1F, y + 1F, z).color(color.r, color.g, color.b, color.a).next();
 
-        buffer.vertex(matrixStack, x, y, z + 1F).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack, x, y + +1F, z + 1F).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x, y, z + 1F).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x, y + +1F, z + 1F).color(color.r, color.g, color.b, color.a).next();
 
-        buffer.vertex(matrixStack, x + 1F, y, z + 1F).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack, x + 1F, y + 1, z + 1F).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x + 1F, y, z + 1F).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x + 1F, y + 1, z + 1F).color(color.r, color.g, color.b, color.a).next();
     }
 
     public static void drawSpecialOutlinesBatched(float x, float y, float z, WatsonBlock watsonBlock, BufferBuilder buffer, boolean sign)
@@ -79,7 +73,6 @@ public class RenderUtils
         float heightY = (12 / 32.0F) * 2;
         float widthZ = (1.0F / 32.0F) * 2;
         Color4f color = watsonBlock.getColor();
-        Matrix4f matrixStack = RenderSystem.getModelViewStack().peek().getModel();
 
         if (sign)
         {
@@ -89,41 +82,41 @@ public class RenderUtils
             heightY = heightY - 0.3F;
         }
 
-        buffer.vertex(matrixStack, posX, posY, posZ).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack, posX + widthX, posY, posZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX, posY, posZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX + widthX, posY, posZ).color(color.r, color.g, color.b, color.a).next();
 
-        buffer.vertex(matrixStack, posX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack, posX + widthX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX + widthX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).next();
 
-        buffer.vertex(matrixStack, posX, posY, posZ).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack, posX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX, posY, posZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).next();
 
-        buffer.vertex(matrixStack, posX + widthX, posY, posZ).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack, posX + widthX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX + widthX, posY, posZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX + widthX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).next();
 
-        buffer.vertex(matrixStack,posX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack,posX + widthX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX + widthX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
 
-        buffer.vertex(matrixStack,posX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack,posX + widthX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX + widthX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
 
-        buffer.vertex(matrixStack,posX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack,posX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
 
-        buffer.vertex(matrixStack,posX + widthX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack,posX + widthX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX + widthX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX + widthX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
 
-        buffer.vertex(matrixStack,posX + widthX, posY, posZ).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack,posX + widthX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX + widthX, posY, posZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX + widthX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
 
-        buffer.vertex(matrixStack,posX, posY, posZ).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack,posX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX, posY, posZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
 
-        buffer.vertex(matrixStack,posX + widthX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack,posX + widthX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX + widthX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX + widthX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
 
-        buffer.vertex(matrixStack,posX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack,posX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
     }
 
     /**
@@ -156,7 +149,6 @@ public class RenderUtils
         float[] fx = new float[4];
         float[] fy = new float[4];
         float[] fz = new float[4];
-        Matrix4f matrixStack = RenderSystem.getModelViewStack().peek().getModel();
 
         for (int index = 0; index < 4; ++index)
         {
@@ -165,16 +157,16 @@ public class RenderUtils
             fz[index] = z + Float.intBitsToFloat(vertexData[index * vertexSize + 2]);
         }
 
-        buffer.vertex(matrixStack, fx[0], fy[0], fz[0]).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack, fx[1], fy[1], fz[1]).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(fx[0], fy[0], fz[0]).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(fx[1], fy[1], fz[1]).color(color.r, color.g, color.b, color.a).next();
 
-        buffer.vertex(matrixStack, fx[1], fy[1], fz[1]).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack, fx[2], fy[2], fz[2]).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(fx[1], fy[1], fz[1]).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(fx[2], fy[2], fz[2]).color(color.r, color.g, color.b, color.a).next();
 
-        buffer.vertex(matrixStack, fx[2], fy[2], fz[2]).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack, fx[3], fy[3], fz[3]).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(fx[2], fy[2], fz[2]).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(fx[3], fy[3], fz[3]).color(color.r, color.g, color.b, color.a).next();
 
-        buffer.vertex(matrixStack, fx[3], fy[3], fz[3]).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(matrixStack, fx[0], fy[0], fz[0]).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(fx[3], fy[3], fz[3]).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(fx[0], fy[0], fz[0]).color(color.r, color.g, color.b, color.a).next();
     }
 }

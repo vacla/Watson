@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 
 import eu.minemania.watson.client.Teleport;
 import eu.minemania.watson.render.RenderUtils;
-import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Vec3d;
 import org.lwjgl.opengl.GL11;
@@ -26,9 +26,6 @@ import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.render.OverlayRenderer;
 import eu.minemania.watson.selection.EditSelection;
 import fi.dy.masa.malilib.util.StringUtils;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormats;
 
 public class BlockEditSet
 {
@@ -244,13 +241,13 @@ public class BlockEditSet
         }
     }
 
-    public synchronized void drawOutlines()
+    public synchronized void drawOutlines(MatrixStack matrices)
     {
         if (Configs.Outlines.OUTLINE_SHOWN.getBooleanValue())
         {
             for (PlayereditSet editsForPlayer : playerEdits.values())
             {
-                editsForPlayer.drawOutlines();
+                editsForPlayer.drawOutlines(matrices);
             }
         }
     }

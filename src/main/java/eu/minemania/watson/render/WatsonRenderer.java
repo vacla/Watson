@@ -1,6 +1,8 @@
 package eu.minemania.watson.render;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.VertexConsumer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
@@ -41,7 +43,7 @@ public class WatsonRenderer
         return INSTANCE;
     }
 
-    public void piecewiseRenderEntities(MinecraftClient mc, MatrixStack matrices, VertexConsumerProvider vertexConsumers)
+    public void piecewiseRenderEntities(MinecraftClient mc, MatrixStack matrices, VertexConsumerProvider.Immediate vertexConsumers)
     {
         if (this.mc == null)
         {
@@ -52,7 +54,11 @@ public class WatsonRenderer
             this.mc.getProfiler().push("watson_entities");
             EditSelection selection = DataManager.getEditSelection();
             BlockEditSet edits = selection.getBlockEditSet();
-            matrices.push();
+            MatrixStack matrixStack = RenderSystem.getModelViewStack();
+            matrixStack.push();
+            //Vec3d cameraPos = this.mc.gameRenderer.getCamera().getPos();
+            //matrices.peek().getModel().multiply(RenderSystem.getProjectionMatrix());
+            //matrices.translate(-cameraPos.getX(), -cameraPos.getY(), -cameraPos.getZ());
             RenderUtils.disableDiffuseLighting();
             RenderSystem.disableCull();
 
@@ -67,14 +73,14 @@ public class WatsonRenderer
             RenderSystem.disableDepthTest();
 
 
+            //matrixStack.method_34425(matrices.peek().getModel());
             Vec3d cameraPos = this.mc.gameRenderer.getCamera().getPos();
-            //matrices.peek().getModel().multiply(RenderSystem.getProjectionMatrix());
-            //matrices.translate(-cameraPos.getX(), -cameraPos.getY(), -cameraPos.getZ());
-            //RenderSystem.applyModelViewMatrix();
-            edits.drawOutlines();
+            //matrixStack.peek().getModel().multiply(RenderSystem.getProjectionMatrix());
+            matrixStack.translate(-cameraPos.getX(), -cameraPos.getY(), -cameraPos.getZ());
+            RenderSystem.applyModelViewMatrix();
+            edits.drawOutlines(matrixStack);
             //edits.drawVectors();
             //selection.drawSelection(matrices);
-
             /*if (foggy)
             {
                 RenderSystem.enableFog();
@@ -87,10 +93,10 @@ public class WatsonRenderer
 
             RenderSystem.enableCull();
 
-            RenderUtils.enableDiffuseLightingForLevel(matrices);
+            RenderUtils.enableDiffuseLightingForLevel(matrixStack);
 
-            matrices.pop();
-            ///RenderSystem.applyModelViewMatrix();
+            matrixStack.pop();
+            RenderSystem.applyModelViewMatrix();
             this.mc.getProfiler().pop();
         }
     }

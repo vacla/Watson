@@ -6,6 +6,7 @@ import eu.minemania.watson.render.WatsonRenderer;
 import fi.dy.masa.malilib.interfaces.IRenderer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.OutlineVertexConsumerProvider;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Matrix4f;
 
@@ -25,7 +26,7 @@ public class RenderHandler implements IRenderer
 
         if (Configs.Generic.ENABLED.getBooleanValue() && mc.world != null && mc.player != null)
         {
-            OutlineVertexConsumerProvider vertexProvider = mc.getBufferBuilders().getOutlineVertexConsumers();
+            VertexConsumerProvider.Immediate vertexProvider = mc.getBufferBuilders().getEntityVertexConsumers();
             OverlayRenderer.renderOverlays(mc);
             WatsonRenderer.getInstance().piecewiseRenderEntities(mc, matrixStack, vertexProvider);
         }

@@ -49,8 +49,12 @@ public class BlockEdit
         this.blockModelShapes = mc.getBlockRenderManager();
     }
 
-    public Object drawOutline(BufferBuilder buffer)
+    public Object drawOutline(BufferBuilder buffer, MatrixStack matrices)
     {
+        //MinecraftClient mc = MinecraftClient.getInstance();
+        //Vec3d camera = mc.gameRenderer.getCamera().getPos();
+        //matrices.translate(camera.getX(), camera.getY(), camera.getZ());
+        //RenderSystem.applyModelViewMatrix();
         Block blocks = Registry.BLOCK.get(Identifier.tryParse(block.getName()));
         float lineWidth = block.getLineWidth();
         if (!blocks.getName().getString().toLowerCase().contains("air"))
