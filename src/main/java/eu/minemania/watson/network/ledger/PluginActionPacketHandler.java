@@ -2,25 +2,28 @@ package eu.minemania.watson.network.ledger;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.minemania.watson.Watson;
-import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.db.BlockEdit;
 import eu.minemania.watson.db.WatsonBlock;
 import eu.minemania.watson.db.WatsonBlockRegistery;
 import eu.minemania.watson.scheduler.SyncTaskQueue;
 import eu.minemania.watson.scheduler.tasks.AddBlockEditTask;
 import fi.dy.masa.malilib.network.IPluginChannelHandler;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.StringNbtReader;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
-public class PluginDeltaLoggerTransactionPacketHandler implements IPluginChannelHandler
+public class PluginActionPacketHandler implements IPluginChannelHandler
 {
     public static final List<Identifier> CHANNELS = ImmutableList.of(new Identifier("ledger:action"));
 
-    public static final PluginDeltaLoggerTransactionPacketHandler INSTANCE = new PluginDeltaLoggerTransactionPacketHandler();
+    public static final PluginActionPacketHandler INSTANCE = new PluginActionPacketHandler();
 
     private boolean registered;
 
@@ -45,24 +48,47 @@ public class PluginDeltaLoggerTransactionPacketHandler implements IPluginChannel
 
         if (this.registered)
         {
-            System.out.println(buf.toString(Charsets.UTF_8));
-            //BlockPos pos = buf.readBlockPos();
-            //String type = buf.readString();
-            //Identifier dim = buf.readIdentifier();
-            //Identifier oldObj = buf.readIdentifier();
-            Identifier newObj = buf.readIdentifier();
-            String source = buf.readString();
-            //Long time = buf.readLong();
-            //String additional = buf.readString();
+            try
+            {
+                System.out.println(buf.toString(Charsets.UTF_8));
+                BlockPos pos = buf.readBlockPos();
+                String type = buf.readString();
+                Identifier dim = buf.readIdentifier();
+                Identifier oldObj = buf.readIdentifier();
+                Identifier newObj = buf.readIdentifier();
+                String source = buf.readString();
+                long time = buf.readLong() * 1000;
+                String additional = buf.readString();
+                int count = 1;
 
-            //System.out.println(pos.toString());
-            //System.out.println(type);
-            //System.out.println(dim.toString());
-            //System.out.println(oldObj.toString());
-            System.out.println(newObj.toString());
-            System.out.println(source);
-            //System.out.println(time);
-            //System.out.println(additional);
+                WatsonBlock watsonBlock = WatsonBlockRegistery.getInstance().getWatsonBlockByName(!type.contains("break") ? newObj.toString() : oldObj.toString());
+
+                System.out.println("watsonblock: "+watsonBlock.getName());
+                System.out.println("pos: "+pos.toString());
+                System.out.println("type: "+type);
+                System.out.println("dim: "+dim.toString());
+                System.out.println("oldobj: "+oldObj);
+                System.out.println("newobj: "+newObj);
+                System.out.println("source: "+source);
+                System.out.println("time: "+time);
+                System.out.println("additional: "+additional);
+                System.out.println("count: "+count);
+                if (!additional.equals(""))
+                {
+                    NbtCompound nbtCompound = StringNbtReader.parse(additional);
+                    if (nbtCompound.contains("Count", NbtElement.BYTE_TYPE))
+                    {
+                        count = nbtCompound.getByte("Count");
+                        System.out.println("count:" + count);
+
+                    }
+                    if (nbtCompound.contains("id", NbtElement.STRING_TYPE))
+                    {
+                        System.out.println("id:" + nbtCompound.getString("id"));
+                    }
+                }
+                BlockEdit edit = new BlockEdit(time, source, type, pos.getX(), pos.getY(), pos.getZ(), watsonBlock, dim.toString(), count);
+                SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, false));
             /*int x = buf.readInt();
             int y = buf.readInt();
             int z = buf.readInt();
@@ -94,6 +120,12 @@ public class PluginDeltaLoggerTransactionPacketHandler implements IPluginChannel
 
             BlockEdit edit = new BlockEdit(actualTime, player, action, x, y, z, block, world, amount);
             SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, false));*/
+            }
+            catch (CommandSyntaxException exception)
+            {
+                Watson.logger.error(exception.getMessage());
+            }
+
         }
     }
 

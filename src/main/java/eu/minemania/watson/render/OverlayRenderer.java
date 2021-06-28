@@ -9,7 +9,6 @@ import fi.dy.masa.malilib.render.RenderUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 
 public class OverlayRenderer
 {
@@ -66,11 +65,9 @@ public class OverlayRenderer
             }
         }
 
-        Vec3d cameraPos = mc.gameRenderer.getCamera().getPos();
-
-        DataManager.getEditSelection().getBlockEditSet().getOreDB().drawDepositLabels(cameraPos.x, cameraPos.y, cameraPos.z);
-        DataManager.getEditSelection().getBlockEditSet().drawAnnotations(cameraPos.x, cameraPos.y, cameraPos.z);
-        LocalAnnotation.getInstance().drawAnnotations(cameraPos.x, cameraPos.y, cameraPos.z);
+        DataManager.getEditSelection().getBlockEditSet().getOreDB().drawDepositLabels();
+        DataManager.getEditSelection().getBlockEditSet().drawAnnotations();
+        LocalAnnotation.getInstance().drawAnnotations();
     }
 
     public static void drawBillboard(double x, double y, double z, double scale, String text)

@@ -45,11 +45,11 @@ public class Annotation
         return _world;
     }
 
-    public void draw(double dx, double dy, double dz)
+    public void draw()
     {
         if (DataManager.getWorldPlugin().isEmpty() || DataManager.getWorldPlugin().equals(getWorld()))
         {
-            OverlayRenderer.drawBillboard(getX() - dx, getY() - dy, getZ() - dz, 0.03, getText());
+            OverlayRenderer.drawBillboard(getX(), getY(), getZ(), 0.03, getText());
         }
     }
 }

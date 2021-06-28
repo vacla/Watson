@@ -56,35 +56,24 @@ public class WatsonRenderer
             BlockEditSet edits = selection.getBlockEditSet();
             MatrixStack matrixStack = RenderSystem.getModelViewStack();
             matrixStack.push();
-            //Vec3d cameraPos = this.mc.gameRenderer.getCamera().getPos();
-            //matrices.peek().getModel().multiply(RenderSystem.getProjectionMatrix());
-            //matrices.translate(-cameraPos.getX(), -cameraPos.getY(), -cameraPos.getZ());
-            RenderUtils.disableDiffuseLighting();
             RenderSystem.disableCull();
 
             RenderUtils.setupBlend();
 
             RenderSystem.disableTexture();
             RenderUtils.color(1f, 1f, 1f, 1f);
-            //RenderSystem.glMultiTexCoord2f(GL13.GL_TEXTURE1, 240.0F, 240.0F);
             RenderSystem.depthMask(false);
-            //boolean foggy = GL11.glIsEnabled(GL11.GL_FOG);
-            //RenderSystem.disableFog();
+
             RenderSystem.disableDepthTest();
 
-
-            //matrixStack.method_34425(matrices.peek().getModel());
             Vec3d cameraPos = this.mc.gameRenderer.getCamera().getPos();
-            //matrixStack.peek().getModel().multiply(RenderSystem.getProjectionMatrix());
+
             matrixStack.translate(-cameraPos.getX(), -cameraPos.getY(), -cameraPos.getZ());
             RenderSystem.applyModelViewMatrix();
             edits.drawOutlines(matrixStack);
-            //edits.drawVectors();
-            //selection.drawSelection(matrices);
-            /*if (foggy)
-            {
-                RenderSystem.enableFog();
-            }*/
+            edits.drawVectors();
+            selection.drawSelection(matrices);
+
             RenderSystem.enableDepthTest();
             RenderSystem.depthMask(true);
             RenderSystem.enableTexture();
@@ -92,8 +81,6 @@ public class WatsonRenderer
             RenderSystem.disableBlend();
 
             RenderSystem.enableCull();
-
-            RenderUtils.enableDiffuseLightingForLevel(matrixStack);
 
             matrixStack.pop();
             RenderSystem.applyModelViewMatrix();

@@ -269,13 +269,13 @@ public class BlockEditSet
         }
     }
 
-    public synchronized void drawAnnotations(double dx, double dy, double dz)
+    public synchronized void drawAnnotations()
     {
         if (Configs.Generic.ANNOTATION_SHOWN.getBooleanValue() && !annotations.isEmpty())
         {
             for (Annotation annotation : annotations)
             {
-                annotation.draw(dx, dy, dz);
+                annotation.draw();
             }
         }
     }

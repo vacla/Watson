@@ -137,12 +137,12 @@ public class EditSelection
             float x = _selection.x + 0.5f;
             float y = _selection.y + 0.5f;
             float z = _selection.z + 0.5f;
-            buffer.vertex(x - halfSize, y, z).color(255 / 255f, 0 / 255f, 255 / 255f, 128).next();
-            buffer.vertex(x + halfSize, y, z).color(255 / 255f, 0 / 255f, 255 / 255f, 128).next();
-            buffer.vertex(x, y - halfSize, z).color(255 / 255f, 0 / 255f, 255 / 255f, 128).next();
-            buffer.vertex(x, y + halfSize, z).color(255 / 255f, 0 / 255f, 255 / 255f, 128).next();
-            buffer.vertex(x, y, z - halfSize).color(255 / 255f, 0 / 255f, 255 / 255f, 128).next();
-            buffer.vertex(x, y, z + halfSize).color(255 / 255f, 0 / 255f, 255 / 255f, 128).next();
+            buffer.vertex(x - halfSize, y, z).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0).next();
+            buffer.vertex(x + halfSize, y, z).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0).next();
+            buffer.vertex(x, y - halfSize, z).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0).next();
+            buffer.vertex(x, y + halfSize, z).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0).next();
+            buffer.vertex(x, y, z - halfSize).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0).next();
+            buffer.vertex(x, y, z + halfSize).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0).next();
             tesselator.draw();
 
             if (_selection.playereditSet != null)
@@ -154,8 +154,8 @@ public class EditSelection
                     int oldProgram = GlStateManager._getInteger(GL20.GL_CURRENT_PROGRAM);
                     GlProgramManager.useProgram(WatsonRenderer.SHADER_LINESTIPPLE.getProgram());
                     RenderSystem.lineWidth(3.0F);
-                    buffer.vertex(previous.x + 0.5f, previous.y + 0.5f, previous.z + 0.5f).color(255 / 255f, 0 / 255f, 255 / 255f, 128).next();
-                    buffer.vertex(x, y, z).color(255 / 255f, 0 / 255f, 255 / 255f, 128).next();
+                    buffer.vertex(previous.x + 0.5f, previous.y + 0.5f, previous.z + 0.5f).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0).next();
+                    buffer.vertex(x, y, z).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0).next();
                     tesselator.draw();
                     GlProgramManager.useProgram(oldProgram);
                 }

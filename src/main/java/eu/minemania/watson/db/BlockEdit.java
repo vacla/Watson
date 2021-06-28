@@ -15,7 +15,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 
 public class BlockEdit
@@ -33,6 +32,7 @@ public class BlockEdit
     public boolean disabled;
     private final BlockRenderManager blockModelShapes;
     protected boolean drawn;
+    private MinecraftClient mc;
 
     public BlockEdit(long time, String player, String action, int x, int y, int z, WatsonBlock block, String world, int amount)
     {
@@ -45,16 +45,12 @@ public class BlockEdit
         this.z = z;
         this.block = block;
         this.world = world;
-        MinecraftClient mc = MinecraftClient.getInstance();
-        this.blockModelShapes = mc.getBlockRenderManager();
+        this.mc = MinecraftClient.getInstance();
+        this.blockModelShapes = this.mc.getBlockRenderManager();
     }
 
     public Object drawOutline(BufferBuilder buffer, MatrixStack matrices)
     {
-        //MinecraftClient mc = MinecraftClient.getInstance();
-        //Vec3d camera = mc.gameRenderer.getCamera().getPos();
-        //matrices.translate(camera.getX(), camera.getY(), camera.getZ());
-        //RenderSystem.applyModelViewMatrix();
         Block blocks = Registry.BLOCK.get(Identifier.tryParse(block.getName()));
         float lineWidth = block.getLineWidth();
         if (!blocks.getName().getString().toLowerCase().contains("air"))
@@ -64,7 +60,7 @@ public class BlockEdit
                 lineWidth = Configs.Outlines.ORE_LINEWIDTH.getIntegerValue();
             }
             RenderSystem.lineWidth(lineWidth);
-            renderBlocks(buffer, blocks);
+            renderBlocks(buffer, blocks, matrices);
         }
         else
         {
@@ -75,7 +71,7 @@ public class BlockEdit
         return null;
     }
 
-    private void renderBlocks(BufferBuilder buffer, Block blocks)
+    private void renderBlocks(BufferBuilder buffer, Block blocks, MatrixStack matrices)
     {
         if (!block.getName().equals("minecraft:grass") && !block.getName().equals("minecraft:water") &&
                 !block.getName().equals("minecraft:lava"))
@@ -152,21 +148,21 @@ public class BlockEdit
 
     public boolean isCreated()
     {
-        return this.action.equals("placed") || this.action.equals("created");
+        return this.action.equals("placed") || this.action.equals("created") || this.action.equals("block-place");
     }
 
     public boolean isBroken()
     {
-        return this.action.equals("broke") || this.action.equals("destroyed");
+        return this.action.equals("broke") || this.action.equals("destroyed") || this.action.equals("block-break");
     }
 
     public boolean isContAdded()
     {
-        return this.action.equals("added") || this.action.equals("put");
+        return this.action.equals("added") || this.action.equals("put") || this.action.equals("item-insert");
     }
 
     public boolean isContRemoved()
     {
-        return this.action.equals("removed") || this.action.equals("took") || this.action.equals("remove");
+        return this.action.equals("removed") || this.action.equals("took") || this.action.equals("remove") || this.action.equals("item-remove");
     }
 }

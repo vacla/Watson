@@ -255,7 +255,7 @@ public class OreDB
         }
     }
 
-    public void drawDepositLabels(double dx, double dy, double dz)
+    public void drawDepositLabels()
     {
         if (Configs.Edits.LABEL_SHOWN.getBooleanValue())
         {
@@ -271,7 +271,7 @@ public class OreDB
                         label.setLength(0);
                         label.ensureCapacity(4);
                         label.append(id);
-                        OverlayRenderer.drawBillboard(block.getLocation().getX() - dx + 0.5, block.getLocation().getY() - dy + 0.5, block.getLocation().getZ() - dz + 0.5, 0.03, label.toString());
+                        OverlayRenderer.drawBillboard(block.getLocation().getX() + 0.5, block.getLocation().getY() + 0.5, block.getLocation().getZ() + 0.5, 0.03, label.toString());
                     }
                     ++id;
                 }

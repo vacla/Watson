@@ -20,7 +20,7 @@ import java.util.List;
 
 public class PluginHandshakePacketHandler implements IPluginChannelHandler
 {
-    public static final List<Identifier> CHANNELS = ImmutableList.of(new Identifier("ledger:handshake"), new Identifier("ledger:handshakeinfo"));
+    public static final List<Identifier> CHANNELS = ImmutableList.of(new Identifier("ledger:handshake"));
 
     public static final PluginHandshakePacketHandler INSTANCE = new PluginHandshakePacketHandler();
 
@@ -48,45 +48,8 @@ public class PluginHandshakePacketHandler implements IPluginChannelHandler
         if (this.registered)
         {
             System.out.println(buf.toString(Charsets.UTF_8));
-            System.out.println("1: "+buf.readBoolean());
+            System.out.println("1: "+buf.readInt());
             System.out.println("2: "+buf.readBoolean());
-            System.out.println("3: "+buf.readBoolean());
-            System.out.println("4: "+buf.readBoolean());
-            //System.out.println("allowed: "+buf.readString(eadBoolean());
-            /*int x = buf.readInt();
-            int y = buf.readInt();
-            int z = buf.readInt();
-            boolean placed = buf.readBoolean();
-            String player = buf.readString();
-            long time = buf.readLong();
-            String blockType = buf.readString();
-            String blockState = buf.readString();
-            String world = buf.readString();
-            String action = placed ? "placed" : "broke";
-            WatsonBlock block = WatsonBlockRegistery.getInstance().getWatsonBlockByName(blockType);
-            long correctTime = time * 1000;
-
-            if (Configs.Generic.DEBUG.getBooleanValue())
-            {
-                Watson.logger.debug("x:" + x);
-                Watson.logger.debug("y:" + y);
-                Watson.logger.debug("z:" + z);
-                Watson.logger.debug("placed:" + placed);
-                Watson.logger.debug("playername:" + player);
-                Watson.logger.debug("time:" + time);
-                Watson.logger.debug("actual time:" + correctTime);
-                Watson.logger.debug("blocktype:" + blockType);
-                Watson.logger.debug("blockstate:" + blockState);
-                Watson.logger.debug("world:" + world);
-                Watson.logger.debug("action:" + action);
-                Watson.logger.debug("block:" + block.getName());
-                Watson.logger.debug("");
-            }
-
-            BlockEdit edit = new BlockEdit(correctTime, player, action, x, y, z, block, world, 1);
-            SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, false));
-
-            //DataManager.setWorldPlugin(buf.read);*/
         }
     }
 

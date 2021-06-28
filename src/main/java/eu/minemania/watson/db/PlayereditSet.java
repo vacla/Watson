@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.TreeSet;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.render.RenderUtils;
 import eu.minemania.watson.selection.PlayereditUtils;
@@ -150,8 +151,9 @@ public class PlayereditSet
                         double length = diff.length();
                         if (length >= (float) Configs.Edits.VECTOR_LENGTH.getDoubleValue())
                         {
-                            buffer.vertex(pPos.x, pPos.y, pPos.z).color(color.r, color.g, color.b, color.a).next();
-                            buffer.vertex(nPos.x, nPos.y, nPos.z).color(color.r, color.g, color.b, color.a).next();
+                            RenderSystem.lineWidth(2f);
+                            buffer.vertex(pPos.x, pPos.y, pPos.z).color(color.r, color.g, color.b, color.a).normal(0,0,0).next();
+                            buffer.vertex(nPos.x, nPos.y, nPos.z).color(color.r, color.g, color.b, color.a).normal(0,0,0).next();
 
                             // Length from arrow tip to midpoint of vector as a fraction of
                             // the total vector length. Scale the arrow in proportion to the
@@ -183,14 +185,14 @@ public class PlayereditSet
                             Vec3d draw1 = new Vec3d(fin1.x * arrowScale * length, fin1.y * arrowScale * length, fin1.z * arrowScale * length);
                             Vec3d draw2 = new Vec3d(fin2.x * arrowScale * length, fin2.y * arrowScale * length, fin2.z * arrowScale * length);
                             // Draw four fins
-                            buffer.vertex(tip.x, tip.y, tip.z).color(color.r, color.g, color.b, color.a).next();
-                            buffer.vertex(tail.x + draw1.x, tail.y + draw1.y, tail.z + draw1.z).color(color.r, color.g, color.b, color.a).next();
-                            buffer.vertex(tip.x, tip.y, tip.z).color(color.r, color.g, color.b, color.a).next();
-                            buffer.vertex(tail.x - draw1.x, tail.y - draw1.y, tail.z - draw1.z).color(color.r, color.g, color.b, color.a).next();
-                            buffer.vertex(tip.x, tip.y, tip.z).color(color.r, color.g, color.b, color.a).next();
-                            buffer.vertex(tail.x + draw2.x, tail.y + draw2.y, tail.z + draw2.z).color(color.r, color.g, color.b, color.a).next();
-                            buffer.vertex(tip.x, tip.y, tip.z).color(color.r, color.g, color.b, color.a).next();
-                            buffer.vertex(tail.x - draw2.x, tail.y - draw2.y, tail.z - draw2.z).color(color.r, color.g, color.b, color.a).next();
+                            buffer.vertex(tip.x, tip.y, tip.z).color(color.r, color.g, color.b, color.a).normal(0,0,0).next();
+                            buffer.vertex(tail.x + draw1.x, tail.y + draw1.y, tail.z + draw1.z).color(color.r, color.g, color.b, color.a).normal(0,0,0).next();
+                            buffer.vertex(tip.x, tip.y, tip.z).color(color.r, color.g, color.b, color.a).normal(0,0,0).next();
+                            buffer.vertex(tail.x - draw1.x, tail.y - draw1.y, tail.z - draw1.z).color(color.r, color.g, color.b, color.a).normal(0,0,0).next();
+                            buffer.vertex(tip.x, tip.y, tip.z).color(color.r, color.g, color.b, color.a).normal(0,0,0).next();
+                            buffer.vertex(tail.x + draw2.x, tail.y + draw2.y, tail.z + draw2.z).color(color.r, color.g, color.b, color.a).normal(0,0,0).next();
+                            buffer.vertex(tip.x, tip.y, tip.z).color(color.r, color.g, color.b, color.a).normal(0,0,0).next();
+                            buffer.vertex(tail.x - draw2.x, tail.y - draw2.y, tail.z - draw2.z).color(color.r, color.g, color.b, color.a).normal(0,0,0).next();
                         }
                         prev = next;
                     }

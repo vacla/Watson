@@ -304,9 +304,9 @@ public class Configs implements IConfigHandler
         ImmutableList.Builder<String> builder = ImmutableList.builder();
         final HashSet<String> set = new HashSet<>();
 
-        Registry.BLOCK.forEach((block) -> set.add(Registry.BLOCK.getId(block).toString() + ";1;" + setCustomColorOres(block.asItem())));
-        Registry.ITEM.forEach((item) -> set.add(Registry.ITEM.getId(item).toString() + ";1;" + setCustomColorOres(item)));
-        Registry.ENTITY_TYPE.forEach((type) -> set.add(Registry.ENTITY_TYPE.getId(type).toString() + ";1;#CC780E22"));
+        Registry.BLOCK.forEach((block) -> set.add(Registry.BLOCK.getId(block) + ";2;" + setCustomColorOres(block.asItem())));
+        Registry.ITEM.forEach((item) -> set.add(Registry.ITEM.getId(item) + ";2;" + setCustomColorOres(item)));
+        Registry.ENTITY_TYPE.forEach((type) -> set.add(Registry.ENTITY_TYPE.getId(type) + ";2;#CC780E22"));
 
         ArrayList<String> list = new ArrayList<>(set);
         list.sort(String::compareTo);

@@ -11,8 +11,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedQuad;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.*;
 
 public class RenderUtils
 {
@@ -20,48 +19,47 @@ public class RenderUtils
 
     public static void startDrawingLines(BufferBuilder buffer)
     {
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        //RenderSystem.applyModelViewMatrix();
-        buffer.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
+        RenderSystem.setShader(GameRenderer::getRenderTypeLinesShader);
+        buffer.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
     }
 
     public static void drawFullBlockOutlinesBatched(float x, float y, float z, Color4f color, BufferBuilder buffer)
     {
-        buffer.vertex(x, y, z).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(x + 1F, y, z).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x, y, z).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(x + 1F, y, z).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
 
-        buffer.vertex(x, y, z).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(x, y, z + 1F).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x, y, z).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(x, y, z + 1F).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
 
-        buffer.vertex(x, y, z + 1F).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(x + 1F, y, z + 1F).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x, y, z + 1F).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(x + 1F, y, z + 1F).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
 
-        buffer.vertex(x + 1F, y, z).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(x + 1F, y, z + 1F).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x + 1F, y, z).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(x + 1F, y, z + 1F).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
 
-        buffer.vertex(x, y + 1F, z).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(x + 1F, y + 1F, z).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x, y + 1F, z).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(x + 1F, y + 1F, z).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
 
-        buffer.vertex(x, y + 1F, z).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(x, y + 1F, z + 1F).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x, y + 1F, z).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(x, y + 1F, z + 1F).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
 
-        buffer.vertex(x, y + 1F, z + 1F).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(x + 1F, y + 1F, z + 1F).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x, y + 1F, z + 1F).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(x + 1F, y + 1F, z + 1F).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
 
-        buffer.vertex(x + 1F, y + 1F, z).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(x + 1F, y + 1F, z + 1F).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x + 1F, y + 1F, z).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(x + 1F, y + 1F, z + 1F).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
 
-        buffer.vertex(x, y, z).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(x, y + 1F, z).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x, y, z).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(x, y + 1F, z).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
 
-        buffer.vertex(x + 1F, y, z).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(x + 1F, y + 1F, z).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x + 1F, y, z).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(x + 1F, y + 1F, z).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
 
-        buffer.vertex(x, y, z + 1F).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(x, y + +1F, z + 1F).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x, y, z + 1F).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(x, y + +1F, z + 1F).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
 
-        buffer.vertex(x + 1F, y, z + 1F).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(x + 1F, y + 1, z + 1F).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(x + 1F, y, z + 1F).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(x + 1F, y + 1, z + 1F).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
     }
 
     public static void drawSpecialOutlinesBatched(float x, float y, float z, WatsonBlock watsonBlock, BufferBuilder buffer, boolean sign)
@@ -82,41 +80,41 @@ public class RenderUtils
             heightY = heightY - 0.3F;
         }
 
-        buffer.vertex(posX, posY, posZ).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(posX + widthX, posY, posZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX, posY, posZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(posX + widthX, posY, posZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
 
-        buffer.vertex(posX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(posX + widthX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(posX + widthX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
 
-        buffer.vertex(posX, posY, posZ).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(posX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX, posY, posZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(posX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
 
-        buffer.vertex(posX + widthX, posY, posZ).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(posX + widthX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX + widthX, posY, posZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(posX + widthX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
 
-        buffer.vertex(posX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(posX + widthX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(posX + widthX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
 
-        buffer.vertex(posX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(posX + widthX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(posX + widthX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
 
-        buffer.vertex(posX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(posX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(posX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
 
-        buffer.vertex(posX + widthX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(posX + widthX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX + widthX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(posX + widthX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
 
-        buffer.vertex(posX + widthX, posY, posZ).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(posX + widthX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX + widthX, posY, posZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(posX + widthX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
 
-        buffer.vertex(posX, posY, posZ).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(posX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX, posY, posZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(posX, posY, posZ + widthZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
 
-        buffer.vertex(posX + widthX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(posX + widthX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX + widthX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(posX + widthX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
 
-        buffer.vertex(posX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(posX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(posX, posY + heightY, posZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(posX, posY + heightY, posZ + widthZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
     }
 
     /**
@@ -136,15 +134,18 @@ public class RenderUtils
     {
         for (BakedQuad quad : quads)
         {
-            renderQuadOutlinesBatched(pos, color, quad.getVertexData(), buffer);
+            renderQuadOutlinesBatched(pos, color, quad, buffer);
         }
     }
 
-    private static void renderQuadOutlinesBatched(BlockPos pos, Color4f color, int[] vertexData, BufferBuilder buffer)
+    private static void renderQuadOutlinesBatched(BlockPos pos, Color4f color, BakedQuad quad, BufferBuilder buffer)
     {
         final int x = pos.getX();
         final int y = pos.getY();
         final int z = pos.getZ();
+        int[] vertexData = quad.getVertexData();
+        Vec3i vec3i = quad.getFace().getVector();
+        Vec3f vec3f = new Vec3f(vec3i.getX(), vec3i.getY(), vec3i.getZ());
         final int vertexSize = vertexData.length / 4;
         float[] fx = new float[4];
         float[] fy = new float[4];
@@ -157,16 +158,16 @@ public class RenderUtils
             fz[index] = z + Float.intBitsToFloat(vertexData[index * vertexSize + 2]);
         }
 
-        buffer.vertex(fx[0], fy[0], fz[0]).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(fx[1], fy[1], fz[1]).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(fx[0], fy[0], fz[0]).color(color.r, color.g, color.b, color.a).normal(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next();
+        buffer.vertex(fx[1], fy[1], fz[1]).color(color.r, color.g, color.b, color.a).normal(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next();
 
-        buffer.vertex(fx[1], fy[1], fz[1]).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(fx[2], fy[2], fz[2]).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(fx[1], fy[1], fz[1]).color(color.r, color.g, color.b, color.a).normal(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next();
+        buffer.vertex(fx[2], fy[2], fz[2]).color(color.r, color.g, color.b, color.a).normal(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next();
 
-        buffer.vertex(fx[2], fy[2], fz[2]).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(fx[3], fy[3], fz[3]).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(fx[2], fy[2], fz[2]).color(color.r, color.g, color.b, color.a).normal(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next();
+        buffer.vertex(fx[3], fy[3], fz[3]).color(color.r, color.g, color.b, color.a).normal(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next();
 
-        buffer.vertex(fx[3], fy[3], fz[3]).color(color.r, color.g, color.b, color.a).next();
-        buffer.vertex(fx[0], fy[0], fz[0]).color(color.r, color.g, color.b, color.a).next();
+        buffer.vertex(fx[3], fy[3], fz[3]).color(color.r, color.g, color.b, color.a).normal(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next();
+        buffer.vertex(fx[0], fy[0], fz[0]).color(color.r, color.g, color.b, color.a).normal(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next();
     }
 }
