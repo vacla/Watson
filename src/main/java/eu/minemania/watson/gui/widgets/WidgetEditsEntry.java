@@ -343,7 +343,7 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
             if (this.type == ButtonType.BLOCKS)
             {
                 EditListBlockedit editList = new EditListBlockedit(this.entry.getBlocks(), true);
-                GuiBase.openGui(new GuiBlockeditData(editList, this.entry.getStack().getTranslationKey(), listWidget.getParent()));
+                GuiBase.openGui(new GuiBlockeditData(editList, this.entry.getStack().getTranslationKey(), listWidget.getGuiParent()));
             }
         }
 

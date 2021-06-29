@@ -34,8 +34,11 @@ public class WidgetListEdits extends WidgetListBase<PlayereditEntry, WidgetEdits
         this.widgetSearchBar.setZLevel(1);
         this.sorter = new PlayereditSorter(parent.getEdits());
         this.shouldSortList = true;
+    }
 
-        this.setParent(parent);
+    protected GuiEdits getGuiParent()
+    {
+        return this.gui;
     }
 
     @Override

@@ -23,7 +23,6 @@ public class WidgetListBlockedit extends WidgetListBase<BlockeditEntry, WidgetBl
 
         this.browserEntryHeight = 26;
         this.gui = parent;
-        this.setParent(parent);
     }
 
     @Override

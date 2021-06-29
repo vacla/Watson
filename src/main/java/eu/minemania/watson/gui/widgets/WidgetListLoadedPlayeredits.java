@@ -18,18 +18,24 @@ import fi.dy.masa.malilib.gui.widgets.WidgetSearchBar;
 public class WidgetListLoadedPlayeredits extends WidgetListBase<PlayereditSet, WidgetPlayereditEntry>
 {
     private final LoadedPlayereditSorter sorter;
+    private final GuiPlayereditLoadedList parent;
 
     public WidgetListLoadedPlayeredits(int x, int y, int width, int height,
                                        ISelectionListener<PlayereditSet> selectionListener, GuiPlayereditLoadedList parent)
     {
         super(x, y, width, height, selectionListener);
 
-        this.setParent(parent);
         this.browserEntryHeight = 22;
         this.widgetSearchBar = new WidgetSearchBar(x + 2, y + 4, width - 14, 14, 0, Icons.FILE_ICON_SEARCH, LeftRight.LEFT);
         this.browserEntriesOffsetY = this.widgetSearchBar.getHeight() + 3;
         this.shouldSortList = true;
         this.sorter = new LoadedPlayereditSorter(parent);
+        this.parent = parent;
+    }
+
+    protected GuiPlayereditLoadedList getGuiParent()
+    {
+        return this.parent;
     }
 
     @Override
