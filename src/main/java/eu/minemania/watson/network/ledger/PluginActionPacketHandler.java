@@ -4,6 +4,7 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.minemania.watson.Watson;
+import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.db.BlockEdit;
 import eu.minemania.watson.db.WatsonBlock;
 import eu.minemania.watson.db.WatsonBlockRegistery;
@@ -50,7 +51,6 @@ public class PluginActionPacketHandler implements IPluginChannelHandlerExtended
         {
             try
             {
-                System.out.println(buf.toString(Charsets.UTF_8));
                 BlockPos pos = buf.readBlockPos();
                 String type = buf.readString();
                 Identifier dim = buf.readIdentifier();
@@ -60,66 +60,40 @@ public class PluginActionPacketHandler implements IPluginChannelHandlerExtended
                 long time = buf.readLong() * 1000;
                 String additional = buf.readString();
                 int count = 1;
+                String id = "";
 
                 WatsonBlock watsonBlock = WatsonBlockRegistery.getInstance().getWatsonBlockByName(!type.contains("break") ? newObj.toString() : oldObj.toString());
 
-                System.out.println("watsonblock: "+watsonBlock.getName());
-                System.out.println("pos: "+pos.toString());
-                System.out.println("type: "+type);
-                System.out.println("dim: "+dim.toString());
-                System.out.println("oldobj: "+oldObj);
-                System.out.println("newobj: "+newObj);
-                System.out.println("source: "+source);
-                System.out.println("time: "+time);
-                System.out.println("additional: "+additional);
-                System.out.println("count: "+count);
                 if (!additional.equals(""))
                 {
                     NbtCompound nbtCompound = StringNbtReader.parse(additional);
                     if (nbtCompound.contains("Count", NbtElement.BYTE_TYPE))
                     {
                         count = nbtCompound.getByte("Count");
-                        System.out.println("count:" + count);
-
                     }
                     if (nbtCompound.contains("id", NbtElement.STRING_TYPE))
                     {
-                        System.out.println("id:" + nbtCompound.getString("id"));
+                        id = nbtCompound.getString("id");
                     }
                 }
+
+                if (Configs.Generic.DEBUG.getBooleanValue())
+                {
+                    Watson.logger.debug("watsonblock: " + watsonBlock.getName());
+                    Watson.logger.debug("pos: " + pos.toString());
+                    Watson.logger.debug("type: " + type);
+                    Watson.logger.debug("dim: " + dim.toString());
+                    Watson.logger.debug("oldobj: " + oldObj);
+                    Watson.logger.debug("newobj: " + newObj);
+                    Watson.logger.debug("source: " + source);
+                    Watson.logger.debug("time: " + time);
+                    Watson.logger.debug("additional: " + additional);
+                    Watson.logger.debug("count: " + count);
+                    Watson.logger.debug("id: " + id);
+                }
+
                 BlockEdit edit = new BlockEdit(time, source, type, pos.getX(), pos.getY(), pos.getZ(), watsonBlock, dim.toString(), count);
                 SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, false));
-            /*int x = buf.readInt();
-            int y = buf.readInt();
-            int z = buf.readInt();
-            String player = buf.readString();
-            long time = buf.readLong();
-            int amount = buf.readInt();
-            String itemType = buf.readString();
-            String world = buf.readString();
-            String action = amount < 0 ? "took" : "put";
-            WatsonBlock block = WatsonBlockRegistery.getInstance().getWatsonBlockByName(itemType);
-            long actualTime = time * 1000;
-            amount = Math.abs(amount);
-
-            if (Configs.Generic.DEBUG.getBooleanValue())
-            {
-                Watson.logger.debug("x:" + x);
-                Watson.logger.debug("y:" + y);
-                Watson.logger.debug("z:" + z);
-                Watson.logger.debug("playername:" + player);
-                Watson.logger.debug("time:" + time);
-                Watson.logger.debug("actualTime:" + actualTime);
-                Watson.logger.debug("amount:" + amount);
-                Watson.logger.debug("itemtype:" + itemType);
-                Watson.logger.debug("world:" + world);
-                Watson.logger.debug("action:" + action);
-                Watson.logger.debug("block:" + block.getName());
-                Watson.logger.debug("");
-            }
-
-            BlockEdit edit = new BlockEdit(actualTime, player, action, x, y, z, block, world, amount);
-            SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, false));*/
             }
             catch (CommandSyntaxException exception)
             {

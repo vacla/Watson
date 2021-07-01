@@ -2,6 +2,8 @@ package eu.minemania.watson.network;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
+import eu.minemania.watson.Watson;
+import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
@@ -37,7 +39,12 @@ public class PluginWorldPacketHandler implements IPluginChannelHandlerExtended
 
         if (this.registered)
         {
-            DataManager.setWorldPlugin(buf.toString(Charsets.UTF_8));
+            String world = buf.toString(Charsets.UTF_8);
+            DataManager.setWorldPlugin(world);
+            if (Configs.Generic.DEBUG.getBooleanValue())
+            {
+                Watson.logger.debug("World: "+ world);
+            }
         }
     }
 

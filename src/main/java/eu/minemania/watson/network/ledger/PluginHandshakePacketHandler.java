@@ -3,6 +3,8 @@ package eu.minemania.watson.network.ledger;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import eu.minemania.watson.Reference;
+import eu.minemania.watson.Watson;
+import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.network.IPluginChannelHandlerExtended;
 import io.netty.buffer.Unpooled;
 import net.minecraft.nbt.NbtCompound;
@@ -40,9 +42,14 @@ public class PluginHandshakePacketHandler implements IPluginChannelHandlerExtend
 
         if (this.registered)
         {
-            System.out.println(buf.toString(Charsets.UTF_8));
-            System.out.println("1: "+buf.readInt());
-            System.out.println("2: "+buf.readBoolean());
+            int protocolVersion = buf.readInt();
+            boolean isAllowed = buf.readBoolean();
+
+            if (Configs.Generic.DEBUG.getBooleanValue())
+            {
+                Watson.logger.debug("protocol version: " + protocolVersion);
+                Watson.logger.debug("Is allowed: " + isAllowed);
+            }
         }
     }
 
