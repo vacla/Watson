@@ -2,8 +2,6 @@ package eu.minemania.watson.network;
 
 import com.google.common.base.Charsets;
 import eu.minemania.watson.Watson;
-import fi.dy.masa.malilib.network.IClientPacketChannelHandler;
-import fi.dy.masa.malilib.network.IPluginChannelHandler;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.MinecraftClient;
@@ -26,7 +24,7 @@ public class ClientPacketChannelHandler implements IClientPacketChannelHandler
 
     private static final ClientPacketChannelHandler INSTANCE = new ClientPacketChannelHandler();
 
-    private final HashMap<Identifier, IPluginChannelHandler> handlers;
+    private final HashMap<Identifier, IPluginChannelHandlerExtended> handlers;
 
     public static IClientPacketChannelHandler getInstance()
     {
@@ -39,7 +37,7 @@ public class ClientPacketChannelHandler implements IClientPacketChannelHandler
     }
 
     @Override
-    public void registerClientChannelHandler(IPluginChannelHandler handler)
+    public void registerClientChannelHandler(IPluginChannelHandlerExtended handler)
     {
         List<Identifier> toRegister = new ArrayList<>();
 
@@ -59,7 +57,7 @@ public class ClientPacketChannelHandler implements IClientPacketChannelHandler
     }
 
     @Override
-    public void unregisterClientChannelHandler(IPluginChannelHandler handler)
+    public void unregisterClientChannelHandler(IPluginChannelHandlerExtended handler)
     {
         List<Identifier> toUnRegister = new ArrayList<>();
 
@@ -83,7 +81,7 @@ public class ClientPacketChannelHandler implements IClientPacketChannelHandler
     public boolean processPacketFromServer(CustomPayloadS2CPacket packet, ClientPlayNetworkHandler netHandler)
     {
         Identifier channel = packet.getChannel();
-        IPluginChannelHandler handler = this.handlers.get(channel);
+        IPluginChannelHandlerExtended handler = this.handlers.get(channel);
 
         if (handler != null)
         {
@@ -106,9 +104,9 @@ public class ClientPacketChannelHandler implements IClientPacketChannelHandler
      */
     public void processPacketFromClient(ClientPlayNetworkHandler netHandler)
     {
-        for(Map.Entry<Identifier, IPluginChannelHandler> entry : this.handlers.entrySet())
+        for(Map.Entry<Identifier, IPluginChannelHandlerExtended> entry : this.handlers.entrySet())
         {
-            IPluginChannelHandler handler = entry.getValue();
+            IPluginChannelHandlerExtended handler = entry.getValue();
 
             PacketByteBuf packetByteBuf = handler.onPacketSend();
             if (packetByteBuf != null)

@@ -80,7 +80,7 @@ public class BlockEdit
             BakedModel model = this.blockModelShapes.getModel(state);
             if (Configs.Lists.SMALLER_RENDER_BOX.getStrings().contains(block.getName()))
             {
-                fi.dy.masa.malilib.render.RenderUtils.drawBlockBoundingBoxOutlinesBatchedLines(new BlockPos(x, y, z), block.getColor(), -0.25, buffer);
+                RenderUtils.drawBlockBoundingBoxOutlinesBatchedLines(new BlockPos(x, y, z), block.getColor(), -0.25, buffer);
             }
             else
             {

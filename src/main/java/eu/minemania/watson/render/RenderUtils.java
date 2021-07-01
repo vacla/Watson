@@ -23,6 +23,84 @@ public class RenderUtils
         buffer.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
     }
 
+    //START TEMP MALILIB
+    /**
+     * Assumes a BufferBuilder in GL_LINES mode has been initialized
+     */
+    public static void drawBlockBoundingBoxOutlinesBatchedLines(BlockPos pos, Color4f color, double expand, BufferBuilder buffer)
+    {
+        drawBlockBoundingBoxOutlinesBatchedLines(pos, Vec3d.ZERO, color, expand, buffer);
+    }
+
+    /**
+     * Assumes a BufferBuilder in GL_LINES mode has been initialized.
+     * The cameraPos value will be subtracted from the absolute coordinate values of the passed in BlockPos.
+     * @param pos
+     * @param cameraPos
+     * @param color
+     * @param expand
+     * @param buffer
+     */
+    public static void drawBlockBoundingBoxOutlinesBatchedLines(BlockPos pos, Vec3d cameraPos, Color4f color, double expand, BufferBuilder buffer)
+    {
+        double minX = pos.getX() - expand - cameraPos.x;
+        double minY = pos.getY() - expand - cameraPos.y;
+        double minZ = pos.getZ() - expand - cameraPos.z;
+        double maxX = pos.getX() + expand - cameraPos.x + 1;
+        double maxY = pos.getY() + expand - cameraPos.y + 1;
+        double maxZ = pos.getZ() + expand - cameraPos.z + 1;
+
+        drawBoxAllEdgesBatchedLines(minX, minY, minZ, maxX, maxY, maxZ, color, buffer);
+    }
+
+    /**
+     * Assumes a BufferBuilder in GL_LINES mode has been initialized
+     */
+    public static void drawBoxAllEdgesBatchedLines(double minX, double minY, double minZ, double maxX, double maxY, double maxZ,
+                                                   Color4f color, BufferBuilder buffer)
+    {
+        // West side
+        buffer.vertex(minX, minY, minZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(minX, minY, maxZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+
+        buffer.vertex(minX, minY, maxZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(minX, maxY, maxZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+
+        buffer.vertex(minX, maxY, maxZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(minX, maxY, minZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+
+        buffer.vertex(minX, maxY, minZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(minX, minY, minZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+
+        // East side
+        buffer.vertex(maxX, minY, maxZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(maxX, minY, minZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+
+        buffer.vertex(maxX, minY, minZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(maxX, maxY, minZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+
+        buffer.vertex(maxX, maxY, minZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(maxX, maxY, maxZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+
+        buffer.vertex(maxX, maxY, maxZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(maxX, minY, maxZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+
+        // North side (don't repeat the vertical lines that are done by the east/west sides)
+        buffer.vertex(maxX, minY, minZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(minX, minY, minZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+
+        buffer.vertex(minX, maxY, minZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(maxX, maxY, minZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+
+        // South side (don't repeat the vertical lines that are done by the east/west sides)
+        buffer.vertex(minX, minY, maxZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(maxX, minY, maxZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+
+        buffer.vertex(maxX, maxY, maxZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(minX, maxY, maxZ).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+    }
+    //END TEMP MALILIB
+
     public static void drawFullBlockOutlinesBatched(float x, float y, float z, Color4f color, BufferBuilder buffer)
     {
         buffer.vertex(x, y, z).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();

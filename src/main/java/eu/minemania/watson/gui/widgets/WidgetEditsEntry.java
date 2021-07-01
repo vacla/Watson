@@ -248,7 +248,6 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
             this.drawString(x6, y, color, String.valueOf(this.entry.getCountTotal()), matrixStack);
 
             matrixStack.push();
-            //RenderSystem.disableLighting();
             RenderUtils.enableDiffuseLightingGui3D();
 
             y = this.y + 3;
@@ -309,7 +308,6 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
 
             RenderUtils.drawRect(x2, y1, 16, 16, 0x20FFFFFF);
 
-            //RenderSystem.disableLighting();
             RenderUtils.enableDiffuseLightingGui3D();
 
             this.mc.getItemRenderer().renderInGuiWithOverrides(stack, x2, y1);

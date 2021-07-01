@@ -7,9 +7,9 @@ import eu.minemania.watson.Watson;
 import eu.minemania.watson.db.BlockEdit;
 import eu.minemania.watson.db.WatsonBlock;
 import eu.minemania.watson.db.WatsonBlockRegistery;
+import eu.minemania.watson.network.IPluginChannelHandlerExtended;
 import eu.minemania.watson.scheduler.SyncTaskQueue;
 import eu.minemania.watson.scheduler.tasks.AddBlockEditTask;
-import fi.dy.masa.malilib.network.IPluginChannelHandler;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.StringNbtReader;
@@ -19,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
-public class PluginActionPacketHandler implements IPluginChannelHandler
+public class PluginActionPacketHandler implements IPluginChannelHandlerExtended
 {
     public static final List<Identifier> CHANNELS = ImmutableList.of(new Identifier("ledger:action"));
 

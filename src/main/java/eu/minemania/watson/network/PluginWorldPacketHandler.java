@@ -3,13 +3,12 @@ package eu.minemania.watson.network;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import eu.minemania.watson.data.DataManager;
-import fi.dy.masa.malilib.network.IPluginChannelHandler;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
 
-public class PluginWorldPacketHandler implements IPluginChannelHandler
+public class PluginWorldPacketHandler implements IPluginChannelHandlerExtended
 {
     public static final List<Identifier> CHANNELS = ImmutableList.of(new Identifier("watson:world"));
 
