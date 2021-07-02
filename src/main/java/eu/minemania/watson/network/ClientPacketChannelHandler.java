@@ -2,6 +2,7 @@ package eu.minemania.watson.network;
 
 import com.google.common.base.Charsets;
 import eu.minemania.watson.Watson;
+import eu.minemania.watson.config.Configs;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.MinecraftClient;
@@ -87,6 +88,13 @@ public class ClientPacketChannelHandler implements IClientPacketChannelHandler
         {
             PacketByteBuf buf = packet.getData();
 
+            if (Configs.Generic.DEBUG.getBooleanValue())
+            {
+                Watson.logger.debug("packet from server");
+                Watson.logger.debug(channel);
+                Watson.logger.debug(buf.toString(Charsets.UTF_8));
+            }
+
             // Finished the complete packet
             if (buf != null)
             {
@@ -112,9 +120,12 @@ public class ClientPacketChannelHandler implements IClientPacketChannelHandler
             if (packetByteBuf != null)
             {
 
-                System.out.println("test");
-                System.out.println(entry.getKey().toString());
-                System.out.println(packetByteBuf.toString(Charsets.UTF_8));
+                if (Configs.Generic.DEBUG.getBooleanValue())
+                {
+                    Watson.logger.debug("packet from client");
+                    Watson.logger.debug(entry.getKey());
+                    Watson.logger.debug(packetByteBuf.toString(Charsets.UTF_8));
+                }
 
                 netHandler.sendPacket(new CustomPayloadC2SPacket(entry.getKey(), packetByteBuf));
             }

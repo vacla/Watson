@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import eu.minemania.watson.Watson;
 import eu.minemania.watson.chat.IChatHandler;
 import eu.minemania.watson.chat.IMatchedChatHandler;
 import eu.minemania.watson.config.Configs;
@@ -22,20 +23,20 @@ public class Analysis implements IChatHandler
         unformatted = unformatted.replaceAll("\u00A7.", "");
         if (Configs.Generic.DEBUG.getBooleanValue())
         {
-            System.out.println("unformatted: " + unformatted);
+            Watson.logger.debug("unformatted: " + unformatted);
         }
         for (Entry<String, IMatchedChatHandler> entry : m.entries())
         {
             if (Configs.Generic.DEBUG.getBooleanValue())
             {
-                System.out.println("key: " + entry.getKey());
+                Watson.logger.debug("key: " + entry.getKey());
             }
             Matcher m = Pattern.compile(entry.getKey()).matcher(unformatted);
             if (m.matches())
             {
                 if (Configs.Generic.DEBUG.getBooleanValue())
                 {
-                    System.out.println("key matched: " + entry.getKey());
+                    Watson.logger.debug("key matched: " + entry.getKey());
                 }
                 return entry.getValue().onMatchedChat(chat, m);
             }

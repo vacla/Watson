@@ -38,7 +38,6 @@ public class InitHandler implements IInitializationHandler
         WorldLoadHandler.getInstance().registerWorldLoadPostHandler(listener);
 
         KeyCallbacks.init(MinecraftClient.getInstance());
-        //StatusInfoRenderer.init();
 
         DataManager.getPlayereditsBaseDirectory();
     }
