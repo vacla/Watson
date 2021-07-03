@@ -28,6 +28,6 @@
     "mixins.watson.json"
   ],
   "depends": {
-    "malilib": ">=0.10.0-dev.21"
+    "malilib": ">=0.10.0-dev.22"
   }
 }
