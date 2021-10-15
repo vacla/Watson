@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,8 +18,6 @@ import eu.minemania.watson.client.Teleport;
 import eu.minemania.watson.render.RenderUtils;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Vec3d;
-import org.lwjgl.opengl.GL11;
 
 import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.config.Configs;
@@ -34,12 +33,12 @@ public class BlockEditSet
     protected OreDB oreDB = new OreDB();
     protected int tpIndexAnno = 0;
 
+    @SuppressWarnings("MagicConstant")
     public synchronized int load(File file) throws Exception
     {
-
         try (BufferedReader reader = new BufferedReader(new FileReader(file)))
         {
-            Pattern editPattern = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})\\|(\\d{2}):(\\d{2}):(\\d{2})\\|(\\w+)\\|(\\w+)\\|(minecraft:\\w+)\\|(-?\\d+)\\|(\\d+)\\|(-?\\d+)\\|(\\w+)\\|(\\d+)");
+            Pattern editPattern = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})\\|(\\d{2}):(\\d{2}):(\\d{2})\\|(\\w+)\\|(\\w+)\\|(minecraft:\\w+)\\|(-?\\d+)\\|(\\d+)\\|(-?\\d+)\\|(\\w+)\\|(\\d+)\\|?([\\w|\\W]+)?");
             Pattern annoPattern = Pattern.compile("#(-?\\d+)\\|(\\d+)\\|(-?\\d+)\\|(\\w+)\\|(.*)");
             Calendar time = Calendar.getInstance();
             String line;
@@ -69,6 +68,21 @@ public class BlockEditSet
 
                     WatsonBlock watsonBlock = WatsonBlockRegistery.getInstance().getWatsonBlockByName(blockName);
                     blockEdit = new BlockEdit(time.getTimeInMillis(), player, action, x, y, z, watsonBlock, world, amount);
+                    try
+                    {
+                        String additionalString = edit.group(15);
+                        String[] additionalSplit = additionalString.split(";");
+                        HashMap<String,Object> addition = new HashMap<>();
+                        for (String additionalData : additionalSplit)
+                        {
+                            String[] partsAdditional = additionalData.split("~");
+                            addition.put(partsAdditional[0], partsAdditional[1]);
+                        }
+                        blockEdit.setAdditional(addition);
+                    }
+                    catch (Exception ignored)
+                    {}
+
                     addBlockEdit(blockEdit);
                     ++edits;
                 }
@@ -148,39 +162,34 @@ public class BlockEditSet
         }
     }
 
-    public synchronized boolean addBlockEdit(BlockEdit edit)
+    public synchronized void addBlockEdit(BlockEdit edit)
     {
-        return addBlockEdit(edit, true);
+        addBlockEdit(edit, true);
     }
 
-    public synchronized boolean addBlockEdit(BlockEdit edit, boolean updateVariables)
+    public synchronized void addBlockEdit(BlockEdit edit, boolean updateVariables)
     {
-        if (DataManager.getFilters().isAcceptedPlayer(edit.player))
+        if (!DataManager.getFilters().isAcceptedPlayer(edit.player))
         {
-            if (updateVariables)
-            {
-                EditSelection selection = DataManager.getEditSelection();
-                selection.selectBlockEdit(edit);
-            }
-            String lowerName = edit.player.toLowerCase();
-            PlayereditSet editsForPlayer = playerEdits.get(lowerName);
-            if (editsForPlayer == null)
-            {
-                editsForPlayer = new PlayereditSet(edit.player);
-                playerEdits.put(lowerName, editsForPlayer);
-            }
-
-            editsForPlayer.addBlockEdit(edit);
-            if (Configs.Edits.GROUPING_ORES_IN_CREATIVE.getBooleanValue())
-            {
-                oreDB.addBlockEdit(edit);
-            }
-
-            return true;
+            return;
         }
-        else
+        if (updateVariables)
         {
-            return false;
+            EditSelection selection = DataManager.getEditSelection();
+            selection.selectBlockEdit(edit);
+        }
+        String lowerName = edit.player.toLowerCase();
+        PlayereditSet editsForPlayer = playerEdits.get(lowerName);
+        if (editsForPlayer == null)
+        {
+            editsForPlayer = new PlayereditSet(edit.player);
+            playerEdits.put(lowerName, editsForPlayer);
+        }
+
+        editsForPlayer.addBlockEdit(edit);
+        if (Configs.Edits.GROUPING_ORES_IN_CREATIVE.getBooleanValue())
+        {
+            oreDB.addBlockEdit(edit);
         }
     }
 

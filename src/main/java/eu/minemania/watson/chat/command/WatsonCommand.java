@@ -3,22 +3,35 @@ package eu.minemania.watson.chat.command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
 
 import eu.minemania.watson.analysis.ServerTime;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
+import eu.minemania.watson.db.BlockEdit;
+import eu.minemania.watson.db.WatsonBlock;
+import eu.minemania.watson.db.WatsonBlockRegistery;
+import eu.minemania.watson.scheduler.SyncTaskQueue;
+import eu.minemania.watson.scheduler.tasks.AddBlockEditTask;
 import fi.dy.masa.malilib.gui.Message.MessageType;
+import fi.dy.masa.malilib.util.Color4f;
 import fi.dy.masa.malilib.util.InfoUtils;
 import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.LiteralText;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 
 import java.util.Map;
+import java.util.Objects;
 
+import static net.minecraft.command.argument.BlockPosArgumentType.blockPos;
+import static net.minecraft.command.argument.BlockPosArgumentType.getBlockPos;
 import static net.minecraft.server.command.CommandManager.literal;
 import static net.minecraft.server.command.CommandManager.argument;
 import static com.mojang.brigadier.arguments.StringArgumentType.word;
+import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
@@ -73,7 +86,12 @@ public class WatsonCommand extends WatsonCommandBase
                         .then(literal("show")
                                 .then(argument("player(s)", greedyString()).executes(WatsonCommand::edits_show)))
                         .then(literal("remove")
-                                .then(argument("player(s)", greedyString()).executes(WatsonCommand::edits_remove))))
+                                .then(argument("player(s)", greedyString()).executes(WatsonCommand::edits_remove)))
+                        .then(literal("test")
+                                .then(argument("pos", blockPos())
+                                        .then(argument("block", string())
+                                                .then(argument("color", string())
+                                                        .then(argument("world", word()).executes(WatsonCommand::set_edit)))))))
                 .then(literal("filter").executes(WatsonCommand::filter_list)
                         .then(literal("list").executes(WatsonCommand::filter_list))
                         .then(literal("clear").executes(WatsonCommand::filter_clear))
@@ -404,6 +422,26 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
+    private static int set_edit(CommandContext<ServerCommandSource> context) throws CommandSyntaxException
+    {
+        BlockPos pos = getBlockPos(context, "pos");
+        String block = getString(context, "block");
+        String colorstr = getString(context, "color");
+        String world = getString(context, "world");
+        WatsonBlock watsonblock = WatsonBlockRegistery.getInstance().getWatsonBlockByName(block);
+        int colorst = StringUtils.getColor(colorstr, 0);
+        int colorTemp = MathHelper.clamp(colorst, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        if (colorTemp != 0)
+        {
+            Color4f color = Color4f.fromColor(colorTemp);
+            watsonblock.setOverrideColor(color);
+        }
+        BlockEdit edit = new BlockEdit(1, "test edits", "test", pos.getX(), pos.getY(), pos.getZ(), watsonblock, world, 1);
+        SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, true));
+
+        return 1;
+    }
+
     private static int filter_list(CommandContext<ServerCommandSource> context)
     {
         DataManager.getFilters().list();
@@ -458,14 +496,7 @@ public class WatsonCommand extends WatsonCommandBase
         {
             page = 1;
         }
-        if (player == null)
-        {
-            DataManager.listBlockEditFiles("*", page);
-        }
-        else
-        {
-            DataManager.listBlockEditFiles(player, page);
-        }
+        DataManager.listBlockEditFiles(Objects.requireNonNullElse(player, "*"), page);
         return 1;
     }
 
@@ -493,13 +524,9 @@ public class WatsonCommand extends WatsonCommandBase
         {
             DataManager.deleteBlockEditFiles(player);
         }
-        else if (filename != null)
-        {
-            DataManager.deleteBlockEditFiles(filename);
-        }
         else
         {
-            DataManager.deleteBlockEditFiles("*");
+            DataManager.deleteBlockEditFiles(Objects.requireNonNullElse(filename, "*"));
         }
         return 1;
     }

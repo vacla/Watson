@@ -53,7 +53,7 @@ public class OreDB
         _db.put(types.getWatsonBlockByBlock(Blocks.MEDIUM_AMETHYST_BUD), new TypedOreDB(200));
         _db.put(types.getWatsonBlockByBlock(Blocks.LARGE_AMETHYST_BUD), new TypedOreDB(200));
         _db.put(types.getWatsonBlockByBlock(Blocks.AMETHYST_CLUSTER), new TypedOreDB(200));
-        _db.put(types.getWatsonBlockByBlock(Blocks.BUDDING_AMETHYST), new TypedOreDB(200));
+        _db.put(types.getWatsonBlockByBlock(Blocks.DEEPSLATE_COPPER_ORE), new TypedOreDB(200));
 
         _chatColors.put(types.getWatsonBlockByBlock(Blocks.DIAMOND_ORE), Color.aqua);
         _chatColors.put(types.getWatsonBlockByBlock(Blocks.EMERALD_ORE), Color.green);
@@ -78,7 +78,7 @@ public class OreDB
         _chatColors.put(types.getWatsonBlockByBlock(Blocks.MEDIUM_AMETHYST_BUD), Color.lightpurple);
         _chatColors.put(types.getWatsonBlockByBlock(Blocks.LARGE_AMETHYST_BUD), Color.lightpurple);
         _chatColors.put(types.getWatsonBlockByBlock(Blocks.AMETHYST_CLUSTER), Color.lightpurple);
-        _chatColors.put(types.getWatsonBlockByBlock(Blocks.BUDDING_AMETHYST), Color.lightpurple);
+        _chatColors.put(types.getWatsonBlockByBlock(Blocks.DEEPSLATE_COPPER_ORE), Color.yellow);
     }
 
     public void clear()

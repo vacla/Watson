@@ -2,6 +2,7 @@ package eu.minemania.watson.db.data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.Nullable;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -216,6 +217,45 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
                 }
                 matrixStack.pop();
             }
+            if (mouseX < this.getColumnPosX(5))
+            {
+                if (this.entry.getEdit().getAdditional() == null || this.entry.getEdit().getAdditional().isEmpty())
+                {
+                    return;
+                }
+                matrixStack.push();
+                matrixStack.translate(0, 0, 200);
+                RenderSystem.applyModelViewMatrix();
+                int w1 = 0;
+                int w2 = 0;
+                for (Map.Entry<?,?> entry : this.entry.getEdit().getAdditional().entrySet())
+                {
+                    w1 = Math.max(w1, this.getStringWidth(String.valueOf(entry.getKey())));
+                    w2 = Math.max(w2, this.getStringWidth(String.valueOf(entry.getValue())));
+                }
+
+                int totalWidth = w1 + w2 + 60;
+                int x = mouseX + 10;
+                int y = mouseY - 10;
+                if (x + totalWidth - 20 >= this.width)
+                {
+                    x -= totalWidth + 40;
+                }
+
+                int x1 = x + 10;
+                int x2 = x1 + w1 + 20;
+
+                RenderUtils.drawOutlinedBox(x, y, totalWidth, 60, 0xFF000000, GuiBase.COLOR_HORIZONTAL_BAR);
+                y += 10;
+
+                for (Map.Entry<?,?> entry : this.entry.getEdit().getAdditional().entrySet())
+                {
+                    this.drawString(x1, y, 0xFFFFFFFF, String.valueOf(entry.getKey()), matrixStack);
+                    this.drawString(x2, y, 0xFFFFFFFF, String.valueOf(entry.getValue()), matrixStack);
+                    y += 16;
+                }
+                matrixStack.pop();
+            }
         }
     }
 
@@ -267,23 +307,16 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
         int x5 = x4 + maxWorldLength + 20;
         int x6 = x5 + maxAmountLength + 20;
 
-        switch (column)
-        {
-            case 0:
-                return x1;
-            case 1:
-                return x2;
-            case 2:
-                return x3;
-            case 3:
-                return x4;
-            case 4:
-                return x5;
-            case 5:
-                return x6;
-            default:
-                return x1;
-        }
+        return switch (column)
+                {
+                    case 0 -> x1;
+                    case 1 -> x2;
+                    case 2 -> x3;
+                    case 3 -> x4;
+                    case 4 -> x5;
+                    case 5 -> x6;
+                    default -> x1;
+                };
     }
 
     @Override

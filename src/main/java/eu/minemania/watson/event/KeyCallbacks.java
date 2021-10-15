@@ -8,6 +8,7 @@ import eu.minemania.watson.client.Screenshot;
 import eu.minemania.watson.client.Teleport;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.config.Hotkeys;
+import eu.minemania.watson.config.Plugins;
 import eu.minemania.watson.data.Actions;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.BlockEdit;
@@ -272,7 +273,7 @@ public class KeyCallbacks
             {
                 if (key == Hotkeys.KEYBIND_COMMAND_CO_INSPECT.getKeybind())
                 {
-                    if (Configs.Plugin.PLUGIN.getStringValue().equals("CoreProtect"))
+                    if (Configs.Plugin.PLUGIN.getOptionListValue() == Plugins.COREPROTECT)
                     {
                         ChatMessage.sendToServerChat("/co i");
                         return true;
@@ -302,12 +303,12 @@ public class KeyCallbacks
                         }
                     }
                 }
-                else if (key == Hotkeys.KEYBIND_QUERY_AFTER.getKeybind() && Configs.Plugin.PLUGIN.getStringValue().equals("LogBlock"))
+                else if (key == Hotkeys.KEYBIND_QUERY_AFTER.getKeybind() && Configs.Plugin.PLUGIN.getOptionListValue() == Plugins.LOGBLOCK)
                 {
                     edits.queryPostEdits(Configs.Edits.POST_COUNT.getIntegerValue());
                     return true;
                 }
-                else if (key == Hotkeys.KEYBIND_QUERY_BEFORE.getKeybind() && Configs.Plugin.PLUGIN.getStringValue().equals("LogBlock"))
+                else if (key == Hotkeys.KEYBIND_QUERY_BEFORE.getKeybind() && Configs.Plugin.PLUGIN.getOptionListValue() == Plugins.LOGBLOCK)
                 {
                     edits.queryPreEdits(Configs.Edits.PRE_COUNT.getIntegerValue());
                     return true;

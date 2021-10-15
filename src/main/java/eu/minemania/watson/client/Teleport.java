@@ -12,29 +12,29 @@ public class Teleport
     public static void teleport(double x, double y, double z, String world)
     {
         String format = Configs.Generic.TELEPORT_COMMAND.getStringValue();
-        Pattern pattern = Pattern.compile("(?:\\{((?:\\w)*):?((?:\\w)*)})");
+        Pattern pattern = Pattern.compile("\\{(\\w*):?(\\w*)}");
         Matcher matcher = pattern.matcher(format);
         while (matcher.find())
         {
             String text = Pattern.quote(matcher.group());
             switch (matcher.group(1))
             {
-                case "world":
+                case "world" -> {
                     world = world != null ? world : "";
                     format = format.replaceFirst(text, world);
-                    break;
-                case "x":
-                    Number nx = (matcher.group(2).equals("d") ? (Number) (x + 0.5) : (int)x);
+                }
+                case "x" -> {
+                    Number nx = (matcher.group(2).equals("d") ? (Number) (x + 0.5) : (int) x);
                     format = format.replaceFirst(text, String.valueOf(nx));
-                    break;
-                case "y":
-                    Number ny = (matcher.group(2).equals("d") ? (Number) (y + 0.5) : (int)y);
+                }
+                case "y" -> {
+                    Number ny = (matcher.group(2).equals("d") ? (Number) (y + 0.5) : (int) y);
                     format = format.replaceFirst(text, String.valueOf(ny));
-                    break;
-                case "z":
-                    Number nz = (matcher.group(2).equals("d") ? (Number) (z + 0.5) : (int)z);
+                }
+                case "z" -> {
+                    Number nz = (matcher.group(2).equals("d") ? (Number) (z + 0.5) : (int) z);
                     format = format.replaceFirst(text, String.valueOf(nz));
-                    break;
+                }
             }
         }
         if (Configs.Generic.DEBUG.getBooleanValue())

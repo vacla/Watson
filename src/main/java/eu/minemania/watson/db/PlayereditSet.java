@@ -1,9 +1,7 @@
 package eu.minemania.watson.db;
 
 import java.io.PrintWriter;
-import java.util.Calendar;
-import java.util.Iterator;
-import java.util.TreeSet;
+import java.util.*;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import eu.minemania.watson.data.DataManager;
@@ -11,7 +9,6 @@ import eu.minemania.watson.render.RenderUtils;
 import eu.minemania.watson.selection.PlayereditUtils;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
-import org.lwjgl.opengl.GL11;
 import eu.minemania.watson.config.Configs;
 import fi.dy.masa.malilib.util.Color4f;
 import net.minecraft.util.math.Vec3d;
@@ -215,7 +212,16 @@ public class PlayereditSet
             int minute = calendar.get(Calendar.MINUTE);
             int second = calendar.get(Calendar.SECOND);
             String action = edit.action;
-            writer.format("%4d-%02d-%02d|%02d:%02d:%02d|%s|%s|%s|%d|%d|%d|%s|%d\n", year, month, day, hour, minute, second, edit.player, action, edit.block.getName(), edit.x, edit.y, edit.z, edit.world, edit.amount);
+            StringBuilder additional = new StringBuilder();
+            if (edit.getAdditional() != null)
+            {
+                additional.append("|");
+                for (Map.Entry<?,?> entry : edit.getAdditional().entrySet())
+                {
+                    additional.append(entry.getKey()).append("~").append(entry.getValue()).append(";");
+                }
+            }
+            writer.format("%4d-%02d-%02d|%02d:%02d:%02d|%s|%s|%s|%d|%d|%d|%s|%d%s\n", year, month, day, hour, minute, second, edit.player, action, edit.block.getName(), edit.x, edit.y, edit.z, edit.world, edit.amount, additional);
             ++editCount;
         }
         return editCount;

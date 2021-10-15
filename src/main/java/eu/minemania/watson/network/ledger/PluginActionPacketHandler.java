@@ -18,6 +18,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class PluginActionPacketHandler implements IPluginChannelHandlerExtended
@@ -58,6 +59,7 @@ public class PluginActionPacketHandler implements IPluginChannelHandlerExtended
                 Identifier newObj = buf.readIdentifier();
                 String source = buf.readString();
                 long time = buf.readLong() * 1000;
+                boolean rolledBack = buf.readBoolean();
                 String additional = buf.readString();
                 int count = 1;
                 String id = "";
@@ -79,20 +81,25 @@ public class PluginActionPacketHandler implements IPluginChannelHandlerExtended
 
                 if (Configs.Generic.DEBUG.getBooleanValue())
                 {
-                    Watson.logger.debug("watsonblock: " + watsonBlock.getName());
-                    Watson.logger.debug("pos: " + pos.toString());
-                    Watson.logger.debug("type: " + type);
-                    Watson.logger.debug("dim: " + dim.toString());
-                    Watson.logger.debug("oldobj: " + oldObj);
-                    Watson.logger.debug("newobj: " + newObj);
-                    Watson.logger.debug("source: " + source);
-                    Watson.logger.debug("time: " + time);
-                    Watson.logger.debug("additional: " + additional);
-                    Watson.logger.debug("count: " + count);
-                    Watson.logger.debug("id: " + id);
+                    Watson.logger.info("watsonblock: " + watsonBlock.getName());
+                    Watson.logger.info("pos: " + pos.toString());
+                    Watson.logger.info("type: " + type);
+                    Watson.logger.info("dim: " + dim.toString());
+                    Watson.logger.info("oldobj: " + oldObj);
+                    Watson.logger.info("newobj: " + newObj);
+                    Watson.logger.info("source: " + source);
+                    Watson.logger.info("time: " + time);
+                    Watson.logger.info("rolled back: " + rolledBack);
+                    Watson.logger.info("additional: " + additional);
+                    Watson.logger.info("count: " + count);
+                    Watson.logger.info("id: " + id);
                 }
+                HashMap<String, Object> addition = new HashMap<>();
+                addition.put("rolledBack", rolledBack);
+                addition.put("id", id);
 
                 BlockEdit edit = new BlockEdit(time, source, type, pos.getX(), pos.getY(), pos.getZ(), watsonBlock, dim.toString(), count);
+                edit.setAdditional(addition);
                 SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, false));
             }
             catch (CommandSyntaxException exception)

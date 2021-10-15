@@ -1,10 +1,12 @@
 package eu.minemania.watson.db;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.render.RenderUtils;
+import fi.dy.masa.malilib.util.Color4f;
 import net.minecraft.block.*;
 import net.minecraft.block.OreBlock;
 import net.minecraft.client.MinecraftClient;
@@ -32,7 +34,7 @@ public class BlockEdit
     public boolean disabled;
     private final BlockRenderManager blockModelShapes;
     protected boolean drawn;
-    private MinecraftClient mc;
+    private HashMap<String,Object> additional;
 
     public BlockEdit(long time, String player, String action, int x, int y, int z, WatsonBlock block, String world, int amount)
     {
@@ -45,8 +47,18 @@ public class BlockEdit
         this.z = z;
         this.block = block;
         this.world = world;
-        this.mc = MinecraftClient.getInstance();
-        this.blockModelShapes = this.mc.getBlockRenderManager();
+        MinecraftClient mc = MinecraftClient.getInstance();
+        this.blockModelShapes = mc.getBlockRenderManager();
+    }
+
+    public void setAdditional(HashMap<String,Object> additional)
+    {
+        this.additional = additional;
+    }
+
+    public HashMap<String,Object> getAdditional()
+    {
+        return this.additional;
     }
 
     public Object drawOutline(BufferBuilder buffer, MatrixStack matrices)
@@ -65,14 +77,14 @@ public class BlockEdit
         else
         {
             RenderSystem.lineWidth(lineWidth);
-            Optional<EntityType<?>> entity = EntityType.get(block.getName());
-            renderEntities(buffer, entity);
+            renderEntities(buffer);
         }
         return null;
     }
 
     private void renderBlocks(BufferBuilder buffer, Block blocks, MatrixStack matrices)
     {
+        Color4f color = block.getOverrideColor() != Color4f.ZERO && block.getOverrideColor() != null ? block.getOverrideColor() : block.getColor();
         if (!block.getName().equals("minecraft:grass") && !block.getName().equals("minecraft:water") &&
                 !block.getName().equals("minecraft:lava"))
         {
@@ -80,7 +92,7 @@ public class BlockEdit
             BakedModel model = this.blockModelShapes.getModel(state);
             if (Configs.Lists.SMALLER_RENDER_BOX.getStrings().contains(block.getName()))
             {
-                RenderUtils.drawBlockBoundingBoxOutlinesBatchedLines(new BlockPos(x, y, z), block.getColor(), -0.25, buffer);
+                RenderUtils.drawBlockBoundingBoxOutlinesBatchedLines(new BlockPos(x, y, z), color, -0.25, buffer);
             }
             else
             {
@@ -88,15 +100,15 @@ public class BlockEdit
                 {
                     if (blocks instanceof SignBlock || blocks instanceof WallSignBlock)
                     {
-                        RenderUtils.drawSpecialOutlinesBatched(x, y, z, block, buffer, true);
+                        RenderUtils.drawSpecialOutlinesBatched(x, y, z, color, buffer, true);
                     }
                     else if (blocks instanceof ChestBlock)
                     {
-                        RenderUtils.drawFullBlockOutlinesBatched(x, y, z, block.getColor(), buffer);
+                        RenderUtils.drawFullBlockOutlinesBatched(x, y, z, color, buffer);
                     }
                     else
                     {
-                        RenderUtils.drawBlockModelOutlinesBatched(model, state, new BlockPos(x, y, z), block.getColor(), buffer);
+                        RenderUtils.drawBlockModelOutlinesBatched(model, state, new BlockPos(x, y, z), color, buffer);
                     }
                 }
             }
@@ -109,27 +121,29 @@ public class BlockEdit
         {
             if (isOreNotDrawn())
             {
-                RenderUtils.drawFullBlockOutlinesBatched(x, y, z, block.getColor(), buffer);
+                RenderUtils.drawFullBlockOutlinesBatched(x, y, z, color, buffer);
             }
         }
     }
 
-    private void renderEntities(BufferBuilder buffer, Optional<EntityType<?>> entity)
+    private void renderEntities(BufferBuilder buffer)
     {
+        Optional<EntityType<?>> entity = EntityType.get(block.getName());
+        Color4f color = block.getOverrideColor() != Color4f.ZERO && block.getOverrideColor() != null ? block.getOverrideColor() : block.getColor();
         if (entity.isPresent())
         {
             if (block.getName().equals("minecraft:item_frame") || block.getName().equals("minecraft:painting"))
             {
-                RenderUtils.drawSpecialOutlinesBatched(x, y, z, block, buffer, false);
+                RenderUtils.drawSpecialOutlinesBatched(x, y, z, color, buffer, false);
             }
             else
             {
-                RenderUtils.drawFullBlockOutlinesBatched(x, y, z, block.getColor(), buffer);
+                RenderUtils.drawFullBlockOutlinesBatched(x, y, z, color, buffer);
             }
         }
         else
         {
-            RenderUtils.drawFullBlockOutlinesBatched(x, y, z, block.getColor(), buffer);
+            RenderUtils.drawFullBlockOutlinesBatched(x, y, z, color, buffer);
         }
     }
 

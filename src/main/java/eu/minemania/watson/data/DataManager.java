@@ -3,10 +3,7 @@ package eu.minemania.watson.data;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,6 +19,7 @@ import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.db.BlockEditSet;
 import eu.minemania.watson.db.Filters;
+import eu.minemania.watson.db.LedgerInfo;
 import eu.minemania.watson.db.TimeStamp;
 import eu.minemania.watson.gui.GuiConfigs.ConfigGuiTab;
 import eu.minemania.watson.selection.EditSelection;
@@ -34,6 +32,9 @@ import fi.dy.masa.malilib.util.StringUtils;
 import fi.dy.masa.malilib.util.WorldUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerInfo;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 
 public class DataManager implements IDirectoryCache
 {
@@ -42,11 +43,14 @@ public class DataManager implements IDirectoryCache
     protected static final Pattern DATE_PATTERN = Pattern.compile("^(\\d{4})-(\\d{1,2})-(\\d{1,2})$");
     protected static final Pattern ABSOLUTE_TIME = Pattern.compile("(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{1,2}):(\\d{1,2})");
     private static final Map<String, File> LAST_DIRECTORIES = new HashMap<>();
+    private static final ArrayList<String> setNames = new ArrayList<>();
 
     private static ConfigGuiTab configGuiTab = ConfigGuiTab.GENERIC;
     private static boolean canSave;
     private static long clientTickStart;
     private static String worldName = "";
+    private static String ledgerVersion = "";
+    private static LedgerInfo ledgerInfo;
 
     private final EditSelection editselection = new EditSelection();
 
@@ -110,6 +114,27 @@ public class DataManager implements IDirectoryCache
     public static String getWorldPlugin()
     {
         return worldName;
+    }
+
+    public static void setLedgerVersion(String version)
+    {
+        ledgerVersion = version;
+    }
+
+    public static String getLedgerVersion()
+    {
+        return ledgerVersion;
+    }
+
+    public static ArrayList<String> getLedgerActions()
+    {
+        ArrayList<String> ledgerActions = new ArrayList<>();
+        ledgerActions.add("block-break");
+        ledgerActions.add("block-place");
+        ledgerActions.add("item-insert");
+        ledgerActions.add("item-remove");
+        ledgerActions.add("entity-killed");
+        return ledgerActions;
     }
 
     @Override
@@ -241,20 +266,20 @@ public class DataManager implements IDirectoryCache
     {
         MinecraftClient mc = MinecraftClient.getInstance();
         String name = StringUtils.getWorldOrServerName();
-
-        if (name != null)
+        World world = mc.world;
+        if (name == null || world == null)
         {
-            if (globalData)
-            {
-                return Reference.MOD_ID + "_" + name + ".json";
-            }
-            else
-            {
-                return Reference.MOD_ID + "_" + name + "_dim" + WorldUtils.getDimensionId(mc.world) + ".json";
-            }
+            return Reference.MOD_ID + "_default.json";
         }
 
-        return Reference.MOD_ID + "_default.json";
+        if (globalData)
+        {
+            return Reference.MOD_ID + "_" + name + ".json";
+        }
+        else
+        {
+            return Reference.MOD_ID + "_" + name + "_dim" + WorldUtils.getDimensionId(world) + ".json";
+        }
     }
 
     public static String getServerIP()
@@ -273,6 +298,11 @@ public class DataManager implements IDirectoryCache
 
     public static void saveBlockEditFile(String fileName)
     {
+        PlayerEntity playerEntity = MinecraftClient.getInstance().player;
+        if (playerEntity == null)
+        {
+            return;
+        }
         if (fileName == null)
         {
             String player = (String) getEditSelection().getVariables().get("player");
@@ -294,7 +324,7 @@ public class DataManager implements IDirectoryCache
             BlockEditSet edits = DataManager.getEditSelection().getBlockEditSet();
             int editCount = edits.save(file);
             int annoCount = edits.getAnnotations().size();
-            StringUtils.sendOpenFileChatMessage(MinecraftClient.getInstance().player, "%s", file);
+            StringUtils.sendOpenFileChatMessage(playerEntity, "%s", file);
             ChatMessage.localOutputT("watson.message.blockedit.edits_annotations.saved", editCount, annoCount, fileName);
         }
         catch (IOException e)
@@ -414,6 +444,7 @@ public class DataManager implements IDirectoryCache
         }
     }
 
+    @SuppressWarnings("MagicConstant")
     public static void expireBlockEditFiles(String date)
     {
         Matcher m = DATE_PATTERN.matcher(date);
@@ -483,7 +514,10 @@ public class DataManager implements IDirectoryCache
     public File[] getBlockEditFileList(String prefix)
     {
         File[] files = getPlayereditsBaseDirectory().listFiles(new CaseInsensitivePrefixFileFilter(prefix));
-        Arrays.sort(files);
+        if (files != null)
+        {
+            Arrays.sort(files);
+        }
         return files;
     }
 
@@ -536,5 +570,35 @@ public class DataManager implements IDirectoryCache
             return message + " -extended";
         }
         return message;
+    }
+
+    public static ArrayList<String> getAllItemEntitiesStringIdentifiers()
+    {
+        if (!setNames.isEmpty())
+        {
+            return setNames;
+        }
+
+        HashSet<String> names = new HashSet<>();
+
+        Registry.BLOCK.forEach((block) -> names.add(Registry.BLOCK.getId(block).toString()));
+        Registry.ITEM.forEach((item) -> names.add(Registry.ITEM.getId(item).toString()));
+        Registry.ENTITY_TYPE.forEach((type) -> names.add(Registry.ENTITY_TYPE.getId(type).toString()));
+
+        setNames.addAll(names);
+
+        setNames.sort(String::compareTo);
+
+        return setNames;
+    }
+
+    public static void setLedgerInfo(LedgerInfo ledgerInfo)
+    {
+        DataManager.ledgerInfo = ledgerInfo;
+    }
+
+    public static LedgerInfo getLedgerInfo()
+    {
+        return ledgerInfo;
     }
 }

@@ -5,6 +5,8 @@ import com.google.common.collect.ImmutableList;
 import eu.minemania.watson.Reference;
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
+import eu.minemania.watson.config.Plugins;
+import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.network.IPluginChannelHandlerExtended;
 import io.netty.buffer.Unpooled;
 import net.minecraft.nbt.NbtCompound;
@@ -24,6 +26,10 @@ public class PluginHandshakePacketHandler implements IPluginChannelHandlerExtend
     public void reset()
     {
         registered = false;
+        if (Configs.Plugin.PLUGIN.getOptionListValue() == Plugins.LEDGER)
+        {
+            Configs.Plugin.PLUGIN.resetToDefault();
+        }
     }
 
     @Override
@@ -43,13 +49,18 @@ public class PluginHandshakePacketHandler implements IPluginChannelHandlerExtend
         if (this.registered)
         {
             int protocolVersion = buf.readInt();
+            String ledgerVersion = buf.readString();
             boolean isAllowed = buf.readBoolean();
 
             if (Configs.Generic.DEBUG.getBooleanValue())
             {
-                Watson.logger.debug("protocol version: " + protocolVersion);
-                Watson.logger.debug("Is allowed: " + isAllowed);
+                Watson.logger.info("protocol version: " + protocolVersion);
+                Watson.logger.info("ledger version: " + ledgerVersion);
+                Watson.logger.info("Is allowed: " + isAllowed);
             }
+
+            DataManager.setLedgerVersion(ledgerVersion);
+            Configs.Plugin.PLUGIN.setOptionListValue(Plugins.LEDGER);
         }
     }
 
@@ -60,7 +71,7 @@ public class PluginHandshakePacketHandler implements IPluginChannelHandlerExtend
         NbtCompound nbtCompound = new NbtCompound();
         nbtCompound.putString("version", Reference.MOD_VERSION);
         nbtCompound.putString("modid", Reference.MOD_ID);
-        nbtCompound.putInt("protocol_version", 0);
+        nbtCompound.putInt("protocol_version", Reference.LEDGER_PROTOCOL);
         packetByteBuf.writeNbt(nbtCompound);
         return packetByteBuf;
     }

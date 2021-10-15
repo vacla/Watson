@@ -1,13 +1,12 @@
 package eu.minemania.watson.config;
 
+import eu.minemania.watson.chat.Color;
 import eu.minemania.watson.data.Actions;
+import eu.minemania.watson.data.DataManager;
 import fi.dy.masa.malilib.config.IConfigHandler;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
@@ -27,8 +26,11 @@ import fi.dy.masa.malilib.config.options.ConfigString;
 import fi.dy.masa.malilib.config.options.ConfigStringList;
 import fi.dy.masa.malilib.util.FileUtils;
 import fi.dy.masa.malilib.util.JsonUtils;
+import net.minecraft.block.Block;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 public class Configs implements IConfigHandler
@@ -112,7 +114,6 @@ public class Configs implements IConfigHandler
     {
         public static final ConfigInteger AMOUNT_ROWS = new ConfigInteger("amountRowes", 5, "watson.description.config.amount_rows");
         public static final ConfigBoolean AUTO_PAGE = new ConfigBoolean("autopage", true, "watson.description.config.auto_page");
-
         public static final ConfigInteger MAX_AUTO_PAGES = new ConfigInteger("maxAutoPages", 100, "watson.description.config.max_auto_pages");
         public static final ConfigInteger MAX_AUTO_PAGES_LOOP = new ConfigInteger("maxAutoPagesLoop", 100, "watson.description.config.max_auto_pages_loop");
         public static final ConfigInteger PAGE_LINES = new ConfigInteger("pagelines", 50, "watson.description.config.page_lines");
@@ -202,7 +203,7 @@ public class Configs implements IConfigHandler
         public static final ConfigStringExt CP_DETAILS = new ConfigStringExt("cp details", "^(\\d+[.,]\\d+\\/[mhd] ago|\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}) - #?(\\w+) (.*?) ((?:x(\\d+) )?\\w+(?::\\w+)?)\\.$", "watson.description.config.analysis").setCommentArgs("cp details");
         public static final ConfigStringExt CP_DETAILS_SIGN = new ConfigStringExt("cp details sign", "^(\\d+[.,]\\d+\\/[mhd] ago|\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}) - (\\w+): ([\\s\\w+\\W]+)", "watson.description.config.analysis").setCommentArgs("cp details sign");
         public static final ConfigStringExt CP_INSPECTOR_COORDS = new ConfigStringExt("cp inspector coords", "^-{5} \\w+(?:\\s\\w+)* -{5} \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\)$", "watson.description.config.analysis").setCommentArgs("cp inspector coords");
-        public static final ConfigStringExt CP_LOOKUP_COORDS = new ConfigStringExt("cp lookup coords", "^ +\\^ \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\/(.+)\\)$", "watson.description.config.analysis").setCommentArgs("cp lookup coords");
+        public static final ConfigStringExt CP_LOOKUP_COORDS = new ConfigStringExt("cp lookup coords", "^ +\\^ \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\/(.+)\\) \\(.+\\)$", "watson.description.config.analysis").setCommentArgs("cp lookup coords");
         public static final ConfigStringExt CP_LOOKUP_HEADER = new ConfigStringExt("cp lookup header", "^----- CoreProtect Lookup Results -----$", "watson.description.config.analysis").setCommentArgs("cp lookup header");
         public static final ConfigStringExt CP_NO_RESULT = new ConfigStringExt("cp no result", "^CoreProtect - No results found.$", "watson.description.config.analysis").setCommentArgs("cp no result");
         public static final ConfigStringExt CP_PAGE = new ConfigStringExt("cp page", "^(?:.\\s)*Page (\\d+)\\/(\\d+) (?:.\\s)*\\| To view a page, type \"\\/co l <page>\"\\.$", "watson.description.config.analysis").setCommentArgs("cp page");
@@ -302,22 +303,37 @@ public class Configs implements IConfigHandler
     private static ImmutableList<String> setWatsonBlockData()
     {
         ImmutableList.Builder<String> builder = ImmutableList.builder();
-        final HashSet<String> set = new HashSet<>();
+        ArrayList<String> list = new ArrayList<>();
+        String color = "";
 
-        Registry.BLOCK.forEach((block) -> set.add(Registry.BLOCK.getId(block) + ";2;" + setCustomColorOres(block.asItem())));
-        Registry.ITEM.forEach((item) -> set.add(Registry.ITEM.getId(item) + ";2;" + setCustomColorOres(item)));
-        Registry.ENTITY_TYPE.forEach((type) -> set.add(Registry.ENTITY_TYPE.getId(type) + ";2;#CC780E22"));
+        for (String name : DataManager.getAllItemEntitiesStringIdentifiers())
+        {
+            Optional<Block> optionalBlock = Registry.BLOCK.getOrEmpty(new Identifier(name));
+            Optional<Item> optionalItem = Registry.ITEM.getOrEmpty(optionalBlock.map(block -> Registry.ITEM.getId(block.asItem())).orElseGet(() -> new Identifier(name)));
 
-        ArrayList<String> list = new ArrayList<>(set);
-        list.sort(String::compareTo);
+            if (optionalItem.isEmpty())
+            {
+                color = setCustomColorOres(Registry.ENTITY_TYPE.get(new Identifier(name)));
+            }
+            if (color.isEmpty() && optionalItem.isPresent())
+            {
+                color = setCustomColorOres(optionalItem.get());
+            }
+
+            list.add(name + ";2;" + color);
+        }
 
         builder.addAll(list);
 
         return builder.build();
     }
 
-    private static String setCustomColorOres(Item block)
+    private static String setCustomColorOres(Object object)
     {
+        if (object instanceof EntityType)
+        {
+            return "#CC780E22";
+        }
         if (DEFAULT_COLORS.isEmpty())
         {
             DEFAULT_COLORS.put(Items.DIAMOND_ORE, "#CC5DECF5");
@@ -328,8 +344,25 @@ public class Configs implements IConfigHandler
             DEFAULT_COLORS.put(Items.COAL_ORE, "#CC191611");
             DEFAULT_COLORS.put(Items.EMERALD_ORE, "#CC17DD62");
             DEFAULT_COLORS.put(Items.NETHER_QUARTZ_ORE, "#CCEBE9E3");
+
+            DEFAULT_COLORS.put(Items.ANCIENT_DEBRIS, "#CC332120");
+            DEFAULT_COLORS.put(Items.GILDED_BLACKSTONE, "#CCFCEE4B");
+            DEFAULT_COLORS.put(Items.NETHER_GOLD_ORE, "#CCFCEE4B");
+            DEFAULT_COLORS.put(Items.COPPER_ORE, "#CCE48149");
+            DEFAULT_COLORS.put(Items.DEEPSLATE_DIAMOND_ORE, "#CC5DECF5");
+            DEFAULT_COLORS.put(Items.DEEPSLATE_EMERALD_ORE, "#CC17DD62");
+            DEFAULT_COLORS.put(Items.DEEPSLATE_IRON_ORE, "#CCE68C3F");
+            DEFAULT_COLORS.put(Items.DEEPSLATE_GOLD_ORE, "#CCFCEE4B");
+            DEFAULT_COLORS.put(Items.DEEPSLATE_LAPIS_ORE, "#CC1846B2");
+            DEFAULT_COLORS.put(Items.DEEPSLATE_REDSTONE_ORE, "#CCA00000");
+            DEFAULT_COLORS.put(Items.DEEPSLATE_COAL_ORE, "#CC191611");
+            DEFAULT_COLORS.put(Items.DEEPSLATE_COPPER_ORE, "#CCE48149");
+            DEFAULT_COLORS.put(Items.SMALL_AMETHYST_BUD, "#CC6532B8");
+            DEFAULT_COLORS.put(Items.MEDIUM_AMETHYST_BUD, "#CC6532B8");
+            DEFAULT_COLORS.put(Items.LARGE_AMETHYST_BUD, "#CC6532B8");
+            DEFAULT_COLORS.put(Items.AMETHYST_CLUSTER, "#CC6532B8");
         }
-        return DEFAULT_COLORS.getOrDefault(block, "#CC737373");
+        return DEFAULT_COLORS.getOrDefault((Item) object, "#CC737373");
     }
 
     /**

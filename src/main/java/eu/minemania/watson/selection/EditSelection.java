@@ -3,6 +3,7 @@ package eu.minemania.watson.selection;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import eu.minemania.watson.client.Teleport;
+import eu.minemania.watson.config.Plugins;
 import eu.minemania.watson.db.BlockEdit;
 import eu.minemania.watson.db.BlockEditComparator;
 import eu.minemania.watson.db.BlockEditSet;
@@ -11,15 +12,16 @@ import eu.minemania.watson.render.RenderUtils;
 import eu.minemania.watson.render.WatsonRenderer;
 import fi.dy.masa.malilib.util.WorldUtils;
 import net.minecraft.client.gl.GlProgramManager;
-import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.command.argument.EntityAnchorArgumentType;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import org.lwjgl.opengl.GL11;
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.config.Configs;
@@ -29,7 +31,6 @@ import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.VertexFormats;
 import org.lwjgl.opengl.GL20;
 
 import java.util.Calendar;
@@ -105,6 +106,11 @@ public class EditSelection
     public BlockEditSet getBlockEditSet()
     {
         MinecraftClient mc = MinecraftClient.getInstance();
+        PlayerEntity player = mc.player;
+        if (player == null)
+        {
+            return null;
+        }
         StringBuilder idBuilder = new StringBuilder();
         String serverIP = DataManager.getServerIP();
         if (serverIP != null)
@@ -112,7 +118,7 @@ public class EditSelection
             idBuilder.append(serverIP);
         }
         idBuilder.append('/');
-        idBuilder.append(WorldUtils.getDimensionId(mc.player.world));
+        idBuilder.append(WorldUtils.getDimensionId(player.world));
         String id = idBuilder.toString();
 
         BlockEditSet edits = _edits.get(id);
@@ -167,7 +173,7 @@ public class EditSelection
     {
         if (_variables.containsKey("player") && _variables.containsKey("time"))
         {
-            if (Configs.Plugin.PLUGIN.getStringValue().equals("LogBlock"))
+            if (Configs.Plugin.PLUGIN.getOptionListValue() == Plugins.LOGBLOCK)
             {
                 _calendar.setTimeInMillis((Long) _variables.get("time"));
                 int day = _calendar.get(Calendar.DAY_OF_MONTH);
@@ -200,7 +206,7 @@ public class EditSelection
     {
         if (_variables.containsKey("player") && _variables.containsKey("time"))
         {
-            if (Configs.Plugin.PLUGIN.getStringValue().equals("LogBlock"))
+            if (Configs.Plugin.PLUGIN.getOptionListValue() == Plugins.LOGBLOCK)
             {
                 _calendar.setTimeInMillis((Long) _variables.get("time"));
                 int day = _calendar.get(Calendar.DAY_OF_MONTH);
@@ -233,7 +239,12 @@ public class EditSelection
     {
         TreeSet<BlockEdit> edits = new TreeSet<>(new BlockEditComparator());
         long timing = DataManager.getTimeDiff(since);
+        Entity entity = source.getEntity();
 
+        if (entity == null)
+        {
+            return;
+        }
         if (timing == -1)
         {
             InfoUtils.showInGameMessage(MessageType.ERROR, "watson.message.edits.none_edits", "here");
@@ -247,7 +258,7 @@ public class EditSelection
                 if (timing <= edit.time)
                 {
                     Vec3d editPos = new Vec3d(edit.x, edit.y, edit.z);
-                    if (source.getEntity().getPos().isInRange(editPos, radius))
+                    if (entity.getPos().isInRange(editPos, radius))
                     {
                         edits.add(edit);
                     }
@@ -258,23 +269,29 @@ public class EditSelection
         if (!edits.isEmpty())
         {
             MinecraftClient mc = MinecraftClient.getInstance();
+            PlayerEntity player = mc.player;
+            ClientPlayNetworkHandler networkHandler = mc.getNetworkHandler();
+            if (player == null || networkHandler == null)
+            {
+                return;
+            }
             Thread t = new Thread(() -> {
                 for (BlockEdit edit : edits)
                 {
                     try
                     {
-                        double randX = MathHelper.clamp(edit.x + mc.player.getRandom().nextDouble() * 16.0D, edit.x - 3, edit.x + 3);
-                        double randY = MathHelper.clamp(edit.y + (double) (mc.player.getRandom().nextInt(16)), edit.y - 3, edit.y + 3);
-                        double randZ = MathHelper.clamp(edit.z + mc.player.getRandom().nextDouble() * 16.0D, edit.z - 3, edit.z + 3);
-                        mc.player.startFallFlying();
-                        mc.getNetworkHandler().sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
+                        double randX = MathHelper.clamp(edit.x + player.getRandom().nextDouble() * 16.0D, edit.x - 3, edit.x + 3);
+                        double randY = MathHelper.clamp(edit.y + (double) (player.getRandom().nextInt(16)), edit.y - 3, edit.y + 3);
+                        double randZ = MathHelper.clamp(edit.z + player.getRandom().nextDouble() * 16.0D, edit.z - 3, edit.z + 3);
+                        player.startFallFlying();
+                        networkHandler.sendPacket(new ClientCommandC2SPacket(player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
                         Teleport.teleport(randX, randY, randZ, edit.world);
                         Thread.sleep(50L);
-                        mc.player.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, new Vec3d(edit.x, edit.y, edit.z));
-                        mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(mc.player.getYaw(), mc.player.getPitch(), false));
+                        player.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, new Vec3d(edit.x, edit.y, edit.z));
+                        networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(player.getYaw(), player.getPitch(), false));
                         selectPosition(edit.x, edit.y, edit.z, edit.world, edit.amount);
-                        mc.player.stopFallFlying();
-                        mc.getNetworkHandler().sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
+                        player.stopFallFlying();
+                        networkHandler.sendPacket(new ClientCommandC2SPacket(player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
                         Thread.sleep((long) (10000L / speed) - 50L);
                     }
                     catch (InterruptedException e)

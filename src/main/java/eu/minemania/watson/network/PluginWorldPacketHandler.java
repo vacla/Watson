@@ -43,7 +43,7 @@ public class PluginWorldPacketHandler implements IPluginChannelHandlerExtended
             DataManager.setWorldPlugin(world);
             if (Configs.Generic.DEBUG.getBooleanValue())
             {
-                Watson.logger.debug("World: "+ world);
+                Watson.logger.info("World: "+ world);
             }
         }
     }

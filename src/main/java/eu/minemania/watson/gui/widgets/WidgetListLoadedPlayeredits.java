@@ -55,14 +55,7 @@ public class WidgetListLoadedPlayeredits extends WidgetListBase<PlayereditSet, W
     {
         String name = entry.getPlayer().toLowerCase();
 
-        if (name != null)
-        {
-            return ImmutableList.of(name);
-        }
-        else
-        {
-            return ImmutableList.of();
-        }
+        return ImmutableList.of(name);
     }
 
     @Override

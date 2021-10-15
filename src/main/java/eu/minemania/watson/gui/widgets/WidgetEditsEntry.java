@@ -15,6 +15,7 @@ import fi.dy.masa.malilib.gui.button.ButtonBase;
 import fi.dy.masa.malilib.gui.button.ButtonGeneric;
 import fi.dy.masa.malilib.gui.button.IButtonActionListener;
 import fi.dy.masa.malilib.gui.widgets.WidgetListEntrySortable;
+import fi.dy.masa.malilib.gui.widgets.WidgetSearchBar;
 import fi.dy.masa.malilib.render.RenderUtils;
 import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.util.math.MatrixStack;
@@ -73,6 +74,11 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
             this.header4 = null;
             this.header5 = null;
             this.header6 = null;
+
+            int posX = x + width;
+            int posY = y + 1;
+
+            this.createButtonGeneric(posX, posY, ButtonListener.ButtonType.BLOCKS);
         }
         else
         {
@@ -83,18 +89,13 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
             this.header5 = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[4]) + GuiBase.TXT_RST;
             this.header6 = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[5]) + GuiBase.TXT_RST;
         }
-
-        int posX = x + width;
-        int posY = y + 1;
-
-        posX = this.createButtonGeneric(posX, posY, ButtonListener.ButtonType.BLOCKS);
     }
 
-    private int createButtonGeneric(int xRight, int y, ButtonListener.ButtonType type)
+    private void createButtonGeneric(int xRight, int y, ButtonListener.ButtonType type)
     {
         String label = type.getDisplayName();
         ButtonListener listener = new ButtonListener(type, this.entry, this.listWidget);
-        return this.addButton(new ButtonGeneric(xRight, y, -1, true, label), listener).getX();
+        this.addButton(new ButtonGeneric(xRight, y, -1, true, label), listener);
     }
 
     public static void setMaxNameLength(List<PlayereditEntry> edits)
@@ -134,25 +135,16 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
         int x6 = x5 + maxContRemovedLength + 20;
         int x7 = x6 + maxTotalLength + 20;
 
-        switch (column)
-        {
-            case 0:
-                return x1;
-            case 1:
-                return x2;
-            case 2:
-                return x3;
-            case 3:
-                return x4;
-            case 4:
-                return x5;
-            case 5:
-                return x6;
-            case 6:
-                return x7;
-            default:
-                return x1;
-        }
+        return switch (column)
+                {
+                    case 1 -> x2;
+                    case 2 -> x3;
+                    case 3 -> x4;
+                    case 4 -> x5;
+                    case 5 -> x6;
+                    case 6 -> x7;
+                    default -> x1;
+                };
     }
 
     @Override
@@ -226,7 +218,8 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
 
         if (this.header1 != null)
         {
-            if (!this.listWidget.getSearchBarWidget().isSearchOpen())
+            WidgetSearchBar widgetSearchBar = this.listWidget.getSearchBarWidget();
+            if (widgetSearchBar != null && !widgetSearchBar.isSearchOpen())
             {
                 this.drawString(x1, y, color, this.header1, matrixStack);
                 this.drawString(x2, y, color, this.header2, matrixStack);

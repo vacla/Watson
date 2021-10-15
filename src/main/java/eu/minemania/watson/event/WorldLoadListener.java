@@ -9,6 +9,7 @@ import eu.minemania.watson.network.ClientPacketChannelHandler;
 import eu.minemania.watson.network.PluginWorldPacketHandler;
 import eu.minemania.watson.network.ledger.PluginActionPacketHandler;
 import eu.minemania.watson.network.ledger.PluginHandshakePacketHandler;
+import eu.minemania.watson.network.ledger.PluginResponsePacketHandler;
 import eu.minemania.watson.render.OverlayRenderer;
 import fi.dy.masa.malilib.interfaces.IWorldLoadListener;
 import net.minecraft.client.MinecraftClient;
@@ -28,9 +29,11 @@ public class WorldLoadListener implements IWorldLoadListener
                 ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginWorldPacketHandler.INSTANCE);
                 ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginHandshakePacketHandler.INSTANCE);
                 ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginActionPacketHandler.INSTANCE);
+                ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginResponsePacketHandler.INSTANCE);
                 PluginWorldPacketHandler.INSTANCE.reset();
                 PluginHandshakePacketHandler.INSTANCE.reset();
                 PluginActionPacketHandler.INSTANCE.reset();
+                PluginResponsePacketHandler.INSTANCE.reset();
                 if (DataManager.getEditSelection().getSelection() != null)
                 {
                     DataManager.getEditSelection().clearBlockEditSet();
@@ -56,6 +59,7 @@ public class WorldLoadListener implements IWorldLoadListener
             ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginWorldPacketHandler.INSTANCE);
             ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginHandshakePacketHandler.INSTANCE);
             ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginActionPacketHandler.INSTANCE);
+            ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginResponsePacketHandler.INSTANCE);
             ((ClientPacketChannelHandler) ClientPacketChannelHandler.getInstance()).processPacketFromClient(mc.getNetworkHandler());
         }
         if (worldAfter != null)

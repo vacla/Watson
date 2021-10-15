@@ -12,10 +12,7 @@ import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket;
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket;
 import net.minecraft.util.Identifier;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ClientPacketChannelHandler implements IClientPacketChannelHandler
@@ -44,14 +41,14 @@ public class ClientPacketChannelHandler implements IClientPacketChannelHandler
 
         for (Identifier channel : handler.getChannels())
         {
-            if (this.handlers.containsKey(channel) == false)
+            if (!this.handlers.containsKey(channel))
             {
                 this.handlers.put(channel, handler);
                 toRegister.add(channel);
             }
         }
 
-        if (toRegister.isEmpty() == false)
+        if (!toRegister.isEmpty())
         {
             this.sendRegisterPacket(REGISTER, toRegister);
         }
@@ -70,7 +67,7 @@ public class ClientPacketChannelHandler implements IClientPacketChannelHandler
             }
         }
 
-        if (toUnRegister.isEmpty() == false)
+        if (!toUnRegister.isEmpty())
         {
             this.sendRegisterPacket(UNREGISTER, toUnRegister);
         }
@@ -84,15 +81,22 @@ public class ClientPacketChannelHandler implements IClientPacketChannelHandler
         Identifier channel = packet.getChannel();
         IPluginChannelHandlerExtended handler = this.handlers.get(channel);
 
+        if (Configs.Generic.DEBUG.getBooleanValue())
+        {
+            Watson.logger.info("packet from server");
+            Watson.logger.info(channel);
+            Watson.logger.info(packet.getData().toString(Charsets.UTF_8));
+        }
+
         if (handler != null)
         {
             PacketByteBuf buf = packet.getData();
 
             if (Configs.Generic.DEBUG.getBooleanValue())
             {
-                Watson.logger.debug("packet from server");
-                Watson.logger.debug(channel);
-                Watson.logger.debug(buf.toString(Charsets.UTF_8));
+                Watson.logger.info("packet from server for watson");
+                Watson.logger.info(channel);
+                Watson.logger.info(buf.toString(Charsets.UTF_8));
             }
 
             // Finished the complete packet
@@ -122,9 +126,9 @@ public class ClientPacketChannelHandler implements IClientPacketChannelHandler
 
                 if (Configs.Generic.DEBUG.getBooleanValue())
                 {
-                    Watson.logger.debug("packet from client");
-                    Watson.logger.debug(entry.getKey());
-                    Watson.logger.debug(packetByteBuf.toString(Charsets.UTF_8));
+                    Watson.logger.info("packet from client");
+                    Watson.logger.info(entry.getKey());
+                    Watson.logger.info(packetByteBuf.toString(Charsets.UTF_8));
                 }
 
                 netHandler.sendPacket(new CustomPayloadC2SPacket(entry.getKey(), packetByteBuf));

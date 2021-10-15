@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Random;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import eu.minemania.watson.db.WatsonBlock;
 import fi.dy.masa.malilib.util.Color4f;
 import fi.dy.masa.malilib.util.PositionUtils;
 import net.minecraft.block.BlockState;
@@ -35,11 +34,6 @@ public class RenderUtils
     /**
      * Assumes a BufferBuilder in GL_LINES mode has been initialized.
      * The cameraPos value will be subtracted from the absolute coordinate values of the passed in BlockPos.
-     * @param pos
-     * @param cameraPos
-     * @param color
-     * @param expand
-     * @param buffer
      */
     public static void drawBlockBoundingBoxOutlinesBatchedLines(BlockPos pos, Vec3d cameraPos, Color4f color, double expand, BufferBuilder buffer)
     {
@@ -134,13 +128,13 @@ public class RenderUtils
         buffer.vertex(x + 1F, y + 1F, z).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
 
         buffer.vertex(x, y, z + 1F).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
-        buffer.vertex(x, y + +1F, z + 1F).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
+        buffer.vertex(x, y + 1F, z + 1F).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
 
         buffer.vertex(x + 1F, y, z + 1F).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
         buffer.vertex(x + 1F, y + 1, z + 1F).color(color.r, color.g, color.b, color.a).normal(0, 0, 0).next();
     }
 
-    public static void drawSpecialOutlinesBatched(float x, float y, float z, WatsonBlock watsonBlock, BufferBuilder buffer, boolean sign)
+    public static void drawSpecialOutlinesBatched(float x, float y, float z, Color4f color, BufferBuilder buffer, boolean sign)
     {
         float posX = x + 0.25F / 2;
         float posY = y + 0.25F / 2;
@@ -148,7 +142,6 @@ public class RenderUtils
         float widthX = (12 / 32.0F) * 2;
         float heightY = (12 / 32.0F) * 2;
         float widthZ = (1.0F / 32.0F) * 2;
-        Color4f color = watsonBlock.getColor();
 
         if (sign)
         {
