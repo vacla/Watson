@@ -21,6 +21,7 @@ public class PluginWorldPacketHandler implements IPluginChannelHandlerExtended
     public void reset()
     {
         registered = false;
+        DataManager.setWorldPlugin("");
     }
 
     @Override

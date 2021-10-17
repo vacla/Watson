@@ -40,6 +40,10 @@ public class WorldLoadListener implements IWorldLoadListener
                     CoreProtectAnalysis.reset();
                 }
             }
+            else
+            {
+                DataManager.setWorldPlugin("");
+            }
         }
         else
         {
