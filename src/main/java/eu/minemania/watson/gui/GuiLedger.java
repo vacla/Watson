@@ -112,7 +112,7 @@ public class GuiLedger extends GuiBase
             label = StringUtils.translate("watson.gui.label.ledger.title.time.before"); //Time before
             this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
             offset = this.getStringWidth(label) + 4;
-            this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.time.before"));
+            this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.time"));
 
             this.textFieldTimeBefore = new GuiTextFieldGeneric(x + offset + 20, y + 2, width, 14, this.textRenderer);
             this.textFieldTimeBefore.setText(ledgerInfo.getTimeBefore());
@@ -121,7 +121,7 @@ public class GuiLedger extends GuiBase
             label = StringUtils.translate("watson.gui.label.ledger.title.time.after"); //Time after
             this.addLabel(textFieldTimeBefore.getX() + textFieldTimeBefore.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
             offset = this.getStringWidth(label) + 10 + textFieldTimeBefore.getWidth();
-            this.addWidget(new WidgetInfoIcon(textFieldTimeBefore.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.time.after"));
+            this.addWidget(new WidgetInfoIcon(textFieldTimeBefore.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.time"));
 
             this.textFieldTimeAfter = new GuiTextFieldGeneric(textFieldTimeBefore.getX() + offset + 20, y + 2, width, 14, this.textRenderer);
             this.textFieldTimeAfter.setText(ledgerInfo.getTimeAfter());
