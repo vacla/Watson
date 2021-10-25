@@ -28,6 +28,7 @@
     "mixins.watson.json"
   ],
   "depends": {
+    "minecraft": "1.17.1",
     "malilib": ">=0.10.0-dev.26 <0.11"
   }
 }
