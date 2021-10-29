@@ -240,7 +240,7 @@ public class GuiLedger extends GuiBase
         return newList;
     }
 
-    public boolean validate(LedgerMode buttonType)
+    public boolean validate()
     {
         boolean error = false;
         ArrayList<String> listActionError = new ArrayList<>();
@@ -264,9 +264,8 @@ public class GuiLedger extends GuiBase
             error = true;
         }
 
-
         ArrayList<String> listDimensionError = new ArrayList<>();
-        for (String dimensionText : this.ledgerInfo.getDimensions())
+        for (String dimensionText : ledgerInfo.getDimensions())
         {
             if (dimensionText.isEmpty())
             {
@@ -313,18 +312,13 @@ public class GuiLedger extends GuiBase
             addMessage(Message.MessageType.WARNING, "watson.error.ledger.objects_not_exist", String.join(",", listObjectError));
             error = true;
         }
-        int textRange = 0;
-        String range = textFieldRange.getText();
-        if (!range.isEmpty())
-        {
-            textRange = Integer.parseInt(range);
-        }
+        int textRange = ledgerInfo.getRange();
         if (textRange <= 1 && textRange != 0)
         {
             addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", "Range", textRange);
             error = true;
         }
-        String textSource = textFieldSource.getText();
+        String textSource = ledgerInfo.getSources();
         String[] sourcesText = textSource.split(",");
         ArrayList<String> listSourceError = new ArrayList<>();
         for (String sourceText : sourcesText)
@@ -343,14 +337,14 @@ public class GuiLedger extends GuiBase
             addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", "Source", String.join(",", listSourceError));
             error = true;
         }
-        String textTimeBefore = textFieldTimeBefore.getText();
-        if (textTimeBefore.matches("[^0-9smhdw]+") && !textTimeBefore.isEmpty())
+        String textTimeBefore = ledgerInfo.getTimeBefore();
+        if (!textTimeBefore.matches("^([0-9]+[smhdw])+$") && !textTimeBefore.isEmpty())
         {
             addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", "Time before", textTimeBefore);
             error = true;
         }
-        String textTimeAfter = textFieldTimeAfter.getText();
-        if (textTimeAfter.matches("[^0-9smhdw]+") && !textTimeAfter.isEmpty())
+        String textTimeAfter = ledgerInfo.getTimeAfter();
+        if (!textTimeAfter.matches("^([0-9]+[smhdw])+$") && !textTimeAfter.isEmpty())
         {
             addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", "Time after", textTimeAfter);
             error = true;
@@ -713,33 +707,21 @@ public class GuiLedger extends GuiBase
             if (this.type == ButtonType.SUBMIT)
             {
                 LedgerInfo ledgerInfo = parent.ledgerInfo;
-                if (parent.validate(ledgerInfo.getLedgerMode()))
+                if (!ledgerInfo.getLedgerMode().equals(LedgerMode.INSPECT) && parent.validate())
                 {
                     return;
                 }
 
-
-                int x = 0, y = 0, z = 0, range = 0;
                 List<String> action = ledgerInfo.getActions();
                 List<String> dimension = ledgerInfo.getDimensions();
                 List<String> object = ledgerInfo.getObjects();
-                if (ledgerInfo.getLedgerMode() != LedgerMode.INSPECT)
-                {
-                    String rangeText = parent.textFieldRange.getText();
-                    if (!rangeText.isEmpty())
-                    {
-                        range = Integer.parseInt(rangeText);
-                    }
-                }
-                String source = parent.textFieldSource.getText();
-                String timeBefore = parent.textFieldTimeBefore.getText();
-                String timeAfter = parent.textFieldTimeAfter.getText();
-                if (ledgerInfo.getLedgerMode() == LedgerMode.INSPECT)
-                {
-                    x = Integer.parseInt(parent.textFieldX.getText());
-                    y = Integer.parseInt(parent.textFieldY.getText());
-                    z = Integer.parseInt(parent.textFieldZ.getText());
-                }
+                int range = ledgerInfo.getRange();
+                String source = ledgerInfo.getSources();
+                String timeBefore = ledgerInfo.getTimeBefore();
+                String timeAfter = ledgerInfo.getTimeAfter();
+                int x = ledgerInfo.getX();
+                int y = ledgerInfo.getY();
+                int z = ledgerInfo.getZ();
                 MinecraftClient mc = parent.mc;
 
                 switch (ledgerInfo.getLedgerMode())
