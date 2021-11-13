@@ -1,6 +1,5 @@
 package eu.minemania.watson.config;
 
-import eu.minemania.watson.chat.Color;
 import eu.minemania.watson.data.Actions;
 import eu.minemania.watson.data.DataManager;
 import fi.dy.masa.malilib.config.IConfigHandler;
@@ -203,7 +202,7 @@ public class Configs implements IConfigHandler
         public static final ConfigStringExt CP_DETAILS = new ConfigStringExt("cp details", "^(\\d+[.,]\\d+\\/[mhd] ago|\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}) - #?(\\w+) (.*?) ((?:x(\\d+) )?\\w+(?::\\w+)?)\\.$", "watson.description.config.analysis").setCommentArgs("cp details");
         public static final ConfigStringExt CP_DETAILS_SIGN = new ConfigStringExt("cp details sign", "^(\\d+[.,]\\d+\\/[mhd] ago|\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}) - (\\w+): ([\\s\\w+\\W]+)", "watson.description.config.analysis").setCommentArgs("cp details sign");
         public static final ConfigStringExt CP_INSPECTOR_COORDS = new ConfigStringExt("cp inspector coords", "^-{5} \\w+(?:\\s\\w+)* -{5} \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\)$", "watson.description.config.analysis").setCommentArgs("cp inspector coords");
-        public static final ConfigStringExt CP_LOOKUP_COORDS = new ConfigStringExt("cp lookup coords", "^ +\\^ \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\/(.+)\\) \\(.+\\)$", "watson.description.config.analysis").setCommentArgs("cp lookup coords");
+        public static final ConfigStringExt CP_LOOKUP_COORDS = new ConfigStringExt("cp lookup coords", "^ +\\^ \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\/([^\\)]+)\\)(?: \\(.+\\))?$", "watson.description.config.analysis").setCommentArgs("cp lookup coords");
         public static final ConfigStringExt CP_LOOKUP_HEADER = new ConfigStringExt("cp lookup header", "^----- CoreProtect Lookup Results -----$", "watson.description.config.analysis").setCommentArgs("cp lookup header");
         public static final ConfigStringExt CP_NO_RESULT = new ConfigStringExt("cp no result", "^CoreProtect - No results found.$", "watson.description.config.analysis").setCommentArgs("cp no result");
         public static final ConfigStringExt CP_PAGE = new ConfigStringExt("cp page", "^(?:.\\s)*Page (\\d+)\\/(\\d+) (?:.\\s)*\\| To view a page, type \"\\/co l <page>\"\\.$", "watson.description.config.analysis").setCommentArgs("cp page");
