@@ -68,6 +68,10 @@ public class CoreProtectAnalysis extends Analysis
             details(chat, m);
             return sendMessage();
         });
+        addMatchedChatHandler(Configs.Analysis.CP_DETAILS_SESSION, ((chat, m) -> {
+            detailsSession(chat, m);
+            return sendMessage();
+        }));
         addMatchedChatHandler(Configs.Analysis.CP_DETAILS_SIGN, (chat, m) -> {
             detailsSign(chat, m);
             return sendMessage();
@@ -149,6 +153,29 @@ public class CoreProtectAnalysis extends Analysis
                 }
             }
         }
+    }
+
+    void detailsSession(MutableText chat, Matcher m)
+    {
+        _lookupDetails = false;
+        HoverEvent hover = chat.getSiblings().get(0).getStyle().getHoverEvent();
+        if (hover != null && hover.getValue(hover.getAction()) != null)
+        {
+            String text = ((MutableText) hover.getValue(hover.getAction())).getString().replaceAll("\u00A7.", "");
+            _millis = TimeStamp.parseTimeExpression(text, m.group(1));
+        }
+        else
+        {
+            _millis = TimeStamp.parseTimeExpression("", m.group(1));
+        }
+        _player = m.group(2);
+        _action = "session"+m.group(3);
+        String block = "minecraft:player";
+        _loop = 1;
+        _block = WatsonBlockRegistery.getInstance().getWatsonBlockByName(block);
+        // Record that we can use these details at the next
+        // coreprotect.lookupcoords only.
+        _lookupDetails = true;
     }
 
     void detailsSign(MutableText chat, Matcher m)

@@ -259,6 +259,10 @@ public class PlayereditUtils
         {
             if (blockedit.block.getName().equals("minecraft:player"))
             {
+                if (blockedit.action.contains("session"))
+                {
+                    return blockedit.action.replace("session", "");
+                }
                 return StringUtils.translate("watson.gui.label.blockedit.list.chat");
             }
             else if (blockedit.block.getName().equals("minecraft:oak_sign") && !blockedit.action.equals("broke") && !blockedit.action.equals("placed") && !blockedit.action.equals("remove") && !blockedit.action.equals("place"))
@@ -287,6 +291,10 @@ public class PlayereditUtils
         {
             if (blockedit.block.getName().equals("minecraft:player"))
             {
+                if (blockedit.action.contains("session"))
+                {
+                    return blockedit.action.replace("session", "");
+                }
                 return blockedit.action;
             }
             else if (blockedit.block.getName().equals("minecraft:oak_sign") && !blockedit.action.equals("broke") && !blockedit.action.equals("placed"))
