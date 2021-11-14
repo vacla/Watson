@@ -23,20 +23,20 @@ public class Analysis implements IChatHandler
         unformatted = unformatted.replaceAll("\u00A7.", "");
         if (Configs.Generic.DEBUG.getBooleanValue())
         {
-            Watson.logger.debug("unformatted: " + unformatted);
+            Watson.logger.info("unformatted: " + unformatted);
         }
         for (Entry<String, IMatchedChatHandler> entry : m.entries())
         {
             if (Configs.Generic.DEBUG.getBooleanValue())
             {
-                Watson.logger.debug("key: " + entry.getKey());
+                Watson.logger.info("key: " + entry.getKey());
             }
             Matcher m = Pattern.compile(entry.getKey()).matcher(unformatted);
             if (m.matches())
             {
                 if (Configs.Generic.DEBUG.getBooleanValue())
                 {
-                    Watson.logger.debug("key matched: " + entry.getKey());
+                    Watson.logger.info("key matched: " + entry.getKey());
                 }
                 return entry.getValue().onMatchedChat(chat, m);
             }
