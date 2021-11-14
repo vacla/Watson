@@ -259,13 +259,13 @@ public class CoreProtectAnalysis extends Analysis
         if (currentPage == 1)
         {
             _looping = true;
+            Paginator.getInstance().setPageCount(pageCount);
         }
-        if (Configs.Plugin.AUTO_PAGE.getBooleanValue() && currentPage > Paginator.getInstance().getCurrentPage())
+        if (Configs.Plugin.AUTO_PAGE.getBooleanValue())
         {
             if (pageCount <= Configs.Plugin.MAX_AUTO_PAGES.getIntegerValue())
             {
                 Paginator.getInstance().setCurrentPage(currentPage);
-                Paginator.getInstance().setPageCount(pageCount);
                 if (_looping)
                 {
                     if (Configs.Messages.DISABLE_CP_MESSAGES.getBooleanValue())

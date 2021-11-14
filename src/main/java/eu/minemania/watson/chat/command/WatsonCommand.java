@@ -6,6 +6,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
 
+import eu.minemania.watson.analysis.CoreProtectAnalysis;
 import eu.minemania.watson.analysis.ServerTime;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
@@ -170,6 +171,7 @@ public class WatsonCommand extends WatsonCommandBase
     private static int clear(CommandContext<ServerCommandSource> context)
     {
         DataManager.getEditSelection().clearBlockEditSet();
+        CoreProtectAnalysis.reset();
         return 1;
     }
 

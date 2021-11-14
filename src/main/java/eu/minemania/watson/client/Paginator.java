@@ -8,6 +8,7 @@ public class Paginator
     protected int currentPage = 0;
     protected int pageCount = 0;
     private static final Paginator INSTANCE = new Paginator();
+    protected boolean firstPageLoop = true;
 
     public static Paginator getInstance()
     {
@@ -59,9 +60,11 @@ public class Paginator
                 ChatMessage.localOutputT("watson.message.autopage.finished");
                 return;
             }
-            if (currentPage == 1)
+            if (currentPage == 1 && firstPageLoop)
             {
                 ChatMessage.getInstance().serverChat(String.format("/co l %d:%d", 1, Configs.Plugin.AMOUNT_ROWS.getIntegerValue()), currentPage == 1);
+                firstPageLoop = false;
+                return;
             }
             ChatMessage.getInstance().serverChat(String.format("/co l %d:%d", currentPage + 1, Configs.Plugin.AMOUNT_ROWS.getIntegerValue()), currentPage == 1);
         }
@@ -75,11 +78,6 @@ public class Paginator
     public void setCurrentPage(int currentPage)
     {
         this.currentPage = currentPage;
-    }
-
-    public int getCurrentPage()
-    {
-        return this.currentPage;
     }
 
     public void reset()
