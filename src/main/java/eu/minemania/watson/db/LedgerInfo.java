@@ -12,13 +12,14 @@ public class LedgerInfo
     private String sources;
     private String timeBefore;
     private String timeAfter;
-    private Integer range;
-    private Integer x;
-    private Integer y;
-    private Integer z;
+    private int range;
+    private int x;
+    private int y;
+    private int z;
     private LedgerMode ledgerMode;
+    private int pages;
 
-    public LedgerInfo(List<String> actions, List<String> objects, List<String> dimensions, String sources, String timeBefore, String timeAfter, Integer range, Integer x, Integer y, Integer z, LedgerMode ledgerMode)
+    public LedgerInfo(List<String> actions, List<String> objects, List<String> dimensions, String sources, String timeBefore, String timeAfter, int range, int x, int y, int z, LedgerMode ledgerMode, int pages)
     {
         this.actions = actions;
         this.objects = objects;
@@ -31,6 +32,7 @@ public class LedgerInfo
         this.y = y;
         this.z = z;
         this.ledgerMode = ledgerMode;
+        this.pages = pages;
     }
 
     public List<String> getActions()
@@ -93,42 +95,42 @@ public class LedgerInfo
         this.timeAfter = timeAfter;
     }
 
-    public Integer getRange()
+    public int getRange()
     {
         return range;
     }
 
-    public void setRange(Integer range)
+    public void setRange(int range)
     {
         this.range = range;
     }
 
-    public Integer getX()
+    public int getX()
     {
         return x;
     }
 
-    public void setX(Integer x)
+    public void setX(int x)
     {
         this.x = x;
     }
 
-    public Integer getY()
+    public int getY()
     {
         return y;
     }
 
-    public void setY(Integer y)
+    public void setY(int y)
     {
         this.y = y;
     }
 
-    public Integer getZ()
+    public int getZ()
     {
         return z;
     }
 
-    public void setZ(Integer z)
+    public void setZ(int z)
     {
         this.z = z;
     }
@@ -141,5 +143,15 @@ public class LedgerInfo
     public void setLedgerMode(LedgerMode ledgerMode)
     {
         this.ledgerMode = ledgerMode;
+    }
+
+    public int getPages()
+    {
+        return pages;
+    }
+
+    public void setPages(int pages)
+    {
+        this.pages = pages;
     }
 }

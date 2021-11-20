@@ -51,6 +51,7 @@ public class DataManager implements IDirectoryCache
     private static String worldName = "";
     private static String ledgerVersion = "";
     private static LedgerInfo ledgerInfo;
+    private static final ArrayList<String> ledgerActions = new ArrayList<>();
 
     private final EditSelection editselection = new EditSelection();
 
@@ -126,14 +127,13 @@ public class DataManager implements IDirectoryCache
         return ledgerVersion;
     }
 
+    public static void setLedgerActions(List<String> allowedLedgerActions)
+    {
+        ledgerActions.addAll(allowedLedgerActions);
+    }
+
     public static ArrayList<String> getLedgerActions()
     {
-        ArrayList<String> ledgerActions = new ArrayList<>();
-        ledgerActions.add("block-break");
-        ledgerActions.add("block-place");
-        ledgerActions.add("item-insert");
-        ledgerActions.add("item-remove");
-        ledgerActions.add("entity-killed");
         return ledgerActions;
     }
 

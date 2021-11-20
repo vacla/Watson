@@ -13,6 +13,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PluginHandshakePacketHandler implements IPluginChannelHandlerExtended
@@ -50,16 +51,27 @@ public class PluginHandshakePacketHandler implements IPluginChannelHandlerExtend
         {
             int protocolVersion = buf.readInt();
             String ledgerVersion = buf.readString();
-            boolean isAllowed = buf.readBoolean();
+            int totalActions = buf.readInt();
+            List<String> actionsList = new ArrayList<>();
+            if (totalActions > 0)
+            {
+                for (int i = 0; i <= totalActions; i++)
+                {
+                    String action = buf.readString();
+                    actionsList.add(action);
+                }
+            }
 
             if (Configs.Generic.DEBUG.getBooleanValue())
             {
                 Watson.logger.info("protocol version: " + protocolVersion);
                 Watson.logger.info("ledger version: " + ledgerVersion);
-                Watson.logger.info("Is allowed: " + isAllowed);
+                Watson.logger.info("total actions: " + totalActions);
+                Watson.logger.info("allowed actions: " + actionsList);
             }
 
             DataManager.setLedgerVersion(ledgerVersion);
+            DataManager.setLedgerActions(actionsList);
             Configs.Plugin.PLUGIN.setOptionListValue(Plugins.LEDGER);
         }
     }

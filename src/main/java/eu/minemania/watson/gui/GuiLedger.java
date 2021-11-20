@@ -35,7 +35,8 @@ public class GuiLedger extends GuiBase
     protected GuiTextFieldInteger textFieldX;
     protected GuiTextFieldInteger textFieldY;
     protected GuiTextFieldInteger textFieldZ;
-    protected LedgerInfo ledgerInfo = new LedgerInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", "", 0, 0, 0, 0, LedgerMode.INSPECT);
+    protected GuiTextFieldInteger textFieldPages;
+    protected LedgerInfo ledgerInfo = new LedgerInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", "", 0, 0, 0, 0, LedgerMode.INSPECT, 10);
 
     protected GuiLedger()
     {
@@ -156,6 +157,20 @@ public class GuiLedger extends GuiBase
             this.textFieldZ = new GuiTextFieldInteger(textFieldY.getX() + offset + 20, y + 2, width, 14, this.textRenderer);
             this.textFieldZ.setText(String.valueOf(ledgerInfo.getZ()));
             this.addTextField(this.textFieldZ, new ZTextFieldListener(this));
+        }
+
+        if (ledgerInfo.getLedgerMode() == LedgerMode.INSPECT || ledgerInfo.getLedgerMode() == LedgerMode.SEARCH)
+        {
+            y += 30;
+
+            label = StringUtils.translate("watson.gui.label.ledger.title.pages"); //Pages
+            this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
+            offset = this.getStringWidth(label) + 4;
+            this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.pages"));
+
+            this.textFieldPages = new GuiTextFieldInteger(x + offset + 20, y + 2, width, 14, this.textRenderer);
+            this.textFieldPages.setText(String.valueOf(ledgerInfo.getPages()));
+            this.addTextField(this.textFieldPages, new PagesTextFieldListener(this));
         }
 
         y = this.height - 50;
@@ -361,19 +376,20 @@ public class GuiLedger extends GuiBase
         String source = this.ledgerInfo.getSources();
         String timeBefore = this.ledgerInfo.getTimeBefore();
         String timeAfter = this.ledgerInfo.getTimeAfter();
-        Integer range = this.ledgerInfo.getRange();
-        Integer x = this.ledgerInfo.getX();
-        Integer y = this.ledgerInfo.getY();
-        Integer z = this.ledgerInfo.getZ();
+        int range = this.ledgerInfo.getRange();
+        int x = this.ledgerInfo.getX();
+        int y = this.ledgerInfo.getY();
+        int z = this.ledgerInfo.getZ();
         LedgerMode ledgerMode = this.ledgerInfo.getLedgerMode();
+        int pages = this.ledgerInfo.getPages();
 
-        LedgerInfo ledgerInfo = new LedgerInfo(actions, objects, dimension, source, timeBefore, timeAfter, range, x, y, z, ledgerMode);
+        LedgerInfo ledgerInfo = new LedgerInfo(actions, objects, dimension, source, timeBefore, timeAfter, range, x, y, z, ledgerMode, pages);
         DataManager.setLedgerInfo(ledgerInfo);
     }
 
     private void clearLedgerInfo()
     {
-        LedgerInfo ledgerInfo = new LedgerInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", "", 0, 0, 0, 0, LedgerMode.INSPECT);
+        LedgerInfo ledgerInfo = new LedgerInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", "", 0, 0, 0, 0, LedgerMode.INSPECT, 10);
         this.ledgerInfo = ledgerInfo;
         DataManager.setLedgerInfo(ledgerInfo);
     }
@@ -552,6 +568,29 @@ public class GuiLedger extends GuiBase
         }
     }
 
+    public static class PagesTextFieldListener implements ITextFieldListener<GuiTextFieldInteger>
+    {
+        private final GuiLedger parent;
+
+        public PagesTextFieldListener(GuiLedger parent)
+        {
+            this.parent = parent;
+        }
+
+        @Override
+        public boolean onTextChange(GuiTextFieldInteger textField)
+        {
+            try
+            {
+                parent.ledgerInfo.setPages(Integer.parseInt(textField.getText()));
+            }
+            catch (Exception ignored)
+            {}
+
+            return false;
+        }
+    }
+
     private static class ActionListCreator implements IStringListConsumer
     {
         GuiLedger parent;
@@ -722,14 +761,15 @@ public class GuiLedger extends GuiBase
                 int x = ledgerInfo.getX();
                 int y = ledgerInfo.getY();
                 int z = ledgerInfo.getZ();
+                int pages = ledgerInfo.getPages();
                 MinecraftClient mc = parent.mc;
 
                 switch (ledgerInfo.getLedgerMode())
                 {
-                    case INSPECT -> new PluginInspectPacketHandler().sendPacket(x, y, z, mc);
+                    case INSPECT -> new PluginInspectPacketHandler().sendPacket(x, y, z, pages, mc);
                     case PURGE -> new PluginPurgePacketHandler().sendPacket(action, dimension, object, range, source, timeBefore, timeAfter, mc);
                     case ROLLBACK -> new PluginRollbackPacketHandler().sendPacket(action, dimension, object, range, source, timeBefore, timeAfter, mc);
-                    case SEARCH -> new PluginSearchPacketHandler().sendPacket(action, dimension, object, range, source, timeBefore, timeAfter, mc);
+                    case SEARCH -> new PluginSearchPacketHandler().sendPacket(action, dimension, object, range, source, timeBefore, timeAfter, pages, mc);
                 }
             }
         }

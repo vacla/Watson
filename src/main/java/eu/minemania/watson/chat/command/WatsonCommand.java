@@ -24,6 +24,8 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -87,12 +89,7 @@ public class WatsonCommand extends WatsonCommandBase
                         .then(literal("show")
                                 .then(argument("player(s)", greedyString()).executes(WatsonCommand::edits_show)))
                         .then(literal("remove")
-                                .then(argument("player(s)", greedyString()).executes(WatsonCommand::edits_remove)))
-                        .then(literal("test")
-                                .then(argument("pos", blockPos())
-                                        .then(argument("block", string())
-                                                .then(argument("color", string())
-                                                        .then(argument("world", word()).executes(WatsonCommand::set_edit)))))))
+                                .then(argument("player(s)", greedyString()).executes(WatsonCommand::edits_remove))))
                 .then(literal("filter").executes(WatsonCommand::filter_list)
                         .then(literal("list").executes(WatsonCommand::filter_list))
                         .then(literal("clear").executes(WatsonCommand::filter_clear))
@@ -164,7 +161,13 @@ public class WatsonCommand extends WatsonCommandBase
                 .then(literal("replay")
                         .then(argument("radius", integer(1))
                                 .then(argument("speed", doubleArg(1))
-                                        .then(argument("since", greedyString()).executes(WatsonCommand::replay)))));
+                                        .then(argument("since", greedyString()).executes(WatsonCommand::replay)))))
+                .then(literal("dev")
+                        .then(argument("pos", blockPos())
+                                .then(argument("block", string())
+                                        .then(argument("color", string())
+                                                .then(argument("world", word()).executes(WatsonCommand::set_edit)))))
+                        .then(literal("ledgerActions").executes(WatsonCommand::setLedgerActions)));
         dispatcher.register(watson);
     }
 
@@ -441,6 +444,22 @@ public class WatsonCommand extends WatsonCommandBase
         BlockEdit edit = new BlockEdit(1, "test edits", "test", pos.getX(), pos.getY(), pos.getZ(), watsonblock, world, 1);
         SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, true));
 
+        return 1;
+    }
+
+    private static int setLedgerActions(CommandContext<ServerCommandSource> context)
+    {
+        if (!DataManager.getLedgerActions().isEmpty())
+        {
+            return 1;
+        }
+        List<String> ledgerActions = new ArrayList<>();
+        ledgerActions.add("block-break");
+        ledgerActions.add("block-place");
+        ledgerActions.add("item-insert");
+        ledgerActions.add("item-remove");
+        ledgerActions.add("entity-killed");
+        DataManager.setLedgerActions(ledgerActions);
         return 1;
     }
 

@@ -17,7 +17,7 @@ public class PluginInspectPacketHandler
 
     public static final PluginInspectPacketHandler INSTANCE = new PluginInspectPacketHandler();
 
-    public void sendPacket(double x, double y, double z, MinecraftClient mc)
+    public void sendPacket(double x, double y, double z, int pages, MinecraftClient mc)
     {
         try
         {
@@ -29,10 +29,12 @@ public class PluginInspectPacketHandler
             PacketByteBuf packetByteBuf = new PacketByteBuf(Unpooled.buffer());
             BlockPos blockPos = new BlockPos(x, y, z);
             packetByteBuf.writeBlockPos(blockPos);
+            packetByteBuf.writeInt(pages);
             if(Configs.Generic.DEBUG.getBooleanValue())
             {
                 Watson.logger.info(packetByteBuf.toString(Charsets.UTF_8));
                 Watson.logger.info("blockpos: "+blockPos.toShortString());
+                Watson.logger.info("pages: "+pages);
                 Watson.logger.info(CHANNEL);
             }
             packetHandler.sendPacket(new CustomPayloadC2SPacket(CHANNEL, packetByteBuf));
