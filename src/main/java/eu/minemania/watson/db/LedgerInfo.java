@@ -7,8 +7,11 @@ import java.util.List;
 public class LedgerInfo
 {
     private List<String> actions;
-    private List<String> objects;
+    private List<String> blocks;
     private List<String> dimensions;
+    private List<String> entityTypes;
+    private List<String> items;
+    private List<String> tags;
     private String sources;
     private String timeBefore;
     private String timeAfter;
@@ -19,11 +22,14 @@ public class LedgerInfo
     private LedgerMode ledgerMode;
     private int pages;
 
-    public LedgerInfo(List<String> actions, List<String> objects, List<String> dimensions, String sources, String timeBefore, String timeAfter, int range, int x, int y, int z, LedgerMode ledgerMode, int pages)
+    public LedgerInfo(List<String> actions, List<String> blocks, List<String> dimensions, List<String> entityTypes, List<String> items, List<String> tags, String sources, String timeBefore, String timeAfter, int range, int x, int y, int z, LedgerMode ledgerMode, int pages)
     {
         this.actions = actions;
-        this.objects = objects;
+        this.blocks = blocks;
         this.dimensions = dimensions;
+        this.entityTypes = entityTypes;
+        this.items = items;
+        this.tags = tags;
         this.sources = sources;
         this.timeBefore = timeBefore;
         this.timeAfter = timeAfter;
@@ -45,14 +51,14 @@ public class LedgerInfo
         this.actions = actions;
     }
 
-    public List<String> getObjects()
+    public List<String> getBlocks()
     {
-        return objects;
+        return blocks;
     }
 
-    public void setObjects(List<String> objects)
+    public void setBlocks(List<String> blocks)
     {
-        this.objects = objects;
+        this.blocks = blocks;
     }
 
     public List<String> getDimensions()
@@ -63,6 +69,36 @@ public class LedgerInfo
     public void setDimensions(List<String> dimensions)
     {
         this.dimensions = dimensions;
+    }
+
+    public List<String> getEntityTypes()
+    {
+        return entityTypes;
+    }
+
+    public void setEntityTypes(List<String> entityTypes)
+    {
+        this.entityTypes = entityTypes;
+    }
+
+    public List<String> getItems()
+    {
+        return items;
+    }
+
+    public void setItems(List<String> items)
+    {
+        this.items = items;
+    }
+
+    public List<String> getTags()
+    {
+        return tags;
+    }
+
+    public void setTags(List<String> tags)
+    {
+        this.tags = tags;
     }
 
     public String getSources()

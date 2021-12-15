@@ -322,6 +322,7 @@ public class Configs implements IConfigHandler
             }
 
             list.add(name + ";2;" + color);
+            color = "";
         }
 
         builder.addAll(list);

@@ -36,7 +36,7 @@ public class GuiLedger extends GuiBase
     protected GuiTextFieldInteger textFieldY;
     protected GuiTextFieldInteger textFieldZ;
     protected GuiTextFieldInteger textFieldPages;
-    protected LedgerInfo ledgerInfo = new LedgerInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", "", 0, 0, 0, 0, LedgerMode.INSPECT, 10);
+    protected LedgerInfo ledgerInfo = new LedgerInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", "", 0, 0, 0, 0, LedgerMode.INSPECT, 10);
 
     protected GuiLedger()
     {
@@ -72,21 +72,40 @@ public class GuiLedger extends GuiBase
             label = StringUtils.translate("watson.gui.label.ledger.title.action"); //Action
             this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
             offset = this.getStringWidth(label) + 4;
-            this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.action"));
+            this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
             button = createButton(x + offset + 20, y, width, ConsumerButtonListener.ButtonType.ACTION);
 
             label = StringUtils.translate("watson.gui.label.ledger.title.dimension"); //Dimension
             this.addLabel(button.getX() + button.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
             offset = this.getStringWidth(label) + 10 + button.getWidth();
-            this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.dimension"));
+            this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
             button = createButton(button.getX() + offset + 20, y, width, ConsumerButtonListener.ButtonType.DIMENSION);
 
-            label = StringUtils.translate("watson.gui.label.ledger.title.object"); //Object
+            label = StringUtils.translate("watson.gui.label.ledger.title.block"); //Block
             this.addLabel(button.getX() + button.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
             offset = this.getStringWidth(label) + 10 + button.getWidth();
-            this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.object"));
+            this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
+            createButton(button.getX() + offset + 20, y, width, ConsumerButtonListener.ButtonType.BLOCK);
 
-            createButton(button.getX() + offset + 20, y, width, ConsumerButtonListener.ButtonType.OBJECT);
+            y += 30;
+
+            label = StringUtils.translate("watson.gui.label.ledger.title.entitytype"); //EntityType
+            this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
+            offset = this.getStringWidth(label) + 4;
+            this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
+            button = createButton(x + offset + 20, y, width, ConsumerButtonListener.ButtonType.ENTITYTYPE);
+
+            label = StringUtils.translate("watson.gui.label.ledger.title.item"); //Item
+            this.addLabel(button.getX() + button.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
+            offset = this.getStringWidth(label) + 10 + button.getWidth();
+            this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
+            button = createButton(button.getX() + offset + 20, y, width, ConsumerButtonListener.ButtonType.ITEM);
+
+            label = StringUtils.translate("watson.gui.label.ledger.title.tag"); //Tag
+            this.addLabel(button.getX() + button.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
+            offset = this.getStringWidth(label) + 10 + button.getWidth();
+            this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
+            createButton(button.getX() + offset + 20, y, width, ConsumerButtonListener.ButtonType.TAG);
 
             y += 30;
 
@@ -264,7 +283,7 @@ public class GuiLedger extends GuiBase
         {
             if (!action.contains("-"))
             {
-                addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", "Action" , action);
+                addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.action"), action);
                 error = true;
                 break;
             }
@@ -275,7 +294,7 @@ public class GuiLedger extends GuiBase
         }
         if (!listActionError.isEmpty())
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.actions_not_exist", String.join(",", listActionError));
+            addMessage(Message.MessageType.WARNING, "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.action"), String.join(",", listActionError));
             error = true;
         }
 
@@ -288,7 +307,7 @@ public class GuiLedger extends GuiBase
             }
             if (!dimensionText.contains(":"))
             {
-                addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", "Dimension", dimensionText);
+                addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.dimension"), dimensionText);
                 error = true;
                 break;
             }
@@ -300,37 +319,110 @@ public class GuiLedger extends GuiBase
         }
         if (!listDimensionError.isEmpty())
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.dimensions_not_exist", String.join(",", listDimensionError));
+            addMessage(Message.MessageType.WARNING, "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.dimension"), String.join(",", listDimensionError));
             error = true;
         }
 
-        ArrayList<String> listObjectError = new ArrayList<>();
-        ArrayList<String> ledgerObjects = getTotalList(DataManager.getAllItemEntitiesStringIdentifiers());
-        for (String objectText : ledgerInfo.getObjects())
+        ArrayList<String> listBlockError = new ArrayList<>();
+        ArrayList<String> ledgerBlocks = getTotalList(DataManager.getBlocks());
+        for (String blockText : ledgerInfo.getBlocks())
         {
-            if (objectText.isEmpty()) {
+            if (blockText.isEmpty()) {
                 break;
             }
-            if (!objectText.contains(":"))
+            if (!blockText.contains(":"))
             {
-                addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", "Object", objectText);
+                addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.block"), blockText);
                 error = true;
                 break;
             }
-            if (!ledgerObjects.contains(objectText))
+            if (!ledgerBlocks.contains(blockText))
             {
-                listObjectError.add(objectText);
+                listBlockError.add(blockText);
             }
         }
-        if (!listObjectError.isEmpty())
+        if (!listBlockError.isEmpty())
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.objects_not_exist", String.join(",", listObjectError));
+            addMessage(Message.MessageType.WARNING, "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.block"), String.join(",", listBlockError));
             error = true;
         }
+
+        ArrayList<String> listEntityTypeError = new ArrayList<>();
+        ArrayList<String> ledgerEntityTypes = getTotalList(DataManager.getEntityTypes());
+        for (String entityTypeText : ledgerInfo.getEntityTypes())
+        {
+            if (entityTypeText.isEmpty()) {
+                break;
+            }
+            if (!entityTypeText.contains(":"))
+            {
+                addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.entitytype"), entityTypeText);
+                error = true;
+                break;
+            }
+            if (!ledgerEntityTypes.contains(entityTypeText))
+            {
+                listEntityTypeError.add(entityTypeText);
+            }
+        }
+        if (!listEntityTypeError.isEmpty())
+        {
+            addMessage(Message.MessageType.WARNING, "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.entitytype"), String.join(",", listEntityTypeError));
+            error = true;
+        }
+
+        ArrayList<String> listItemError = new ArrayList<>();
+        ArrayList<String> ledgerItems = getTotalList(DataManager.getItems());
+        for (String itemText : ledgerInfo.getItems())
+        {
+            if (itemText.isEmpty()) {
+                break;
+            }
+            if (!itemText.contains(":"))
+            {
+                addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.item"), itemText);
+                error = true;
+                break;
+            }
+            if (!ledgerItems.contains(itemText))
+            {
+                listItemError.add(itemText);
+            }
+        }
+        if (!listItemError.isEmpty())
+        {
+            addMessage(Message.MessageType.WARNING, "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.item"), String.join(",", listItemError));
+            error = true;
+        }
+
+        ArrayList<String> listTagError = new ArrayList<>();
+        ArrayList<String> ledgerTags = getTotalList(DataManager.getTags());
+        for (String tagText : ledgerInfo.getTags())
+        {
+            if (tagText.isEmpty()) {
+                break;
+            }
+            if (!tagText.contains(":") || !tagText.contains("#"))
+            {
+                addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.tag"), tagText);
+                error = true;
+                break;
+            }
+            if (!ledgerTags.contains(tagText))
+            {
+                listTagError.add(tagText);
+            }
+        }
+        if (!listTagError.isEmpty())
+        {
+            addMessage(Message.MessageType.WARNING, "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.tag"), String.join(",", listTagError));
+            error = true;
+        }
+
         int textRange = ledgerInfo.getRange();
         if (textRange <= 1 && textRange != 0)
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", "Range", textRange);
+            addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.range"), textRange);
             error = true;
         }
         String textSource = ledgerInfo.getSources();
@@ -349,19 +441,19 @@ public class GuiLedger extends GuiBase
         }
         if (!listSourceError.isEmpty())
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", "Source", String.join(",", listSourceError));
+            addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.source"), String.join(",", listSourceError));
             error = true;
         }
         String textTimeBefore = ledgerInfo.getTimeBefore();
         if (!textTimeBefore.matches("^([0-9]+[smhdw])+$") && !textTimeBefore.isEmpty())
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", "Time before", textTimeBefore);
+            addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.time.before"), textTimeBefore);
             error = true;
         }
         String textTimeAfter = ledgerInfo.getTimeAfter();
         if (!textTimeAfter.matches("^([0-9]+[smhdw])+$") && !textTimeAfter.isEmpty())
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", "Time after", textTimeAfter);
+            addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.time.after"), textTimeAfter);
             error = true;
         }
 
@@ -371,8 +463,11 @@ public class GuiLedger extends GuiBase
     private void setLedgerInfo()
     {
         List<String> actions = this.ledgerInfo.getActions();
-        List<String> objects = this.ledgerInfo.getObjects();
+        List<String> blocks = this.ledgerInfo.getBlocks();
         List<String> dimension = this.ledgerInfo.getDimensions();
+        List<String> entityTypes = this.ledgerInfo.getEntityTypes();
+        List<String> items = this.ledgerInfo.getItems();
+        List<String> tags = this.ledgerInfo.getTags();
         String source = this.ledgerInfo.getSources();
         String timeBefore = this.ledgerInfo.getTimeBefore();
         String timeAfter = this.ledgerInfo.getTimeAfter();
@@ -383,13 +478,13 @@ public class GuiLedger extends GuiBase
         LedgerMode ledgerMode = this.ledgerInfo.getLedgerMode();
         int pages = this.ledgerInfo.getPages();
 
-        LedgerInfo ledgerInfo = new LedgerInfo(actions, objects, dimension, source, timeBefore, timeAfter, range, x, y, z, ledgerMode, pages);
+        LedgerInfo ledgerInfo = new LedgerInfo(actions, blocks, dimension, entityTypes, items, tags, source, timeBefore, timeAfter, range, x, y, z, ledgerMode, pages);
         DataManager.setLedgerInfo(ledgerInfo);
     }
 
     private void clearLedgerInfo()
     {
-        LedgerInfo ledgerInfo = new LedgerInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", "", 0, 0, 0, 0, LedgerMode.INSPECT, 10);
+        LedgerInfo ledgerInfo = new LedgerInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", "", 0, 0, 0, 0, LedgerMode.INSPECT, 10);
         this.ledgerInfo = ledgerInfo;
         DataManager.setLedgerInfo(ledgerInfo);
     }
@@ -627,11 +722,11 @@ public class GuiLedger extends GuiBase
         }
     }
 
-    private static class ObjectListCreator implements IStringListConsumer
+    private static class BlockListCreator implements IStringListConsumer
     {
         GuiLedger parent;
 
-        public ObjectListCreator(GuiLedger parent)
+        public BlockListCreator(GuiLedger parent)
         {
             this.parent = parent;
         }
@@ -639,7 +734,61 @@ public class GuiLedger extends GuiBase
         @Override
         public boolean consume(Collection<String> strings)
         {
-            parent.ledgerInfo.setObjects(ImmutableList.copyOf(strings));
+            parent.ledgerInfo.setBlocks(ImmutableList.copyOf(strings));
+            GuiBase.openGui(parent);
+            return true;
+        }
+    }
+
+    private static class EntityTypeListCreator implements IStringListConsumer
+    {
+        GuiLedger parent;
+
+        public EntityTypeListCreator(GuiLedger parent)
+        {
+            this.parent = parent;
+        }
+
+        @Override
+        public boolean consume(Collection<String> strings)
+        {
+            parent.ledgerInfo.setEntityTypes(ImmutableList.copyOf(strings));
+            GuiBase.openGui(parent);
+            return true;
+        }
+    }
+
+    private static class ItemListCreator implements IStringListConsumer
+    {
+        GuiLedger parent;
+
+        public ItemListCreator(GuiLedger parent)
+        {
+            this.parent = parent;
+        }
+
+        @Override
+        public boolean consume(Collection<String> strings)
+        {
+            parent.ledgerInfo.setItems(ImmutableList.copyOf(strings));
+            GuiBase.openGui(parent);
+            return true;
+        }
+    }
+
+    private static class TagListCreator implements IStringListConsumer
+    {
+        GuiLedger parent;
+
+        public TagListCreator(GuiLedger parent)
+        {
+            this.parent = parent;
+        }
+
+        @Override
+        public boolean consume(Collection<String> strings)
+        {
+            parent.ledgerInfo.setTags(ImmutableList.copyOf(strings));
             GuiBase.openGui(parent);
             return true;
         }
@@ -677,11 +826,38 @@ public class GuiLedger extends GuiBase
                 gui.setParent(parent);
                 GuiBase.openGui(gui);
             }
-            if (this.type == ButtonType.OBJECT)
+            if (this.type == ButtonType.BLOCK)
             {
-                ObjectListCreator objectCreator = new ObjectListCreator(parent);
-                ArrayList<String> itemEntities = parent.getTotalList(DataManager.getAllItemEntitiesStringIdentifiers());
-                GuiStringListSelection gui = new GuiStringListSelectionWithSearch(itemEntities, objectCreator, true, parent.ledgerInfo.getObjects());
+                BlockListCreator blockCreator = new BlockListCreator(parent);
+                ArrayList<String> blocks = parent.getTotalList(DataManager.getBlocks());
+                GuiStringListSelection gui = new GuiStringListSelectionWithSearch(blocks, blockCreator, true, parent.ledgerInfo.getBlocks());
+                gui.setTitle(type.getDisplayName());
+                gui.setParent(parent);
+                GuiBase.openGui(gui);
+            }
+            if (this.type == ButtonType.ENTITYTYPE)
+            {
+                EntityTypeListCreator entityTypeCreator = new EntityTypeListCreator(parent);
+                ArrayList<String> entityTypes = parent.getTotalList(DataManager.getEntityTypes());
+                GuiStringListSelection gui = new GuiStringListSelectionWithSearch(entityTypes, entityTypeCreator, true, parent.ledgerInfo.getEntityTypes());
+                gui.setTitle(type.getDisplayName());
+                gui.setParent(parent);
+                GuiBase.openGui(gui);
+            }
+            if (this.type == ButtonType.ITEM)
+            {
+                ItemListCreator itemCreator = new ItemListCreator(parent);
+                ArrayList<String> items = parent.getTotalList(DataManager.getItems());
+                GuiStringListSelection gui = new GuiStringListSelectionWithSearch(items, itemCreator, true, parent.ledgerInfo.getItems());
+                gui.setTitle(type.getDisplayName());
+                gui.setParent(parent);
+                GuiBase.openGui(gui);
+            }
+            if (this.type == ButtonType.TAG)
+            {
+                TagListCreator tagCreator = new TagListCreator(parent);
+                ArrayList<String> tags = parent.getTotalList(DataManager.getTags());
+                GuiStringListSelection gui = new GuiStringListSelectionWithSearch(tags, tagCreator, true, parent.ledgerInfo.getTags());
                 gui.setTitle(type.getDisplayName());
                 gui.setParent(parent);
                 GuiBase.openGui(gui);
@@ -691,8 +867,11 @@ public class GuiLedger extends GuiBase
         public enum ButtonType
         {
             ACTION("watson.gui.button.ledger.action"),
+            BLOCK("watson.gui.button.ledger.block"),
             DIMENSION("watson.gui.button.ledger.dimension"),
-            OBJECT("watson.gui.button.ledger.object");
+            ENTITYTYPE("watson.gui.button.ledger.entitytype"),
+            ITEM("watson.gui.button.ledger.item"),
+            TAG("watson.gui.button.ledger.tag");
 
             private final String labelKey;
 
@@ -753,7 +932,10 @@ public class GuiLedger extends GuiBase
 
                 List<String> action = ledgerInfo.getActions();
                 List<String> dimension = ledgerInfo.getDimensions();
-                List<String> object = ledgerInfo.getObjects();
+                List<String> block = ledgerInfo.getBlocks();
+                List<String> entityType = ledgerInfo.getEntityTypes();
+                List<String> item = ledgerInfo.getItems();
+                List<String> tag = ledgerInfo.getTags();
                 int range = ledgerInfo.getRange();
                 String source = ledgerInfo.getSources();
                 String timeBefore = ledgerInfo.getTimeBefore();
@@ -767,9 +949,9 @@ public class GuiLedger extends GuiBase
                 switch (ledgerInfo.getLedgerMode())
                 {
                     case INSPECT -> new PluginInspectPacketHandler().sendPacket(x, y, z, pages, mc);
-                    case PURGE -> new PluginPurgePacketHandler().sendPacket(action, dimension, object, range, source, timeBefore, timeAfter, mc);
-                    case ROLLBACK -> new PluginRollbackPacketHandler().sendPacket(action, dimension, object, range, source, timeBefore, timeAfter, mc);
-                    case SEARCH -> new PluginSearchPacketHandler().sendPacket(action, dimension, object, range, source, timeBefore, timeAfter, pages, mc);
+                    case PURGE -> new PluginPurgePacketHandler().sendPacket(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter, mc);
+                    case ROLLBACK -> new PluginRollbackPacketHandler().sendPacket(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter, mc);
+                    case SEARCH -> new PluginSearchPacketHandler().sendPacket(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter, pages, mc);
                 }
             }
         }

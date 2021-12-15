@@ -33,6 +33,9 @@ import fi.dy.masa.malilib.util.WorldUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.tag.BlockTags;
+import net.minecraft.tag.EntityTypeTags;
+import net.minecraft.tag.ItemTags;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
@@ -579,17 +582,53 @@ public class DataManager implements IDirectoryCache
             return setNames;
         }
 
-        HashSet<String> names = new HashSet<>();
-
-        Registry.BLOCK.forEach((block) -> names.add(Registry.BLOCK.getId(block).toString()));
-        Registry.ITEM.forEach((item) -> names.add(Registry.ITEM.getId(item).toString()));
-        Registry.ENTITY_TYPE.forEach((type) -> names.add(Registry.ENTITY_TYPE.getId(type).toString()));
-
-        setNames.addAll(names);
-
-        setNames.sort(String::compareTo);
+        setNames.addAll(getBlocks());
+        setNames.addAll(getItems());
+        setNames.addAll(getEntityTypes());
 
         return setNames;
+    }
+
+    public static ArrayList<String> getBlocks() {
+        ArrayList<String> blocks = new ArrayList<>();
+
+        Registry.BLOCK.forEach(block -> blocks.add(Registry.BLOCK.getId(block).toString()));
+
+        blocks.sort(String::compareTo);
+
+        return blocks;
+    }
+
+    public static ArrayList<String> getItems() {
+        ArrayList<String> items = new ArrayList<>();
+
+        Registry.ITEM.forEach(item -> items.add(Registry.ITEM.getId(item).toString()));
+
+        items.sort(String::compareTo);
+
+        return items;
+    }
+
+    public static ArrayList<String> getEntityTypes() {
+        ArrayList<String> entityTypes = new ArrayList<>();
+
+        Registry.ENTITY_TYPE.forEach(entityType -> entityTypes.add(Registry.ENTITY_TYPE.getId(entityType).toString()));
+
+        entityTypes.sort(String::compareTo);
+
+        return entityTypes;
+    }
+
+    public static ArrayList<String> getTags() {
+        ArrayList<String> tags = new ArrayList<>();
+
+        BlockTags.getTagGroup().getTagIds().forEach((block) -> tags.add("#"+block.toString()));
+        EntityTypeTags.getTagGroup().getTagIds().forEach((entity) -> tags.add("#"+entity.toString()));
+        ItemTags.getTagGroup().getTagIds().forEach((item) -> tags.add("#"+item.toString()));
+
+        tags.sort(String::compareTo);
+
+        return tags;
     }
 
     public static void setLedgerInfo(LedgerInfo ledgerInfo)

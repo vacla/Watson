@@ -6,17 +6,23 @@ public class LedgerSearch
 {
     private final String actions;
     private final String dimensions;
-    private final String objects;
+    private final String blocks;
+    private final String entityTypes;
+    private final String items;
+    private final String tags;
     private final String range;
     private final String sources;
     private final String timeBefore;
     private final String timeAfter;
 
-    public LedgerSearch(List<String> actions, List<String> dimension, List<String> object, int range, String source, String timeBefore, String timeAfter)
+    public LedgerSearch(List<String> actions, List<String> dimension, List<String> block, List<String> entityType, List<String> item, List<String> tag, int range, String source, String timeBefore, String timeAfter)
     {
         this.actions = setTypeList("action",actions);
         this.dimensions = setTypeList("world", dimension);
-        this.objects = setTypeList("object", object);
+        this.blocks = setTypeList("object", block);
+        this.entityTypes = setTypeList("object", entityType);
+        this.items = setTypeList("object", item);
+        this.tags = setTypeList("object", tag);
         this.range = setTypeInt("range", range);
         this.sources = setTypeString("source", source);
         this.timeBefore = setTypeString("before", timeBefore);
@@ -74,9 +80,24 @@ public class LedgerSearch
         return dimensions;
     }
 
-    public String getObjects()
+    public String getBlocks()
     {
-        return objects;
+        return blocks;
+    }
+
+    public String getEntityTypes()
+    {
+        return entityTypes;
+    }
+
+    public String getItems()
+    {
+        return items;
+    }
+
+    public String getTags()
+    {
+        return tags;
     }
 
     public String getRange()
@@ -112,9 +133,24 @@ public class LedgerSearch
             search.append(dimensions);
             search.append(" ");
         }
-        if (!objects.isEmpty())
+        if (!blocks.isEmpty())
         {
-            search.append(objects);
+            search.append(blocks);
+            search.append(" ");
+        }
+        if (!entityTypes.isEmpty())
+        {
+            search.append(entityTypes);
+            search.append(" ");
+        }
+        if (!items.isEmpty())
+        {
+            search.append(items);
+            search.append(" ");
+        }
+        if (!tags.isEmpty())
+        {
+            search.append(tags);
             search.append(" ");
         }
         if (!range.isEmpty())

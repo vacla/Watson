@@ -1,6 +1,5 @@
 package eu.minemania.watson.selection;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import eu.minemania.watson.client.Teleport;
 import eu.minemania.watson.config.Plugins;
@@ -9,9 +8,7 @@ import eu.minemania.watson.db.BlockEditComparator;
 import eu.minemania.watson.db.BlockEditSet;
 import eu.minemania.watson.db.PlayereditSet;
 import eu.minemania.watson.render.RenderUtils;
-import eu.minemania.watson.render.WatsonRenderer;
 import fi.dy.masa.malilib.util.WorldUtils;
-import net.minecraft.client.gl.GlProgramManager;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.command.argument.EntityAnchorArgumentType;
@@ -31,7 +28,6 @@ import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
-import org.lwjgl.opengl.GL20;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -157,13 +153,10 @@ public class EditSelection
                 if (previous != null)
                 {
                     RenderUtils.startDrawingLines(buffer);
-                    int oldProgram = GlStateManager._getInteger(GL20.GL_CURRENT_PROGRAM);
-                    GlProgramManager.useProgram(WatsonRenderer.SHADER_LINESTIPPLE.getProgram());
                     RenderSystem.lineWidth(3.0F);
                     buffer.vertex(previous.x + 0.5f, previous.y + 0.5f, previous.z + 0.5f).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0).next();
                     buffer.vertex(x, y, z).color(255 / 255f, 0 / 255f, 255 / 255f, 128).normal(0, 0, 0).next();
                     tesselator.draw();
-                    GlProgramManager.useProgram(oldProgram);
                 }
             }
         }
