@@ -589,7 +589,8 @@ public class DataManager implements IDirectoryCache
         return setNames;
     }
 
-    public static ArrayList<String> getBlocks() {
+    public static ArrayList<String> getBlocks()
+    {
         ArrayList<String> blocks = new ArrayList<>();
 
         Registry.BLOCK.forEach(block -> blocks.add(Registry.BLOCK.getId(block).toString()));
@@ -599,7 +600,8 @@ public class DataManager implements IDirectoryCache
         return blocks;
     }
 
-    public static ArrayList<String> getItems() {
+    public static ArrayList<String> getItems()
+    {
         ArrayList<String> items = new ArrayList<>();
 
         Registry.ITEM.forEach(item -> items.add(Registry.ITEM.getId(item).toString()));
@@ -609,7 +611,8 @@ public class DataManager implements IDirectoryCache
         return items;
     }
 
-    public static ArrayList<String> getEntityTypes() {
+    public static ArrayList<String> getEntityTypes()
+    {
         ArrayList<String> entityTypes = new ArrayList<>();
 
         Registry.ENTITY_TYPE.forEach(entityType -> entityTypes.add(Registry.ENTITY_TYPE.getId(entityType).toString()));
@@ -619,7 +622,8 @@ public class DataManager implements IDirectoryCache
         return entityTypes;
     }
 
-    public static ArrayList<String> getTags() {
+    public static ArrayList<String> getTags()
+    {
         ArrayList<String> tags = new ArrayList<>();
 
         BlockTags.getTagGroup().getTagIds().forEach((block) -> tags.add("#"+block.toString()));

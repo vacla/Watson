@@ -327,7 +327,8 @@ public class GuiLedger extends GuiBase
         ArrayList<String> ledgerBlocks = getTotalList(DataManager.getBlocks());
         for (String blockText : ledgerInfo.getBlocks())
         {
-            if (blockText.isEmpty()) {
+            if (blockText.isEmpty())
+            {
                 break;
             }
             if (!blockText.contains(":"))
@@ -351,7 +352,8 @@ public class GuiLedger extends GuiBase
         ArrayList<String> ledgerEntityTypes = getTotalList(DataManager.getEntityTypes());
         for (String entityTypeText : ledgerInfo.getEntityTypes())
         {
-            if (entityTypeText.isEmpty()) {
+            if (entityTypeText.isEmpty())
+            {
                 break;
             }
             if (!entityTypeText.contains(":"))
@@ -375,7 +377,8 @@ public class GuiLedger extends GuiBase
         ArrayList<String> ledgerItems = getTotalList(DataManager.getItems());
         for (String itemText : ledgerInfo.getItems())
         {
-            if (itemText.isEmpty()) {
+            if (itemText.isEmpty())
+            {
                 break;
             }
             if (!itemText.contains(":"))
@@ -399,7 +402,8 @@ public class GuiLedger extends GuiBase
         ArrayList<String> ledgerTags = getTotalList(DataManager.getTags());
         for (String tagText : ledgerInfo.getTags())
         {
-            if (tagText.isEmpty()) {
+            if (tagText.isEmpty())
+            {
                 break;
             }
             if (!tagText.contains(":") || !tagText.contains("#"))
@@ -430,7 +434,8 @@ public class GuiLedger extends GuiBase
         ArrayList<String> listSourceError = new ArrayList<>();
         for (String sourceText : sourcesText)
         {
-            if (sourceText.isEmpty()) {
+            if (sourceText.isEmpty())
+            {
                 break;
             }
             if (!sourceText.matches("^[0-9a-zA-Z@_!]+$"))
