@@ -106,6 +106,10 @@ public class BlockEdit
                     {
                         RenderUtils.drawFullBlockOutlinesBatched(x, y, z, color, buffer);
                     }
+                    else if (blocks instanceof BedBlock)
+                    {
+                        RenderUtils.drawBedOutlineBatched(x, y, z, color, buffer);
+                    }
                     else
                     {
                         RenderUtils.drawBlockModelOutlinesBatched(model, state, new BlockPos(x, y, z), color, buffer);

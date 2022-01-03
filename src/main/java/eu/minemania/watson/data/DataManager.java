@@ -568,7 +568,7 @@ public class DataManager implements IDirectoryCache
 
     public static String onSendChatMessage(String message)
     {
-        if(message.contains("/pr l") && !message.contains("-extended"))
+        if((message.contains("/pr l") || message.contains("/pr i")) && !message.contains("-extended"))
         {
             return message + " -extended";
         }

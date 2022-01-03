@@ -113,6 +113,7 @@ public class Configs implements IConfigHandler
     {
         public static final ConfigInteger AMOUNT_ROWS = new ConfigInteger("amountRowes", 5, "watson.description.config.amount_rows");
         public static final ConfigBoolean AUTO_PAGE = new ConfigBoolean("autopage", true, "watson.description.config.auto_page");
+        public static final ConfigOptionList COREPROTECT_COMMAND = new ConfigOptionList("coreprotectCommand", CoreprotectCommand.CO, "watson.description.config.coreprotect_command");
         public static final ConfigInteger MAX_AUTO_PAGES = new ConfigInteger("maxAutoPages", 100, "watson.description.config.max_auto_pages");
         public static final ConfigInteger MAX_AUTO_PAGES_LOOP = new ConfigInteger("maxAutoPagesLoop", 100, "watson.description.config.max_auto_pages_loop");
         public static final ConfigInteger PAGE_LINES = new ConfigInteger("pagelines", 50, "watson.description.config.page_lines");
@@ -124,6 +125,7 @@ public class Configs implements IConfigHandler
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
                 AMOUNT_ROWS,
                 AUTO_PAGE,
+                COREPROTECT_COMMAND,
                 MAX_AUTO_PAGES,
                 MAX_AUTO_PAGES_LOOP,
                 PAGE_LINES,
@@ -202,8 +204,8 @@ public class Configs implements IConfigHandler
         public static final ConfigStringExt CP_DETAILS = new ConfigStringExt("cp details", "^(\\d+[.,]\\d+\\/[mhd] ago|\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}) - #?(\\w+) ((?!.*logged).*?) ((?:x(\\d+) )?\\w+(?::\\w+)?)\\.$", "watson.description.config.analysis").setCommentArgs("cp details");
         public static final ConfigStringExt CP_DETAILS_SESSION = new ConfigStringExt("cp details session", "^(\\d+[.,]\\d+\\/[mhd] ago|\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}) - (\\w+) (logged \\w+)\\.$", "watson.description.config.analysis").setCommentArgs("cp details session");
         public static final ConfigStringExt CP_DETAILS_SIGN = new ConfigStringExt("cp details sign", "^(\\d+[.,]\\d+\\/[mhd] ago|\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}) - (\\w+): ([\\s\\w+\\W]+)", "watson.description.config.analysis").setCommentArgs("cp details sign");
-        public static final ConfigStringExt CP_INSPECTOR_COORDS = new ConfigStringExt("cp inspector coords", "^-{5} \\w+(?:\\s\\w+)* -{5} \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\)$", "watson.description.config.analysis").setCommentArgs("cp inspector coords");
-        public static final ConfigStringExt CP_LOOKUP_COORDS = new ConfigStringExt("cp lookup coords", "^ +\\^ \\(x(-?\\d+)\\/y(\\d+)\\/z(-?\\d+)\\/([^\\)]+)\\)(?: \\(.+\\))?$", "watson.description.config.analysis").setCommentArgs("cp lookup coords");
+        public static final ConfigStringExt CP_INSPECTOR_COORDS = new ConfigStringExt("cp inspector coords", "^-{5} \\w+(?:\\s\\w+)* -{5} \\(x(-?\\d+)\\/y(-?\\d+)\\/z(-?\\d+)\\)$", "watson.description.config.analysis").setCommentArgs("cp inspector coords");
+        public static final ConfigStringExt CP_LOOKUP_COORDS = new ConfigStringExt("cp lookup coords", "^ +\\^ \\(x(-?\\d+)\\/y(-?\\d+)\\/z(-?\\d+)\\/([^\\)]+)\\)(?: \\(.+\\))?$", "watson.description.config.analysis").setCommentArgs("cp lookup coords");
         public static final ConfigStringExt CP_LOOKUP_HEADER = new ConfigStringExt("cp lookup header", "^----- CoreProtect Lookup Results -----$", "watson.description.config.analysis").setCommentArgs("cp lookup header");
         public static final ConfigStringExt CP_NO_RESULT = new ConfigStringExt("cp no result", "^CoreProtect - No results found.$", "watson.description.config.analysis").setCommentArgs("cp no result");
         public static final ConfigStringExt CP_PAGE = new ConfigStringExt("cp page", "^(?:.\\s)*Page (\\d+)\\/(\\d+) (?:.\\s)*\\| To view a page, type \"\\/co l <page>\"\\.$", "watson.description.config.analysis").setCommentArgs("cp page");
@@ -227,8 +229,9 @@ public class Configs implements IConfigHandler
         public static final ConfigStringExt LB_SUM = new ConfigStringExt("lb sum", "^(\\d+)[ ]{6,}(\\d+)[ ]{6,}((?:\\w| )+)$", "watson.description.config.analysis").setCommentArgs("lb sum");
         public static final ConfigStringExt MODMODE_DISABLE = new ConfigStringExt("modmode disable", "^You are no longer in ModMode!$", "watson.description.config.analysis").setCommentArgs("modmode disable");
         public static final ConfigStringExt MODMODE_ENABLE = new ConfigStringExt("modmode enable", "^You are now in ModMode!$", "watson.description.config.analysis").setCommentArgs("modmode enable");
-        public static final ConfigStringExt PRISM_DATA = new ConfigStringExt("prism data", ".*?[-+] \\[([0-9]+)\\]\\s+(?<instigator>.*) (?<cause>killed|picked up|placed|grew|ignited|set a fire|used|threw potion|sheared|dispensed|blew up|formed|poured|broke|filled a|accessed|ate|(?:un)?leashed|launched|hung|wrote|entered|exited|removed|dropped|inserted|ran command|said|spawned)\\s+(?<target>.*)\\s+(?<when>just now|(?:\\d+d)?(?:\\d+h)?(?:\\d+m)?\\sago) \\(a:(?<action>.*)\\)\\s-\\d+- (?<date>\\d+\\/\\d+\\/\\d+) (?<time>\\d+:\\d+:\\d+\\w+) - (?<world>\\w+) @ (?<x>-?\\d+) (?<y>-?\\d+) (?<z>-?\\d+).*?", "watson.description.config.analysis").setCommentArgs("prism data");
-        public static final ConfigStringExt PRISM_PAGE = new ConfigStringExt("prism page", "Prism \\/\\/ Showing \\d+ results\\. Page (?<current>\\d+) of (?<max>\\d+)", "watson.description.config.analysis").setCommentArgs("prism page");
+        public static final ConfigStringExt PRISM_DATA = new ConfigStringExt("prism data", ".*?[-+] \\[([0-9]+)\\]\\s+(?<instigator>.*) (?<cause>grew|killed|picked up|placed|grew|ignited|set a fire|used|threw potion|sheared|dispensed|blew up|formed|poured|broke|filled a|accessed|ate|(?:un)?leashed|launched|hung|wrote|entered|exited|removed|dropped|inserted|ran command|said|spawned)\\s+(?<target>.*)\\s+(?<when>just now|(?:\\d+d)?(?:\\d+h)?(?:\\d+m)?\\sago) \\(a:(?<action>.*)\\)", "watson.description.config.analysis").setCommentArgs("prism data");
+        public static final ConfigStringExt PRISM_COORDS = new ConfigStringExt("prism lookup coords", "-\\d+- (?<date>\\d+\\/\\d+\\/\\d+) (?<time>\\d+:\\d+:\\d+\\w+) - (?<world>\\w+) @ (?<x>-?\\d+) (?<y>-?\\d+) (?<z>-?\\d+).*?", "watson.description.config.analysis").setCommentArgs("prism coords");
+        public static final ConfigStringExt PRISM_PAGE = new ConfigStringExt("prism page", "Showing +\\d+ results\\. Page +(?<current>\\d+) of +(?<max>\\d+)", "watson.description.config.analysis").setCommentArgs("prism page");
         public static final ConfigStringExt PRISM_PAGINATION = new ConfigStringExt("prism pagination", "(?:\\s+\\[<< Prev] \\|)?\\s+\\[Next >>\\]", "watson.description.config.analysis").setCommentArgs("prism pagination");
         public static final ConfigStringExt WG_REGIONS = new ConfigStringExt("wg regions", "^Applicable regions: ([a-zA-Z0-9_-]+(?:, [a-zA-Z0-9_-]+)*)$", "watson.description.config.analysis").setCommentArgs("wg regions");
 
@@ -263,6 +266,7 @@ public class Configs implements IConfigHandler
                 MODMODE_DISABLE,
                 MODMODE_ENABLE,
                 PRISM_DATA,
+                PRISM_COORDS,
                 PRISM_PAGE,
                 PRISM_PAGINATION,
                 WG_REGIONS

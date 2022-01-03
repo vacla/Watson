@@ -67,6 +67,7 @@ public class KeyCallbacks
         Configs.Analysis.LB_SUM.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.LB_TP.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.PRISM_DATA.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.PRISM_COORDS.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.PRISM_PAGE.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.PRISM_PAGINATION.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.WG_REGIONS.setValueChangeCallback(valueChangeStringCallback);
@@ -217,6 +218,10 @@ public class KeyCallbacks
             {
                 Analysis.removeMatchedChatHandler(Configs.Analysis.PRISM_DATA);
             }
+            else if (config == Configs.Analysis.PRISM_COORDS)
+            {
+                Analysis.removeMatchedChatHandler(Configs.Analysis.PRISM_COORDS);
+            }
             else if (config == Configs.Analysis.PRISM_PAGE)
             {
                 Analysis.removeMatchedChatHandler(Configs.Analysis.PRISM_PAGE);
@@ -299,7 +304,7 @@ public class KeyCallbacks
                 {
                     if (Configs.Plugin.PLUGIN.getOptionListValue() == Plugins.COREPROTECT)
                     {
-                        ChatMessage.sendToServerChat("/co i");
+                        ChatMessage.sendToServerChat(String.format("/%s i", Configs.Plugin.COREPROTECT_COMMAND.getStringValue()));
                         return true;
                     }
                 }
