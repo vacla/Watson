@@ -36,9 +36,9 @@ public class HighlightCommand extends WatsonCommandBase
                 .then(literal("remove")
                         .then(argument("pattern", greedyString()).executes(HighlightCommand::remove)))
                 .then(literal("add")
-                        .then(argument("pattern", word())
-                                .then(argument("color", word()).suggests(SUGGESTION_COLOR)
-                                        .then(argument("style", word()).suggests(SUGGESTION_STYLE).executes(HighlightCommand::add)))));
+                        .then(argument("color", word()).suggests(SUGGESTION_COLOR)
+                                .then(argument("style", word()).suggests(SUGGESTION_STYLE)
+                                        .then(argument("pattern", greedyString()).executes(HighlightCommand::add)))));
         dispatcher.register(highlight);
     }
 
@@ -87,9 +87,9 @@ public class HighlightCommand extends WatsonCommandBase
 
     private static int add(CommandContext<ServerCommandSource> context)
     {
-        String pattern = getString(context, "pattern");
         String color = getString(context, "color");
         String style = getString(context, "style");
+        String pattern = getString(context, "pattern");
         Highlight.add(pattern, color, style);
         return 1;
     }

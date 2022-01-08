@@ -32,7 +32,7 @@ public class Analysis implements IChatHandler
                 Watson.logger.info("key: " + entry.getKey());
             }
             Matcher m = Pattern.compile(entry.getKey()).matcher(unformatted);
-            if (m.matches())
+            if (m.find())
             {
                 if (Configs.Generic.DEBUG.getBooleanValue())
                 {
