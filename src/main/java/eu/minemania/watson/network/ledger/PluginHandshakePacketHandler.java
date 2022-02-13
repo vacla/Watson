@@ -55,7 +55,7 @@ public class PluginHandshakePacketHandler implements IPluginChannelHandlerExtend
             List<String> actionsList = new ArrayList<>();
             if (totalActions > 0)
             {
-                for (int i = 0; i <= totalActions; i++)
+                for (int i = 0; i < totalActions; i++)
                 {
                     String action = buf.readString();
                     actionsList.add(action);
