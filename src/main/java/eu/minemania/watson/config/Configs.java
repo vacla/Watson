@@ -229,8 +229,7 @@ public class Configs implements IConfigHandler
         public static final ConfigStringExt LB_SUM = new ConfigStringExt("lb sum", "^(\\d+)[ ]{6,}(\\d+)[ ]{6,}((?:\\w| )+)$", "watson.description.config.analysis").setCommentArgs("lb sum");
         public static final ConfigStringExt MODMODE_DISABLE = new ConfigStringExt("modmode disable", "^You are no longer in ModMode!$", "watson.description.config.analysis").setCommentArgs("modmode disable");
         public static final ConfigStringExt MODMODE_ENABLE = new ConfigStringExt("modmode enable", "^You are now in ModMode!$", "watson.description.config.analysis").setCommentArgs("modmode enable");
-        public static final ConfigStringExt PRISM_DATA = new ConfigStringExt("prism data", ".*?[-+] \\[([0-9]+)\\]\\s+(?<instigator>.*) (?<cause>grew|killed|picked up|placed|grew|ignited|set a fire|used|threw potion|sheared|dispensed|blew up|formed|poured|broke|filled a|accessed|ate|(?:un)?leashed|launched|hung|wrote|entered|exited|removed|dropped|inserted|ran command|said|spawned|quit|joined)\\s+(?<target>.*)\\s+(?<when>just now|(?:\\d+d)?(?:\\d+h)?(?:\\d+m)?\\sago) \\(a:(?<action>.*)\\)", "watson.description.config.analysis").setCommentArgs("prism data");
-        public static final ConfigStringExt PRISM_COORDS = new ConfigStringExt("prism lookup coords", "-\\d+- (?<date>\\d+\\/\\d+\\/\\d+) (?<time>\\d+:\\d+:\\d+\\w+) - (?<world>\\w+) @ (?<x>-?\\d+) (?<y>-?\\d+) (?<z>-?\\d+).*?", "watson.description.config.analysis").setCommentArgs("prism coords");
+        public static final ConfigStringExt PRISM_DATA = new ConfigStringExt("prism data", ".*?[-+] \\[([0-9]+)\\]\\s+(?<instigator>.*) (?<cause>grew|killed|picked up|placed|grew|ignited|set a fire|used|threw potion|sheared|dispensed|blew up|formed|poured|broke|filled a|accessed|ate|(?:un)?leashed|launched|hung|wrote|entered|exited|removed|dropped|inserted|ran command|said|spawned|quit|joined)\\s+(?<target>.*)\\s+(?<when>just now|(?:\\d+d)?(?:\\d+h)?(?:\\d+m)?\\sago) \\(a:(?<action>.*)\\)\\s-\\d+- (?<date>\\d+\\/\\d+\\/\\d+) (?<time>\\d+:\\d+:\\d+\\w+) - (?<world>\\w+) @ (?<x>-?\\d+) (?<y>-?\\d+) (?<z>-?\\d+).*?", "watson.description.config.analysis").setCommentArgs("prism data");
         public static final ConfigStringExt PRISM_PAGE = new ConfigStringExt("prism page", "Showing\\s+\\d+ results\\. Page\\s+(?<current>\\d+) of\\s+(?<max>\\d+)", "watson.description.config.analysis").setCommentArgs("prism page");
         public static final ConfigStringExt PRISM_PAGINATION = new ConfigStringExt("prism pagination", "(?:\\s+\\[<< Prev] \\|)?\\s+\\[Next >>\\]", "watson.description.config.analysis").setCommentArgs("prism pagination");
         public static final ConfigStringExt WG_REGIONS = new ConfigStringExt("wg regions", "^Applicable regions: ([a-zA-Z0-9_-]+(?:, [a-zA-Z0-9_-]+)*)$", "watson.description.config.analysis").setCommentArgs("wg regions");
@@ -266,7 +265,6 @@ public class Configs implements IConfigHandler
                 MODMODE_DISABLE,
                 MODMODE_ENABLE,
                 PRISM_DATA,
-                PRISM_COORDS,
                 PRISM_PAGE,
                 PRISM_PAGINATION,
                 WG_REGIONS

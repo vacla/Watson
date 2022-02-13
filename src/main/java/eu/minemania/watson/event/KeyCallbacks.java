@@ -67,7 +67,6 @@ public class KeyCallbacks
         Configs.Analysis.LB_SUM.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.LB_TP.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.PRISM_DATA.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.PRISM_COORDS.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.PRISM_PAGE.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.PRISM_PAGINATION.setValueChangeCallback(valueChangeStringCallback);
         Configs.Analysis.WG_REGIONS.setValueChangeCallback(valueChangeStringCallback);
@@ -217,10 +216,6 @@ public class KeyCallbacks
             else if (config == Configs.Analysis.PRISM_DATA)
             {
                 Analysis.removeMatchedChatHandler(Configs.Analysis.PRISM_DATA);
-            }
-            else if (config == Configs.Analysis.PRISM_COORDS)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.PRISM_COORDS);
             }
             else if (config == Configs.Analysis.PRISM_PAGE)
             {
