@@ -108,6 +108,7 @@
   "watson.gui.button.ledger.ledgermode": "Ledger mode: %s",
   "watson.gui.button.ledger.ledgermode.hover": "Click to cycle thru the modes.\\nClick the other button to go backwards.",
   "watson.gui.button.ledger.purge": "Purge",
+  "watson.gui.button.ledger.restore": "Restore",
   "watson.gui.button.ledger.rollback": "Rollback",
   "watson.gui.button.ledger.search": "Search",
   "watson.gui.button.ledger.submit": "Submit",

@@ -102,6 +102,7 @@
   "watson.gui.button.ledger.ledgermode": "Ledger Режим: %s",
   "watson.gui.button.ledger.ledgermode.hover": "Щелкните для переключения режимов.\\nНажмите другую кнопку, чтобы вернуться назад.",
   "watson.gui.button.ledger.purge": "Удалять",
+  "watson.gui.button.ledger.restore": "Восстановить",
   "watson.gui.button.ledger.rollback": "Откат",
   "watson.gui.button.ledger.search": "Поиск",
   "watson.gui.button.ledger.submit": "Представить",

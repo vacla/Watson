@@ -3,9 +3,9 @@
   "id": "watson",
   "name": "Watson",
   "version": "${mod_version}",
-  "description": "Updated Watson that displays LogBlock and CoreProtect query results in 3D.",
+  "description": "Updated Watson that displays Ledger, LogBlock and CoreProtect query results in 3D.",
   "authors": [
-    "Arnevdl29"
+    "Annevdl29"
   ],
   "contact": {
     "homepage": "",
@@ -29,6 +29,6 @@
   ],
   "depends": {
     "minecraft": "1.18.x",
-    "malilib": ">=0.10.0-dev.26 <0.11"
+    "malilib": ">=0.11.5 <0.12"
   }
 }

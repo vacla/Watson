@@ -123,9 +123,9 @@ public class GuiBlockeditData extends GuiListBase<BlockeditEntry, WidgetBlockedi
     }
 
     @Override
-    public boolean isPauseScreen()
+    public boolean shouldPause()
     {
-        return this.getParent() != null && this.getParent().isPauseScreen();
+        return this.getParent() != null && this.getParent().shouldPause();
     }
 
     public BlockeditBase getDisplay()

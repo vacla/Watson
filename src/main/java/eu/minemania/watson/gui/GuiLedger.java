@@ -955,7 +955,8 @@ public class GuiLedger extends GuiBase
                 {
                     case INSPECT -> new PluginInspectPacketHandler().sendPacket(x, y, z, pages, mc);
                     case PURGE -> new PluginPurgePacketHandler().sendPacket(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter, mc);
-                    case ROLLBACK -> new PluginRollbackPacketHandler().sendPacket(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter, mc);
+                    case ROLLBACK -> new PluginRollbackPacketHandler().sendPacket(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter, false, mc);
+                    case RESTORE -> new PluginRollbackPacketHandler().sendPacket(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter, true, mc);
                     case SEARCH -> new PluginSearchPacketHandler().sendPacket(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter, pages, mc);
                 }
             }
@@ -1007,6 +1008,7 @@ public class GuiLedger extends GuiBase
         {
             INSPECT("watson.gui.button.ledger.inspect"),
             PURGE("watson.gui.button.ledger.purge"),
+            RESTORE("watson.gui.button.ledger.restore"),
             ROLLBACK("watson.gui.button.ledger.rollback"),
             SEARCH("watson.gui.button.ledger.search");
 
