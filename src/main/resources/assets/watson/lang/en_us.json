@@ -5,7 +5,7 @@
   "watson.description.config.amount_rows": "Sets amount of rows used for autopage feature\nCoreProtect Only",
   "watson.description.config.analysis": "Changes regex for %s",
   "watson.description.config.annotation_shown": "Shows annotation if enabled",
-  "watson.description.config.auto_page": "Does automatic 3 pages at a time if enabled",
+  "watson.description.config.auto_page": "If enabled, this allows to automatically step thru max allowed pages",
   "watson.description.config.billboard_background": "Background color of the annotations",
   "watson.description.config.billboard_foreground": "Foreground color of the annotations",
   "watson.description.config.chat_timeout": "The minimum amount of seconds between sent chat messages by the mod",
