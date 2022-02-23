@@ -1,4 +1,3 @@
-# 
 {
   "__comment": "outline/wireframe -> контур | highlight -> подсветка | label -> метка | Watson, playeredits, CoreProtect, LogBlock, Ledger -> *непереводимые слова*",
   "watson.chat.message": "%s %s %s",
