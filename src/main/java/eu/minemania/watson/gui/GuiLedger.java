@@ -431,23 +431,12 @@ public class GuiLedger extends GuiBase
         }
         String textSource = ledgerInfo.getSources();
         String[] sourcesText = textSource.split(",");
-        ArrayList<String> listSourceError = new ArrayList<>();
         for (String sourceText : sourcesText)
         {
-            if (sourceText.isEmpty())
+            if (sourceText.trim().isEmpty())
             {
                 break;
             }
-            if (!sourceText.matches("^[0-9a-zA-Z@_!]+$"))
-            {
-                listSourceError.add(sourceText);
-                break;
-            }
-        }
-        if (!listSourceError.isEmpty())
-        {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.source"), String.join(",", listSourceError));
-            error = true;
         }
         String textTimeBefore = ledgerInfo.getTimeBefore();
         if (!textTimeBefore.matches("^([0-9]+[smhdw])+$") && !textTimeBefore.isEmpty())
