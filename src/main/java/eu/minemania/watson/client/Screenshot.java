@@ -1,25 +1,20 @@
 package eu.minemania.watson.client;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.nio.ByteBuffer;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.imageio.ImageIO;
-
+import eu.minemania.watson.Watson;
+import net.minecraft.client.texture.NativeImage;
+import net.minecraft.client.util.ScreenshotRecorder;
+import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
+import net.minecraft.util.Util;
 
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.text.ClickEvent;
 
 public class Screenshot
 {
@@ -31,57 +26,32 @@ public class Screenshot
     {
         Date now = new Date();
         String player2 = (String) DataManager.getEditSelection().getVariables().get("player");
-        String subdirectoryName = (!player2.isEmpty() && Configs.Generic.SS_PLAYER_DIRECTORY.getBooleanValue()) ? player2 : new SimpleDateFormat(Configs.Generic.SS_DATE_DIRECTORY.getStringValue()).format(now);
+        String subdirectoryName = (player2 != null && !player2.isEmpty() && Configs.Generic.SS_PLAYER_DIRECTORY.getBooleanValue()) ? player2 : new SimpleDateFormat(Configs.Generic.SS_DATE_DIRECTORY.getStringValue()).format(now);
+        subdirectoryName = subdirectoryName.replaceAll(":", "-").replaceAll(" ", "-");
         MinecraftClient mc = MinecraftClient.getInstance();
         File screenshotsDir = new File(mc.runDirectory, "screenshots");
         File subdirectory = new File(screenshotsDir, subdirectoryName);
         File file = Screenshot.getUniqueFilename(subdirectory, player2, now);
-        mc.inGameHud.getChatHud().addMessage(Screenshot.save(file, mc.getWindow().getWidth(), mc.getWindow().getHeight()));
+        Screenshot.save(file, mc);
     }
 
-    /**
-     * Returns if screenshot is saved or not.
-     *
-     * @param file   Sets filename
-     * @param width  Sets width
-     * @param height Sets height
-     * @return TextComponentTranslation of screenshot save
-     */
-    public static Text save(File file, int width, int height)
+    public static void save(File file, MinecraftClient mc)
     {
-        try
-        {
-            file.getParentFile().mkdirs();
-
-            ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4);
-            GL11.glReadBuffer(GL11.GL_FRONT);
-            // GL11.glReadBuffer() unexpectedly sets an error state (invalid enum).
-            GL11.glGetError();
-            GL11.glReadPixels(0, 0, width, height, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
-
-            BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    int i = (x + width * y) * 4;
-                    int r = buffer.get(i) & 0xFF;
-                    int g = buffer.get(i + 1) & 0xFF;
-                    int b = buffer.get(i + 2) & 0xFF;
-                    image.setRGB(x, (height - 1) - y, (0xFF << 24) | (r << 16) | (g << 8) | b);
-                }
+        NativeImage nativeImage = ScreenshotRecorder.takeScreenshot(mc.getFramebuffer());
+        Util.getIoWorkerExecutor().execute(() -> {
+            try {
+                nativeImage.writeTo(file);
+                MutableText text = new LiteralText(file.getName()).formatted(Formatting.UNDERLINE).styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, file.getAbsolutePath())));
+                mc.inGameHud.getChatHud().addMessage(new TranslatableText("screenshot.success", text));
             }
-
-            ImageIO.write(image, "png", file);
-            LiteralText text = new LiteralText(file.getName());
-            text.getStyle().withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, file.getAbsolutePath()));
-            text.getStyle().withFormatting(Formatting.UNDERLINE);
-            return new TranslatableText("screenshot.success", text);
-        }
-        catch (Exception ex)
-        {
-            return new TranslatableText("screenshot.failure", ex.getMessage());
-        }
+            catch (Exception text) {
+                Watson.logger.warn("Couldn't save screenshot", (Throwable)text);
+                mc.inGameHud.getChatHud().addMessage(new TranslatableText("screenshot.failure", text.getMessage()));
+            }
+            finally {
+                nativeImage.close();
+            }
+        });
     }
 
     /**
@@ -97,12 +67,13 @@ public class Screenshot
         String baseName = _DATE_FORMAT.format(now);
 
         int count = 1;
-        String playerSuffix = (player.isEmpty() || !Configs.Generic.SS_PLAYER_SUFFIX.getBooleanValue()) ? "" : "-" + player;
+        String playerSuffix = (player == null || player.isEmpty() || !Configs.Generic.SS_PLAYER_SUFFIX.getBooleanValue()) ? "" : "-" + player;
         while (true)
         {
             File result = new File(dir, baseName + playerSuffix + (count == 1 ? "" : "-" + count) + ".png");
             if (!result.exists())
             {
+                dir.mkdir();
                 return result;
             }
             ++count;

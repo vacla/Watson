@@ -102,7 +102,7 @@ public class BlockEdit
                     {
                         RenderUtils.drawSpecialOutlinesBatched(x, y, z, color, buffer, true);
                     }
-                    else if (blocks instanceof ChestBlock)
+                    else if (blocks instanceof ChestBlock || blocks instanceof ShulkerBoxBlock)
                     {
                         RenderUtils.drawFullBlockOutlinesBatched(x, y, z, color, buffer);
                     }

@@ -33,9 +33,6 @@ import fi.dy.masa.malilib.util.WorldUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.tag.EntityTypeTags;
-import net.minecraft.tag.ItemTags;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
@@ -625,14 +622,21 @@ public class DataManager implements IDirectoryCache
     public static ArrayList<String> getTags()
     {
         ArrayList<String> tags = new ArrayList<>();
+        ArrayList<String> deDupTags = new ArrayList<>();
 
-        BlockTags.getTagGroup().getTagIds().forEach((block) -> tags.add("#"+block.toString()));
-        EntityTypeTags.getTagGroup().getTagIds().forEach((entity) -> tags.add("#"+entity.toString()));
-        ItemTags.getTagGroup().getTagIds().forEach((item) -> tags.add("#"+item.toString()));
+        Registry.BLOCK.streamTags().forEach((block) -> tags.add("#"+block.id().toString()));
+        Registry.ENTITY_TYPE.streamTags().forEach((entity) -> tags.add("#"+entity.id().toString()));
+        Registry.ITEM.streamTags().forEach((item) -> tags.add("#"+item.id().toString()));
 
-        tags.sort(String::compareTo);
+        for (String tag : tags) {
+            if (!deDupTags.contains(tag)) {
+                deDupTags.add(tag);
+            }
+        }
 
-        return tags;
+        deDupTags.sort(String::compareTo);
+
+        return deDupTags;
     }
 
     public static void setLedgerInfo(LedgerInfo ledgerInfo)
