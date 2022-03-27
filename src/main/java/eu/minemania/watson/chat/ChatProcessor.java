@@ -18,8 +18,6 @@ public class ChatProcessor
         addChatHandler(new ModModeAnalysis());
         addChatHandler(new RegionInfoAnalysis());
 
-        addChatHandler(new CoreProtectAnalysis());
-
         addChatHandler(new PrismAnalysis());
     }
 

@@ -263,6 +263,10 @@ public class PlayereditUtils
                 {
                     return blockedit.action.replace("session", "");
                 }
+                else if (blockedit.world.equals("unknown"))
+                {
+                    return StringUtils.translate("watson.message.cp.username_change");
+                }
                 return StringUtils.translate("watson.gui.label.blockedit.list.chat");
             }
             else if (blockedit.block.getName().equals("minecraft:oak_sign") && !blockedit.action.equals("broke") && !blockedit.action.equals("placed") && !blockedit.action.equals("remove") && !blockedit.action.equals("place"))

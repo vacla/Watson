@@ -166,21 +166,21 @@ public class BlockEdit
 
     public boolean isCreated()
     {
-        return this.action.equals("placed") || this.action.equals("created") || this.action.equals("block-place");
+        return this.action.equals("placed") || this.action.equals("created") || this.action.equals("block-place") || (!(boolean) this.additional.getOrDefault("isContainer", false) && (boolean) this.additional.getOrDefault("added", false));
     }
 
     public boolean isBroken()
     {
-        return this.action.equals("broke") || this.action.equals("destroyed") || this.action.equals("block-break");
+        return this.action.equals("broke") || this.action.equals("destroyed") || this.action.equals("block-break") || (!(boolean) this.additional.getOrDefault("isContainer", false) && !(boolean) this.additional.getOrDefault("added", false));
     }
 
     public boolean isContAdded()
     {
-        return this.action.equals("added") || this.action.equals("put") || this.action.equals("item-insert");
+        return this.action.equals("added") || this.action.equals("put") || this.action.equals("item-insert") || ((boolean) this.additional.getOrDefault("isContainer", false) && (boolean) this.additional.getOrDefault("added", false));
     }
 
     public boolean isContRemoved()
     {
-        return this.action.equals("removed") || this.action.equals("took") || this.action.equals("remove") || this.action.equals("item-remove");
+        return this.action.equals("removed") || this.action.equals("took") || this.action.equals("remove") || this.action.equals("item-remove") || ((boolean) this.additional.getOrDefault("isContainer", false) && !(boolean) this.additional.getOrDefault("added", false));
     }
 }
