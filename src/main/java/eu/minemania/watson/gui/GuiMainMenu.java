@@ -39,6 +39,10 @@ public class GuiMainMenu extends GuiBase
             {
                 this.createChangeMenuButton(x, y, width, ButtonListenerChangeMenu.ButtonType.LEDGER_MENU);
             }
+            if (Configs.Plugin.PLUGIN.getOptionListValue() == Plugins.COREPROTECT)
+            {
+                this.createChangeMenuButton(x, y, width, ButtonListenerChangeMenu.ButtonType.COREPROTECT_MENU);
+            }
         }
     }
 
@@ -87,6 +91,7 @@ public class GuiMainMenu extends GuiBase
                 case MAIN_MENU -> gui = new GuiMainMenu();
                 case PLAYEREDIT_LOADED -> gui = new GuiPlayereditLoadedList();
                 case LEDGER_MENU -> gui = new GuiLedger();
+                case COREPROTECT_MENU -> gui = new GuiCoreProtect();
             }
 
             if (gui != null)
@@ -101,7 +106,8 @@ public class GuiMainMenu extends GuiBase
             CONFIGURATION("watson.gui.button.change_menu.configuration_menu", ButtonIcons.CONFIGURATION),
             MAIN_MENU("watson.gui.button.change_menu.to_main_menu", null),
             PLAYEREDIT_LOADED("watson.gui.button.change_menu.playeredit_loaded_menu", null),
-            LEDGER_MENU("watson.gui.button.change_menu.ledger_menu", null);
+            LEDGER_MENU("watson.gui.button.change_menu.ledger_menu", null),
+            COREPROTECT_MENU("watson.gui.button.change_menu.coreprotect_menu", null);
 
             private final String labelKey;
             private final ButtonIcons icon;

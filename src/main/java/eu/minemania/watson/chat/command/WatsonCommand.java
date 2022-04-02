@@ -447,7 +447,7 @@ public class WatsonCommand extends WatsonCommandBase
 
     private static int setLedgerActions(CommandContext<ServerCommandSource> context)
     {
-        if (!DataManager.getLedgerActions().isEmpty())
+        if (!DataManager.getPluginActions().isEmpty())
         {
             return 1;
         }
@@ -457,7 +457,7 @@ public class WatsonCommand extends WatsonCommandBase
         ledgerActions.add("item-insert");
         ledgerActions.add("item-remove");
         ledgerActions.add("entity-killed");
-        DataManager.setLedgerActions(ledgerActions);
+        DataManager.setPluginActions(ledgerActions);
         return 1;
     }
 

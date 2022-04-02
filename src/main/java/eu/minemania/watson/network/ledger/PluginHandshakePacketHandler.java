@@ -70,8 +70,8 @@ public class PluginHandshakePacketHandler implements IPluginChannelHandlerExtend
                 Watson.logger.info("allowed actions: " + actionsList);
             }
 
-            DataManager.setLedgerVersion(ledgerVersion);
-            DataManager.setLedgerActions(actionsList);
+            DataManager.setPluginVersion(ledgerVersion);
+            DataManager.setPluginActions(actionsList);
             Configs.Plugin.PLUGIN.setOptionListValue(Plugins.LEDGER);
         }
     }

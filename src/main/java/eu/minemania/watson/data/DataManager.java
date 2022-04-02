@@ -17,10 +17,7 @@ import eu.minemania.watson.Reference;
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.config.Configs;
-import eu.minemania.watson.db.BlockEditSet;
-import eu.minemania.watson.db.Filters;
-import eu.minemania.watson.db.LedgerInfo;
-import eu.minemania.watson.db.TimeStamp;
+import eu.minemania.watson.db.*;
 import eu.minemania.watson.gui.GuiConfigs.ConfigGuiTab;
 import eu.minemania.watson.selection.EditSelection;
 import fi.dy.masa.malilib.gui.Message;
@@ -49,9 +46,11 @@ public class DataManager implements IDirectoryCache
     private static boolean canSave;
     private static long clientTickStart;
     private static String worldName = "";
-    private static String ledgerVersion = "";
+    private static String pluginVersion = "";
     private static LedgerInfo ledgerInfo;
-    private static final ArrayList<String> ledgerActions = new ArrayList<>();
+    private static CoreProtectInfo coreProtectInfo;
+    private static final ArrayList<String> pluginActions = new ArrayList<>();
+    private static final ArrayList<String> pluginWorlds = new ArrayList<>();
 
     private final EditSelection editselection = new EditSelection();
 
@@ -117,24 +116,34 @@ public class DataManager implements IDirectoryCache
         return worldName;
     }
 
-    public static void setLedgerVersion(String version)
+    public static void setPluginVersion(String version)
     {
-        ledgerVersion = version;
+        pluginVersion = version;
     }
 
-    public static String getLedgerVersion()
+    public static String getPluginVersion()
     {
-        return ledgerVersion;
+        return pluginVersion;
     }
 
-    public static void setLedgerActions(List<String> allowedLedgerActions)
+    public static void setPluginActions(List<String> allowedPluginActions)
     {
-        ledgerActions.addAll(allowedLedgerActions);
+        pluginActions.addAll(allowedPluginActions);
     }
 
-    public static ArrayList<String> getLedgerActions()
+    public static ArrayList<String> getPluginActions()
     {
-        return ledgerActions;
+        return pluginActions;
+    }
+
+    public static void setPluginWorlds(List<String> availablePluginWorlds)
+    {
+        pluginWorlds.addAll(availablePluginWorlds);
+    }
+
+    public static ArrayList<String> getPluginWorlds()
+    {
+        return pluginWorlds;
     }
 
     @Override
@@ -647,5 +656,15 @@ public class DataManager implements IDirectoryCache
     public static LedgerInfo getLedgerInfo()
     {
         return ledgerInfo;
+    }
+
+    public static void setCoreProtectInfo(CoreProtectInfo coreProtectInfo)
+    {
+        DataManager.coreProtectInfo = coreProtectInfo;
+    }
+
+    public static CoreProtectInfo getCoreProtectInfo()
+    {
+        return coreProtectInfo;
     }
 }

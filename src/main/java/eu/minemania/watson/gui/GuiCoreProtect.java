@@ -2,8 +2,8 @@ package eu.minemania.watson.gui;
 
 import com.google.common.collect.ImmutableList;
 import eu.minemania.watson.data.DataManager;
-import eu.minemania.watson.db.LedgerInfo;
-import eu.minemania.watson.gui.GuiLedger.ButtonListenerCycleTypePacket.LedgerMode;
+import eu.minemania.watson.db.CoreProtectInfo;
+import eu.minemania.watson.gui.GuiCoreProtect.ButtonListenerCycleTypePacket.CoreProtectMode;
 import eu.minemania.watson.network.ledger.PluginInspectPacketHandler;
 import eu.minemania.watson.network.ledger.PluginPurgePacketHandler;
 import eu.minemania.watson.network.ledger.PluginRollbackPacketHandler;
@@ -17,16 +17,12 @@ import fi.dy.masa.malilib.gui.interfaces.ITextFieldListener;
 import fi.dy.masa.malilib.gui.widgets.WidgetInfoIcon;
 import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.util.registry.RegistryKey;
-import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
-public class GuiLedger extends GuiBase
+public class GuiCoreProtect extends GuiBase
 {
     protected GuiTextFieldInteger textFieldRange;
     protected GuiTextFieldGeneric textFieldSource;
@@ -36,12 +32,12 @@ public class GuiLedger extends GuiBase
     protected GuiTextFieldInteger textFieldY;
     protected GuiTextFieldInteger textFieldZ;
     protected GuiTextFieldInteger textFieldPages;
-    protected LedgerInfo ledgerInfo = new LedgerInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", "", 0, 0, 0, 0, LedgerMode.INSPECT, 10);
+    protected CoreProtectInfo coreProtectInfo = new CoreProtectInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", "", 0, 0, 0, 0, CoreProtectMode.INSPECT, 10);
 
-    protected GuiLedger()
+    protected GuiCoreProtect()
     {
-        this.title = StringUtils.translate("watson.gui.title.ledger", DataManager.getPluginVersion());
-        this.ledgerInfo = DataManager.getLedgerInfo() == null ? this.ledgerInfo : DataManager.getLedgerInfo();
+        this.title = DataManager.getPluginVersion();
+        this.coreProtectInfo = DataManager.getCoreProtectInfo() == null ? this.coreProtectInfo : DataManager.getCoreProtectInfo();
     }
 
     @Override
@@ -67,7 +63,7 @@ public class GuiLedger extends GuiBase
         int width = 70;
         int offset;
 
-        if (ledgerInfo.getLedgerMode() != LedgerMode.INSPECT)
+        if (coreProtectInfo.getCoreProtectMode() != CoreProtectMode.INSPECT)
         {
             label = StringUtils.translate("watson.gui.label.ledger.title.action"); //Action
             this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
@@ -115,7 +111,7 @@ public class GuiLedger extends GuiBase
             this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.range"));
 
             this.textFieldRange = new GuiTextFieldInteger(x + offset + 20, y + 2, width, 14, this.textRenderer);
-            this.textFieldRange.setText(String.valueOf(ledgerInfo.getRange()));
+            this.textFieldRange.setText(String.valueOf(coreProtectInfo.getRange()));
             this.addTextField(this.textFieldRange, new RangeTextFieldListener(this));
 
             label = StringUtils.translate("watson.gui.label.ledger.title.source"); //Source
@@ -124,7 +120,7 @@ public class GuiLedger extends GuiBase
             this.addWidget(new WidgetInfoIcon(textFieldRange.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.source"));
 
             this.textFieldSource = new GuiTextFieldGeneric(textFieldRange.getX() + offset + 20, y + 2, width, 14, this.textRenderer);
-            this.textFieldSource.setText(ledgerInfo.getSources());
+            this.textFieldSource.setText(coreProtectInfo.getSources());
             this.addTextField(this.textFieldSource, new SourceTextFieldListener(this));
 
             y += 30;
@@ -135,7 +131,7 @@ public class GuiLedger extends GuiBase
             this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.time"));
 
             this.textFieldTimeBefore = new GuiTextFieldGeneric(x + offset + 20, y + 2, width, 14, this.textRenderer);
-            this.textFieldTimeBefore.setText(ledgerInfo.getTimeBefore());
+            this.textFieldTimeBefore.setText(coreProtectInfo.getTimeBefore());
             this.addTextField(this.textFieldTimeBefore, new TimeBeforeTextFieldListener(this));
 
             label = StringUtils.translate("watson.gui.label.ledger.title.time.after"); //Time after
@@ -144,11 +140,11 @@ public class GuiLedger extends GuiBase
             this.addWidget(new WidgetInfoIcon(textFieldTimeBefore.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.time"));
 
             this.textFieldTimeAfter = new GuiTextFieldGeneric(textFieldTimeBefore.getX() + offset + 20, y + 2, width, 14, this.textRenderer);
-            this.textFieldTimeAfter.setText(ledgerInfo.getTimeAfter());
+            this.textFieldTimeAfter.setText(coreProtectInfo.getTimeAfter());
             this.addTextField(this.textFieldTimeAfter, new TimeAfterTextFieldListener(this));
         }
 
-        if (ledgerInfo.getLedgerMode() == LedgerMode.INSPECT)
+        if (coreProtectInfo.getCoreProtectMode() == CoreProtectMode.INSPECT)
         {
             label = "X"; //X
             this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
@@ -156,7 +152,7 @@ public class GuiLedger extends GuiBase
             this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.coords"));
 
             this.textFieldX = new GuiTextFieldInteger(x + offset + 20, y + 2, width, 14, this.textRenderer);
-            this.textFieldX.setText(String.valueOf(ledgerInfo.getX()));
+            this.textFieldX.setText(String.valueOf(coreProtectInfo.getX()));
             this.addTextField(this.textFieldX, new XTextFieldListener(this));
 
             label = "Y"; //Y
@@ -165,7 +161,7 @@ public class GuiLedger extends GuiBase
             this.addWidget(new WidgetInfoIcon(textFieldX.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.coords"));
 
             this.textFieldY = new GuiTextFieldInteger(textFieldX.getX() + offset + 20, y + 2, width, 14, this.textRenderer);
-            this.textFieldY.setText(String.valueOf(ledgerInfo.getY()));
+            this.textFieldY.setText(String.valueOf(coreProtectInfo.getY()));
             this.addTextField(this.textFieldY, new YTextFieldListener(this));
 
             label = "Z"; //Z
@@ -174,11 +170,11 @@ public class GuiLedger extends GuiBase
             this.addWidget(new WidgetInfoIcon(textFieldY.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.coords"));
 
             this.textFieldZ = new GuiTextFieldInteger(textFieldY.getX() + offset + 20, y + 2, width, 14, this.textRenderer);
-            this.textFieldZ.setText(String.valueOf(ledgerInfo.getZ()));
+            this.textFieldZ.setText(String.valueOf(coreProtectInfo.getZ()));
             this.addTextField(this.textFieldZ, new ZTextFieldListener(this));
         }
 
-        if (ledgerInfo.getLedgerMode() == LedgerMode.INSPECT || ledgerInfo.getLedgerMode() == LedgerMode.SEARCH)
+        if (coreProtectInfo.getCoreProtectMode() == CoreProtectMode.INSPECT || coreProtectInfo.getCoreProtectMode() == CoreProtectMode.SEARCH)
         {
             y += 30;
 
@@ -188,13 +184,13 @@ public class GuiLedger extends GuiBase
             this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.pages"));
 
             this.textFieldPages = new GuiTextFieldInteger(x + offset + 20, y + 2, width, 14, this.textRenderer);
-            this.textFieldPages.setText(String.valueOf(ledgerInfo.getPages()));
+            this.textFieldPages.setText(String.valueOf(coreProtectInfo.getPages()));
             this.addTextField(this.textFieldPages, new PagesTextFieldListener(this));
         }
 
         y = this.height - 50;
 
-        label = StringUtils.translate("watson.gui.button.ledger.ledgermode", ledgerInfo.getLedgerMode().getDisplayName());
+        label = StringUtils.translate("watson.gui.button.ledger.ledgermode", coreProtectInfo.getCoreProtectMode().getDisplayName());
         buttonWidth = this.getStringWidth(label) + 20;
         button = new ButtonGeneric(x, y, buttonWidth, 20, label);
         button.setHoverStrings("watson.gui.button.ledger.ledgermode.hover");
@@ -231,30 +227,13 @@ public class GuiLedger extends GuiBase
         return button;
     }
 
-    private ArrayList<String> getDimensions(String dimensionText)
+    private ArrayList<String> getDimensions()
     {
         ArrayList<String> currentDimensions = new ArrayList<>();
-        ClientPlayNetworkHandler networkHandler = mc.getNetworkHandler();
 
-        if (networkHandler == null)
+        if (!DataManager.getPluginWorlds().isEmpty())
         {
-            return currentDimensions;
-        }
-
-        Set<RegistryKey<World>> dimensions = networkHandler.getWorldKeys();
-        for (RegistryKey<World> dimension : dimensions)
-        {
-            String dimensionString = dimension.getValue().toString();
-            String invertedDimensionString = "!"+dimensionString;
-            if (!dimensionText.isEmpty() && (dimensionString.equals(dimensionText) || invertedDimensionString.equals(dimensionText)))
-            {
-                currentDimensions.add(dimensionText);
-                return currentDimensions;
-            }
-            else if (dimensionText.isEmpty())
-            {
-                currentDimensions.add(dimension.getValue().toString());
-            }
+            currentDimensions.addAll(DataManager.getPluginWorlds());
         }
 
         return currentDimensions;
@@ -279,7 +258,7 @@ public class GuiLedger extends GuiBase
         boolean error = false;
         ArrayList<String> listActionError = new ArrayList<>();
         ArrayList<String> ledgerActions = getTotalList(DataManager.getPluginActions());
-        for (String action : ledgerInfo.getActions())
+        for (String action : coreProtectInfo.getActions())
         {
             if (!action.contains("-"))
             {
@@ -298,8 +277,7 @@ public class GuiLedger extends GuiBase
             error = true;
         }
 
-        ArrayList<String> listDimensionError = new ArrayList<>();
-        for (String dimensionText : ledgerInfo.getDimensions())
+        for (String dimensionText : coreProtectInfo.getDimensions())
         {
             if (dimensionText.isEmpty())
             {
@@ -311,21 +289,11 @@ public class GuiLedger extends GuiBase
                 error = true;
                 break;
             }
-
-            if (getDimensions(dimensionText).isEmpty())
-            {
-                listDimensionError.add(dimensionText);
-            }
-        }
-        if (!listDimensionError.isEmpty())
-        {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.dimension"), String.join(",", listDimensionError));
-            error = true;
         }
 
         ArrayList<String> listBlockError = new ArrayList<>();
         ArrayList<String> ledgerBlocks = getTotalList(DataManager.getBlocks());
-        for (String blockText : ledgerInfo.getBlocks())
+        for (String blockText : coreProtectInfo.getBlocks())
         {
             if (blockText.isEmpty())
             {
@@ -350,7 +318,7 @@ public class GuiLedger extends GuiBase
 
         ArrayList<String> listEntityTypeError = new ArrayList<>();
         ArrayList<String> ledgerEntityTypes = getTotalList(DataManager.getEntityTypes());
-        for (String entityTypeText : ledgerInfo.getEntityTypes())
+        for (String entityTypeText : coreProtectInfo.getEntityTypes())
         {
             if (entityTypeText.isEmpty())
             {
@@ -375,7 +343,7 @@ public class GuiLedger extends GuiBase
 
         ArrayList<String> listItemError = new ArrayList<>();
         ArrayList<String> ledgerItems = getTotalList(DataManager.getItems());
-        for (String itemText : ledgerInfo.getItems())
+        for (String itemText : coreProtectInfo.getItems())
         {
             if (itemText.isEmpty())
             {
@@ -400,7 +368,7 @@ public class GuiLedger extends GuiBase
 
         ArrayList<String> listTagError = new ArrayList<>();
         ArrayList<String> ledgerTags = getTotalList(DataManager.getTags());
-        for (String tagText : ledgerInfo.getTags())
+        for (String tagText : coreProtectInfo.getTags())
         {
             if (tagText.isEmpty())
             {
@@ -423,13 +391,13 @@ public class GuiLedger extends GuiBase
             error = true;
         }
 
-        int textRange = ledgerInfo.getRange();
+        int textRange = coreProtectInfo.getRange();
         if (textRange <= 1 && textRange != 0)
         {
             addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.range"), textRange);
             error = true;
         }
-        String textSource = ledgerInfo.getSources();
+        String textSource = coreProtectInfo.getSources();
         String[] sourcesText = textSource.split(",");
         for (String sourceText : sourcesText)
         {
@@ -438,13 +406,13 @@ public class GuiLedger extends GuiBase
                 break;
             }
         }
-        String textTimeBefore = ledgerInfo.getTimeBefore();
+        String textTimeBefore = coreProtectInfo.getTimeBefore();
         if (!textTimeBefore.matches("^([0-9]+[smhdw])+$") && !textTimeBefore.isEmpty())
         {
             addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.time.before"), textTimeBefore);
             error = true;
         }
-        String textTimeAfter = ledgerInfo.getTimeAfter();
+        String textTimeAfter = coreProtectInfo.getTimeAfter();
         if (!textTimeAfter.matches("^([0-9]+[smhdw])+$") && !textTimeAfter.isEmpty())
         {
             addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.time.after"), textTimeAfter);
@@ -454,47 +422,47 @@ public class GuiLedger extends GuiBase
         return error;
     }
 
-    private void setLedgerInfo()
+    private void setCoreProtectInfo()
     {
-        List<String> actions = this.ledgerInfo.getActions();
-        List<String> blocks = this.ledgerInfo.getBlocks();
-        List<String> dimension = this.ledgerInfo.getDimensions();
-        List<String> entityTypes = this.ledgerInfo.getEntityTypes();
-        List<String> items = this.ledgerInfo.getItems();
-        List<String> tags = this.ledgerInfo.getTags();
-        String source = this.ledgerInfo.getSources();
-        String timeBefore = this.ledgerInfo.getTimeBefore();
-        String timeAfter = this.ledgerInfo.getTimeAfter();
-        int range = this.ledgerInfo.getRange();
-        int x = this.ledgerInfo.getX();
-        int y = this.ledgerInfo.getY();
-        int z = this.ledgerInfo.getZ();
-        LedgerMode ledgerMode = this.ledgerInfo.getLedgerMode();
-        int pages = this.ledgerInfo.getPages();
+        List<String> actions = this.coreProtectInfo.getActions();
+        List<String> blocks = this.coreProtectInfo.getBlocks();
+        List<String> dimension = this.coreProtectInfo.getDimensions();
+        List<String> entityTypes = this.coreProtectInfo.getEntityTypes();
+        List<String> items = this.coreProtectInfo.getItems();
+        List<String> tags = this.coreProtectInfo.getTags();
+        String source = this.coreProtectInfo.getSources();
+        String timeBefore = this.coreProtectInfo.getTimeBefore();
+        String timeAfter = this.coreProtectInfo.getTimeAfter();
+        int range = this.coreProtectInfo.getRange();
+        int x = this.coreProtectInfo.getX();
+        int y = this.coreProtectInfo.getY();
+        int z = this.coreProtectInfo.getZ();
+        CoreProtectMode coreProtectMode = this.coreProtectInfo.getCoreProtectMode();
+        int pages = this.coreProtectInfo.getPages();
 
-        LedgerInfo ledgerInfo = new LedgerInfo(actions, blocks, dimension, entityTypes, items, tags, source, timeBefore, timeAfter, range, x, y, z, ledgerMode, pages);
-        DataManager.setLedgerInfo(ledgerInfo);
+        CoreProtectInfo coreProtectInfo = new CoreProtectInfo(actions, blocks, dimension, entityTypes, items, tags, source, timeBefore, timeAfter, range, x, y, z, coreProtectMode, pages);
+        DataManager.setCoreProtectInfo(coreProtectInfo);
     }
 
-    private void clearLedgerInfo()
+    private void clearCoreProtectInfo()
     {
-        LedgerInfo ledgerInfo = new LedgerInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", "", 0, 0, 0, 0, LedgerMode.INSPECT, 10);
-        this.ledgerInfo = ledgerInfo;
-        DataManager.setLedgerInfo(ledgerInfo);
+        CoreProtectInfo coreProtectInfo = new CoreProtectInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", "", 0, 0, 0, 0, CoreProtectMode.INSPECT, 10);
+        this.coreProtectInfo = coreProtectInfo;
+        DataManager.setCoreProtectInfo(coreProtectInfo);
     }
 
     @Override
     protected void closeGui(boolean showParent)
     {
-        setLedgerInfo();
+        setCoreProtectInfo();
         super.closeGui(showParent);
     }
 
     public static class SourceTextFieldListener implements ITextFieldListener<GuiTextFieldGeneric>
     {
-        private final GuiLedger parent;
+        private final GuiCoreProtect parent;
 
-        public SourceTextFieldListener(GuiLedger parent)
+        public SourceTextFieldListener(GuiCoreProtect parent)
         {
             this.parent = parent;
         }
@@ -504,11 +472,11 @@ public class GuiLedger extends GuiBase
         {
             try
             {
-                parent.ledgerInfo.setSources(textField.getText());
+                parent.coreProtectInfo.setSources(textField.getText());
             }
             catch (Exception e)
             {
-                parent.ledgerInfo.setSources("");
+                parent.coreProtectInfo.setSources("");
             }
 
             return false;
@@ -517,9 +485,9 @@ public class GuiLedger extends GuiBase
 
     public static class TimeBeforeTextFieldListener implements ITextFieldListener<GuiTextFieldGeneric>
     {
-        private final GuiLedger parent;
+        private final GuiCoreProtect parent;
 
-        public TimeBeforeTextFieldListener(GuiLedger parent)
+        public TimeBeforeTextFieldListener(GuiCoreProtect parent)
         {
             this.parent = parent;
         }
@@ -529,11 +497,11 @@ public class GuiLedger extends GuiBase
         {
             try
             {
-                parent.ledgerInfo.setTimeBefore(textField.getText());
+                parent.coreProtectInfo.setTimeBefore(textField.getText());
             }
             catch (Exception e)
             {
-                parent.ledgerInfo.setTimeBefore("");
+                parent.coreProtectInfo.setTimeBefore("");
             }
 
             return false;
@@ -542,9 +510,9 @@ public class GuiLedger extends GuiBase
 
     public static class TimeAfterTextFieldListener implements ITextFieldListener<GuiTextFieldGeneric>
     {
-        private final GuiLedger parent;
+        private final GuiCoreProtect parent;
 
-        public TimeAfterTextFieldListener(GuiLedger parent)
+        public TimeAfterTextFieldListener(GuiCoreProtect parent)
         {
             this.parent = parent;
         }
@@ -554,11 +522,11 @@ public class GuiLedger extends GuiBase
         {
             try
             {
-                parent.ledgerInfo.setTimeAfter(textField.getText());
+                parent.coreProtectInfo.setTimeAfter(textField.getText());
             }
             catch (Exception e)
             {
-                parent.ledgerInfo.setTimeAfter("");
+                parent.coreProtectInfo.setTimeAfter("");
             }
 
             return false;
@@ -567,9 +535,9 @@ public class GuiLedger extends GuiBase
 
     public static class RangeTextFieldListener implements ITextFieldListener<GuiTextFieldInteger>
     {
-        private final GuiLedger parent;
+        private final GuiCoreProtect parent;
 
-        public RangeTextFieldListener(GuiLedger parent)
+        public RangeTextFieldListener(GuiCoreProtect parent)
         {
             this.parent = parent;
         }
@@ -579,7 +547,7 @@ public class GuiLedger extends GuiBase
         {
             try
             {
-                parent.ledgerInfo.setRange(Integer.parseInt(textField.getText()));
+                parent.coreProtectInfo.setRange(Integer.parseInt(textField.getText()));
             }
             catch (Exception ignored)
             {}
@@ -590,9 +558,9 @@ public class GuiLedger extends GuiBase
 
     public static class XTextFieldListener implements ITextFieldListener<GuiTextFieldInteger>
     {
-        private final GuiLedger parent;
+        private final GuiCoreProtect parent;
 
-        public XTextFieldListener(GuiLedger parent)
+        public XTextFieldListener(GuiCoreProtect parent)
         {
             this.parent = parent;
         }
@@ -602,7 +570,7 @@ public class GuiLedger extends GuiBase
         {
             try
             {
-                parent.ledgerInfo.setX(Integer.parseInt(textField.getText()));
+                parent.coreProtectInfo.setX(Integer.parseInt(textField.getText()));
             }
             catch (Exception ignored)
             {}
@@ -613,9 +581,9 @@ public class GuiLedger extends GuiBase
 
     public static class YTextFieldListener implements ITextFieldListener<GuiTextFieldInteger>
     {
-        private final GuiLedger parent;
+        private final GuiCoreProtect parent;
 
-        public YTextFieldListener(GuiLedger parent)
+        public YTextFieldListener(GuiCoreProtect parent)
         {
             this.parent = parent;
         }
@@ -625,7 +593,7 @@ public class GuiLedger extends GuiBase
         {
             try
             {
-                parent.ledgerInfo.setY(Integer.parseInt(textField.getText()));
+                parent.coreProtectInfo.setY(Integer.parseInt(textField.getText()));
             }
             catch (Exception ignored)
             {}
@@ -636,9 +604,9 @@ public class GuiLedger extends GuiBase
 
     public static class ZTextFieldListener implements ITextFieldListener<GuiTextFieldInteger>
     {
-        private final GuiLedger parent;
+        private final GuiCoreProtect parent;
 
-        public ZTextFieldListener(GuiLedger parent)
+        public ZTextFieldListener(GuiCoreProtect parent)
         {
             this.parent = parent;
         }
@@ -648,7 +616,7 @@ public class GuiLedger extends GuiBase
         {
             try
             {
-                parent.ledgerInfo.setZ(Integer.parseInt(textField.getText()));
+                parent.coreProtectInfo.setZ(Integer.parseInt(textField.getText()));
             }
             catch (Exception ignored)
             {}
@@ -659,9 +627,9 @@ public class GuiLedger extends GuiBase
 
     public static class PagesTextFieldListener implements ITextFieldListener<GuiTextFieldInteger>
     {
-        private final GuiLedger parent;
+        private final GuiCoreProtect parent;
 
-        public PagesTextFieldListener(GuiLedger parent)
+        public PagesTextFieldListener(GuiCoreProtect parent)
         {
             this.parent = parent;
         }
@@ -671,7 +639,7 @@ public class GuiLedger extends GuiBase
         {
             try
             {
-                parent.ledgerInfo.setPages(Integer.parseInt(textField.getText()));
+                parent.coreProtectInfo.setPages(Integer.parseInt(textField.getText()));
             }
             catch (Exception ignored)
             {}
@@ -682,9 +650,9 @@ public class GuiLedger extends GuiBase
 
     private static class ActionListCreator implements IStringListConsumer
     {
-        GuiLedger parent;
+        GuiCoreProtect parent;
 
-        public ActionListCreator(GuiLedger parent)
+        public ActionListCreator(GuiCoreProtect parent)
         {
             this.parent = parent;
         }
@@ -692,7 +660,7 @@ public class GuiLedger extends GuiBase
         @Override
         public boolean consume(Collection<String> strings)
         {
-            parent.ledgerInfo.setActions(ImmutableList.copyOf(strings));
+            parent.coreProtectInfo.setActions(ImmutableList.copyOf(strings));
             GuiBase.openGui(parent);
             return true;
         }
@@ -700,9 +668,9 @@ public class GuiLedger extends GuiBase
 
     private static class DimensionListCreator implements IStringListConsumer
     {
-        GuiLedger parent;
+        GuiCoreProtect parent;
 
-        public DimensionListCreator(GuiLedger parent)
+        public DimensionListCreator(GuiCoreProtect parent)
         {
             this.parent = parent;
         }
@@ -710,7 +678,7 @@ public class GuiLedger extends GuiBase
         @Override
         public boolean consume(Collection<String> strings)
         {
-            parent.ledgerInfo.setDimensions(ImmutableList.copyOf(strings));
+            parent.coreProtectInfo.setDimensions(ImmutableList.copyOf(strings));
             GuiBase.openGui(parent);
             return true;
         }
@@ -718,9 +686,9 @@ public class GuiLedger extends GuiBase
 
     private static class BlockListCreator implements IStringListConsumer
     {
-        GuiLedger parent;
+        GuiCoreProtect parent;
 
-        public BlockListCreator(GuiLedger parent)
+        public BlockListCreator(GuiCoreProtect parent)
         {
             this.parent = parent;
         }
@@ -728,7 +696,7 @@ public class GuiLedger extends GuiBase
         @Override
         public boolean consume(Collection<String> strings)
         {
-            parent.ledgerInfo.setBlocks(ImmutableList.copyOf(strings));
+            parent.coreProtectInfo.setBlocks(ImmutableList.copyOf(strings));
             GuiBase.openGui(parent);
             return true;
         }
@@ -736,9 +704,9 @@ public class GuiLedger extends GuiBase
 
     private static class EntityTypeListCreator implements IStringListConsumer
     {
-        GuiLedger parent;
+        GuiCoreProtect parent;
 
-        public EntityTypeListCreator(GuiLedger parent)
+        public EntityTypeListCreator(GuiCoreProtect parent)
         {
             this.parent = parent;
         }
@@ -746,7 +714,7 @@ public class GuiLedger extends GuiBase
         @Override
         public boolean consume(Collection<String> strings)
         {
-            parent.ledgerInfo.setEntityTypes(ImmutableList.copyOf(strings));
+            parent.coreProtectInfo.setEntityTypes(ImmutableList.copyOf(strings));
             GuiBase.openGui(parent);
             return true;
         }
@@ -754,9 +722,9 @@ public class GuiLedger extends GuiBase
 
     private static class ItemListCreator implements IStringListConsumer
     {
-        GuiLedger parent;
+        GuiCoreProtect parent;
 
-        public ItemListCreator(GuiLedger parent)
+        public ItemListCreator(GuiCoreProtect parent)
         {
             this.parent = parent;
         }
@@ -764,7 +732,7 @@ public class GuiLedger extends GuiBase
         @Override
         public boolean consume(Collection<String> strings)
         {
-            parent.ledgerInfo.setItems(ImmutableList.copyOf(strings));
+            parent.coreProtectInfo.setItems(ImmutableList.copyOf(strings));
             GuiBase.openGui(parent);
             return true;
         }
@@ -772,9 +740,9 @@ public class GuiLedger extends GuiBase
 
     private static class TagListCreator implements IStringListConsumer
     {
-        GuiLedger parent;
+        GuiCoreProtect parent;
 
-        public TagListCreator(GuiLedger parent)
+        public TagListCreator(GuiCoreProtect parent)
         {
             this.parent = parent;
         }
@@ -782,7 +750,7 @@ public class GuiLedger extends GuiBase
         @Override
         public boolean consume(Collection<String> strings)
         {
-            parent.ledgerInfo.setTags(ImmutableList.copyOf(strings));
+            parent.coreProtectInfo.setTags(ImmutableList.copyOf(strings));
             GuiBase.openGui(parent);
             return true;
         }
@@ -791,9 +759,9 @@ public class GuiLedger extends GuiBase
     public static class ConsumerButtonListener implements IButtonActionListener
     {
         private final ButtonType type;
-        private final GuiLedger parent;
+        private final GuiCoreProtect parent;
 
-        public ConsumerButtonListener(ButtonType type, GuiLedger parent)
+        public ConsumerButtonListener(ButtonType type, GuiCoreProtect parent)
         {
             this.type = type;
             this.parent = parent;
@@ -806,7 +774,7 @@ public class GuiLedger extends GuiBase
             {
                 ActionListCreator actionCreator = new ActionListCreator(parent);
                 ArrayList<String> actions = parent.getTotalList(DataManager.getPluginActions());
-                GuiStringListSelection gui = new GuiStringListSelectionWithSearch(actions, actionCreator, false, parent.ledgerInfo.getActions());
+                GuiStringListSelection gui = new GuiStringListSelectionWithSearch(actions, actionCreator, false, parent.coreProtectInfo.getActions());
                 gui.setTitle(type.getDisplayName());
                 gui.setParent(parent);
                 GuiBase.openGui(gui);
@@ -814,8 +782,8 @@ public class GuiLedger extends GuiBase
             if (this.type == ButtonType.DIMENSION)
             {
                 DimensionListCreator dimensionCreator = new DimensionListCreator(parent);
-                ArrayList<String> dimensions = parent.getTotalList(parent.getDimensions(""));
-                GuiStringListSelection gui = new GuiStringListSelectionWithSearch(dimensions, dimensionCreator, false, parent.ledgerInfo.getDimensions());
+                ArrayList<String> dimensions = parent.getTotalList(parent.getDimensions());
+                GuiStringListSelection gui = new GuiStringListSelectionWithSearch(dimensions, dimensionCreator, false, parent.coreProtectInfo.getDimensions());
                 gui.setTitle(type.getDisplayName());
                 gui.setParent(parent);
                 GuiBase.openGui(gui);
@@ -824,7 +792,7 @@ public class GuiLedger extends GuiBase
             {
                 BlockListCreator blockCreator = new BlockListCreator(parent);
                 ArrayList<String> blocks = parent.getTotalList(DataManager.getBlocks());
-                GuiStringListSelection gui = new GuiStringListSelectionWithSearch(blocks, blockCreator, true, parent.ledgerInfo.getBlocks());
+                GuiStringListSelection gui = new GuiStringListSelectionWithSearch(blocks, blockCreator, true, parent.coreProtectInfo.getBlocks());
                 gui.setTitle(type.getDisplayName());
                 gui.setParent(parent);
                 GuiBase.openGui(gui);
@@ -833,7 +801,7 @@ public class GuiLedger extends GuiBase
             {
                 EntityTypeListCreator entityTypeCreator = new EntityTypeListCreator(parent);
                 ArrayList<String> entityTypes = parent.getTotalList(DataManager.getEntityTypes());
-                GuiStringListSelection gui = new GuiStringListSelectionWithSearch(entityTypes, entityTypeCreator, true, parent.ledgerInfo.getEntityTypes());
+                GuiStringListSelection gui = new GuiStringListSelectionWithSearch(entityTypes, entityTypeCreator, true, parent.coreProtectInfo.getEntityTypes());
                 gui.setTitle(type.getDisplayName());
                 gui.setParent(parent);
                 GuiBase.openGui(gui);
@@ -842,7 +810,7 @@ public class GuiLedger extends GuiBase
             {
                 ItemListCreator itemCreator = new ItemListCreator(parent);
                 ArrayList<String> items = parent.getTotalList(DataManager.getItems());
-                GuiStringListSelection gui = new GuiStringListSelectionWithSearch(items, itemCreator, true, parent.ledgerInfo.getItems());
+                GuiStringListSelection gui = new GuiStringListSelectionWithSearch(items, itemCreator, true, parent.coreProtectInfo.getItems());
                 gui.setTitle(type.getDisplayName());
                 gui.setParent(parent);
                 GuiBase.openGui(gui);
@@ -851,7 +819,7 @@ public class GuiLedger extends GuiBase
             {
                 TagListCreator tagCreator = new TagListCreator(parent);
                 ArrayList<String> tags = parent.getTotalList(DataManager.getTags());
-                GuiStringListSelection gui = new GuiStringListSelectionWithSearch(tags, tagCreator, true, parent.ledgerInfo.getTags());
+                GuiStringListSelection gui = new GuiStringListSelectionWithSearch(tags, tagCreator, true, parent.coreProtectInfo.getTags());
                 gui.setTitle(type.getDisplayName());
                 gui.setParent(parent);
                 GuiBase.openGui(gui);
@@ -889,9 +857,9 @@ public class GuiLedger extends GuiBase
     public static class ButtonListener implements IButtonActionListener
     {
         private final ButtonType type;
-        private final GuiLedger parent;
+        private final GuiCoreProtect parent;
 
-        public ButtonListener(ButtonType type, GuiLedger parent)
+        public ButtonListener(ButtonType type, GuiCoreProtect parent)
         {
             this.type = type;
             this.parent = parent;
@@ -902,7 +870,7 @@ public class GuiLedger extends GuiBase
         {
             if (this.type == ButtonType.MAIN_MENU)
             {
-                this.parent.setLedgerInfo();
+                this.parent.setCoreProtectInfo();
                 GuiMainMenu gui = new GuiMainMenu();
                 gui.setParent(parent.getParent());
                 GuiBase.openGui(gui);
@@ -911,36 +879,36 @@ public class GuiLedger extends GuiBase
 
             if (this.type == ButtonType.CLEAR)
             {
-                this.parent.clearLedgerInfo();
+                this.parent.clearCoreProtectInfo();
                 this.parent.initGui();
                 return;
             }
 
             if (this.type == ButtonType.SUBMIT)
             {
-                LedgerInfo ledgerInfo = parent.ledgerInfo;
-                if (!ledgerInfo.getLedgerMode().equals(LedgerMode.INSPECT) && parent.validate())
+                CoreProtectInfo coreProtectInfo = parent.coreProtectInfo;
+                if (!coreProtectInfo.getCoreProtectMode().equals(CoreProtectMode.INSPECT) && parent.validate())
                 {
                     return;
                 }
 
-                List<String> action = ledgerInfo.getActions();
-                List<String> dimension = ledgerInfo.getDimensions();
-                List<String> block = ledgerInfo.getBlocks();
-                List<String> entityType = ledgerInfo.getEntityTypes();
-                List<String> item = ledgerInfo.getItems();
-                List<String> tag = ledgerInfo.getTags();
-                int range = ledgerInfo.getRange();
-                String source = ledgerInfo.getSources();
-                String timeBefore = ledgerInfo.getTimeBefore();
-                String timeAfter = ledgerInfo.getTimeAfter();
-                int x = ledgerInfo.getX();
-                int y = ledgerInfo.getY();
-                int z = ledgerInfo.getZ();
-                int pages = ledgerInfo.getPages();
+                List<String> action = coreProtectInfo.getActions();
+                List<String> dimension = coreProtectInfo.getDimensions();
+                List<String> block = coreProtectInfo.getBlocks();
+                List<String> entityType = coreProtectInfo.getEntityTypes();
+                List<String> item = coreProtectInfo.getItems();
+                List<String> tag = coreProtectInfo.getTags();
+                int range = coreProtectInfo.getRange();
+                String source = coreProtectInfo.getSources();
+                String timeBefore = coreProtectInfo.getTimeBefore();
+                String timeAfter = coreProtectInfo.getTimeAfter();
+                int x = coreProtectInfo.getX();
+                int y = coreProtectInfo.getY();
+                int z = coreProtectInfo.getZ();
+                int pages = coreProtectInfo.getPages();
                 MinecraftClient mc = parent.mc;
 
-                switch (ledgerInfo.getLedgerMode())
+                switch (coreProtectInfo.getCoreProtectMode())
                 {
                     case INSPECT -> new PluginInspectPacketHandler().sendPacket(x, y, z, pages, mc);
                     case PURGE -> new PluginPurgePacketHandler().sendPacket(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter, mc);
@@ -978,9 +946,9 @@ public class GuiLedger extends GuiBase
 
     public static class ButtonListenerCycleTypePacket implements IButtonActionListener
     {
-        private final GuiLedger parent;
+        private final GuiCoreProtect parent;
 
-        public ButtonListenerCycleTypePacket(GuiLedger parent)
+        public ButtonListenerCycleTypePacket(GuiCoreProtect parent)
         {
             this.parent = parent;
         }
@@ -988,12 +956,12 @@ public class GuiLedger extends GuiBase
         @Override
         public void actionPerformedWithButton(ButtonBase button, int mouseButton)
         {
-            LedgerMode mode = parent.ledgerInfo.getLedgerMode().cycle(mouseButton == 0);
-            parent.ledgerInfo.setLedgerMode(mode);
+            CoreProtectMode mode = parent.coreProtectInfo.getCoreProtectMode().cycle(mouseButton == 0);
+            parent.coreProtectInfo.setCoreProtectMode(mode);
             parent.initGui();
         }
 
-        public enum LedgerMode
+        public enum CoreProtectMode
         {
             INSPECT("watson.gui.button.ledger.inspect"),
             PURGE("watson.gui.button.ledger.purge"),
@@ -1003,7 +971,7 @@ public class GuiLedger extends GuiBase
 
             private final String labelKey;
 
-            LedgerMode(String labelKey)
+            CoreProtectMode(String labelKey)
             {
                 this.labelKey = labelKey;
             }
@@ -1018,7 +986,7 @@ public class GuiLedger extends GuiBase
                 return StringUtils.translate(this.getLabelKey());
             }
 
-            public LedgerMode cycle(boolean forward)
+            public CoreProtectMode cycle(boolean forward)
             {
                 int id = this.ordinal();
 

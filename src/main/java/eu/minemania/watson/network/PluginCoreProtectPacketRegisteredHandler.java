@@ -6,12 +6,13 @@ import eu.minemania.watson.Reference;
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.config.Plugins;
+import eu.minemania.watson.data.DataManager;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PluginCoreProtectPacketRegisteredHandler implements IPluginChannelHandlerExtended
@@ -47,13 +48,29 @@ public class PluginCoreProtectPacketRegisteredHandler implements IPluginChannelH
 
         if (this.registered)
         {
-            boolean coreprotectRegistered = buf.readBoolean();
+            ByteArrayInputStream in = new ByteArrayInputStream(buf.getWrittenBytes());
+            DataInputStream dis = new DataInputStream(in);
+            try
+            {
+                boolean coreprotectRegistered = dis.readBoolean();
+                List<String> actions = readList(dis);
+                List<String> worlds = readList(dis);
+                String version = dis.readUTF();
 
-            if (coreprotectRegistered) {
-                Configs.Plugin.PLUGIN.setOptionListValue(Plugins.COREPROTECT);
-                if (Configs.Generic.DEBUG.getBooleanValue()) {
-                    Watson.logger.info("CoreProtect is registered.");
+                DataManager.setPluginActions(actions);
+                DataManager.setPluginVersion(version);
+                DataManager.setPluginWorlds(worlds);
+
+                if (coreprotectRegistered) {
+                    Configs.Plugin.PLUGIN.setOptionListValue(Plugins.COREPROTECT);
+                    if (Configs.Generic.DEBUG.getBooleanValue()) {
+                        Watson.logger.info("CoreProtect is registered.");
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Watson.logger.error("CoreProtect was not successfully registered", e);
             }
         }
     }
@@ -73,5 +90,16 @@ public class PluginCoreProtectPacketRegisteredHandler implements IPluginChannelH
         } catch (Exception ignored) {
         }
         return packetByteBuf;
+    }
+
+    private List<String> readList(DataInputStream dis) throws IOException
+    {
+        int total = dis.readInt();
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < total; i++)
+        {
+            list.add(dis.readUTF());
+        }
+        return list;
     }
 }
