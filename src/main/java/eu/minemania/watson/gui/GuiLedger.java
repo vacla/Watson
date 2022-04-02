@@ -1,6 +1,7 @@
 package eu.minemania.watson.gui;
 
 import com.google.common.collect.ImmutableList;
+import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.LedgerInfo;
 import eu.minemania.watson.gui.GuiLedger.ButtonListenerCycleTypePacket.LedgerMode;
@@ -153,27 +154,24 @@ public class GuiLedger extends GuiBase
             label = "X"; //X
             this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
             offset = this.getStringWidth(label) + 4;
-            this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.coords"));
 
-            this.textFieldX = new GuiTextFieldInteger(x + offset + 20, y + 2, width, 14, this.textRenderer);
+            this.textFieldX = new GuiTextFieldInteger(x + offset, y + 2, width, 14, this.textRenderer);
             this.textFieldX.setText(String.valueOf(ledgerInfo.getX()));
             this.addTextField(this.textFieldX, new XTextFieldListener(this));
 
             label = "Y"; //Y
-            this.addLabel(textFieldX.getX() + textFieldX.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
+            this.addLabel(textFieldX.getX() + textFieldX.getWidth() + 15, y, width, 20, 0xFFFFFFFF, label);
             offset = this.getStringWidth(label) + 10 + textFieldX.getWidth();
-            this.addWidget(new WidgetInfoIcon(textFieldX.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.coords"));
 
-            this.textFieldY = new GuiTextFieldInteger(textFieldX.getX() + offset + 20, y + 2, width, 14, this.textRenderer);
+            this.textFieldY = new GuiTextFieldInteger(textFieldX.getX() + offset + 10, y + 2, width, 14, this.textRenderer);
             this.textFieldY.setText(String.valueOf(ledgerInfo.getY()));
             this.addTextField(this.textFieldY, new YTextFieldListener(this));
 
             label = "Z"; //Z
-            this.addLabel(textFieldY.getX() + textFieldY.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
+            this.addLabel(textFieldY.getX() + textFieldY.getWidth() + 15, y, width, 20, 0xFFFFFFFF, label);
             offset = this.getStringWidth(label) + 10 + textFieldY.getWidth();
-            this.addWidget(new WidgetInfoIcon(textFieldY.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.coords"));
 
-            this.textFieldZ = new GuiTextFieldInteger(textFieldY.getX() + offset + 20, y + 2, width, 14, this.textRenderer);
+            this.textFieldZ = new GuiTextFieldInteger(textFieldY.getX() + offset + 10, y + 2, width, 14, this.textRenderer);
             this.textFieldZ.setText(String.valueOf(ledgerInfo.getZ()));
             this.addTextField(this.textFieldZ, new ZTextFieldListener(this));
         }
@@ -194,10 +192,10 @@ public class GuiLedger extends GuiBase
 
         y = this.height - 50;
 
-        label = StringUtils.translate("watson.gui.button.ledger.ledgermode", ledgerInfo.getLedgerMode().getDisplayName());
+        label = StringUtils.translate("watson.gui.button.plugin.mode", Configs.Plugin.PLUGIN.getOptionListValue().getDisplayName(), ledgerInfo.getLedgerMode().getDisplayName());
         buttonWidth = this.getStringWidth(label) + 20;
         button = new ButtonGeneric(x, y, buttonWidth, 20, label);
-        button.setHoverStrings("watson.gui.button.ledger.ledgermode.hover");
+        button.setHoverStrings("watson.gui.button.plugin.mode.hover");
         button.setHoverInfoRequiresShift(true);
         this.addButton(button, new ButtonListenerCycleTypePacket(this));
 

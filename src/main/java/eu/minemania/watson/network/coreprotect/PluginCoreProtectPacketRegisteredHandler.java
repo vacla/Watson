@@ -1,4 +1,4 @@
-package eu.minemania.watson.network;
+package eu.minemania.watson.network.coreprotect;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
@@ -7,6 +7,7 @@ import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.config.Plugins;
 import eu.minemania.watson.data.DataManager;
+import eu.minemania.watson.network.IPluginChannelHandlerExtended;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
@@ -25,11 +26,11 @@ public class PluginCoreProtectPacketRegisteredHandler implements IPluginChannelH
 
     public void reset()
     {
-        registered = false;
-        if (Configs.Plugin.PLUGIN.getOptionListValue() == Plugins.COREPROTECT)
+        if (Configs.Plugin.PLUGIN.getOptionListValue() == Plugins.COREPROTECT && registered)
         {
             Configs.Plugin.PLUGIN.resetToDefault();
         }
+        registered = false;
     }
 
     @Override

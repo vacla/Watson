@@ -26,11 +26,11 @@ public class PluginHandshakePacketHandler implements IPluginChannelHandlerExtend
 
     public void reset()
     {
-        registered = false;
-        if (Configs.Plugin.PLUGIN.getOptionListValue() == Plugins.LEDGER)
+        if (Configs.Plugin.PLUGIN.getOptionListValue() == Plugins.LEDGER && registered)
         {
             Configs.Plugin.PLUGIN.resetToDefault();
         }
+        registered = false;
     }
 
     @Override

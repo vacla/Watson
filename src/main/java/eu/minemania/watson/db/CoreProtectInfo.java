@@ -11,10 +11,8 @@ public class CoreProtectInfo
     private List<String> dimensions;
     private List<String> entityTypes;
     private List<String> items;
-    private List<String> tags;
     private String sources;
-    private String timeBefore;
-    private String timeAfter;
+    private String time;
     private int range;
     private int x;
     private int y;
@@ -22,17 +20,15 @@ public class CoreProtectInfo
     private CoreProtectMode coreProtectMode;
     private int pages;
 
-    public CoreProtectInfo(List<String> actions, List<String> blocks, List<String> dimensions, List<String> entityTypes, List<String> items, List<String> tags, String sources, String timeBefore, String timeAfter, int range, int x, int y, int z, CoreProtectMode coreProtectMode, int pages)
+    public CoreProtectInfo(List<String> actions, List<String> blocks, List<String> dimensions, List<String> entityTypes, List<String> items, String sources, String time, int range, int x, int y, int z, CoreProtectMode coreProtectMode, int pages)
     {
         this.actions = actions;
         this.blocks = blocks;
         this.dimensions = dimensions;
         this.entityTypes = entityTypes;
         this.items = items;
-        this.tags = tags;
         this.sources = sources;
-        this.timeBefore = timeBefore;
-        this.timeAfter = timeAfter;
+        this.time = time;
         this.range = range;
         this.x = x;
         this.y = y;
@@ -91,16 +87,6 @@ public class CoreProtectInfo
         this.items = items;
     }
 
-    public List<String> getTags()
-    {
-        return tags;
-    }
-
-    public void setTags(List<String> tags)
-    {
-        this.tags = tags;
-    }
-
     public String getSources()
     {
         return sources;
@@ -111,24 +97,14 @@ public class CoreProtectInfo
         this.sources = sources;
     }
 
-    public String getTimeBefore()
+    public String getTime()
     {
-        return timeBefore;
+        return time;
     }
 
-    public void setTimeBefore(String timeBefore)
+    public void setTime(String time)
     {
-        this.timeBefore = timeBefore;
-    }
-
-    public String getTimeAfter()
-    {
-        return timeAfter;
-    }
-
-    public void setTimeAfter(String timeAfter)
-    {
-        this.timeAfter = timeAfter;
+        this.time = time;
     }
 
     public int getRange()

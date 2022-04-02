@@ -1,6 +1,7 @@
 package eu.minemania.watson.gui;
 
 import com.google.common.collect.ImmutableList;
+import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.CoreProtectInfo;
 import eu.minemania.watson.gui.GuiCoreProtect.ButtonListenerCycleTypePacket.CoreProtectMode;
@@ -26,13 +27,12 @@ public class GuiCoreProtect extends GuiBase
 {
     protected GuiTextFieldInteger textFieldRange;
     protected GuiTextFieldGeneric textFieldSource;
-    protected GuiTextFieldGeneric textFieldTimeBefore;
-    protected GuiTextFieldGeneric textFieldTimeAfter;
+    protected GuiTextFieldGeneric textFieldTime;
     protected GuiTextFieldInteger textFieldX;
     protected GuiTextFieldInteger textFieldY;
     protected GuiTextFieldInteger textFieldZ;
     protected GuiTextFieldInteger textFieldPages;
-    protected CoreProtectInfo coreProtectInfo = new CoreProtectInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", "", 0, 0, 0, 0, CoreProtectMode.INSPECT, 10);
+    protected CoreProtectInfo coreProtectInfo = new CoreProtectInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", 0, 0, 0, 0, CoreProtectMode.INSPECT, 10);
 
     protected GuiCoreProtect()
     {
@@ -63,116 +63,94 @@ public class GuiCoreProtect extends GuiBase
         int width = 70;
         int offset;
 
-        if (coreProtectInfo.getCoreProtectMode() != CoreProtectMode.INSPECT)
-        {
-            label = StringUtils.translate("watson.gui.label.ledger.title.action"); //Action
-            this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
-            offset = this.getStringWidth(label) + 4;
-            this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
-            button = createButton(x + offset + 20, y, width, ConsumerButtonListener.ButtonType.ACTION);
+        label = StringUtils.translate("watson.gui.label.ledger.title.action"); //Action
+        this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
+        offset = this.getStringWidth(label) + 4;
+        this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
+        button = createButton(x + offset + 20, y, width, ConsumerButtonListener.ButtonType.ACTION);
 
-            label = StringUtils.translate("watson.gui.label.ledger.title.dimension"); //Dimension
-            this.addLabel(button.getX() + button.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
-            offset = this.getStringWidth(label) + 10 + button.getWidth();
-            this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
-            button = createButton(button.getX() + offset + 20, y, width, ConsumerButtonListener.ButtonType.DIMENSION);
+        label = StringUtils.translate("watson.gui.label.ledger.title.dimension"); //Dimension
+        this.addLabel(button.getX() + button.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
+        offset = this.getStringWidth(label) + 10 + button.getWidth();
+        this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
+        button = createButton(button.getX() + offset + 20, y, width, ConsumerButtonListener.ButtonType.DIMENSION);
 
-            label = StringUtils.translate("watson.gui.label.ledger.title.block"); //Block
-            this.addLabel(button.getX() + button.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
-            offset = this.getStringWidth(label) + 10 + button.getWidth();
-            this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
-            createButton(button.getX() + offset + 20, y, width, ConsumerButtonListener.ButtonType.BLOCK);
+        label = StringUtils.translate("watson.gui.label.ledger.title.block"); //Block
+        this.addLabel(button.getX() + button.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
+        offset = this.getStringWidth(label) + 10 + button.getWidth();
+        this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
+        createButton(button.getX() + offset + 20, y, width, ConsumerButtonListener.ButtonType.BLOCK);
 
-            y += 30;
+        y += 30;
 
-            label = StringUtils.translate("watson.gui.label.ledger.title.entitytype"); //EntityType
-            this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
-            offset = this.getStringWidth(label) + 4;
-            this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
-            button = createButton(x + offset + 20, y, width, ConsumerButtonListener.ButtonType.ENTITYTYPE);
+        label = StringUtils.translate("watson.gui.label.ledger.title.entitytype"); //EntityType
+        this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
+        offset = this.getStringWidth(label) + 4;
+        this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
+        button = createButton(x + offset + 20, y, width, ConsumerButtonListener.ButtonType.ENTITYTYPE);
 
-            label = StringUtils.translate("watson.gui.label.ledger.title.item"); //Item
-            this.addLabel(button.getX() + button.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
-            offset = this.getStringWidth(label) + 10 + button.getWidth();
-            this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
-            button = createButton(button.getX() + offset + 20, y, width, ConsumerButtonListener.ButtonType.ITEM);
+        label = StringUtils.translate("watson.gui.label.ledger.title.item"); //Item
+        this.addLabel(button.getX() + button.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
+        offset = this.getStringWidth(label) + 10 + button.getWidth();
+        this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
+        createButton(button.getX() + offset + 20, y, width, ConsumerButtonListener.ButtonType.ITEM);
 
-            label = StringUtils.translate("watson.gui.label.ledger.title.tag"); //Tag
-            this.addLabel(button.getX() + button.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
-            offset = this.getStringWidth(label) + 10 + button.getWidth();
-            this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
-            createButton(button.getX() + offset + 20, y, width, ConsumerButtonListener.ButtonType.TAG);
+        y += 30;
 
-            y += 30;
+        label = StringUtils.translate("watson.gui.label.ledger.title.range"); //Range
+        this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
+        offset = this.getStringWidth(label) + 4;
+        this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.range"));
 
-            label = StringUtils.translate("watson.gui.label.ledger.title.range"); //Range
-            this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
-            offset = this.getStringWidth(label) + 4;
-            this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.range"));
+        this.textFieldRange = new GuiTextFieldInteger(x + offset + 20, y + 2, width, 14, this.textRenderer);
+        this.textFieldRange.setText(String.valueOf(coreProtectInfo.getRange()));
+        this.addTextField(this.textFieldRange, new RangeTextFieldListener(this));
 
-            this.textFieldRange = new GuiTextFieldInteger(x + offset + 20, y + 2, width, 14, this.textRenderer);
-            this.textFieldRange.setText(String.valueOf(coreProtectInfo.getRange()));
-            this.addTextField(this.textFieldRange, new RangeTextFieldListener(this));
+        label = StringUtils.translate("watson.gui.label.ledger.title.source"); //Source
+        this.addLabel(textFieldRange.getX() + textFieldRange.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
+        offset = this.getStringWidth(label) + 10 + textFieldRange.getWidth();
+        this.addWidget(new WidgetInfoIcon(textFieldRange.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.source"));
 
-            label = StringUtils.translate("watson.gui.label.ledger.title.source"); //Source
-            this.addLabel(textFieldRange.getX() + textFieldRange.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
-            offset = this.getStringWidth(label) + 10 + textFieldRange.getWidth();
-            this.addWidget(new WidgetInfoIcon(textFieldRange.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.source"));
+        this.textFieldSource = new GuiTextFieldGeneric(textFieldRange.getX() + offset + 20, y + 2, width, 14, this.textRenderer);
+        this.textFieldSource.setText(coreProtectInfo.getSources());
+        this.addTextField(this.textFieldSource, new SourceTextFieldListener(this));
 
-            this.textFieldSource = new GuiTextFieldGeneric(textFieldRange.getX() + offset + 20, y + 2, width, 14, this.textRenderer);
-            this.textFieldSource.setText(coreProtectInfo.getSources());
-            this.addTextField(this.textFieldSource, new SourceTextFieldListener(this));
+        y += 30;
 
-            y += 30;
+        label = StringUtils.translate("watson.gui.label.plugin.title.time"); // Time
+        this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
+        offset = this.getStringWidth(label) + 4;
+        this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.time"));
 
-            label = StringUtils.translate("watson.gui.label.ledger.title.time.before"); //Time before
-            this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
-            offset = this.getStringWidth(label) + 4;
-            this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.time"));
+        this.textFieldTime = new GuiTextFieldGeneric(x + offset + 20, y + 2, width, 14, this.textRenderer);
+        this.textFieldTime.setText(coreProtectInfo.getTime());
+        this.addTextField(this.textFieldTime, new TimeTextFieldListener(this));
 
-            this.textFieldTimeBefore = new GuiTextFieldGeneric(x + offset + 20, y + 2, width, 14, this.textRenderer);
-            this.textFieldTimeBefore.setText(coreProtectInfo.getTimeBefore());
-            this.addTextField(this.textFieldTimeBefore, new TimeBeforeTextFieldListener(this));
+        y += 30;
 
-            label = StringUtils.translate("watson.gui.label.ledger.title.time.after"); //Time after
-            this.addLabel(textFieldTimeBefore.getX() + textFieldTimeBefore.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
-            offset = this.getStringWidth(label) + 10 + textFieldTimeBefore.getWidth();
-            this.addWidget(new WidgetInfoIcon(textFieldTimeBefore.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.time"));
+        label = "X"; //X
+        this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
+        offset = this.getStringWidth(label) + 4;
 
-            this.textFieldTimeAfter = new GuiTextFieldGeneric(textFieldTimeBefore.getX() + offset + 20, y + 2, width, 14, this.textRenderer);
-            this.textFieldTimeAfter.setText(coreProtectInfo.getTimeAfter());
-            this.addTextField(this.textFieldTimeAfter, new TimeAfterTextFieldListener(this));
-        }
+        this.textFieldX = new GuiTextFieldInteger(x + offset, y + 2, width, 14, this.textRenderer);
+        this.textFieldX.setText(String.valueOf(coreProtectInfo.getX()));
+        this.addTextField(this.textFieldX, new XTextFieldListener(this));
 
-        if (coreProtectInfo.getCoreProtectMode() == CoreProtectMode.INSPECT)
-        {
-            label = "X"; //X
-            this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
-            offset = this.getStringWidth(label) + 4;
-            this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.coords"));
+        label = "Y"; //Y
+        this.addLabel(textFieldX.getX() + textFieldX.getWidth() + 15, y, width, 20, 0xFFFFFFFF, label);
+        offset = this.getStringWidth(label) + 10 + textFieldX.getWidth();
 
-            this.textFieldX = new GuiTextFieldInteger(x + offset + 20, y + 2, width, 14, this.textRenderer);
-            this.textFieldX.setText(String.valueOf(coreProtectInfo.getX()));
-            this.addTextField(this.textFieldX, new XTextFieldListener(this));
+        this.textFieldY = new GuiTextFieldInteger(textFieldX.getX() + offset + 10, y + 2, width, 14, this.textRenderer);
+        this.textFieldY.setText(String.valueOf(coreProtectInfo.getY()));
+        this.addTextField(this.textFieldY, new YTextFieldListener(this));
 
-            label = "Y"; //Y
-            this.addLabel(textFieldX.getX() + textFieldX.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
-            offset = this.getStringWidth(label) + 10 + textFieldX.getWidth();
-            this.addWidget(new WidgetInfoIcon(textFieldX.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.coords"));
+        label = "Z"; //Z
+        this.addLabel(textFieldY.getX() + textFieldY.getWidth() + 15, y, width, 20, 0xFFFFFFFF, label);
+        offset = this.getStringWidth(label) + 10 + textFieldY.getWidth();
 
-            this.textFieldY = new GuiTextFieldInteger(textFieldX.getX() + offset + 20, y + 2, width, 14, this.textRenderer);
-            this.textFieldY.setText(String.valueOf(coreProtectInfo.getY()));
-            this.addTextField(this.textFieldY, new YTextFieldListener(this));
-
-            label = "Z"; //Z
-            this.addLabel(textFieldY.getX() + textFieldY.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
-            offset = this.getStringWidth(label) + 10 + textFieldY.getWidth();
-            this.addWidget(new WidgetInfoIcon(textFieldY.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.coords"));
-
-            this.textFieldZ = new GuiTextFieldInteger(textFieldY.getX() + offset + 20, y + 2, width, 14, this.textRenderer);
-            this.textFieldZ.setText(String.valueOf(coreProtectInfo.getZ()));
-            this.addTextField(this.textFieldZ, new ZTextFieldListener(this));
-        }
+        this.textFieldZ = new GuiTextFieldInteger(textFieldY.getX() + offset + 10, y + 2, width, 14, this.textRenderer);
+        this.textFieldZ.setText(String.valueOf(coreProtectInfo.getZ()));
+        this.addTextField(this.textFieldZ, new ZTextFieldListener(this));
 
         if (coreProtectInfo.getCoreProtectMode() == CoreProtectMode.INSPECT || coreProtectInfo.getCoreProtectMode() == CoreProtectMode.SEARCH)
         {
@@ -190,10 +168,10 @@ public class GuiCoreProtect extends GuiBase
 
         y = this.height - 50;
 
-        label = StringUtils.translate("watson.gui.button.ledger.ledgermode", coreProtectInfo.getCoreProtectMode().getDisplayName());
+        label = StringUtils.translate("watson.gui.button.plugin.mode", Configs.Plugin.PLUGIN.getOptionListValue().getDisplayName(), coreProtectInfo.getCoreProtectMode().getDisplayName());
         buttonWidth = this.getStringWidth(label) + 20;
         button = new ButtonGeneric(x, y, buttonWidth, 20, label);
-        button.setHoverStrings("watson.gui.button.ledger.ledgermode.hover");
+        button.setHoverStrings("watson.gui.button.plugin.mode.hover");
         button.setHoverInfoRequiresShift(true);
         this.addButton(button, new ButtonListenerCycleTypePacket(this));
 
@@ -366,31 +344,6 @@ public class GuiCoreProtect extends GuiBase
             error = true;
         }
 
-        ArrayList<String> listTagError = new ArrayList<>();
-        ArrayList<String> ledgerTags = getTotalList(DataManager.getTags());
-        for (String tagText : coreProtectInfo.getTags())
-        {
-            if (tagText.isEmpty())
-            {
-                break;
-            }
-            if (!tagText.contains(":") || !tagText.contains("#"))
-            {
-                addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.tag"), tagText);
-                error = true;
-                break;
-            }
-            if (!ledgerTags.contains(tagText))
-            {
-                listTagError.add(tagText);
-            }
-        }
-        if (!listTagError.isEmpty())
-        {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.tag"), String.join(",", listTagError));
-            error = true;
-        }
-
         int textRange = coreProtectInfo.getRange();
         if (textRange <= 1 && textRange != 0)
         {
@@ -406,16 +359,10 @@ public class GuiCoreProtect extends GuiBase
                 break;
             }
         }
-        String textTimeBefore = coreProtectInfo.getTimeBefore();
-        if (!textTimeBefore.matches("^([0-9]+[smhdw])+$") && !textTimeBefore.isEmpty())
+        String textTime = coreProtectInfo.getTime();
+        if (!textTime.matches("^([0-9]+[smhdw.-])+$") && !textTime.isEmpty())
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.time.before"), textTimeBefore);
-            error = true;
-        }
-        String textTimeAfter = coreProtectInfo.getTimeAfter();
-        if (!textTimeAfter.matches("^([0-9]+[smhdw])+$") && !textTimeAfter.isEmpty())
-        {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.time.after"), textTimeAfter);
+            addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.plugin.title.time"), textTime);
             error = true;
         }
 
@@ -429,10 +376,8 @@ public class GuiCoreProtect extends GuiBase
         List<String> dimension = this.coreProtectInfo.getDimensions();
         List<String> entityTypes = this.coreProtectInfo.getEntityTypes();
         List<String> items = this.coreProtectInfo.getItems();
-        List<String> tags = this.coreProtectInfo.getTags();
         String source = this.coreProtectInfo.getSources();
-        String timeBefore = this.coreProtectInfo.getTimeBefore();
-        String timeAfter = this.coreProtectInfo.getTimeAfter();
+        String time = this.coreProtectInfo.getTime();
         int range = this.coreProtectInfo.getRange();
         int x = this.coreProtectInfo.getX();
         int y = this.coreProtectInfo.getY();
@@ -440,13 +385,13 @@ public class GuiCoreProtect extends GuiBase
         CoreProtectMode coreProtectMode = this.coreProtectInfo.getCoreProtectMode();
         int pages = this.coreProtectInfo.getPages();
 
-        CoreProtectInfo coreProtectInfo = new CoreProtectInfo(actions, blocks, dimension, entityTypes, items, tags, source, timeBefore, timeAfter, range, x, y, z, coreProtectMode, pages);
+        CoreProtectInfo coreProtectInfo = new CoreProtectInfo(actions, blocks, dimension, entityTypes, items, source, time, range, x, y, z, coreProtectMode, pages);
         DataManager.setCoreProtectInfo(coreProtectInfo);
     }
 
     private void clearCoreProtectInfo()
     {
-        CoreProtectInfo coreProtectInfo = new CoreProtectInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", "", 0, 0, 0, 0, CoreProtectMode.INSPECT, 10);
+        CoreProtectInfo coreProtectInfo = new CoreProtectInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", 0, 0, 0, 0, CoreProtectMode.INSPECT, 10);
         this.coreProtectInfo = coreProtectInfo;
         DataManager.setCoreProtectInfo(coreProtectInfo);
     }
@@ -483,11 +428,11 @@ public class GuiCoreProtect extends GuiBase
         }
     }
 
-    public static class TimeBeforeTextFieldListener implements ITextFieldListener<GuiTextFieldGeneric>
+    public static class TimeTextFieldListener implements ITextFieldListener<GuiTextFieldGeneric>
     {
         private final GuiCoreProtect parent;
 
-        public TimeBeforeTextFieldListener(GuiCoreProtect parent)
+        public TimeTextFieldListener(GuiCoreProtect parent)
         {
             this.parent = parent;
         }
@@ -497,36 +442,11 @@ public class GuiCoreProtect extends GuiBase
         {
             try
             {
-                parent.coreProtectInfo.setTimeBefore(textField.getText());
+                parent.coreProtectInfo.setTime(textField.getText());
             }
             catch (Exception e)
             {
-                parent.coreProtectInfo.setTimeBefore("");
-            }
-
-            return false;
-        }
-    }
-
-    public static class TimeAfterTextFieldListener implements ITextFieldListener<GuiTextFieldGeneric>
-    {
-        private final GuiCoreProtect parent;
-
-        public TimeAfterTextFieldListener(GuiCoreProtect parent)
-        {
-            this.parent = parent;
-        }
-
-        @Override
-        public boolean onTextChange(GuiTextFieldGeneric textField)
-        {
-            try
-            {
-                parent.coreProtectInfo.setTimeAfter(textField.getText());
-            }
-            catch (Exception e)
-            {
-                parent.coreProtectInfo.setTimeAfter("");
+                parent.coreProtectInfo.setTime("");
             }
 
             return false;
@@ -738,24 +658,6 @@ public class GuiCoreProtect extends GuiBase
         }
     }
 
-    private static class TagListCreator implements IStringListConsumer
-    {
-        GuiCoreProtect parent;
-
-        public TagListCreator(GuiCoreProtect parent)
-        {
-            this.parent = parent;
-        }
-
-        @Override
-        public boolean consume(Collection<String> strings)
-        {
-            parent.coreProtectInfo.setTags(ImmutableList.copyOf(strings));
-            GuiBase.openGui(parent);
-            return true;
-        }
-    }
-
     public static class ConsumerButtonListener implements IButtonActionListener
     {
         private final ButtonType type;
@@ -815,15 +717,6 @@ public class GuiCoreProtect extends GuiBase
                 gui.setParent(parent);
                 GuiBase.openGui(gui);
             }
-            if (this.type == ButtonType.TAG)
-            {
-                TagListCreator tagCreator = new TagListCreator(parent);
-                ArrayList<String> tags = parent.getTotalList(DataManager.getTags());
-                GuiStringListSelection gui = new GuiStringListSelectionWithSearch(tags, tagCreator, true, parent.coreProtectInfo.getTags());
-                gui.setTitle(type.getDisplayName());
-                gui.setParent(parent);
-                GuiBase.openGui(gui);
-            }
         }
 
         public enum ButtonType
@@ -832,8 +725,7 @@ public class GuiCoreProtect extends GuiBase
             BLOCK("watson.gui.button.ledger.block"),
             DIMENSION("watson.gui.button.ledger.dimension"),
             ENTITYTYPE("watson.gui.button.ledger.entitytype"),
-            ITEM("watson.gui.button.ledger.item"),
-            TAG("watson.gui.button.ledger.tag");
+            ITEM("watson.gui.button.ledger.item");
 
             private final String labelKey;
 
@@ -897,25 +789,23 @@ public class GuiCoreProtect extends GuiBase
                 List<String> block = coreProtectInfo.getBlocks();
                 List<String> entityType = coreProtectInfo.getEntityTypes();
                 List<String> item = coreProtectInfo.getItems();
-                List<String> tag = coreProtectInfo.getTags();
                 int range = coreProtectInfo.getRange();
                 String source = coreProtectInfo.getSources();
-                String timeBefore = coreProtectInfo.getTimeBefore();
-                String timeAfter = coreProtectInfo.getTimeAfter();
+                String time = coreProtectInfo.getTime();
                 int x = coreProtectInfo.getX();
                 int y = coreProtectInfo.getY();
                 int z = coreProtectInfo.getZ();
                 int pages = coreProtectInfo.getPages();
                 MinecraftClient mc = parent.mc;
 
-                switch (coreProtectInfo.getCoreProtectMode())
+                /*switch (coreProtectInfo.getCoreProtectMode())
                 {
                     case INSPECT -> new PluginInspectPacketHandler().sendPacket(x, y, z, pages, mc);
-                    case PURGE -> new PluginPurgePacketHandler().sendPacket(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter, mc);
-                    case ROLLBACK -> new PluginRollbackPacketHandler().sendPacket(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter, false, mc);
-                    case RESTORE -> new PluginRollbackPacketHandler().sendPacket(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter, true, mc);
-                    case SEARCH -> new PluginSearchPacketHandler().sendPacket(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter, pages, mc);
-                }
+                    case PURGE -> new PluginPurgePacketHandler().sendPacket(action, dimension, block, entityType, item, range, source, time, mc);
+                    case ROLLBACK -> new PluginRollbackPacketHandler().sendPacket(action, dimension, block, entityType, item, range, source, time, false, mc);
+                    case RESTORE -> new PluginRollbackPacketHandler().sendPacket(action, dimension, block, entityType, item, range, source, time, true, mc);
+                    case SEARCH -> new PluginSearchPacketHandler().sendPacket(action, dimension, block, entityType, item, range, source, time, pages, mc);
+                }*/
             }
         }
 

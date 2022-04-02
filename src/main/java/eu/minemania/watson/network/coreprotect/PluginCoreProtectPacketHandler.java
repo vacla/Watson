@@ -1,4 +1,4 @@
-package eu.minemania.watson.network;
+package eu.minemania.watson.network.coreprotect;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
@@ -7,6 +7,7 @@ import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.db.BlockEdit;
 import eu.minemania.watson.db.WatsonBlock;
 import eu.minemania.watson.db.WatsonBlockRegistery;
+import eu.minemania.watson.network.IPluginChannelHandlerExtended;
 import eu.minemania.watson.scheduler.SyncTaskQueue;
 import eu.minemania.watson.scheduler.tasks.AddBlockEditTask;
 import fi.dy.masa.malilib.util.StringUtils;
