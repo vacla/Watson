@@ -128,6 +128,7 @@ public class DataManager implements IDirectoryCache
 
     public static void setPluginActions(List<String> allowedPluginActions)
     {
+        pluginActions.clear();
         pluginActions.addAll(allowedPluginActions);
     }
 
@@ -138,6 +139,7 @@ public class DataManager implements IDirectoryCache
 
     public static void setPluginWorlds(List<String> availablePluginWorlds)
     {
+        pluginWorlds.clear();
         pluginWorlds.addAll(availablePluginWorlds);
     }
 
