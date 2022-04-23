@@ -8,9 +8,10 @@ import eu.minemania.watson.network.ClientPacketChannelHandler;
 import eu.minemania.watson.network.coreprotect.PluginCoreProtectPacketHandler;
 import eu.minemania.watson.network.coreprotect.PluginCoreProtectPacketRegisteredHandler;
 import eu.minemania.watson.network.PluginWorldPacketHandler;
+import eu.minemania.watson.network.coreprotect.PluginCoreProtectResponsePacketHandler;
 import eu.minemania.watson.network.ledger.PluginActionPacketHandler;
 import eu.minemania.watson.network.ledger.PluginHandshakePacketHandler;
-import eu.minemania.watson.network.ledger.PluginResponsePacketHandler;
+import eu.minemania.watson.network.ledger.PluginLedgerResponsePacketHandler;
 import eu.minemania.watson.render.OverlayRenderer;
 import fi.dy.masa.malilib.interfaces.IWorldLoadListener;
 import net.minecraft.client.MinecraftClient;
@@ -30,15 +31,17 @@ public class WorldLoadListener implements IWorldLoadListener
                 ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginWorldPacketHandler.INSTANCE);
                 ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginHandshakePacketHandler.INSTANCE);
                 ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginActionPacketHandler.INSTANCE);
-                ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginResponsePacketHandler.INSTANCE);
+                ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginLedgerResponsePacketHandler.INSTANCE);
                 ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginCoreProtectPacketRegisteredHandler.INSTANCE);
                 ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginCoreProtectPacketHandler.INSTANCE);
+                ClientPacketChannelHandler.getInstance().unregisterClientChannelHandler(PluginCoreProtectResponsePacketHandler.INSTANCE);
                 PluginWorldPacketHandler.INSTANCE.reset();
                 PluginHandshakePacketHandler.INSTANCE.reset();
                 PluginActionPacketHandler.INSTANCE.reset();
-                PluginResponsePacketHandler.INSTANCE.reset();
+                PluginLedgerResponsePacketHandler.INSTANCE.reset();
                 PluginCoreProtectPacketRegisteredHandler.INSTANCE.reset();
                 PluginCoreProtectPacketHandler.INSTANCE.reset();
+                PluginCoreProtectResponsePacketHandler.INSTANCE.reset();
                 if (DataManager.getEditSelection().getSelection() != null)
                 {
                     DataManager.getEditSelection().clearBlockEditSet();
@@ -67,9 +70,10 @@ public class WorldLoadListener implements IWorldLoadListener
             ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginWorldPacketHandler.INSTANCE);
             ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginHandshakePacketHandler.INSTANCE);
             ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginActionPacketHandler.INSTANCE);
-            ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginResponsePacketHandler.INSTANCE);
+            ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginLedgerResponsePacketHandler.INSTANCE);
             ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginCoreProtectPacketRegisteredHandler.INSTANCE);
             ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginCoreProtectPacketHandler.INSTANCE);
+            ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginCoreProtectResponsePacketHandler.INSTANCE);
             ((ClientPacketChannelHandler) ClientPacketChannelHandler.getInstance()).processPacketFromClient(mc.getNetworkHandler());
         }
         if (worldAfter != null)

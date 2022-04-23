@@ -5,10 +5,7 @@ import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.CoreProtectInfo;
 import eu.minemania.watson.gui.GuiCoreProtect.ButtonListenerCycleTypePacket.CoreProtectMode;
-import eu.minemania.watson.network.ledger.PluginInspectPacketHandler;
-import eu.minemania.watson.network.ledger.PluginPurgePacketHandler;
-import eu.minemania.watson.network.ledger.PluginRollbackPacketHandler;
-import eu.minemania.watson.network.ledger.PluginSearchPacketHandler;
+import eu.minemania.watson.network.coreprotect.PluginSearchPacketHandler;
 import fi.dy.masa.malilib.gui.*;
 import fi.dy.masa.malilib.gui.button.ButtonBase;
 import fi.dy.masa.malilib.gui.button.ButtonGeneric;
@@ -32,7 +29,7 @@ public class GuiCoreProtect extends GuiBase
     protected GuiTextFieldInteger textFieldY;
     protected GuiTextFieldInteger textFieldZ;
     protected GuiTextFieldInteger textFieldPages;
-    protected CoreProtectInfo coreProtectInfo = new CoreProtectInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", 0, 0, 0, 0, CoreProtectMode.INSPECT, 10);
+    protected CoreProtectInfo coreProtectInfo = new CoreProtectInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", 0, 0, 0, 0, CoreProtectMode.SEARCH, 10);
 
     protected GuiCoreProtect()
     {
@@ -234,41 +231,6 @@ public class GuiCoreProtect extends GuiBase
     public boolean validate()
     {
         boolean error = false;
-        ArrayList<String> listActionError = new ArrayList<>();
-        ArrayList<String> ledgerActions = getTotalList(DataManager.getPluginActions());
-        for (String action : coreProtectInfo.getActions())
-        {
-            if (!action.contains("-"))
-            {
-                addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.action"), action);
-                error = true;
-                break;
-            }
-            if (!ledgerActions.contains(action))
-            {
-                listActionError.add(action);
-            }
-        }
-        if (!listActionError.isEmpty())
-        {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.action"), String.join(",", listActionError));
-            error = true;
-        }
-
-        for (String dimensionText : coreProtectInfo.getDimensions())
-        {
-            if (dimensionText.isEmpty())
-            {
-                break;
-            }
-            if (!dimensionText.contains(":"))
-            {
-                addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.dimension"), dimensionText);
-                error = true;
-                break;
-            }
-        }
-
         ArrayList<String> listBlockError = new ArrayList<>();
         ArrayList<String> ledgerBlocks = getTotalList(DataManager.getBlocks());
         for (String blockText : coreProtectInfo.getBlocks())
@@ -391,7 +353,7 @@ public class GuiCoreProtect extends GuiBase
 
     private void clearCoreProtectInfo()
     {
-        CoreProtectInfo coreProtectInfo = new CoreProtectInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", 0, 0, 0, 0, CoreProtectMode.INSPECT, 10);
+        CoreProtectInfo coreProtectInfo = new CoreProtectInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", 0, 0, 0, 0, CoreProtectMode.SEARCH, 10);
         this.coreProtectInfo = coreProtectInfo;
         DataManager.setCoreProtectInfo(coreProtectInfo);
     }
@@ -675,7 +637,7 @@ public class GuiCoreProtect extends GuiBase
             if (this.type == ButtonType.ACTION)
             {
                 ActionListCreator actionCreator = new ActionListCreator(parent);
-                ArrayList<String> actions = parent.getTotalList(DataManager.getPluginActions());
+                ArrayList<String> actions = DataManager.getPluginActions();
                 GuiStringListSelection gui = new GuiStringListSelectionWithSearch(actions, actionCreator, false, parent.coreProtectInfo.getActions());
                 gui.setTitle(type.getDisplayName());
                 gui.setParent(parent);
@@ -684,7 +646,7 @@ public class GuiCoreProtect extends GuiBase
             if (this.type == ButtonType.DIMENSION)
             {
                 DimensionListCreator dimensionCreator = new DimensionListCreator(parent);
-                ArrayList<String> dimensions = parent.getTotalList(parent.getDimensions());
+                ArrayList<String> dimensions = parent.getDimensions();
                 GuiStringListSelection gui = new GuiStringListSelectionWithSearch(dimensions, dimensionCreator, false, parent.coreProtectInfo.getDimensions());
                 gui.setTitle(type.getDisplayName());
                 gui.setParent(parent);
@@ -798,14 +760,10 @@ public class GuiCoreProtect extends GuiBase
                 int pages = coreProtectInfo.getPages();
                 MinecraftClient mc = parent.mc;
 
-                /*switch (coreProtectInfo.getCoreProtectMode())
+                switch (coreProtectInfo.getCoreProtectMode())
                 {
-                    case INSPECT -> new PluginInspectPacketHandler().sendPacket(x, y, z, pages, mc);
-                    case PURGE -> new PluginPurgePacketHandler().sendPacket(action, dimension, block, entityType, item, range, source, time, mc);
-                    case ROLLBACK -> new PluginRollbackPacketHandler().sendPacket(action, dimension, block, entityType, item, range, source, time, false, mc);
-                    case RESTORE -> new PluginRollbackPacketHandler().sendPacket(action, dimension, block, entityType, item, range, source, time, true, mc);
-                    case SEARCH -> new PluginSearchPacketHandler().sendPacket(action, dimension, block, entityType, item, range, source, time, pages, mc);
-                }*/
+                    case SEARCH -> new PluginSearchPacketHandler().sendPacket(action, dimension, block, entityType, item, range, source, time, pages, x, y, z, mc);
+                }
             }
         }
 
