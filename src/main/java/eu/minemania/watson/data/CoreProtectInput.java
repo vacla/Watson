@@ -5,7 +5,7 @@ import eu.minemania.watson.config.Configs;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CoreProtectSearch
+public class CoreProtectInput
 {
     private final String actions;
     private final String dimensions;
@@ -19,7 +19,7 @@ public class CoreProtectSearch
     private final boolean optimize;
     private final boolean silentChat;
 
-    public CoreProtectSearch(String type, List<String> actions, List<String> dimension, List<String> block, List<String> entityType, List<String> item, int range, int x, int y, int z, String source, String time, boolean optimize, boolean silentChat)
+    public CoreProtectInput(String type, List<String> actions, List<String> dimension, List<String> block, List<String> entityType, List<String> item, int range, int x, int y, int z, String source, String time, boolean optimize, boolean silentChat)
     {
         List<String> mergedList = mergeLists(block, entityType, item);
         this.type = type;

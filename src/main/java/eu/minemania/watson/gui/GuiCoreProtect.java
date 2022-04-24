@@ -5,7 +5,7 @@ import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.CoreProtectInfo;
 import eu.minemania.watson.gui.GuiCoreProtect.ButtonListenerCycleTypePacket.CoreProtectMode;
-import eu.minemania.watson.network.coreprotect.PluginSearchPacketHandler;
+import eu.minemania.watson.network.coreprotect.PluginCoreProtectInputPacketHandler;
 import fi.dy.masa.malilib.gui.*;
 import fi.dy.masa.malilib.gui.button.ButtonBase;
 import fi.dy.masa.malilib.gui.button.ButtonGeneric;
@@ -796,10 +796,10 @@ public class GuiCoreProtect extends GuiBase
 
                 switch (coreProtectInfo.getCoreProtectMode())
                 {
-                    case PURGE -> new PluginSearchPacketHandler().sendPacket("purge", action, dimension, null, null, null, range, "", time, 1, x, y, z, optimize, silentChat, mc);
-                    case RESTORE -> new PluginSearchPacketHandler().sendPacket("restore", action, dimension, block, entityType, item, range, source, time, pages, x, y, z, false, silentChat, mc);
-                    case ROLLBACK -> new PluginSearchPacketHandler().sendPacket("rollback", action, dimension, block, entityType, item, range, source, time, pages, x, y, z, false, silentChat, mc);
-                    case SEARCH -> new PluginSearchPacketHandler().sendPacket("lookup", action, dimension, block, entityType, item, range, source, time, pages, x, y, z, false, silentChat, mc);
+                    case PURGE -> new PluginCoreProtectInputPacketHandler().sendPacket("purge", action, dimension, null, null, null, range, "", time, 1, x, y, z, optimize, silentChat, mc);
+                    case RESTORE -> new PluginCoreProtectInputPacketHandler().sendPacket("restore", action, dimension, block, entityType, item, range, source, time, pages, x, y, z, false, silentChat, mc);
+                    case ROLLBACK -> new PluginCoreProtectInputPacketHandler().sendPacket("rollback", action, dimension, block, entityType, item, range, source, time, pages, x, y, z, false, silentChat, mc);
+                    case SEARCH -> new PluginCoreProtectInputPacketHandler().sendPacket("lookup", action, dimension, block, entityType, item, range, source, time, pages, x, y, z, false, silentChat, mc);
                 }
             }
         }
