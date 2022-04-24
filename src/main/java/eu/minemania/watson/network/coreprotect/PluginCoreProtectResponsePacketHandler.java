@@ -56,7 +56,7 @@ public class PluginCoreProtectResponsePacketHandler implements IPluginChannelHan
                     Watson.logger.info("message: " + message);
                 }
 
-                InfoUtils.showGuiOrInGameMessage(Message.MessageType.INFO, message, type);
+                InfoUtils.showGuiOrInGameMessage(Message.MessageType.INFO, message);
             }
             catch (Exception e)
             {

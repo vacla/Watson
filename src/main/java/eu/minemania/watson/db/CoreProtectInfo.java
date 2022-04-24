@@ -19,9 +19,26 @@ public class CoreProtectInfo
     private int z;
     private CoreProtectMode coreProtectMode;
     private int pages;
+    private boolean optimize;
+    private boolean silentChat;
 
-    public CoreProtectInfo(List<String> actions, List<String> blocks, List<String> dimensions, List<String> entityTypes, List<String> items, String sources, String time, int range, int x, int y, int z, CoreProtectMode coreProtectMode, int pages)
-    {
+    public CoreProtectInfo(
+            List<String> actions,
+            List<String> blocks,
+            List<String> dimensions,
+            List<String> entityTypes,
+            List<String> items,
+            String sources,
+            String time,
+            int range,
+            int x,
+            int y,
+            int z,
+            CoreProtectMode coreProtectMode,
+            int pages,
+            boolean optimize,
+            boolean silentChat
+    ) {
         this.actions = actions;
         this.blocks = blocks;
         this.dimensions = dimensions;
@@ -35,6 +52,8 @@ public class CoreProtectInfo
         this.z = z;
         this.coreProtectMode = coreProtectMode;
         this.pages = pages;
+        this.optimize = optimize;
+        this.silentChat = silentChat;
     }
 
     public List<String> getActions()
@@ -165,5 +184,25 @@ public class CoreProtectInfo
     public void setPages(int pages)
     {
         this.pages = pages;
+    }
+
+    public boolean getOptimize()
+    {
+        return optimize;
+    }
+
+    public void setOptimize(boolean optimize)
+    {
+        this.optimize = optimize;
+    }
+
+    public boolean getSilentChat()
+    {
+        return silentChat;
+    }
+
+    public void setSilentchat(boolean silentChat)
+    {
+        this.silentChat = silentChat;
     }
 }

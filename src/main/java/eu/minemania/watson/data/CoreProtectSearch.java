@@ -1,5 +1,7 @@
 package eu.minemania.watson.data;
 
+import eu.minemania.watson.config.Configs;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,10 +15,14 @@ public class CoreProtectSearch
     private final String coords;
     private final String included;
     private final String excluded;
+    private final String type;
+    private final boolean optimize;
+    private final boolean silentChat;
 
-    public CoreProtectSearch(List<String> actions, List<String> dimension, List<String> block, List<String> entityType, List<String> item, int range, int x, int y, int z, String source, String time)
+    public CoreProtectSearch(String type, List<String> actions, List<String> dimension, List<String> block, List<String> entityType, List<String> item, int range, int x, int y, int z, String source, String time, boolean optimize, boolean silentChat)
     {
         List<String> mergedList = mergeLists(block, entityType, item);
+        this.type = type;
         this.actions = setTypeList("a",actions);
         this.included = setTypeList("i", getIncluded(mergedList));
         this.excluded = setTypeList("e", getExcluded(mergedList));
@@ -25,6 +31,8 @@ public class CoreProtectSearch
         this.sources = setTypeString("u", source);
         this.time = setTypeString("t", time);
         this.coords = setTypeCoords("c", x, y, z);
+        this.optimize = optimize;
+        this.silentChat = silentChat;
     }
 
     private String setTypeString(String type, String parameterContent)
@@ -67,6 +75,10 @@ public class CoreProtectSearch
         List<T> list = new ArrayList<>();
         for (List<T> value : lists)
         {
+            if (value == null)
+            {
+                continue;
+            }
             list.addAll(value);
         }
 
@@ -133,48 +145,71 @@ public class CoreProtectSearch
         return excluded;
     }
 
+    public String getType()
+    {
+        return type;
+    }
+
+    public boolean getOptimize()
+    {
+        return optimize;
+    }
+
+    public boolean getSilentChat()
+    {
+        return silentChat;
+    }
+
     public String getSearchData()
     {
         StringBuilder search = new StringBuilder();
+        if (!type.isEmpty())
+        {
+            search.append(type);
+        }
         if (!actions.isEmpty())
         {
-            search.append(actions);
-            search.append(" ");
+            search.append(" ").append(actions);
         }
         if (!dimensions.isEmpty())
         {
-            search.append(dimensions);
-            search.append(" ");
+            search.append(" ").append(dimensions);
         }
         if (!included.isEmpty())
         {
-            search.append(included);
-            search.append(" ");
+            search.append(" ").append(included);
         }
         if (!excluded.isEmpty())
         {
-            search.append(excluded);
-            search.append(" ");
+            search.append(" ").append(excluded);
         }
         if (!range.isEmpty())
         {
-            search.append(range);
-            search.append(" ");
+            search.append(" ").append(range);
         }
         if (!sources.isEmpty())
         {
-            search.append(sources);
-            search.append(" ");
+            search.append(" ").append(sources);
         }
         if (!time.isEmpty())
         {
-            search.append(time);
-            search.append(" ");
+            search.append(" ").append(time);
         }
         if (!coords.isEmpty())
         {
-            search.append(coords);
-            search.append(" ");
+            search.append(" ").append(coords);
+        }
+        if (optimize)
+        {
+            search.append(" ").append("#optimize");
+        }
+        if (silentChat)
+        {
+            search.append(" ").append("#silentchat");
+        }
+        if (type.equals("lookup"))
+        {
+            search.append(" ").append("rows:").append(Configs.Plugin.AMOUNT_ROWS.getIntegerValue());
         }
         return search.toString().strip();
     }

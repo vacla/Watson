@@ -51,25 +51,6 @@ public class Paginator
         }
     }
 
-    public void cpRequestNextPage()
-    {
-        if (currentPage != 0 && currentPage < pageCount)
-        {
-            if (currentPage >= Configs.Plugin.MAX_AUTO_PAGES_LOOP.getIntegerValue()) {
-                reset();
-                ChatMessage.localOutputT("watson.message.autopage.finished");
-                return;
-            }
-            if (currentPage == 1 && firstPageLoop)
-            {
-                ChatMessage.getInstance().serverChat(String.format("/%s l %d:%d", Configs.Plugin.COREPROTECT_COMMAND.getStringValue(), 1, Configs.Plugin.AMOUNT_ROWS.getIntegerValue()), currentPage == 1);
-                firstPageLoop = false;
-                return;
-            }
-            ChatMessage.getInstance().serverChat(String.format("/%s l %d:%d", Configs.Plugin.COREPROTECT_COMMAND.getStringValue(), currentPage + 1, Configs.Plugin.AMOUNT_ROWS.getIntegerValue()), currentPage == 1);
-        }
-    }
-
     public void setPageCount(int pageCount)
     {
         this.pageCount = pageCount;

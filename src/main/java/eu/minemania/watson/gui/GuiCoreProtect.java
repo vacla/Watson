@@ -10,8 +10,10 @@ import fi.dy.masa.malilib.gui.*;
 import fi.dy.masa.malilib.gui.button.ButtonBase;
 import fi.dy.masa.malilib.gui.button.ButtonGeneric;
 import fi.dy.masa.malilib.gui.button.IButtonActionListener;
+import fi.dy.masa.malilib.gui.interfaces.ISelectionListener;
 import fi.dy.masa.malilib.gui.interfaces.IStringListConsumer;
 import fi.dy.masa.malilib.gui.interfaces.ITextFieldListener;
+import fi.dy.masa.malilib.gui.widgets.WidgetCheckBox;
 import fi.dy.masa.malilib.gui.widgets.WidgetInfoIcon;
 import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.MinecraftClient;
@@ -29,7 +31,7 @@ public class GuiCoreProtect extends GuiBase
     protected GuiTextFieldInteger textFieldY;
     protected GuiTextFieldInteger textFieldZ;
     protected GuiTextFieldInteger textFieldPages;
-    protected CoreProtectInfo coreProtectInfo = new CoreProtectInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", 0, 0, 0, 0, CoreProtectMode.SEARCH, 10);
+    protected CoreProtectInfo coreProtectInfo = new CoreProtectInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", 0, 0, 0, 0, CoreProtectMode.SEARCH, 1, true, true);
 
     protected GuiCoreProtect()
     {
@@ -72,25 +74,28 @@ public class GuiCoreProtect extends GuiBase
         this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
         button = createButton(button.getX() + offset + 20, y, width, ConsumerButtonListener.ButtonType.DIMENSION);
 
-        label = StringUtils.translate("watson.gui.label.ledger.title.block"); //Block
-        this.addLabel(button.getX() + button.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
-        offset = this.getStringWidth(label) + 10 + button.getWidth();
-        this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
-        createButton(button.getX() + offset + 20, y, width, ConsumerButtonListener.ButtonType.BLOCK);
+        if (coreProtectInfo.getCoreProtectMode() != CoreProtectMode.PURGE)
+        {
+            label = StringUtils.translate("watson.gui.label.ledger.title.block"); //Block
+            this.addLabel(button.getX() + button.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
+            offset = this.getStringWidth(label) + 10 + button.getWidth();
+            this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
+            createButton(button.getX() + offset + 20, y, width, ConsumerButtonListener.ButtonType.BLOCK);
 
-        y += 30;
+            y += 30;
 
-        label = StringUtils.translate("watson.gui.label.ledger.title.entitytype"); //EntityType
-        this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
-        offset = this.getStringWidth(label) + 4;
-        this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
-        button = createButton(x + offset + 20, y, width, ConsumerButtonListener.ButtonType.ENTITYTYPE);
+            label = StringUtils.translate("watson.gui.label.ledger.title.entitytype"); //EntityType
+            this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
+            offset = this.getStringWidth(label) + 4;
+            this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
+            button = createButton(x + offset + 20, y, width, ConsumerButtonListener.ButtonType.ENTITYTYPE);
 
-        label = StringUtils.translate("watson.gui.label.ledger.title.item"); //Item
-        this.addLabel(button.getX() + button.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
-        offset = this.getStringWidth(label) + 10 + button.getWidth();
-        this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
-        createButton(button.getX() + offset + 20, y, width, ConsumerButtonListener.ButtonType.ITEM);
+            label = StringUtils.translate("watson.gui.label.ledger.title.item"); //Item
+            this.addLabel(button.getX() + button.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
+            offset = this.getStringWidth(label) + 10 + button.getWidth();
+            this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
+            createButton(button.getX() + offset + 20, y, width, ConsumerButtonListener.ButtonType.ITEM);
+        }
 
         y += 30;
 
@@ -103,14 +108,26 @@ public class GuiCoreProtect extends GuiBase
         this.textFieldRange.setText(String.valueOf(coreProtectInfo.getRange()));
         this.addTextField(this.textFieldRange, new RangeTextFieldListener(this));
 
-        label = StringUtils.translate("watson.gui.label.ledger.title.source"); //Source
-        this.addLabel(textFieldRange.getX() + textFieldRange.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
-        offset = this.getStringWidth(label) + 10 + textFieldRange.getWidth();
-        this.addWidget(new WidgetInfoIcon(textFieldRange.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.source"));
+        if (coreProtectInfo.getCoreProtectMode() == CoreProtectMode.PURGE)
+        {
+            label = StringUtils.translate("watson.gui.label.coreprotect.optimize");
+            WidgetCheckBox cb = new WidgetCheckBox(textFieldRange.getX() + textFieldRange.getWidth() + 5, y, Icons.CHECKBOX_UNSELECTED, Icons.CHECKBOX_SELECTED, label);
+            cb.setChecked(coreProtectInfo.getOptimize(), false);
+            cb.setListener(new CheckBoxOptimizeListener(this));
+            this.addWidget(cb);
+        }
 
-        this.textFieldSource = new GuiTextFieldGeneric(textFieldRange.getX() + offset + 20, y + 2, width, 14, this.textRenderer);
-        this.textFieldSource.setText(coreProtectInfo.getSources());
-        this.addTextField(this.textFieldSource, new SourceTextFieldListener(this));
+        if (coreProtectInfo.getCoreProtectMode() != CoreProtectMode.PURGE)
+        {
+            label = StringUtils.translate("watson.gui.label.ledger.title.source"); //Source
+            this.addLabel(textFieldRange.getX() + textFieldRange.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
+            offset = this.getStringWidth(label) + 10 + textFieldRange.getWidth();
+            this.addWidget(new WidgetInfoIcon(textFieldRange.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.source"));
+
+            this.textFieldSource = new GuiTextFieldGeneric(textFieldRange.getX() + offset + 20, y + 2, width, 14, this.textRenderer);
+            this.textFieldSource.setText(coreProtectInfo.getSources());
+            this.addTextField(this.textFieldSource, new SourceTextFieldListener(this));
+        }
 
         y += 30;
 
@@ -122,6 +139,12 @@ public class GuiCoreProtect extends GuiBase
         this.textFieldTime = new GuiTextFieldGeneric(x + offset + 20, y + 2, width, 14, this.textRenderer);
         this.textFieldTime.setText(coreProtectInfo.getTime());
         this.addTextField(this.textFieldTime, new TimeTextFieldListener(this));
+
+        label = StringUtils.translate("watson.gui.label.coreprotect.silentchat");
+        WidgetCheckBox cb = new WidgetCheckBox(textFieldTime.getX() + textFieldTime.getWidth() + 5, y, Icons.CHECKBOX_UNSELECTED, Icons.CHECKBOX_SELECTED, label);
+        cb.setChecked(coreProtectInfo.getSilentChat(), false);
+        cb.setListener(new CheckBoxSilentChatListener(this));
+        this.addWidget(cb);
 
         y += 30;
 
@@ -149,7 +172,7 @@ public class GuiCoreProtect extends GuiBase
         this.textFieldZ.setText(String.valueOf(coreProtectInfo.getZ()));
         this.addTextField(this.textFieldZ, new ZTextFieldListener(this));
 
-        if (coreProtectInfo.getCoreProtectMode() == CoreProtectMode.INSPECT || coreProtectInfo.getCoreProtectMode() == CoreProtectMode.SEARCH)
+        if (coreProtectInfo.getCoreProtectMode() == CoreProtectMode.SEARCH)
         {
             y += 30;
 
@@ -346,14 +369,16 @@ public class GuiCoreProtect extends GuiBase
         int z = this.coreProtectInfo.getZ();
         CoreProtectMode coreProtectMode = this.coreProtectInfo.getCoreProtectMode();
         int pages = this.coreProtectInfo.getPages();
+        boolean optimize = this.coreProtectInfo.getOptimize();
+        boolean silentChat = this.coreProtectInfo.getSilentChat();
 
-        CoreProtectInfo coreProtectInfo = new CoreProtectInfo(actions, blocks, dimension, entityTypes, items, source, time, range, x, y, z, coreProtectMode, pages);
+        CoreProtectInfo coreProtectInfo = new CoreProtectInfo(actions, blocks, dimension, entityTypes, items, source, time, range, x, y, z, coreProtectMode, pages, optimize, silentChat);
         DataManager.setCoreProtectInfo(coreProtectInfo);
     }
 
     private void clearCoreProtectInfo()
     {
-        CoreProtectInfo coreProtectInfo = new CoreProtectInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", 0, 0, 0, 0, CoreProtectMode.SEARCH, 10);
+        CoreProtectInfo coreProtectInfo = new CoreProtectInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", 0, 0, 0, 0, CoreProtectMode.SEARCH, 1, true, true);
         this.coreProtectInfo = coreProtectInfo;
         DataManager.setCoreProtectInfo(coreProtectInfo);
     }
@@ -521,10 +546,17 @@ public class GuiCoreProtect extends GuiBase
         {
             try
             {
-                parent.coreProtectInfo.setPages(Integer.parseInt(textField.getText()));
+                int pages = Integer.parseInt(textField.getText());
+                if (pages < 1)
+                {
+                    pages = 1;
+                }
+                parent.coreProtectInfo.setPages(pages);
             }
             catch (Exception ignored)
-            {}
+            {
+                parent.coreProtectInfo.setPages(1);
+            }
 
             return false;
         }
@@ -741,7 +773,7 @@ public class GuiCoreProtect extends GuiBase
             if (this.type == ButtonType.SUBMIT)
             {
                 CoreProtectInfo coreProtectInfo = parent.coreProtectInfo;
-                if (!coreProtectInfo.getCoreProtectMode().equals(CoreProtectMode.INSPECT) && parent.validate())
+                if (parent.validate())
                 {
                     return;
                 }
@@ -758,11 +790,16 @@ public class GuiCoreProtect extends GuiBase
                 int y = coreProtectInfo.getY();
                 int z = coreProtectInfo.getZ();
                 int pages = coreProtectInfo.getPages();
+                boolean optimize = coreProtectInfo.getOptimize();
+                boolean silentChat = coreProtectInfo.getSilentChat();
                 MinecraftClient mc = parent.mc;
 
                 switch (coreProtectInfo.getCoreProtectMode())
                 {
-                    case SEARCH -> new PluginSearchPacketHandler().sendPacket(action, dimension, block, entityType, item, range, source, time, pages, x, y, z, mc);
+                    case PURGE -> new PluginSearchPacketHandler().sendPacket("purge", action, dimension, null, null, null, range, "", time, 1, x, y, z, optimize, silentChat, mc);
+                    case RESTORE -> new PluginSearchPacketHandler().sendPacket("restore", action, dimension, block, entityType, item, range, source, time, pages, x, y, z, false, silentChat, mc);
+                    case ROLLBACK -> new PluginSearchPacketHandler().sendPacket("rollback", action, dimension, block, entityType, item, range, source, time, pages, x, y, z, false, silentChat, mc);
+                    case SEARCH -> new PluginSearchPacketHandler().sendPacket("lookup", action, dimension, block, entityType, item, range, source, time, pages, x, y, z, false, silentChat, mc);
                 }
             }
         }
@@ -811,7 +848,6 @@ public class GuiCoreProtect extends GuiBase
 
         public enum CoreProtectMode
         {
-            INSPECT("watson.gui.button.ledger.inspect"),
             PURGE("watson.gui.button.ledger.purge"),
             RESTORE("watson.gui.button.ledger.restore"),
             ROLLBACK("watson.gui.button.ledger.rollback"),
@@ -855,6 +891,38 @@ public class GuiCoreProtect extends GuiBase
 
                 return values()[id % values().length];
             }
+        }
+    }
+
+    public static class CheckBoxOptimizeListener implements ISelectionListener<WidgetCheckBox>
+    {
+        private final GuiCoreProtect parent;
+
+        public CheckBoxOptimizeListener(GuiCoreProtect parent)
+        {
+            this.parent = parent;
+        }
+
+        @Override
+        public void onSelectionChange(WidgetCheckBox entry)
+        {
+            parent.coreProtectInfo.setOptimize(entry.isChecked());
+        }
+    }
+
+    public static class CheckBoxSilentChatListener implements ISelectionListener<WidgetCheckBox>
+    {
+        private final GuiCoreProtect parent;
+
+        public CheckBoxSilentChatListener(GuiCoreProtect parent)
+        {
+            this.parent = parent;
+        }
+
+        @Override
+        public void onSelectionChange(WidgetCheckBox entry)
+        {
+            parent.coreProtectInfo.setSilentchat(entry.isChecked());
         }
     }
 }

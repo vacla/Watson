@@ -135,6 +135,8 @@
   "watson.gui.label.blockedit.title.description": "Description",
   "watson.gui.label.blockedit.title.time": "Date Time",
   "watson.gui.label.blockedit.title.world": "World",
+  "watson.gui.label.coreprotect.optimize": "Optimize",
+  "watson.gui.label.coreprotect.silentchat": "Silent Chat",
   "watson.gui.label.edits.title.broken": "Broken",
   "watson.gui.label.edits.title.contadded": "Container added",
   "watson.gui.label.edits.title.contremoved": "Container removed",
