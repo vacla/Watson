@@ -161,7 +161,8 @@ public class WatsonCommand extends WatsonCommandBase
                 .then(literal("replay")
                         .then(argument("radius", integer(1))
                                 .then(argument("speed", doubleArg(1))
-                                        .then(argument("since", greedyString()).executes(WatsonCommand::replay)))))
+                                        .then(argument("since", greedyString()).executes(WatsonCommand::replay))))
+                        .then(literal("cancel").executes(WatsonCommand::cancelReplay)))
                 .then(literal("dev")
                         .then(argument("pos", blockPos())
                                 .then(argument("block", string())
@@ -1038,9 +1039,16 @@ public class WatsonCommand extends WatsonCommandBase
                 error = "radius";
             }
             localErrorT(context.getSource(), "watson.error.command.replay." + error);
+            return 0;
         }
 
         DataManager.getEditSelection().replay(since, speed, radius, context.getSource());
+        return 1;
+    }
+
+    private static int cancelReplay(CommandContext<ServerCommandSource> context)
+    {
+        DataManager.getEditSelection().cancelReplay();
         return 1;
     }
 }
