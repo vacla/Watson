@@ -41,6 +41,8 @@ public class EditSelection
     protected static HashMap<String, BlockEditSet> _edits = new HashMap<>();
     protected Calendar _calendar = Calendar.getInstance();
 
+    private static Thread thread;
+
     public HashMap<String, Object> getVariables()
     {
         return _variables;
@@ -293,11 +295,17 @@ public class EditSelection
                     }
                 }
             });
-            t.start();
+            thread = t;
+            thread.start();
         }
         else
         {
             InfoUtils.showInGameMessage(MessageType.ERROR, "watson.message.edits.none_world");
         }
+    }
+
+    public void cancelReplay()
+    {
+        thread.stop();
     }
 }
