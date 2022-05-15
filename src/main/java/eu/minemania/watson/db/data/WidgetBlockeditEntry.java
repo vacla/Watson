@@ -1,6 +1,7 @@
 package eu.minemania.watson.db.data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Nullable;
@@ -219,7 +220,8 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
             }
             if (mouseX < this.getColumnPosX(5))
             {
-                if (this.entry.getEdit().getAdditional() == null || this.entry.getEdit().getAdditional().isEmpty())
+                HashMap<?, ?> additional = this.entry.getEdit().getAdditional();
+                if (additional == null || additional.isEmpty())
                 {
                     return;
                 }
@@ -228,7 +230,8 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
                 RenderSystem.applyModelViewMatrix();
                 int w1 = 0;
                 int w2 = 0;
-                for (Map.Entry<?,?> entry : this.entry.getEdit().getAdditional().entrySet())
+                int additionalHeight = 20 * additional.size();
+                for (Map.Entry<?,?> entry : additional.entrySet())
                 {
                     w1 = Math.max(w1, this.getStringWidth(String.valueOf(entry.getKey())));
                     w2 = Math.max(w2, this.getStringWidth(String.valueOf(entry.getValue())));
@@ -245,10 +248,10 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
                 int x1 = x + 10;
                 int x2 = x1 + w1 + 20;
 
-                RenderUtils.drawOutlinedBox(x, y, totalWidth, 60, 0xFF000000, GuiBase.COLOR_HORIZONTAL_BAR);
+                RenderUtils.drawOutlinedBox(x, y, totalWidth, additionalHeight, 0xFF000000, GuiBase.COLOR_HORIZONTAL_BAR);
                 y += 10;
 
-                for (Map.Entry<?,?> entry : this.entry.getEdit().getAdditional().entrySet())
+                for (Map.Entry<?,?> entry : additional.entrySet())
                 {
                     this.drawString(x1, y, 0xFFFFFFFF, String.valueOf(entry.getKey()), matrixStack);
                     this.drawString(x2, y, 0xFFFFFFFF, String.valueOf(entry.getValue()), matrixStack);

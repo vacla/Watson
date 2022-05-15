@@ -15,6 +15,7 @@ import net.minecraft.util.Identifier;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -133,6 +134,7 @@ public class PluginCoreProtectPacketHandler implements IPluginChannelHandlerExte
                 {
                     boolean isContainer = dis.readBoolean();
                     boolean added = dis.readBoolean();
+                    readAdditional(dis, addition);
                     addition.put("isContainer", isContainer);
                     addition.put("added", added);
                     if (Configs.Generic.DEBUG.getBooleanValue())
@@ -153,5 +155,19 @@ public class PluginCoreProtectPacketHandler implements IPluginChannelHandlerExte
     public PacketByteBuf onPacketSend()
     {
         return null;
+    }
+
+    private void readAdditional(DataInputStream dis, HashMap<String, Object> addition) throws IOException
+    {
+        int count = dis.readInt();
+        if (count != 0)
+        {
+            for (int i = 0; i <= count; i++)
+            {
+                String key = dis.readUTF();
+                String value = dis.readUTF();
+                addition.put(key, value);
+            }
+        }
     }
 }
