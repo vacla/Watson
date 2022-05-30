@@ -1,6 +1,7 @@
 package eu.minemania.watson.mixin;
 
 import net.minecraft.text.MutableText;
+import net.minecraft.text.TranslatableTextContent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.At.Shift;
@@ -12,7 +13,6 @@ import eu.minemania.watson.chat.Highlight;
 import eu.minemania.watson.config.Configs;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 
 @Mixin(ChatHud.class)
 public abstract class MixinChatHud
@@ -33,11 +33,11 @@ public abstract class MixinChatHud
         {
             if (Configs.Highlights.USE_CHAT_HIGHLIGHTS.getBooleanValue())
             {
-                if (componentln instanceof TranslatableText)
+                if (componentln.getContent() instanceof TranslatableTextContent)
                 {
-                    if (((TranslatableText) componentln).getKey().contains("chat.type.text"))
+                    if (((TranslatableTextContent)componentln).getKey().contains("chat.type.text"))
                     {
-                        return Highlight.setHighlightChatMessage(((TranslatableText) componentln).getKey(), (MutableText) componentln, false);
+                        return Highlight.setHighlightChatMessage(((TranslatableTextContent) componentln).getKey(), (MutableText) componentln, false);
                     }
                 }
                 else

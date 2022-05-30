@@ -62,11 +62,11 @@ public class Paginator
             }
             if (currentPage == 1 && firstPageLoop)
             {
-                ChatMessage.getInstance().serverChat(String.format("/%s l %d:%d", Configs.Plugin.COREPROTECT_COMMAND.getStringValue(), 1, Configs.Plugin.AMOUNT_ROWS.getIntegerValue()), currentPage == 1);
+                ChatMessage.getInstance().serverChat(String.format("/%s l %d:%d", Configs.Plugin.COREPROTECT_COMMAND.getValue(), 1, Configs.Plugin.AMOUNT_ROWS.getIntegerValue()), currentPage == 1);
                 firstPageLoop = false;
                 return;
             }
-            ChatMessage.getInstance().serverChat(String.format("/%s l %d:%d", Configs.Plugin.COREPROTECT_COMMAND.getStringValue(), currentPage + 1, Configs.Plugin.AMOUNT_ROWS.getIntegerValue()), currentPage == 1);
+            ChatMessage.getInstance().serverChat(String.format("/%s l %d:%d", Configs.Plugin.COREPROTECT_COMMAND.getValue(), currentPage + 1, Configs.Plugin.AMOUNT_ROWS.getIntegerValue()), currentPage == 1);
         }
     }
 

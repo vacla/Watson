@@ -7,8 +7,7 @@ import java.util.Optional;
 
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
-import fi.dy.masa.malilib.util.Color4f;
-import fi.dy.masa.malilib.util.StringUtils;
+import fi.dy.masa.malilib.util.data.Color4f;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
@@ -22,7 +21,7 @@ public final class WatsonBlockRegistery
 {
     private static final WatsonBlockRegistery INSTANCE = new WatsonBlockRegistery();
     public static final Map<String, WatsonBlock> _byName = new HashMap<>();
-    protected Color4f color;
+    private Color4f color;
 
     public static WatsonBlockRegistery getInstance()
     {
@@ -66,7 +65,7 @@ public final class WatsonBlockRegistery
                             {
                                 watsonBlock.setLineWidth(lineWidth);
                             }
-                            int colorst = StringUtils.getColor(watsonBlockData[2], 0);
+                            int colorst = Color4f.getColorFromString(watsonBlockData[2], 0);
                             int colorTemp = MathHelper.clamp(colorst, Integer.MIN_VALUE, Integer.MAX_VALUE);
                             if (colorTemp != 0)
                             {
@@ -86,7 +85,7 @@ public final class WatsonBlockRegistery
                                 {
                                     watsonBlock.setLineWidth(lineWidth);
                                 }
-                                int colorst = StringUtils.getColor(watsonBlockData[2], 0);
+                                int colorst = Color4f.getColorFromString(watsonBlockData[2], 0);
                                 int colorTemp = MathHelper.clamp(colorst, Integer.MIN_VALUE, Integer.MAX_VALUE);
                                 if (colorTemp != 0)
                                 {
@@ -104,7 +103,7 @@ public final class WatsonBlockRegistery
                                 {
                                     watsonBlock.setLineWidth(lineWidth);
                                 }
-                                int colorst = StringUtils.getColor(watsonBlockData[2], 0);
+                                int colorst = Color4f.getColorFromString(watsonBlockData[2], 0);
                                 int colorTemp = MathHelper.clamp(colorst, Integer.MIN_VALUE, Integer.MAX_VALUE);
                                 if (colorTemp != 0)
                                 {

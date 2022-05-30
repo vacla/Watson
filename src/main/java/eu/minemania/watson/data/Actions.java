@@ -1,8 +1,7 @@
 package eu.minemania.watson.data;
 
 import eu.minemania.watson.db.BlockEdit;
-import fi.dy.masa.malilib.gui.Message;
-import fi.dy.masa.malilib.util.InfoUtils;
+import fi.dy.masa.malilib.overlay.message.MessageDispatcher;
 import org.apache.commons.lang3.tuple.MutablePair;
 
 import java.util.HashSet;
@@ -72,7 +71,7 @@ public class Actions
             }
             catch (Exception e)
             {
-                InfoUtils.showGuiMessage(Message.MessageType.ERROR, "watson.error.action", str);
+                MessageDispatcher.error("watson.error.action", str);
             }
         }
     }

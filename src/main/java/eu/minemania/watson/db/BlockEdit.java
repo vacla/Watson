@@ -6,7 +6,7 @@ import java.util.Optional;
 import com.mojang.blaze3d.systems.RenderSystem;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.render.RenderUtils;
-import fi.dy.masa.malilib.util.Color4f;
+import fi.dy.masa.malilib.util.data.Color4f;
 import net.minecraft.block.*;
 import net.minecraft.block.OreBlock;
 import net.minecraft.client.MinecraftClient;
@@ -84,13 +84,13 @@ public class BlockEdit
 
     private void renderBlocks(BufferBuilder buffer, Block blocks, MatrixStack matrices)
     {
-        Color4f color = block.getOverrideColor() != Color4f.ZERO && block.getOverrideColor() != null ? block.getOverrideColor() : block.getColor();
+        Color4f color = block.getOverrideColor() != Color4f.WHITE && block.getOverrideColor() != null ? block.getOverrideColor() : block.getColor();
         if (!block.getName().equals("minecraft:grass") && !block.getName().equals("minecraft:water") &&
                 !block.getName().equals("minecraft:lava"))
         {
             BlockState state = blocks.getDefaultState();
             BakedModel model = this.blockModelShapes.getModel(state);
-            if (Configs.Lists.SMALLER_RENDER_BOX.getStrings().contains(block.getName()))
+            if (Configs.Lists.SMALLER_RENDER_BOX.getValue().contains(block.getName()))
             {
                 RenderUtils.drawBlockBoundingBoxOutlinesBatchedLines(new BlockPos(x, y, z), color, -0.25, buffer);
             }
@@ -133,7 +133,7 @@ public class BlockEdit
     private void renderEntities(BufferBuilder buffer)
     {
         Optional<EntityType<?>> entity = EntityType.get(block.getName());
-        Color4f color = block.getOverrideColor() != Color4f.ZERO && block.getOverrideColor() != null ? block.getOverrideColor() : block.getColor();
+        Color4f color = block.getOverrideColor() != Color4f.WHITE && block.getOverrideColor() != null ? block.getOverrideColor() : block.getColor();
         if (entity.isPresent())
         {
             if (block.getName().equals("minecraft:item_frame") || block.getName().equals("minecraft:painting"))

@@ -3,14 +3,10 @@ package eu.minemania.watson.event;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.render.OverlayRenderer;
 import eu.minemania.watson.render.WatsonRenderer;
-import fi.dy.masa.malilib.interfaces.IRenderer;
+import fi.dy.masa.malilib.event.PostWorldRenderer;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.OutlineVertexConsumerProvider;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Matrix4f;
 
-public class RenderHandler implements IRenderer
+public class RenderHandler implements PostWorldRenderer
 {
     private static final RenderHandler INSTANCE = new RenderHandler();
 
@@ -20,15 +16,12 @@ public class RenderHandler implements IRenderer
     }
 
     @Override
-    public void onRenderWorldLast(MatrixStack matrixStack, Matrix4f projMatrix)
+    public void onPostWorldRender(MinecraftClient mc, float partialTicks)
     {
-        MinecraftClient mc = MinecraftClient.getInstance();
-
         if (Configs.Generic.ENABLED.getBooleanValue() && mc.world != null && mc.player != null)
         {
-            VertexConsumerProvider.Immediate vertexProvider = mc.getBufferBuilders().getEntityVertexConsumers();
             OverlayRenderer.renderOverlays(mc);
-            WatsonRenderer.getInstance().piecewiseRenderEntities(mc, matrixStack, vertexProvider);
+            WatsonRenderer.getInstance().piecewiseRenderEntities(mc);
         }
     }
 }

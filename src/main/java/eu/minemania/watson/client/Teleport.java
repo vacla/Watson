@@ -11,7 +11,7 @@ public class Teleport
 {
     public static void teleport(double x, double y, double z, String world)
     {
-        String format = Configs.Generic.TELEPORT_COMMAND.getStringValue();
+        String format = Configs.Generic.TELEPORT_COMMAND.getValue();
         Pattern pattern = Pattern.compile("\\{(\\w*):?(\\w*)}");
         Matcher matcher = pattern.matcher(format);
         while (matcher.find())

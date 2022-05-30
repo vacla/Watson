@@ -16,11 +16,10 @@ import com.mojang.brigadier.tree.CommandNode;
 
 import eu.minemania.watson.chat.Highlight;
 import eu.minemania.watson.config.Configs;
-import fi.dy.masa.malilib.gui.Message.MessageType;
-import fi.dy.masa.malilib.util.InfoUtils;
+import fi.dy.masa.malilib.overlay.message.MessageDispatcher;
 import net.minecraft.command.CommandSource;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 
 public class HighlightCommand extends WatsonCommandBase
 {
@@ -46,7 +45,7 @@ public class HighlightCommand extends WatsonCommandBase
     {
         if (!Configs.Highlights.USE_CHAT_HIGHLIGHTS.getBooleanValue())
         {
-            InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.highlight.disabled");
+            MessageDispatcher.generic("watson.message.highlight.disabled");
             return 1;
         }
         int cmdCount = 0;
@@ -59,12 +58,12 @@ public class HighlightCommand extends WatsonCommandBase
                 Map<CommandNode<ServerCommandSource>, String> usage = dispatcher.getSmartUsage(command, context.getSource());
                 for (String u : usage.values())
                 {
-                    ClientCommandManager.sendFeedback(new LiteralText("/" + cmdName + " " + u));
+                    ClientCommandManager.sendFeedback(Text.literal("/" + cmdName + " " + u));
                 }
                 cmdCount += usage.size();
                 if (usage.size() == 0)
                 {
-                    ClientCommandManager.sendFeedback(new LiteralText("/" + cmdName));
+                    ClientCommandManager.sendFeedback(Text.literal("/" + cmdName));
                     cmdCount++;
                 }
             }

@@ -7,8 +7,6 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.Nullable;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -21,31 +19,30 @@ import eu.minemania.watson.db.BlockEditSet;
 import eu.minemania.watson.db.Filters;
 import eu.minemania.watson.db.LedgerInfo;
 import eu.minemania.watson.db.TimeStamp;
-import eu.minemania.watson.gui.GuiConfigs.ConfigGuiTab;
+import eu.minemania.watson.gui.ConfigScreen;
 import eu.minemania.watson.selection.EditSelection;
-import fi.dy.masa.malilib.gui.Message;
-import fi.dy.masa.malilib.gui.interfaces.IDirectoryCache;
+import fi.dy.masa.malilib.config.util.ConfigUtils;
+import fi.dy.masa.malilib.gui.config.ConfigTab;
+import fi.dy.masa.malilib.gui.tab.ScreenTab;
+import fi.dy.masa.malilib.overlay.message.MessageDispatcher;
 import fi.dy.masa.malilib.util.FileUtils;
-import fi.dy.masa.malilib.util.InfoUtils;
-import fi.dy.masa.malilib.util.JsonUtils;
 import fi.dy.masa.malilib.util.StringUtils;
-import fi.dy.masa.malilib.util.WorldUtils;
+import fi.dy.masa.malilib.util.data.json.JsonUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
-public class DataManager implements IDirectoryCache
+public class DataManager
 {
     private static final DataManager INSTANCE = new DataManager();
 
     protected static final Pattern DATE_PATTERN = Pattern.compile("^(\\d{4})-(\\d{1,2})-(\\d{1,2})$");
     protected static final Pattern ABSOLUTE_TIME = Pattern.compile("(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{1,2}):(\\d{1,2})");
-    private static final Map<String, File> LAST_DIRECTORIES = new HashMap<>();
     private static final ArrayList<String> setNames = new ArrayList<>();
 
-    private static ConfigGuiTab configGuiTab = ConfigGuiTab.GENERIC;
+    private static ScreenTab configGuiTab = ConfigScreen.GENERIC;
     private static boolean canSave;
     private static long clientTickStart;
     private static String worldName = "";
@@ -67,11 +64,6 @@ public class DataManager implements IDirectoryCache
         return INSTANCE;
     }
 
-    public static IDirectoryCache getDirectoryCache()
-    {
-        return INSTANCE;
-    }
-
     public static void setClientTick(long time)
     {
         clientTickStart = time;
@@ -87,12 +79,12 @@ public class DataManager implements IDirectoryCache
         return clientTickStart;
     }
 
-    public static ConfigGuiTab getConfigGuiTab()
+    public static ScreenTab getConfigGuiTab()
     {
         return configGuiTab;
     }
 
-    public static void setConfigGuiTab(ConfigGuiTab tab)
+    public static void setConfigGuiTab(ConfigTab tab)
     {
         configGuiTab = tab;
     }
@@ -137,66 +129,20 @@ public class DataManager implements IDirectoryCache
         return ledgerActions;
     }
 
-    @Override
-    @Nullable
-    public File getCurrentDirectoryForContext(String context)
-    {
-        return LAST_DIRECTORIES.get(context);
-    }
-
-    @Override
-    public void setCurrentDirectoryForContext(String context, File dir)
-    {
-        LAST_DIRECTORIES.put(context, dir);
-    }
-
     public static void load()
     {
-        File file = getCurrentStorageFile(true);
+        File file = getCurrentStorageFile();
 
         JsonElement element = JsonUtils.parseJsonFile(file);
 
         if (element != null && element.isJsonObject())
         {
-            LAST_DIRECTORIES.clear();
 
             JsonObject root = element.getAsJsonObject();
 
-            if (JsonUtils.hasObject(root, "last_directories"))
-            {
-                JsonObject obj = root.get("last_directories").getAsJsonObject();
-
-                for (Map.Entry<String, JsonElement> entry : obj.entrySet())
-                {
-                    String name = entry.getKey();
-                    JsonElement el = entry.getValue();
-
-                    if (el.isJsonPrimitive())
-                    {
-                        File dir = new File(el.getAsString());
-
-                        if (dir.exists() && dir.isDirectory())
-                        {
-                            LAST_DIRECTORIES.put(name, dir);
-                        }
-                    }
-                }
-            }
-
             if (JsonUtils.hasString(root, "config_gui_tab"))
             {
-                try
-                {
-                    configGuiTab = ConfigGuiTab.valueOf(root.get("config_gui_tab").getAsString());
-                }
-                catch (Exception ignored)
-                {
-                }
-
-                if (configGuiTab == null)
-                {
-                    configGuiTab = ConfigGuiTab.GENERIC;
-                }
+                configGuiTab = ScreenTab.getTabByNameOrDefault(root.get("config_gui_tab").getAsString(), ConfigScreen.ALL_TABS, ConfigScreen.GENERIC);
             }
         }
 
@@ -205,29 +151,16 @@ public class DataManager implements IDirectoryCache
 
     public static void save()
     {
-        save(false);
-    }
-
-    public static void save(boolean forceSave)
-    {
-        if (!canSave && !forceSave)
+        if (!canSave)
         {
             return;
         }
 
         JsonObject root = new JsonObject();
-        JsonObject objDirs = new JsonObject();
 
-        for (Map.Entry<String, File> entry : LAST_DIRECTORIES.entrySet())
-        {
-            objDirs.add(entry.getKey(), new JsonPrimitive(entry.getValue().getAbsolutePath()));
-        }
+        root.add("config_gui_tab", new JsonPrimitive(configGuiTab.getName()));
 
-        root.add("last_directories", objDirs);
-
-        root.add("config_gui_tab", new JsonPrimitive(configGuiTab.name()));
-
-        File file = getCurrentStorageFile(true);
+        File file = getCurrentStorageFile();
         JsonUtils.writeJsonToFile(root, file);
 
         canSave = false;
@@ -235,7 +168,7 @@ public class DataManager implements IDirectoryCache
 
     public static File getCurrentConfigDirectory()
     {
-        return new File(FileUtils.getConfigDirectory(), Reference.MOD_ID);
+        return ConfigUtils.getConfigDirectoryPath().resolve(Reference.MOD_ID).toFile();
     }
 
     public static File getPlayereditsBaseDirectory()
@@ -250,7 +183,7 @@ public class DataManager implements IDirectoryCache
         return dir;
     }
 
-    private static File getCurrentStorageFile(boolean globalData)
+    private static File getCurrentStorageFile()
     {
         File dir = getCurrentConfigDirectory();
 
@@ -259,10 +192,10 @@ public class DataManager implements IDirectoryCache
             Watson.logger.warn("Failed to create the config directory '{}'", dir.getAbsolutePath());
         }
 
-        return new File(dir, getStorageFileName(globalData));
+        return new File(dir, getStorageFileName());
     }
 
-    private static String getStorageFileName(boolean globalData)
+    private static String getStorageFileName()
     {
         MinecraftClient mc = MinecraftClient.getInstance();
         String name = StringUtils.getWorldOrServerName();
@@ -272,14 +205,7 @@ public class DataManager implements IDirectoryCache
             return Reference.MOD_ID + "_default.json";
         }
 
-        if (globalData)
-        {
-            return Reference.MOD_ID + "_" + name + ".json";
-        }
-        else
-        {
-            return Reference.MOD_ID + "_" + name + "_dim" + WorldUtils.getDimensionId(world) + ".json";
-        }
+        return Reference.MOD_ID + "_" + name + ".json";
     }
 
     public static String getServerIP()
@@ -405,7 +331,7 @@ public class DataManager implements IDirectoryCache
                 ChatMessage.localOutputT("watson.message.blockedit.pages", page, pages);
                 if (page < pages)
                 {
-                    ChatMessage.localOutputT("watson.message.blockedit.next_page", Configs.Generic.WATSON_PREFIX.getStringValue(), prefix, (page + 1));
+                    ChatMessage.localOutputT("watson.message.blockedit.next_page", Configs.Generic.WATSON_PREFIX.getValue(), prefix, (page + 1));
                 }
             }
         }
@@ -542,7 +468,7 @@ public class DataManager implements IDirectoryCache
         }
         else
         {
-            InfoUtils.showGuiOrInGameMessage(Message.MessageType.ERROR, "watson.gui.label.blockedit.info.format");
+            MessageDispatcher.error("watson.gui.label.blockedit.info.format");
             return -1;
         }
     }

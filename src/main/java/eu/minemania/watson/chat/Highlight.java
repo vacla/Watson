@@ -7,15 +7,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 
+import com.google.common.collect.ImmutableList;
+import fi.dy.masa.malilib.overlay.message.MessageDispatcher;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.text.*;
+import net.minecraft.text.HoverEvent;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.apache.commons.lang3.tuple.MutablePair;
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
-import fi.dy.masa.malilib.gui.Message.MessageType;
-import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.util.Formatting;
@@ -57,22 +60,22 @@ public class Highlight
         if (!watsonMessage)
         {
             message.visit((style, string) -> {
-                MutableText chatComponent = new LiteralText(string).setStyle(style);
+                MutableText chatComponent = Text.literal(string).setStyle(style);
 
                 if (i[0] == 1)
                 {
-                    user[0] = chatComponent.asString();
+                    user[0] = chatComponent.getString();
                 }
                 if (i[0] > 2)
                 {
-                    textChat.append(chatComponent.asString());
+                    textChat.append(chatComponent.getString());
                 }
                 i[0]++;
                 return Optional.empty();
             }, Style.EMPTY);
 
             setUsername(user[0], null);
-            endMessage = new TranslatableText(key, player.getDisplayName(), Configs.Highlights.USE_CHAT_HIGHLIGHTS.getBooleanValue() ? highlight(textChat.toString()) : textChat.toString());
+            endMessage = Text.translatable(key, player.getDisplayName(), Configs.Highlights.USE_CHAT_HIGHLIGHTS.getBooleanValue() ? highlight(textChat.toString()) : textChat.toString());
         }
         else
         {
@@ -95,9 +98,9 @@ public class Highlight
     {
         String textChat;
         StringBuilder chat = new StringBuilder();
-        MutableText endMessage = new LiteralText("");
+        MutableText endMessage = Text.literal("");
         final MutableText[] playerChatComponent = {null};
-        MutableText prefix = new LiteralText("");
+        MutableText prefix = Text.literal("");
         final Style[] prefixStyle = {null};
         final Style[] dividerStyle = {null};
         String divineDivider = "\u00BB";
@@ -136,7 +139,7 @@ public class Highlight
                     }
                     if (playerChatComponent[0] == null && !string.equals(" ") && (i[0] == 2 || i[0] == 3) && prefixStyle[0] != null)
                     {
-                        playerChatComponent[0] = new LiteralText(string).setStyle(style);
+                        playerChatComponent[0] = Text.literal(string).setStyle(style);
                     }
                     if (string.contains(divineDivider))
                     {
@@ -158,9 +161,9 @@ public class Highlight
                     {
                         start = 0;
                     }
-                    prefix = new LiteralText(chat.substring(start, chat.indexOf("]") + 1));
+                    prefix = Text.literal(chat.substring(start, chat.indexOf("]") + 1));
                 }
-                if (!prefix.equals(new LiteralText("")) || chat.toString().startsWith("<"))
+                if (!prefix.equals(Text.literal("")) || chat.toString().startsWith("<"))
                 {
                     username = chat.substring(startUsername, endUsername);
                 }
@@ -172,14 +175,14 @@ public class Highlight
                 changeUsername = true;
                 setUsername(username, null);
 
-                endMessage.append(new TranslatableText(tempkey, mc.player.getDisplayName(), highlight(textChat)));
+                endMessage.append(Text.translatable(tempkey, mc.player.getDisplayName(), highlight(textChat)));
                 if (Configs.Generic.DEBUG.getBooleanValue())
                 {
                     Watson.logger.info("textchat: " + textChat);
                     Watson.logger.info("prefix: " + prefix.getString());
                     Watson.logger.info("text endmessage: " + endMessage.getString());
                 }
-                if (!prefix.equals(new LiteralText("")))
+                if (!prefix.equals(Text.literal("")))
                 {
                     prefix.append(" ");
                     prefix.append(endMessage);
@@ -194,12 +197,12 @@ public class Highlight
                 }
                 int startUsername = chat.indexOf("]") + 1;
                 int endUsername = chat.indexOf(divineDivider) - 1;
-                if (prefix.equals(new LiteralText("")) && (chat.toString().contains("[") && chat.toString().contains("]")) && chat.indexOf("]") < endUsername)
+                if (prefix.equals(Text.literal("")) && (chat.toString().contains("[") && chat.toString().contains("]")) && chat.indexOf("]") < endUsername)
                 {
                     String textPrefix = chat.substring(chat.indexOf("["), chat.indexOf("]") + 1);
                     if (prefixStyle[0] != null)
                     {
-                        prefix = new LiteralText(textPrefix).setStyle(prefixStyle[0]);
+                        prefix = Text.literal(textPrefix).setStyle(prefixStyle[0]);
                         if (Configs.Generic.DEBUG.getBooleanValue())
                         {
                             Watson.logger.info("prefixStyle: " + prefixStyle[0] + " formatting: " + Formatting.RESET);
@@ -211,11 +214,11 @@ public class Highlight
                         Watson.logger.info("prefix: " + prefix.getString());
                     }
                 }
-                if (!prefix.equals(new LiteralText("")) || chat.toString().startsWith("["))
+                if (!prefix.equals(Text.literal("")) || chat.toString().startsWith("["))
                 {
-                    if (prefix.equals(new LiteralText("")))
+                    if (prefix.equals(Text.literal("")))
                     {
-                        prefix = new LiteralText(chat.substring(0, startUsername));
+                        prefix = Text.literal(chat.substring(0, startUsername));
                         Watson.logger.info("prefix: " + prefix.getString());
                     }
                     username = chat.substring(startUsername, endUsername);
@@ -226,12 +229,12 @@ public class Highlight
                 }
                 else
                 {
-                    MutableText beforeDivider = new LiteralText("");
+                    MutableText beforeDivider = Text.literal("");
                     AtomicBoolean dividerShown = new AtomicBoolean(false);
                     List<MutableText> textMessage = new ArrayList<>();
 
                     message.visit((style, string) -> {
-                        MutableText test = new LiteralText(string).setStyle(style);
+                        MutableText test = Text.literal(string).setStyle(style);
                         if (dividerShown.get())
                         {
                             textMessage.add(test);
@@ -239,11 +242,11 @@ public class Highlight
                         else if (string.contains(divineDivider))
                         {
                             dividerShown.set(true);
-                            textMessage.add(string.length() > 3 ? new LiteralText(string.substring(string.indexOf(divineDivider))).setStyle(style) : test);
+                            textMessage.add(string.length() > 3 ? Text.literal(string.substring(string.indexOf(divineDivider))).setStyle(style) : test);
                         }
                         else
                         {
-                            beforeDivider.append(new LiteralText(string).setStyle(style));
+                            beforeDivider.append(Text.literal(string).setStyle(style));
                         }
                         return Optional.empty();
                     }, Style.EMPTY);
@@ -275,7 +278,7 @@ public class Highlight
                 changeUsername = true;
                 if (playerChatComponent[0] != null)
                 {
-                    setUsername(playerChatComponent[0].asString(), playerChatComponent[0].getStyle());
+                    setUsername(playerChatComponent[0].getString(), playerChatComponent[0].getStyle());
                 }
                 else
                 {
@@ -283,9 +286,9 @@ public class Highlight
                 }
                 MutableText displayName = (MutableText) mc.player.getDisplayName();
                 String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
-                HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TranslatableText("watson.chat.message.hover", (new LiteralText(time)).formatted(Formatting.YELLOW)));
+                HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.translatable("watson.chat.message.hover", (Text.literal(time)).formatted(Formatting.YELLOW)));
                 displayName.styled(style -> style.withHoverEvent(hover));
-                if (!prefix.equals(new LiteralText("")))
+                if (!prefix.equals(Text.literal("")))
                 {
                     if (Configs.Generic.DEBUG.getBooleanValue())
                     {
@@ -296,11 +299,11 @@ public class Highlight
                 if (dividerStyle[0] != null)
                 {
                     endMessage.append(" ");
-                    endMessage.append(new TranslatableText("watson.chat.message", displayName, new LiteralText(divineDivider).setStyle(dividerStyle[0]), highlight(textChat)));
+                    endMessage.append(Text.translatable("watson.chat.message", displayName, Text.literal(divineDivider).setStyle(dividerStyle[0]), highlight(textChat)));
                 }
                 else
                 {
-                    endMessage.append(new TranslatableText(tempkey, displayName, new LiteralText(highlight(textChat))));
+                    endMessage.append(Text.translatable(tempkey, displayName, Text.literal(highlight(textChat))));
                 }
             }
             else
@@ -344,7 +347,7 @@ public class Highlight
                 if (!madeSound && Configs.Highlights.HIGHLIGHT_SOUND_ENABLE.getBooleanValue())
                 {
                     madeSound = true;
-                    String sound = Configs.Highlights.HIGHLIGHT_SOUND.getStringValue();
+                    String sound = Configs.Highlights.HIGHLIGHT_SOUND.getValue();
                     try
                     {
                         SoundEvent soundEvent = Registry.SOUND_EVENT.get(new Identifier(sound));
@@ -381,10 +384,10 @@ public class Highlight
 
     private static MutableText highlight(List<MutableText> messages)
     {
-        MutableText endMessage = new LiteralText("");
+        MutableText endMessage = Text.literal("");
         for (MutableText message : messages)
         {
-            endMessage.append(new LiteralText(highlight(message.asString())).setStyle(message.getStyle()));
+            endMessage.append(Text.literal(highlight(message.getString())).setStyle(message.getStyle()));
         }
         return endMessage;
     }
@@ -473,7 +476,7 @@ public class Highlight
     {
         if (highlights.isEmpty())
         {
-            InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.highlight.empty");
+            MessageDispatcher.generic("watson.message.highlight.empty");
         }
         else
         {
@@ -493,29 +496,29 @@ public class Highlight
     {
         if (highlights.isEmpty())
         {
-            InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.highlight.empty");
+            MessageDispatcher.generic("watson.message.highlight.empty");
             return;
         }
-        List<String> orig = Configs.Lists.HIGHLIGHT.getStrings();
+        List<String> orig = Configs.Lists.HIGHLIGHT.getValue();
         List<String> copy = new ArrayList<>(orig);
         copy.removeIf((str) -> str.contains(pattern));
 
         if (copy.size() != orig.size())
         {
-            Configs.Lists.HIGHLIGHT.setStrings(copy);
-            InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.highlight.removed", pattern);
+            Configs.Lists.HIGHLIGHT.setValue(ImmutableList.copyOf(copy));
+            MessageDispatcher.generic("watson.message.highlight.removed", pattern);
         }
     }
 
     public static void add(String pattern, String color, String style)
     {
-        List<String> orig = Configs.Lists.HIGHLIGHT.getStrings();
+        List<String> orig = Configs.Lists.HIGHLIGHT.getValue();
         List<String> copy = new ArrayList<>(orig);
         if (pattern != null && (style != null || color != null))
         {
             copy.add(style + color + ";" + pattern);
-            Configs.Lists.HIGHLIGHT.setStrings(copy);
-            InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.highlight.added", copy.size(), pattern);
+            Configs.Lists.HIGHLIGHT.setValue(ImmutableList.copyOf(copy));
+            MessageDispatcher.generic("watson.message.highlight.added", copy.size(), pattern);
         }
     }
 
@@ -580,7 +583,7 @@ public class Highlight
             }
             catch (Exception e)
             {
-                InfoUtils.showGuiMessage(MessageType.ERROR, "watson.error.highlight", str);
+                MessageDispatcher.error("watson.error.highlight", str);
             }
         }
     }

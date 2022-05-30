@@ -140,7 +140,7 @@ public class OreDB
                 if (page < pages)
                 {
                     ChatMessage.localOutputT("watson.message.blockedit.pages", page, pages);
-                    ChatMessage.localOutputT("watson.message.deposit.next_page", Configs.Generic.WATSON_PREFIX.getStringValue(), (page + 1));
+                    ChatMessage.localOutputT("watson.message.deposit.next_page", Configs.Generic.WATSON_PREFIX.getValue(), (page + 1));
                 }
             }
         }

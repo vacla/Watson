@@ -1,6 +1,6 @@
 package eu.minemania.watson.db;
 
-import fi.dy.masa.malilib.util.Color4f;
+import fi.dy.masa.malilib.util.data.Color4f;
 
 public final class WatsonBlock
 {

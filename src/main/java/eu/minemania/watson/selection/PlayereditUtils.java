@@ -13,10 +13,9 @@ import eu.minemania.watson.db.BlockEdit;
 import eu.minemania.watson.db.PlayereditSet;
 import eu.minemania.watson.db.WatsonBlock;
 import eu.minemania.watson.db.data.BlockeditEntry;
-import fi.dy.masa.malilib.gui.Message.MessageType;
-import fi.dy.masa.malilib.util.InfoUtils;
-import fi.dy.masa.malilib.util.ItemType;
+import fi.dy.masa.malilib.overlay.message.MessageDispatcher;
 import fi.dy.masa.malilib.util.StringUtils;
+import fi.dy.masa.malilib.util.data.ItemType;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -223,7 +222,7 @@ public class PlayereditUtils
                     SpawnEggItem spawnEgg = SpawnEggItem.forEntity(entity);
                     if (spawnEgg == null)
                     {
-                        InfoUtils.showGuiMessage(MessageType.WARNING, "watson.error.entity.not_found", entity.getName().getString());
+                        MessageDispatcher.warning("watson.error.entity.not_found", entity.getName().getString());
                         if (Configs.Generic.DEBUG.getBooleanValue())
                         {
                             Watson.logger.warn(StringUtils.translate("watson.error.blockentity.not_found", blocks));
@@ -236,7 +235,7 @@ public class PlayereditUtils
             }
         }
 
-        InfoUtils.showGuiMessage(MessageType.WARNING, "watson.error.blockentity.not_found", blocks);
+        MessageDispatcher.warning("watson.error.blockentity.not_found", blocks);
         if (Configs.Generic.DEBUG.getBooleanValue())
         {
             Watson.logger.warn(StringUtils.translate("watson.error.blockentity.not_found", blocks));

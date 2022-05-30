@@ -13,7 +13,7 @@ import eu.minemania.watson.db.WatsonBlockRegistery;
 import eu.minemania.watson.scheduler.SyncTaskQueue;
 import eu.minemania.watson.scheduler.tasks.AddBlockEditTask;
 import eu.minemania.watson.selection.EditSelection;
-import fi.dy.masa.malilib.util.InfoUtils;
+import fi.dy.masa.malilib.overlay.message.MessageDispatcher;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.MutableText;
 
@@ -270,7 +270,7 @@ public class CoreProtectAnalysis extends Analysis
                 {
                     if (Configs.Messages.DISABLE_CP_MESSAGES.getBooleanValue())
                     {
-                        InfoUtils.printActionbarMessage("watson.message.cp.auto_page.page", currentPage, pageCount);
+                        MessageDispatcher.generic().customHotbar().translate("watson.message.cp.auto_page.page", currentPage, pageCount);
                         if (currentPage == 1)
                         {
                             ChatMessage.localOutputT("watson.message.cp.auto_page.start", pageCount);

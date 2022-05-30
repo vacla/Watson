@@ -5,127 +5,89 @@ import javax.annotation.Nullable;
 import eu.minemania.watson.Reference;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.config.Plugins;
-import fi.dy.masa.malilib.gui.GuiBase;
-import fi.dy.masa.malilib.gui.button.ButtonBase;
-import fi.dy.masa.malilib.gui.button.ButtonGeneric;
-import fi.dy.masa.malilib.gui.button.IButtonActionListener;
+import fi.dy.masa.malilib.gui.BaseScreen;
+import fi.dy.masa.malilib.gui.widget.InteractableWidget;
+import fi.dy.masa.malilib.gui.widget.button.GenericButton;
 import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.gui.screen.Screen;
 
-public class GuiMainMenu extends GuiBase
+import java.util.ArrayList;
+import java.util.List;
+
+public class GuiMainMenu extends BaseScreen
 {
+    protected final GenericButton configScreenButton;
+    protected final GenericButton playereditLoadedScreenButton;
+    protected final GenericButton ledgerScreenButton;
+    protected int equalWidthWidgetMaxWidth = -1;
+
     public GuiMainMenu()
     {
+        this.configScreenButton = GenericButton.create("watson.gui.button.change_menu.configuration_menu", Icons.CONFIGURATION);
+        this.playereditLoadedScreenButton = GenericButton.create("watson.gui.button.change_menu.playeredit_loaded_menu");
+        this.ledgerScreenButton = GenericButton.create("watson.gui.button.change_menu.ledger_menu");
+
+        this.configScreenButton.setActionListener(ConfigScreen::openConfigScreen);
+        this.playereditLoadedScreenButton.setActionListener(() -> openScreenWithParent(new GuiPlayereditLoadedList()));
+        this.ledgerScreenButton.setActionListener(() -> openScreenWithParent(new GuiLedger()));
+
         String version = String.format("v%s", Reference.MOD_VERSION);
-        this.title = StringUtils.translate("watson.gui.title.watson_main_menu", version);
+        this.setTitle("watson.gui.title.watson_main_menu", version);
     }
 
     @Override
-    public void initGui()
+    public void reAddActiveWidgets()
     {
-        super.initGui();
+        super.reAddActiveWidgets();
 
-        int x = 12;
-        int y = 30;
-        int width = this.getButtonWidth();
+        List<InteractableWidget> list = new ArrayList<>();
 
-        this.createChangeMenuButton(x, y, width, ButtonListenerChangeMenu.ButtonType.CONFIGURATION);
+        boolean isInitial = this.equalWidthWidgetMaxWidth < 0;
+        this.equalWidthWidgetMaxWidth = 0;
+
+        this.addEqualWidthWidget(this.configScreenButton, list);
         if (mc.player != null)
         {
-            y += 22;
-            this.createChangeMenuButton(x, y, width, ButtonListenerChangeMenu.ButtonType.PLAYEREDIT_LOADED);
-            y += 22;
-            if (Configs.Plugin.PLUGIN.getOptionListValue() == Plugins.LEDGER)
+            this.addEqualWidthWidget(this.playereditLoadedScreenButton, list);
+            if (Configs.Plugin.PLUGIN.getValue().equals(Plugins.LEDGER))
             {
-                this.createChangeMenuButton(x, y, width, ButtonListenerChangeMenu.ButtonType.LEDGER_MENU);
+                this.addEqualWidthWidget(this.ledgerScreenButton, list);
+            }
+        }
+
+        if (isInitial)
+        {
+            int width = this.equalWidthWidgetMaxWidth + 10;
+            for (InteractableWidget widget : list)
+            {
+                widget.setWidth(width);
             }
         }
     }
 
-    private void createChangeMenuButton(int x, int y, int width, ButtonListenerChangeMenu.ButtonType type)
+    @Override
+    protected void updateWidgetPositions()
     {
-        ButtonGeneric button = new ButtonGeneric(x, y, width, 20, type.getDisplayName(), type.getIcon());
+        super.updateWidgetPositions();
 
-        this.addButton(button, new ButtonListenerChangeMenu(type, this));
+        int x = this.x + 12;
+        int y = this.y + 30;
+        this.configScreenButton.setPosition(x, y);
+        this.playereditLoadedScreenButton.setPosition(x, y + 22);
+        this.ledgerScreenButton.setPosition(x, y + 44);
     }
 
-    private int getButtonWidth()
+    protected void addEqualWidthWidget(InteractableWidget widget, List<InteractableWidget> widgets)
     {
-        int width = 0;
-
-        for (ButtonListenerChangeMenu.ButtonType type : ButtonListenerChangeMenu.ButtonType.values())
-        {
-            width = Math.max(width, this.getStringWidth(type.getDisplayName()) + 30);
-        }
-
-        return width;
+        this.equalWidthWidgetMaxWidth = Math.max(this.equalWidthWidgetMaxWidth, widget.getWidth());
+        widgets.add(widget);
+        widget.setAutomaticWidth(false);
+        this.addWidget(widget);
     }
 
-    public static class ButtonListenerChangeMenu implements IButtonActionListener
+    public static void openMainMenu()
     {
-        private final ButtonType type;
-        @Nullable
-        private final Screen parent;
-
-        public ButtonListenerChangeMenu(ButtonType type, @Nullable Screen parent)
-        {
-            this.type = type;
-            this.parent = parent;
-        }
-
-        @Override
-        public void actionPerformedWithButton(ButtonBase button, int mouseButton)
-        {
-            GuiBase gui = null;
-
-            switch (this.type)
-            {
-                case CONFIGURATION -> {
-                    GuiBase.openGui(new GuiConfigs());
-                    return;
-                }
-                case MAIN_MENU -> gui = new GuiMainMenu();
-                case PLAYEREDIT_LOADED -> gui = new GuiPlayereditLoadedList();
-                case LEDGER_MENU -> gui = new GuiLedger();
-            }
-
-            if (gui != null)
-            {
-                gui.setParent(this.parent);
-                GuiBase.openGui(gui);
-            }
-        }
-
-        public enum ButtonType
-        {
-            CONFIGURATION("watson.gui.button.change_menu.configuration_menu", ButtonIcons.CONFIGURATION),
-            MAIN_MENU("watson.gui.button.change_menu.to_main_menu", null),
-            PLAYEREDIT_LOADED("watson.gui.button.change_menu.playeredit_loaded_menu", null),
-            LEDGER_MENU("watson.gui.button.change_menu.ledger_menu", null);
-
-            private final String labelKey;
-            private final ButtonIcons icon;
-
-            ButtonType(String labelKey, ButtonIcons icon)
-            {
-                this.labelKey = labelKey;
-                this.icon = icon;
-            }
-
-            public String getLabelKey()
-            {
-                return this.labelKey;
-            }
-
-            public String getDisplayName()
-            {
-                return StringUtils.translate(this.getLabelKey());
-            }
-
-            public ButtonIcons getIcon()
-            {
-                return this.icon;
-            }
-        }
+        GuiMainMenu screen = new GuiMainMenu();
+        BaseScreen.openScreen(screen);
     }
 }

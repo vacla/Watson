@@ -3,13 +3,13 @@ package eu.minemania.watson.selection;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
-import fi.dy.masa.malilib.interfaces.ICompletionListener;
+import fi.dy.masa.malilib.listener.TaskCompletionListener;
 
 public abstract class PlayereditBase implements IPlayeredit
 {
     protected ImmutableList<PlayereditEntry> playereditAll = ImmutableList.of();
     @Nullable
-    protected ICompletionListener completionListener;
+    protected TaskCompletionListener completionListener;
     protected SortCriteria sortCriteria = SortCriteria.COUNT_TOTAL;
     protected boolean reverse;
 
@@ -22,7 +22,7 @@ public abstract class PlayereditBase implements IPlayeredit
         return this.playereditAll;
     }
 
-    public void setCompletionListener(ICompletionListener listener)
+    public void setCompletionListener(TaskCompletionListener listener)
     {
         this.completionListener = listener;
     }

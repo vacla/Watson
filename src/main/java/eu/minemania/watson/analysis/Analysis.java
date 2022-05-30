@@ -10,7 +10,7 @@ import eu.minemania.watson.Watson;
 import eu.minemania.watson.chat.IChatHandler;
 import eu.minemania.watson.chat.IMatchedChatHandler;
 import eu.minemania.watson.config.Configs;
-import fi.dy.masa.malilib.config.options.ConfigString;
+import fi.dy.masa.malilib.config.option.StringConfig;
 import net.minecraft.text.MutableText;
 
 public class Analysis implements IChatHandler
@@ -44,18 +44,18 @@ public class Analysis implements IChatHandler
         return true;
     }
 
-    public void addMatchedChatHandler(ConfigString pattern, IMatchedChatHandler handler)
+    public void addMatchedChatHandler(StringConfig pattern, IMatchedChatHandler handler)
     {
-        m.put(pattern.getStringValue(), handler);
+        m.put(pattern.getValue(), handler);
     }
 
-    public static void removeMatchedChatHandler(ConfigString pattern)
+    public static void removeMatchedChatHandler(String newValue, String oldValue)
     {
-        for (IMatchedChatHandler handler : m.get(pattern.getOldStringValue()))
+        for (IMatchedChatHandler handler : m.get(oldValue))
         {
-            m.put(pattern.getStringValue(), handler);
+            m.put(newValue, handler);
         }
-        m.removeAll(pattern.getOldStringValue());
+        m.removeAll(oldValue);
     }
 
     @Override

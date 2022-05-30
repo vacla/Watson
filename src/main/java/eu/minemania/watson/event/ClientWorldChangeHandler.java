@@ -11,14 +11,13 @@ import eu.minemania.watson.network.ledger.PluginActionPacketHandler;
 import eu.minemania.watson.network.ledger.PluginHandshakePacketHandler;
 import eu.minemania.watson.network.ledger.PluginResponsePacketHandler;
 import eu.minemania.watson.render.OverlayRenderer;
-import fi.dy.masa.malilib.interfaces.IWorldLoadListener;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.world.ClientWorld;
 
-public class WorldLoadListener implements IWorldLoadListener
+public class ClientWorldChangeHandler implements fi.dy.masa.malilib.event.ClientWorldChangeHandler
 {
     @Override
-    public void onWorldLoadPre(@Nullable ClientWorld worldBefore, @Nullable ClientWorld worldAfter, MinecraftClient mc)
+    public void onPreClientWorldChange(@Nullable ClientWorld worldBefore, @Nullable ClientWorld worldAfter, MinecraftClient mc)
     {
         // Save the settings before the integrated server gets shut down
         if (worldBefore != null)
@@ -55,7 +54,7 @@ public class WorldLoadListener implements IWorldLoadListener
     }
 
     @Override
-    public void onWorldLoadPost(@Nullable ClientWorld worldBefore, @Nullable ClientWorld worldAfter, MinecraftClient mc)
+    public void onPostClientWorldChange(@Nullable ClientWorld worldBefore, @Nullable ClientWorld worldAfter, MinecraftClient mc)
     {
         if (worldBefore == null && worldAfter != null && Configs.Generic.ENABLED.getBooleanValue())
         {

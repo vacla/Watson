@@ -9,8 +9,7 @@ import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.config.Plugins;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.TimeStamp;
-import fi.dy.masa.malilib.gui.Message.MessageType;
-import fi.dy.masa.malilib.util.InfoUtils;
+import fi.dy.masa.malilib.overlay.message.MessageDispatcher;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 
@@ -68,7 +67,7 @@ public class ServerTime extends Analysis
         {
             if (_localMinusServerMinutes.get(serverIP) == null)
             {
-                if (Configs.Plugin.PLUGIN.getOptionListValue() == Plugins.LOGBLOCK)
+                if (Configs.Plugin.PLUGIN.getValue().equals(Plugins.LOGBLOCK))
                 {
                     Calendar pastTime = getPastTime();
                     String date = String.format("%d.%d.%d", pastTime.get(Calendar.DAY_OF_MONTH), pastTime.get(Calendar.MONTH) + 1, pastTime.get(Calendar.YEAR));
@@ -82,7 +81,7 @@ public class ServerTime extends Analysis
                 }
                 else
                 {
-                    InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.info.no_logblock");
+                    MessageDispatcher.generic("watson.message.info.no_logblock");
                 }
             }
             else if (showServerTime)

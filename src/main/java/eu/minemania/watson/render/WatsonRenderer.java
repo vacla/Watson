@@ -9,7 +9,6 @@ import eu.minemania.watson.selection.EditSelection;
 import fi.dy.masa.malilib.render.RenderUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BackgroundRenderer;
-import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Vec3d;
 
@@ -24,7 +23,7 @@ public class WatsonRenderer
         return INSTANCE;
     }
 
-    public void piecewiseRenderEntities(MinecraftClient mc, MatrixStack matrices, VertexConsumerProvider.Immediate vertexConsumers)
+    public void piecewiseRenderEntities(MinecraftClient mc)
     {
         if (this.mc == null)
         {
@@ -55,7 +54,7 @@ public class WatsonRenderer
             RenderSystem.applyModelViewMatrix();
             edits.drawOutlines(matrixStack);
             edits.drawVectors();
-            selection.drawSelection(matrices);
+            selection.drawSelection();
 
             RenderSystem.enableDepthTest();
             RenderSystem.depthMask(true);

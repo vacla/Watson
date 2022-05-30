@@ -15,12 +15,11 @@ import eu.minemania.watson.db.WatsonBlock;
 import eu.minemania.watson.db.WatsonBlockRegistery;
 import eu.minemania.watson.scheduler.SyncTaskQueue;
 import eu.minemania.watson.scheduler.tasks.AddBlockEditTask;
-import fi.dy.masa.malilib.gui.Message.MessageType;
-import fi.dy.masa.malilib.util.Color4f;
-import fi.dy.masa.malilib.util.InfoUtils;
+import fi.dy.masa.malilib.overlay.message.MessageDispatcher;
 import fi.dy.masa.malilib.util.StringUtils;
+import fi.dy.masa.malilib.util.data.Color4f;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
@@ -50,8 +49,8 @@ public class WatsonCommand extends WatsonCommandBase
 {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher)
     {
-        ClientCommandManager.addClientSideCommand(Configs.Generic.WATSON_PREFIX.getStringValue());
-        LiteralArgumentBuilder<ServerCommandSource> watson = literal(Configs.Generic.WATSON_PREFIX.getStringValue()).executes(WatsonCommand::help)
+        ClientCommandManager.addClientSideCommand(Configs.Generic.WATSON_PREFIX.getValue());
+        LiteralArgumentBuilder<ServerCommandSource> watson = literal(Configs.Generic.WATSON_PREFIX.getValue()).executes(WatsonCommand::help)
                 .then(literal("help").executes(WatsonCommand::help))
                 .then(literal("clear").executes(WatsonCommand::clear))
                 .then(literal("ratio").executes(WatsonCommand::ratio))
@@ -249,7 +248,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Generic.DISPLAYED.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.display", StringUtils.translate(strSetting));
+        MessageDispatcher.generic("watson.message.config.display", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -267,7 +266,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Outlines.OUTLINE_SHOWN.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.outline", StringUtils.translate(strSetting));
+        MessageDispatcher.generic("watson.message.config.outline", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -285,7 +284,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Generic.ANNOTATION_SHOWN.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.anno", StringUtils.translate(strSetting));
+        MessageDispatcher.generic("watson.message.config.anno", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -303,7 +302,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Edits.VECTOR_SHOWN.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector", StringUtils.translate(strSetting));
+        MessageDispatcher.generic("watson.message.config.vector", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -321,7 +320,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Edits.LINKED_CREATION.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector.creation", StringUtils.translate(strSetting));
+        MessageDispatcher.generic("watson.message.config.vector.creation", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -339,7 +338,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Edits.LINKED_DESTRUCTION.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector.destruction", StringUtils.translate(strSetting));
+        MessageDispatcher.generic("watson.message.config.vector.destruction", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -347,7 +346,7 @@ public class WatsonCommand extends WatsonCommandBase
     {
         float length = getFloat(context, "length");
         Configs.Edits.VECTOR_LENGTH.setDoubleValue(length);
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector.length", length);
+        MessageDispatcher.generic("watson.message.config.vector.length", length);
         return 1;
     }
 
@@ -365,7 +364,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Edits.LABEL_SHOWN.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.label", StringUtils.translate(strSetting));
+        MessageDispatcher.generic("watson.message.config.label", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -434,7 +433,7 @@ public class WatsonCommand extends WatsonCommandBase
         String colorstr = getString(context, "color");
         String world = getString(context, "world");
         WatsonBlock watsonblock = WatsonBlockRegistery.getInstance().getWatsonBlockByName(block);
-        int colorst = StringUtils.getColor(colorstr, 0);
+        int colorst = Color4f.getColorFromString(colorstr, 0);
         int colorTemp = MathHelper.clamp(colorst, Integer.MIN_VALUE, Integer.MAX_VALUE);
         if (colorTemp != 0)
         {
@@ -621,11 +620,11 @@ public class WatsonCommand extends WatsonCommandBase
         }
         if (displayed)
         {
-            InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.watson.enabled");
+            MessageDispatcher.generic("watson.message.config.watson.enabled");
         }
         else
         {
-            InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.watson.disabled", Configs.Generic.WATSON_PREFIX.getStringValue());
+            MessageDispatcher.generic("watson.message.config.watson.disabled", Configs.Generic.WATSON_PREFIX.getValue());
         }
         return 1;
     }
@@ -644,7 +643,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Generic.DEBUG.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.debug", StringUtils.translate(strSetting));
+        MessageDispatcher.generic("watson.message.config.debug", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -662,7 +661,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Plugin.AUTO_PAGE.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.auto_page", StringUtils.translate(strSetting));
+        MessageDispatcher.generic("watson.message.config.auto_page", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -683,7 +682,7 @@ public class WatsonCommand extends WatsonCommandBase
         {
             seconds = Configs.Plugin.REGION_INFO_TIMEOUT.getDoubleValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.region_info_timeout", seconds);
+        MessageDispatcher.generic("watson.message.config.region_info_timeout", seconds);
         return 1;
     }
 
@@ -693,13 +692,13 @@ public class WatsonCommand extends WatsonCommandBase
         try
         {
             color = getInteger(context, "argb");
-            Configs.Generic.BILLBOARD_BACKGROUND.setIntegerValue(color);
+            Configs.Generic.BILLBOARD_BACKGROUND.setValueFromInt(color);
         }
         catch (Exception e)
         {
             color = Configs.Generic.BILLBOARD_BACKGROUND.getIntegerValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.billb_background", color);
+        MessageDispatcher.generic("watson.message.config.billb_background", color);
         return 1;
     }
 
@@ -709,13 +708,13 @@ public class WatsonCommand extends WatsonCommandBase
         try
         {
             color = getInteger(context, "argb");
-            Configs.Generic.BILLBOARD_FOREGROUND.setIntegerValue(color);
+            Configs.Generic.BILLBOARD_FOREGROUND.setValueFromInt(color);
         }
         catch (Exception e)
         {
             color = Configs.Generic.BILLBOARD_FOREGROUND.getIntegerValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.billb_foreground", color);
+        MessageDispatcher.generic("watson.message.config.billb_foreground", color);
         return 1;
     }
 
@@ -733,7 +732,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Edits.GROUPING_ORES_IN_CREATIVE.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.group_ores_creative", StringUtils.translate(strSetting));
+        MessageDispatcher.generic("watson.message.config.group_ores_creative", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -743,13 +742,13 @@ public class WatsonCommand extends WatsonCommandBase
         try
         {
             command = getString(context, "command");
-            Configs.Generic.TELEPORT_COMMAND.setValueFromString(command);
+            Configs.Generic.TELEPORT_COMMAND.setValue(command);
         }
         catch (Exception e)
         {
-            command = Configs.Generic.TELEPORT_COMMAND.getStringValue();
+            command = Configs.Generic.TELEPORT_COMMAND.getValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.teleport_command", command);
+        MessageDispatcher.generic("watson.message.config.teleport_command", command);
         return 1;
     }
 
@@ -770,7 +769,7 @@ public class WatsonCommand extends WatsonCommandBase
         {
             seconds = Configs.Generic.CHAT_TIMEOUT.getDoubleValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.chat_timeout", seconds);
+        MessageDispatcher.generic("watson.message.config.chat_timeout", seconds);
         return 1;
     }
 
@@ -786,7 +785,7 @@ public class WatsonCommand extends WatsonCommandBase
         {
             pages = Configs.Plugin.MAX_AUTO_PAGES.getIntegerValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.max_auto_page", pages);
+        MessageDispatcher.generic("watson.message.config.max_auto_page", pages);
         return 1;
     }
 
@@ -802,7 +801,7 @@ public class WatsonCommand extends WatsonCommandBase
         {
             count = Configs.Edits.PRE_COUNT.getIntegerValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.pre_count", count);
+        MessageDispatcher.generic("watson.message.config.pre_count", count);
         return 1;
     }
 
@@ -818,7 +817,7 @@ public class WatsonCommand extends WatsonCommandBase
         {
             count = Configs.Edits.POST_COUNT.getIntegerValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.post_count", count);
+        MessageDispatcher.generic("watson.message.config.post_count", count);
         return 1;
     }
 
@@ -828,13 +827,13 @@ public class WatsonCommand extends WatsonCommandBase
         try
         {
             prefix = getString(context, "prefix");
-            Configs.Generic.WATSON_PREFIX.setValueFromString(prefix);
+            Configs.Generic.WATSON_PREFIX.setValue(prefix);
         }
         catch (Exception e)
         {
-            prefix = Configs.Generic.WATSON_PREFIX.getStringValue();
+            prefix = Configs.Generic.WATSON_PREFIX.getValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.watson.prefix", prefix);
+        MessageDispatcher.generic("watson.message.config.watson.prefix", prefix);
         return 1;
     }
 
@@ -852,7 +851,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Generic.SS_PLAYER_DIRECTORY.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.ss_player_directory", StringUtils.translate(strSetting));
+        MessageDispatcher.generic("watson.message.config.ss_player_directory", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -870,7 +869,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Generic.SS_PLAYER_SUFFIX.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.ss_player_suffix", StringUtils.translate(strSetting));
+        MessageDispatcher.generic("watson.message.config.ss_player_suffix", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -880,13 +879,13 @@ public class WatsonCommand extends WatsonCommandBase
         try
         {
             date_directory = getString(context, "format");
-            Configs.Generic.SS_DATE_DIRECTORY.setValueFromString(date_directory);
+            Configs.Generic.SS_DATE_DIRECTORY.setValue(date_directory);
         }
         catch (Exception e)
         {
-            date_directory = Configs.Generic.SS_DATE_DIRECTORY.getStringValue();
+            date_directory = Configs.Generic.SS_DATE_DIRECTORY.getValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.ss_date_directory", date_directory);
+        MessageDispatcher.generic("watson.message.config.ss_date_directory", date_directory);
         return 1;
     }
 
@@ -904,7 +903,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Plugin.REFORMAT_QUERY_RESULTS.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.reformat_query_results", StringUtils.translate(strSetting));
+        MessageDispatcher.generic("watson.message.config.reformat_query_results", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -922,7 +921,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Plugin.RECOLOR_QUERY_RESULTS.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.recolor_query_results", StringUtils.translate(strSetting));
+        MessageDispatcher.generic("watson.message.config.recolor_query_results", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -939,14 +938,7 @@ public class WatsonCommand extends WatsonCommandBase
             Configs.Edits.TIME_ORDERED_DEPOSITS.toggleBooleanValue();
             displayed = Configs.Edits.TIME_ORDERED_DEPOSITS.getBooleanValue();
         }
-        if (displayed)
-        {
-            InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.time_ordered_deposits.enabled");
-        }
-        else
-        {
-            InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.time_ordered_deposits.disabled");
-        }
+        MessageDispatcher.generic("watson.message.config.time_ordered_deposits." + (displayed ? "enabled" : "disabled"));
         return 1;
     }
 
@@ -963,7 +955,7 @@ public class WatsonCommand extends WatsonCommandBase
         {
             length = (float) Configs.Edits.VECTOR_LENGTH.getDoubleValue();
         }
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.vector.length", length);
+        MessageDispatcher.generic("watson.message.config.vector.length", length);
         return 1;
     }
 
@@ -981,7 +973,7 @@ public class WatsonCommand extends WatsonCommandBase
             displayed = Configs.Highlights.USE_CHAT_HIGHLIGHTS.getBooleanValue();
         }
         String strSetting = displayed ? "watson.message.setting.on" : "watson.message.setting.off";
-        InfoUtils.showGuiOrInGameMessage(MessageType.INFO, "watson.message.config.chat_highlights", StringUtils.translate(strSetting));
+        MessageDispatcher.generic("watson.message.config.chat_highlights", StringUtils.translate(strSetting));
         return 1;
     }
 
@@ -997,12 +989,12 @@ public class WatsonCommand extends WatsonCommandBase
                 Map<CommandNode<ServerCommandSource>, String> usage = dispatcher.getSmartUsage(command, context.getSource());
                 for (String u : usage.values())
                 {
-                    ClientCommandManager.sendFeedback(new LiteralText("/" + cmdName + " " + u));
+                    ClientCommandManager.sendFeedback(Text.literal("/" + cmdName + " " + u));
                 }
                 cmdCount += usage.size();
                 if (usage.size() == 0)
                 {
-                    ClientCommandManager.sendFeedback(new LiteralText("/" + cmdName));
+                    ClientCommandManager.sendFeedback(Text.literal("/" + cmdName));
                     cmdCount++;
                 }
             }

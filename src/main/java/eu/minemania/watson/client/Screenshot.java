@@ -26,7 +26,7 @@ public class Screenshot
     {
         Date now = new Date();
         String player2 = (String) DataManager.getEditSelection().getVariables().get("player");
-        String subdirectoryName = (player2 != null && !player2.isEmpty() && Configs.Generic.SS_PLAYER_DIRECTORY.getBooleanValue()) ? player2 : new SimpleDateFormat(Configs.Generic.SS_DATE_DIRECTORY.getStringValue()).format(now);
+        String subdirectoryName = (player2 != null && !player2.isEmpty() && Configs.Generic.SS_PLAYER_DIRECTORY.getBooleanValue()) ? player2 : new SimpleDateFormat(Configs.Generic.SS_DATE_DIRECTORY.getValue()).format(now);
         subdirectoryName = subdirectoryName.replaceAll(":", "-").replaceAll(" ", "-");
         MinecraftClient mc = MinecraftClient.getInstance();
         File screenshotsDir = new File(mc.runDirectory, "screenshots");
@@ -41,12 +41,12 @@ public class Screenshot
         Util.getIoWorkerExecutor().execute(() -> {
             try {
                 nativeImage.writeTo(file);
-                MutableText text = new LiteralText(file.getName()).formatted(Formatting.UNDERLINE).styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, file.getAbsolutePath())));
-                mc.inGameHud.getChatHud().addMessage(new TranslatableText("screenshot.success", text));
+                MutableText text = Text.literal(file.getName()).formatted(Formatting.UNDERLINE).styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, file.getAbsolutePath())));
+                mc.inGameHud.getChatHud().addMessage(Text.translatable("screenshot.success", text));
             }
             catch (Exception text) {
                 Watson.logger.warn("Couldn't save screenshot", (Throwable)text);
-                mc.inGameHud.getChatHud().addMessage(new TranslatableText("screenshot.failure", text.getMessage()));
+                mc.inGameHud.getChatHud().addMessage(Text.translatable("screenshot.failure", text.getMessage()));
             }
             finally {
                 nativeImage.close();

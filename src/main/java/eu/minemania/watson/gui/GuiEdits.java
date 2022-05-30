@@ -10,12 +10,13 @@ import fi.dy.masa.malilib.gui.button.ButtonBase;
 import fi.dy.masa.malilib.gui.button.ButtonGeneric;
 import fi.dy.masa.malilib.gui.button.IButtonActionListener;
 import fi.dy.masa.malilib.interfaces.ICompletionListener;
+import fi.dy.masa.malilib.listener.TaskCompletionListener;
 import fi.dy.masa.malilib.util.GuiUtils;
 import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.gui.screen.Screen;
 
 public class GuiEdits extends GuiListBase<PlayereditEntry, WidgetEditsEntry, WidgetListEdits>
-        implements ICompletionListener
+        implements TaskCompletionListener
 {
     private final PlayereditBase edits;
 

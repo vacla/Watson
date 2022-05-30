@@ -14,6 +14,7 @@ import fi.dy.masa.malilib.gui.button.ButtonGeneric;
 import fi.dy.masa.malilib.gui.button.IButtonActionListener;
 import fi.dy.masa.malilib.gui.interfaces.IStringListConsumer;
 import fi.dy.masa.malilib.gui.interfaces.ITextFieldListener;
+import fi.dy.masa.malilib.gui.widget.IntegerEditWidget;
 import fi.dy.masa.malilib.gui.widgets.WidgetInfoIcon;
 import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.MinecraftClient;
@@ -26,9 +27,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-public class GuiLedger extends GuiBase
+public class GuiLedger extends BaseScreen
 {
-    protected GuiTextFieldInteger textFieldRange;
+    protected IntegerEditWidget textFieldRange;
     protected GuiTextFieldGeneric textFieldSource;
     protected GuiTextFieldGeneric textFieldTimeBefore;
     protected GuiTextFieldGeneric textFieldTimeAfter;
@@ -40,15 +41,15 @@ public class GuiLedger extends GuiBase
 
     protected GuiLedger()
     {
-        this.title = StringUtils.translate("watson.gui.title.ledger", DataManager.getLedgerVersion());
         this.ledgerInfo = DataManager.getLedgerInfo() == null ? this.ledgerInfo : DataManager.getLedgerInfo();
+        this.setTitle("watson.gui.title.ledger", DataManager.getLedgerVersion());
     }
 
     @Override
-    public void initGui()
+    public void reAddActiveWidgets()
     {
-        super.initGui();
-
+        super.reAddActiveWidgets();
+        /*
         int y = this.height - 26;
         int buttonWidth;
         String label;
@@ -113,9 +114,9 @@ public class GuiLedger extends GuiBase
             this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
             offset = this.getStringWidth(label) + 4;
             this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.range"));
-
-            this.textFieldRange = new GuiTextFieldInteger(x + offset + 20, y + 2, width, 14, this.textRenderer);
-            this.textFieldRange.setText(String.valueOf(ledgerInfo.getRange()));
+*/
+            this.textFieldRange = new IntegerEditWidget(width, 14, this::setRange);
+            /*this.textFieldRange.setText(String.valueOf(ledgerInfo.getRange()));
             this.addTextField(this.textFieldRange, new RangeTextFieldListener(this));
 
             label = StringUtils.translate("watson.gui.label.ledger.title.source"); //Source
@@ -211,7 +212,12 @@ public class GuiLedger extends GuiBase
         label = type.getDisplayName();
         buttonWidth = this.getStringWidth(label) + 25;
         button = new ButtonGeneric(button.getX() + button.getWidth() + 10, y, buttonWidth, 20, label);
-        this.addButton(button, new ButtonListener(type, this));
+        this.addButton(button, new ButtonListener(type, this));*/
+    }
+
+    protected void setRange(int range)
+    {
+        ledgerInfo.setRange(range);
     }
 
     private ButtonGeneric createButton(int x, int y, int width, ConsumerButtonListener.ButtonType type)
@@ -560,29 +566,6 @@ public class GuiLedger extends GuiBase
             {
                 parent.ledgerInfo.setTimeAfter("");
             }
-
-            return false;
-        }
-    }
-
-    public static class RangeTextFieldListener implements ITextFieldListener<GuiTextFieldInteger>
-    {
-        private final GuiLedger parent;
-
-        public RangeTextFieldListener(GuiLedger parent)
-        {
-            this.parent = parent;
-        }
-
-        @Override
-        public boolean onTextChange(GuiTextFieldInteger textField)
-        {
-            try
-            {
-                parent.ledgerInfo.setRange(Integer.parseInt(textField.getText()));
-            }
-            catch (Exception ignored)
-            {}
 
             return false;
         }

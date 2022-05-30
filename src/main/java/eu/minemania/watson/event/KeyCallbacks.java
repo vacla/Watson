@@ -12,252 +12,81 @@ import eu.minemania.watson.config.Plugins;
 import eu.minemania.watson.data.Actions;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.BlockEdit;
-import eu.minemania.watson.gui.GuiConfigs;
+import eu.minemania.watson.db.WatsonBlockRegistery;
+import eu.minemania.watson.gui.ConfigScreen;
 import eu.minemania.watson.gui.GuiMainMenu;
 import eu.minemania.watson.selection.EditSelection;
-import fi.dy.masa.malilib.config.options.ConfigString;
-import fi.dy.masa.malilib.config.options.ConfigStringList;
-import fi.dy.masa.malilib.gui.GuiBase;
-import fi.dy.masa.malilib.hotkeys.IHotkeyCallback;
-import fi.dy.masa.malilib.hotkeys.IKeybind;
-import fi.dy.masa.malilib.hotkeys.KeyAction;
-import fi.dy.masa.malilib.hotkeys.KeyCallbackToggleBoolean;
-import fi.dy.masa.malilib.interfaces.IValueChangeCallback;
+import fi.dy.masa.malilib.gui.BaseScreen;
+import fi.dy.masa.malilib.input.ActionResult;
+import fi.dy.masa.malilib.input.KeyAction;
+import fi.dy.masa.malilib.input.KeyBind;
+import fi.dy.masa.malilib.input.callback.HotkeyCallback;
 import net.minecraft.client.MinecraftClient;
 
 public class KeyCallbacks
 {
     public static void init(MinecraftClient mc)
     {
-        IHotkeyCallback callbackHotkeys = new KeyCallbackHotkeys(mc);
-        ValueChangeStringCallback valueChangeStringCallback = new ValueChangeStringCallback();
-        ValueChangeStringListCallback valueChangeStringListCallback = new ValueChangeStringListCallback();
+        KeyCallbackHotkeys callbackHotkeys = new KeyCallbackHotkeys(mc);
 
-        Configs.Generic.WATSON_PREFIX.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Lists.HIGHLIGHT.setValueChangeCallback(valueChangeStringListCallback);
-        Configs.Lists.OVERRIDING_ACTIONS.setValueChangeCallback(valueChangeStringListCallback);
+        Configs.Generic.WATSON_PREFIX.setValueChangeCallback(Command::reregisterWatsonCommand);
+        Configs.Lists.HIGHLIGHT.setValueChangeCallback(((newValue, oldValue) -> Highlight.setHighlightList(newValue)));
+        Configs.Lists.HIGHLIGHT.setValueLoadCallback(Highlight::setHighlightList);
+        Configs.Lists.OVERRIDING_ACTIONS.setValueChangeCallback(((newValue, oldValue) -> Actions.setActionsList(newValue)));
+        Configs.Lists.OVERRIDING_ACTIONS.setValueLoadCallback(Actions::setActionsList);
+        Configs.Lists.WATSON_BLOCKS.setValueLoadCallback(WatsonBlockRegistery::setWatsonBlockList);
 
-        Configs.Analysis.CP_BUSY.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.CP_DETAILS.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.CP_DETAILS_SESSION.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.CP_DETAILS_SIGN.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.CP_INSPECTOR_COORDS.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.CP_LOOKUP_COORDS.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.CP_LOOKUP_HEADER.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.CP_NO_RESULT.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.CP_PAGE.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.CP_SEARCH.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.DUTYMODE_DISABLE.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.DUTYMODE_ENABLE.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.MODMODE_DISABLE.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.MODMODE_ENABLE.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.LB_DATA.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.LB_HEADER_BLOCK.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.LB_HEADER_BLOCKS.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.LB_HEADER_CHANGES.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.LB_HEADER_NO_RESULTS.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.LB_HEADER_RATIO.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.LB_HEADER_RATIO_CURRENT.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.LB_HEADER_SEARCHING.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.LB_HEADER_SUM_BLOCKS.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.LB_HEADER_SUM_PLAYERS.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.LB_HEADER_TIME_CHECK.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.LB_PAGE.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.LB_POSITION.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.LB_SUM.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.LB_TP.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.PRISM_DATA.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.PRISM_PAGE.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.PRISM_PAGINATION.setValueChangeCallback(valueChangeStringCallback);
-        Configs.Analysis.WG_REGIONS.setValueChangeCallback(valueChangeStringCallback);
+        Configs.Analysis.CP_BUSY.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.CP_DETAILS.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.CP_DETAILS_SESSION.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.CP_DETAILS_SIGN.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.CP_INSPECTOR_COORDS.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.CP_LOOKUP_COORDS.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.CP_LOOKUP_HEADER.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.CP_NO_RESULT.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.CP_PAGE.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.CP_SEARCH.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.DUTYMODE_DISABLE.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.DUTYMODE_ENABLE.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.MODMODE_DISABLE.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.MODMODE_ENABLE.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.LB_DATA.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.LB_HEADER_BLOCK.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.LB_HEADER_BLOCKS.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.LB_HEADER_CHANGES.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.LB_HEADER_NO_RESULTS.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.LB_HEADER_RATIO.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.LB_HEADER_RATIO_CURRENT.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.LB_HEADER_SEARCHING.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.LB_HEADER_SUM_BLOCKS.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.LB_HEADER_SUM_PLAYERS.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.LB_HEADER_TIME_CHECK.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.LB_PAGE.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.LB_POSITION.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.LB_SUM.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.LB_TP.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.PRISM_DATA.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.PRISM_PAGE.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.PRISM_PAGINATION.setValueChangeCallback(Analysis::removeMatchedChatHandler);
+        Configs.Analysis.WG_REGIONS.setValueChangeCallback(Analysis::removeMatchedChatHandler);
 
-        Hotkeys.KEYBIND_AUTO_PAGE.getKeybind().setCallback(new KeyCallbackToggleBoolean(Configs.Plugin.AUTO_PAGE));
-        Hotkeys.KEYBIND_COMMAND_CO_INSPECT.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.KEYBIND_CURSOR_NEXT.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.KEYBIND_CURSOR_PREV.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.KEYBIND_QUERY_AFTER.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.KEYBIND_QUERY_BEFORE.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.KEYBIND_SCREENSHOT.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.KEYBIND_TP_CURSOR.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.KEYBIND_TP_NEXT.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.KEYBIND_TP_NEXT_ANNO.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.KEYBIND_TP_PREV.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.KEYBIND_TP_PREV_ANNO.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.KEYBIND_WATSON_CLEAR.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.OPEN_GUI_MAIN_MENU.getKeybind().setCallback(callbackHotkeys);
-        Hotkeys.OPEN_GUI_SETTINGS.getKeybind().setCallback(callbackHotkeys);
+        Hotkeys.KEYBIND_COMMAND_CO_INSPECT.getKeyBind().setCallback(callbackHotkeys);
+        Hotkeys.KEYBIND_CURSOR_NEXT.getKeyBind().setCallback(callbackHotkeys);
+        Hotkeys.KEYBIND_CURSOR_PREV.getKeyBind().setCallback(callbackHotkeys);
+        Hotkeys.KEYBIND_QUERY_AFTER.getKeyBind().setCallback(callbackHotkeys);
+        Hotkeys.KEYBIND_QUERY_BEFORE.getKeyBind().setCallback(callbackHotkeys);
+        Hotkeys.KEYBIND_SCREENSHOT.getKeyBind().setCallback(callbackHotkeys);
+        Hotkeys.KEYBIND_TP_CURSOR.getKeyBind().setCallback(callbackHotkeys);
+        Hotkeys.KEYBIND_TP_NEXT.getKeyBind().setCallback(callbackHotkeys);
+        Hotkeys.KEYBIND_TP_NEXT_ANNO.getKeyBind().setCallback(callbackHotkeys);
+        Hotkeys.KEYBIND_TP_PREV.getKeyBind().setCallback(callbackHotkeys);
+        Hotkeys.KEYBIND_TP_PREV_ANNO.getKeyBind().setCallback(callbackHotkeys);
+        Hotkeys.KEYBIND_WATSON_CLEAR.getKeyBind().setCallback(callbackHotkeys);
+        Hotkeys.OPEN_GUI_MAIN_MENU.getKeyBind().setCallback(callbackHotkeys);
+        Hotkeys.OPEN_GUI_SETTINGS.getKeyBind().setCallback(callbackHotkeys);
     }
 
-    private static class ValueChangeStringCallback implements IValueChangeCallback<ConfigString>
-    {
-        public ValueChangeStringCallback()
-        {
-        }
-
-        @Override
-        public void onValueChanged(ConfigString config)
-        {
-            if (config == Configs.Analysis.CP_BUSY)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.CP_BUSY);
-            }
-            else if (config == Configs.Analysis.CP_DETAILS)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.CP_DETAILS);
-            }
-            else if (config == Configs.Analysis.CP_DETAILS_SESSION)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.CP_DETAILS_SESSION);
-            }
-            else if (config == Configs.Analysis.CP_DETAILS_SIGN)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.CP_DETAILS_SIGN);
-            }
-            else if (config == Configs.Analysis.CP_INSPECTOR_COORDS)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.CP_INSPECTOR_COORDS);
-            }
-            else if (config == Configs.Analysis.CP_LOOKUP_COORDS)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.CP_LOOKUP_COORDS);
-            }
-            else if (config == Configs.Analysis.CP_LOOKUP_HEADER)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.CP_LOOKUP_HEADER);
-            }
-            else if (config == Configs.Analysis.CP_NO_RESULT)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.CP_NO_RESULT);
-            }
-            else if (config == Configs.Analysis.CP_PAGE)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.CP_PAGE);
-            }
-            else if (config == Configs.Analysis.CP_SEARCH)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.CP_SEARCH);
-            }
-            else if (config == Configs.Analysis.DUTYMODE_DISABLE)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.DUTYMODE_DISABLE);
-            }
-            else if (config == Configs.Analysis.DUTYMODE_ENABLE)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.DUTYMODE_ENABLE);
-            }
-            else if (config == Configs.Analysis.MODMODE_DISABLE)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.MODMODE_DISABLE);
-            }
-            else if (config == Configs.Analysis.MODMODE_ENABLE)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.MODMODE_ENABLE);
-            }
-            else if (config == Configs.Analysis.LB_HEADER_BLOCK)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_HEADER_BLOCK);
-            }
-            else if (config == Configs.Analysis.LB_HEADER_BLOCKS)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_HEADER_BLOCKS);
-            }
-            else if (config == Configs.Analysis.LB_HEADER_CHANGES)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_HEADER_CHANGES);
-            }
-            else if (config == Configs.Analysis.LB_HEADER_NO_RESULTS)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_HEADER_NO_RESULTS);
-            }
-            else if (config == Configs.Analysis.LB_HEADER_RATIO)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_HEADER_RATIO);
-            }
-            else if (config == Configs.Analysis.LB_HEADER_RATIO_CURRENT)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_HEADER_RATIO_CURRENT);
-            }
-            else if (config == Configs.Analysis.LB_HEADER_SEARCHING)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_HEADER_SEARCHING);
-            }
-            else if (config == Configs.Analysis.LB_HEADER_SUM_BLOCKS)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_HEADER_SUM_BLOCKS);
-            }
-            else if (config == Configs.Analysis.LB_HEADER_SUM_PLAYERS)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_HEADER_SUM_PLAYERS);
-            }
-            else if (config == Configs.Analysis.LB_HEADER_TIME_CHECK)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_HEADER_TIME_CHECK);
-            }
-            else if (config == Configs.Analysis.LB_PAGE)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_PAGE);
-            }
-            else if (config == Configs.Analysis.LB_POSITION)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_POSITION);
-            }
-            else if (config == Configs.Analysis.LB_SUM)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_SUM);
-            }
-            else if (config == Configs.Analysis.LB_TP)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_TP);
-            }
-            else if (config == Configs.Analysis.LB_DATA)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.LB_DATA);
-            }
-            else if (config == Configs.Analysis.PRISM_DATA)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.PRISM_DATA);
-            }
-            else if (config == Configs.Analysis.PRISM_PAGE)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.PRISM_PAGE);
-            }
-            else if (config == Configs.Analysis.PRISM_PAGINATION)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.PRISM_PAGINATION);
-            }
-            else if (config == Configs.Analysis.WG_REGIONS)
-            {
-                Analysis.removeMatchedChatHandler(Configs.Analysis.WG_REGIONS);
-            }
-            else if (config == Configs.Generic.WATSON_PREFIX)
-            {
-                Command.reregisterWatsonCommand(Command.commandDispatcher, Configs.Generic.WATSON_PREFIX);
-            }
-        }
-    }
-
-    private static class ValueChangeStringListCallback implements IValueChangeCallback<ConfigStringList>
-    {
-
-        public ValueChangeStringListCallback()
-        {
-        }
-
-        @Override
-        public void onValueChanged(ConfigStringList config)
-        {
-            if (config == Configs.Lists.HIGHLIGHT)
-            {
-                Highlight.setHighlightList(Configs.Lists.HIGHLIGHT.getStrings());
-            }
-            else if (config == Configs.Lists.OVERRIDING_ACTIONS)
-            {
-                Actions.setActionsList(Configs.Lists.OVERRIDING_ACTIONS.getStrings());
-            }
-        }
-    }
-
-    private static class KeyCallbackHotkeys implements IHotkeyCallback
+    private static class KeyCallbackHotkeys implements HotkeyCallback
     {
         private final MinecraftClient mc;
 
@@ -267,43 +96,42 @@ public class KeyCallbacks
         }
 
         @Override
-        public boolean onKeyAction(KeyAction action, IKeybind key)
+        public ActionResult onKeyAction(KeyAction action, KeyBind key)
         {
             if (this.mc.player == null || this.mc.world == null)
             {
-                return false;
+                return ActionResult.FAIL;
             }
             EditSelection edits = DataManager.getEditSelection();
-            if (key == Hotkeys.OPEN_GUI_MAIN_MENU.getKeybind())
+            if (key == Hotkeys.OPEN_GUI_MAIN_MENU.getKeyBind())
             {
-                GuiBase.openGui(new GuiMainMenu());
-                return true;
+                BaseScreen.openScreen(new GuiMainMenu());
             }
-            else if (key == Hotkeys.OPEN_GUI_SETTINGS.getKeybind())
+            else if (key == Hotkeys.OPEN_GUI_SETTINGS.getKeyBind())
             {
-                GuiBase.openGui(new GuiConfigs());
-                return true;
+                BaseScreen.openScreen(ConfigScreen.create());
+                return ActionResult.SUCCESS;
             }
-            else if (key == Hotkeys.KEYBIND_SCREENSHOT.getKeybind())
+            else if (key == Hotkeys.KEYBIND_SCREENSHOT.getKeyBind())
             {
                 if (Configs.Generic.SS_KEY_CUSTOM.getBooleanValue())
                 {
                     Screenshot.makeScreenshot();
-                    return true;
+                    return ActionResult.SUCCESS;
                 }
-                return true;
+                return ActionResult.SUCCESS;
             }
             else if (Configs.Generic.ENABLED.getBooleanValue())
             {
-                if (key == Hotkeys.KEYBIND_COMMAND_CO_INSPECT.getKeybind())
+                if (key == Hotkeys.KEYBIND_COMMAND_CO_INSPECT.getKeyBind())
                 {
-                    if (Configs.Plugin.PLUGIN.getOptionListValue() == Plugins.COREPROTECT)
+                    if (Configs.Plugin.PLUGIN.getValue().equals(Plugins.COREPROTECT))
                     {
-                        ChatMessage.sendToServerChat(String.format("/%s i", Configs.Plugin.COREPROTECT_COMMAND.getStringValue()));
-                        return true;
+                        ChatMessage.sendToServerChat(String.format("/%s i", Configs.Plugin.COREPROTECT_COMMAND.getValue().getName()));
+                        return ActionResult.SUCCESS;
                     }
                 }
-                else if (key == Hotkeys.KEYBIND_CURSOR_NEXT.getKeybind())
+                else if (key == Hotkeys.KEYBIND_CURSOR_NEXT.getKeyBind())
                 {
                     if (edits.getSelection() != null && edits.getSelection().playereditSet != null)
                     {
@@ -311,11 +139,11 @@ public class KeyCallbacks
                         if (edit != null)
                         {
                             edits.selectBlockEdit(edit);
-                            return true;
+                            return ActionResult.SUCCESS;
                         }
                     }
                 }
-                else if (key == Hotkeys.KEYBIND_CURSOR_PREV.getKeybind())
+                else if (key == Hotkeys.KEYBIND_CURSOR_PREV.getKeyBind())
                 {
                     if (edits.getSelection() != null && edits.getSelection().playereditSet != null)
                     {
@@ -323,55 +151,55 @@ public class KeyCallbacks
                         if (edit != null)
                         {
                             edits.selectBlockEdit(edit);
-                            return true;
+                            return ActionResult.SUCCESS;
                         }
                     }
                 }
-                else if (key == Hotkeys.KEYBIND_QUERY_AFTER.getKeybind() && Configs.Plugin.PLUGIN.getOptionListValue() == Plugins.LOGBLOCK)
+                else if (key == Hotkeys.KEYBIND_QUERY_AFTER.getKeyBind() && Configs.Plugin.PLUGIN.getValue().equals(Plugins.LOGBLOCK))
                 {
                     edits.queryPostEdits(Configs.Edits.POST_COUNT.getIntegerValue());
-                    return true;
+                    return ActionResult.SUCCESS;
                 }
-                else if (key == Hotkeys.KEYBIND_QUERY_BEFORE.getKeybind() && Configs.Plugin.PLUGIN.getOptionListValue() == Plugins.LOGBLOCK)
+                else if (key == Hotkeys.KEYBIND_QUERY_BEFORE.getKeyBind() && Configs.Plugin.PLUGIN.getValue().equals(Plugins.LOGBLOCK))
                 {
                     edits.queryPreEdits(Configs.Edits.PRE_COUNT.getIntegerValue());
-                    return true;
+                    return ActionResult.SUCCESS;
                 }
-                else if (key == Hotkeys.KEYBIND_TP_CURSOR.getKeybind())
+                else if (key == Hotkeys.KEYBIND_TP_CURSOR.getKeyBind())
                 {
                     if (edits.getSelection() != null)
                     {
                         Teleport.teleport(edits.getSelection().x, edits.getSelection().y, edits.getSelection().z, edits.getSelection().world);
-                        return true;
+                        return ActionResult.SUCCESS;
                     }
                 }
-                else if (key == Hotkeys.KEYBIND_TP_NEXT.getKeybind())
+                else if (key == Hotkeys.KEYBIND_TP_NEXT.getKeyBind())
                 {
                     edits.getBlockEditSet().getOreDB().tpNext();
-                    return true;
+                    return ActionResult.SUCCESS;
                 }
-                else if (key == Hotkeys.KEYBIND_TP_NEXT_ANNO.getKeybind())
+                else if (key == Hotkeys.KEYBIND_TP_NEXT_ANNO.getKeyBind())
                 {
                     edits.getBlockEditSet().tpNextAnno();
-                    return true;
+                    return ActionResult.SUCCESS;
                 }
-                else if (key == Hotkeys.KEYBIND_TP_PREV.getKeybind())
+                else if (key == Hotkeys.KEYBIND_TP_PREV.getKeyBind())
                 {
                     edits.getBlockEditSet().getOreDB().tpPrev();
-                    return true;
+                    return ActionResult.SUCCESS;
                 }
-                else if (key == Hotkeys.KEYBIND_TP_PREV_ANNO.getKeybind())
+                else if (key == Hotkeys.KEYBIND_TP_PREV_ANNO.getKeyBind())
                 {
                     edits.getBlockEditSet().tpPrevAnno();
-                    return true;
+                    return ActionResult.SUCCESS;
                 }
-                else if (key == Hotkeys.KEYBIND_WATSON_CLEAR.getKeybind())
+                else if (key == Hotkeys.KEYBIND_WATSON_CLEAR.getKeyBind())
                 {
                     edits.clearBlockEditSet();
-                    return true;
+                    return ActionResult.SUCCESS;
                 }
             }
-            return false;
+            return ActionResult.FAIL;
         }
     }
 }

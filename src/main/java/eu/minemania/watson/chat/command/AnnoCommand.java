@@ -22,10 +22,9 @@ import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.Annotation;
 import eu.minemania.watson.db.BlockEditSet;
 import eu.minemania.watson.db.LocalAnnotation;
-import fi.dy.masa.malilib.gui.Message.MessageType;
-import fi.dy.masa.malilib.util.InfoUtils;
+import fi.dy.masa.malilib.overlay.message.MessageDispatcher;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 
 public class AnnoCommand extends WatsonCommandBase
@@ -70,12 +69,12 @@ public class AnnoCommand extends WatsonCommandBase
                 Map<CommandNode<ServerCommandSource>, String> usage = dispatcher.getSmartUsage(command, context.getSource());
                 for (String u : usage.values())
                 {
-                    ClientCommandManager.sendFeedback(new LiteralText("/" + cmdName + " " + u));
+                    ClientCommandManager.sendFeedback(Text.literal("/" + cmdName + " " + u));
                 }
                 cmdCount += usage.size();
                 if (usage.size() == 0)
                 {
-                    ClientCommandManager.sendFeedback(new LiteralText("/" + cmdName));
+                    ClientCommandManager.sendFeedback(Text.literal("/" + cmdName));
                     cmdCount++;
                 }
             }
@@ -117,7 +116,7 @@ public class AnnoCommand extends WatsonCommandBase
         BlockEditSet edits = DataManager.getEditSelection().getBlockEditSet();
         ArrayList<Annotation> annotations = edits.getAnnotations();
 
-        InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.anno.clear", annotations.size());
+        MessageDispatcher.generic("watson.message.anno.clear", annotations.size());
         annotations.clear();
         return 1;
     }
@@ -126,7 +125,7 @@ public class AnnoCommand extends WatsonCommandBase
     {
         ArrayList<Annotation> annotations = LocalAnnotation.getInstance().getAnnotations();
 
-        InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.anno.clear", annotations.size());
+        MessageDispatcher.generic("watson.message.anno.clear", annotations.size());
         annotations.clear();
         return 1;
     }
@@ -178,7 +177,7 @@ public class AnnoCommand extends WatsonCommandBase
         if (index < annotations.size())
         {
             annotations.remove(index);
-            InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.anno.remove", index + 1);
+            MessageDispatcher.generic("watson.message.anno.remove", index + 1);
         }
         else
         {
@@ -195,7 +194,7 @@ public class AnnoCommand extends WatsonCommandBase
         if (index < annotations.size())
         {
             annotations.remove(index);
-            InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.anno.remove", index + 1);
+            MessageDispatcher.generic("watson.message.anno.remove", index + 1);
         }
         else
         {
@@ -213,7 +212,7 @@ public class AnnoCommand extends WatsonCommandBase
         String world = (String) vars.get("world");
         if (x == null || y == null || z == null || world == null)
         {
-            InfoUtils.showInGameMessage(MessageType.ERROR, "watson.error.anno.position");
+            MessageDispatcher.error("watson.error.anno.position");
         }
         else
         {
@@ -244,7 +243,7 @@ public class AnnoCommand extends WatsonCommandBase
 
         if (blockPos == BlockPos.ORIGIN || world == null)
         {
-            InfoUtils.showInGameMessage(MessageType.ERROR, "watson.error.anno.position");
+            MessageDispatcher.error("watson.error.anno.position");
         }
         else
         {

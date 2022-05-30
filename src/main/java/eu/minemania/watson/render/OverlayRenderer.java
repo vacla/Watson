@@ -6,6 +6,7 @@ import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.LocalAnnotation;
 import fi.dy.masa.malilib.render.RenderUtils;
+import fi.dy.masa.malilib.render.TextRenderUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
@@ -77,7 +78,7 @@ public class OverlayRenderer
         Entity entity = mc.getCameraEntity();
         if (entity != null)
         {
-            RenderUtils.drawTextPlate(Arrays.asList(text), x, y, z, entity.getYaw(), entity.getPitch(), scaled, Configs.Generic.BILLBOARD_FOREGROUND.getIntegerValue(), Configs.Generic.BILLBOARD_BACKGROUND.getIntegerValue(), true);
+            TextRenderUtils.renderTextPlate(Arrays.asList(text), x, y, z, entity.getYaw(), entity.getPitch(), scaled, Configs.Generic.BILLBOARD_FOREGROUND.getIntegerValue(), Configs.Generic.BILLBOARD_BACKGROUND.getIntegerValue(), true);
         }
     }
 }

@@ -30,11 +30,11 @@ public class ModModeAnalysis extends Analysis
 
     void changeModMode(MutableText chat, Matcher m)
     {
-        Configs.Generic.DISPLAYED.setBooleanValue(m.pattern().pattern().equals(Pattern.compile(Configs.Analysis.MODMODE_ENABLE.getStringValue()).pattern()));
+        Configs.Generic.DISPLAYED.setBooleanValue(m.pattern().pattern().equals(Pattern.compile(Configs.Analysis.MODMODE_ENABLE.getValue()).pattern()));
     }
 
     void changeDutyMode(MutableText chat, Matcher m)
     {
-        Configs.Generic.DISPLAYED.setBooleanValue(m.pattern().pattern().equals(Pattern.compile(Configs.Analysis.DUTYMODE_ENABLE.getStringValue()).pattern()));
+        Configs.Generic.DISPLAYED.setBooleanValue(m.pattern().pattern().equals(Pattern.compile(Configs.Analysis.DUTYMODE_ENABLE.getValue()).pattern()));
     }
 }

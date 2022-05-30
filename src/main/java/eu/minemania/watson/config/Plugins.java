@@ -1,77 +1,19 @@
 package eu.minemania.watson.config;
 
-import fi.dy.masa.malilib.config.IConfigOptionListEntry;
-import fi.dy.masa.malilib.util.StringUtils;
+import com.google.common.collect.ImmutableList;
+import fi.dy.masa.malilib.config.value.BaseOptionListConfigValue;
 
-public enum Plugins implements IConfigOptionListEntry
+public class Plugins extends BaseOptionListConfigValue
 {
-    NULL("No plugin", "watson.label.plugin.no_plugin"),
-    COREPROTECT("CoreProtect", "watson.label.plugin.coreprotect"),
-    LOGBLOCK("LogBlock", "watson.label.plugin.logblock"),
-    MODMODE("ModMode", "watson.label.plugin.modmode"),
-    PRISM("Prism", "watson.label.plugin.prism"),
-    LEDGER("Ledger", "watson.label.plugin.ledger");
-
-    private final String configString;
-    private final String translationKey;
-
-    Plugins(String configString, String translationKey)
+    public static final Plugins NULL = new Plugins("No plugin", "watson.label.plugin.no_plugin");
+    public static final Plugins COREPROTECT = new Plugins("CoreProtect", "watson.label.plugin.coreprotect");
+    public static final Plugins LOGBLOCK = new Plugins("LogBlock", "watson.label.plugin.logblock");
+    public static final Plugins MODMODE = new Plugins("ModMode", "watson.label.plugin.modmode");
+    public static final Plugins PRISM = new Plugins("Prism", "watson.label.plugin.prism");
+    public static final Plugins LEDGER = new Plugins("Ledger", "watson.label.plugin.ledger");
+    public static final ImmutableList<Plugins> VALUES = ImmutableList.of(NULL, COREPROTECT, LOGBLOCK, MODMODE, PRISM, LEDGER);
+    public Plugins(String configString, String translationKey)
     {
-        this.configString = configString;
-        this.translationKey = translationKey;
-    }
-
-    @Override
-    public String getStringValue()
-    {
-        return this.configString;
-    }
-
-    @Override
-    public String getDisplayName()
-    {
-        return StringUtils.translate(this.translationKey);
-    }
-
-    @Override
-    public IConfigOptionListEntry cycle(boolean forward)
-    {
-        int id = this.ordinal();
-
-        if (forward)
-        {
-            if (++id >= values().length)
-            {
-                id = 0;
-            }
-        }
-        else
-        {
-            if (--id < 0)
-            {
-                id = values().length - 1;
-            }
-        }
-
-        return values()[id % values().length];
-    }
-
-    @Override
-    public Plugins fromString(String name)
-    {
-        return fromStringStatic(name);
-    }
-
-    public static Plugins fromStringStatic(String name)
-    {
-        for (Plugins action : Plugins.values())
-        {
-            if (action.configString.equalsIgnoreCase(name))
-            {
-                return action;
-            }
-        }
-
-        return Plugins.NULL;
+        super(configString, translationKey);
     }
 }

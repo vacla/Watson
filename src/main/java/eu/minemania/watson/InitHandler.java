@@ -2,40 +2,39 @@ package eu.minemania.watson;
 
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
-import eu.minemania.watson.event.InputHandler;
 import eu.minemania.watson.event.KeyCallbacks;
 import eu.minemania.watson.event.RenderHandler;
-import eu.minemania.watson.event.WorldLoadListener;
+import eu.minemania.watson.event.ClientWorldChangeHandler;
+import eu.minemania.watson.gui.ConfigScreen;
+import eu.minemania.watson.input.WatsonHotkeyProvider;
 import eu.minemania.watson.scheduler.ClientTickHandler;
-import fi.dy.masa.malilib.config.ConfigManager;
-import fi.dy.masa.malilib.event.InputEventHandler;
-import fi.dy.masa.malilib.event.RenderEventHandler;
-import fi.dy.masa.malilib.event.TickHandler;
-import fi.dy.masa.malilib.event.WorldLoadHandler;
-import fi.dy.masa.malilib.interfaces.IInitializationHandler;
-import fi.dy.masa.malilib.interfaces.IRenderer;
+import fi.dy.masa.malilib.config.JsonModConfig;
+import fi.dy.masa.malilib.config.JsonModConfig.ConfigDataUpdater;
+import fi.dy.masa.malilib.config.util.ConfigUpdateUtils.KeyBindSettingsResetter;
+import fi.dy.masa.malilib.event.InitializationHandler;
+import fi.dy.masa.malilib.registry.Registry;
 import net.minecraft.client.MinecraftClient;
 
-public class InitHandler implements IInitializationHandler
+public class InitHandler implements InitializationHandler
 {
     @Override
     public void registerModHandlers()
     {
-        ConfigManager.getInstance().registerConfigHandler(Reference.MOD_ID, new Configs());
+        //Reset all KeyBindSettings when updating to the first post-malilib-refactor version
+        ConfigDataUpdater updater = new KeyBindSettingsResetter(WatsonHotkeyProvider.INSTANCE::getAllHotkeys, 0);
+        Registry.CONFIG_MANAGER.registerConfigHandler(JsonModConfig.createJsonModConfig(Reference.MOD_INFO, Configs.CURRENT_VERSION, Configs.CATEGORIES, updater));
 
-        InputEventHandler.getKeybindManager().registerKeybindProvider(InputHandler.getInstance());
-        InputEventHandler.getInputManager().registerKeyboardInputHandler(InputHandler.getInstance());
-        InputEventHandler.getInputManager().registerMouseInputHandler(InputHandler.getInstance());
+        Registry.CONFIG_SCREEN.registerConfigScreenFactory(Reference.MOD_INFO, ConfigScreen::create);
+        Registry.CONFIG_TAB.registerConfigTabProvider(Reference.MOD_INFO, ConfigScreen::getConfigTabs);
 
-        TickHandler.getInstance().registerClientTickHandler(new ClientTickHandler());
+        Registry.HOTKEY_MANAGER.registerHotkeyProvider(new WatsonHotkeyProvider());
 
-        IRenderer renderer = new RenderHandler();
-        RenderEventHandler.getInstance().registerGameOverlayRenderer(renderer);
-        RenderEventHandler.getInstance().registerWorldLastRenderer(renderer);
+        RenderHandler renderer = new RenderHandler();
+        Registry.RENDER_EVENT_DISPATCHER.registerWorldPostRenderer(renderer);
 
-        WorldLoadListener listener = new WorldLoadListener();
-        WorldLoadHandler.getInstance().registerWorldLoadPreHandler(listener);
-        WorldLoadHandler.getInstance().registerWorldLoadPostHandler(listener);
+        Registry.TICK_EVENT_DISPATCHER.registerClientTickHandler(new ClientTickHandler());
+
+        Registry.CLIENT_WORLD_CHANGE_EVENT_DISPATCHER.registerClientWorldChangeHandler(new ClientWorldChangeHandler());
 
         KeyCallbacks.init(MinecraftClient.getInstance());
 

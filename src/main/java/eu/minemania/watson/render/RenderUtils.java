@@ -1,20 +1,20 @@
 package eu.minemania.watson.render;
 
 import java.util.List;
-import java.util.Random;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import fi.dy.masa.malilib.util.Color4f;
 import fi.dy.masa.malilib.util.PositionUtils;
+import fi.dy.masa.malilib.util.data.Color4f;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.util.math.*;
+import net.minecraft.util.math.random.Random;
 
 public class RenderUtils
 {
-    private static final Random RAND = new Random();
+    private static final Random RAND = Random.create();
 
     public static void startDrawingLines(BufferBuilder buffer)
     {

@@ -8,9 +8,9 @@ import eu.minemania.watson.db.BlockEditComparator;
 import eu.minemania.watson.db.BlockEditSet;
 import eu.minemania.watson.db.PlayereditSet;
 import eu.minemania.watson.render.RenderUtils;
+import fi.dy.masa.malilib.overlay.message.MessageDispatcher;
 import fi.dy.masa.malilib.util.WorldUtils;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.command.argument.EntityAnchorArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,8 +23,6 @@ import eu.minemania.watson.Watson;
 import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
-import fi.dy.masa.malilib.gui.Message.MessageType;
-import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
@@ -114,7 +112,7 @@ public class EditSelection
             idBuilder.append(serverIP);
         }
         idBuilder.append('/');
-        idBuilder.append(WorldUtils.getDimensionId(player.world));
+        idBuilder.append(WorldUtils.getDimensionAsString(player.world));
         String id = idBuilder.toString();
 
         BlockEditSet edits = _edits.get(id);
@@ -126,7 +124,7 @@ public class EditSelection
         return edits;
     }
 
-    public void drawSelection(MatrixStack matrixStack)
+    public void drawSelection()
     {
         if (_selection != null && Configs.Edits.SELECTION_SHOWN.getBooleanValue() && (DataManager.getWorldPlugin().isEmpty() || DataManager.getWorldPlugin().equals(_selection.world)))
         {
@@ -166,7 +164,7 @@ public class EditSelection
     {
         if (_variables.containsKey("player") && _variables.containsKey("time"))
         {
-            if (Configs.Plugin.PLUGIN.getOptionListValue() == Plugins.LOGBLOCK)
+            if (Configs.Plugin.PLUGIN.getValue().equals(Plugins.LOGBLOCK))
             {
                 _calendar.setTimeInMillis((Long) _variables.get("time"));
                 int day = _calendar.get(Calendar.DAY_OF_MONTH);
@@ -186,12 +184,12 @@ public class EditSelection
             }
             else
             {
-                InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.info.no_logblock");
+                MessageDispatcher.generic("watson.message.info.no_logblock");
             }
         }
         else
         {
-            InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.info.no_player_time");
+            MessageDispatcher.generic("watson.message.info.no_player_time");
         }
     }
 
@@ -199,7 +197,7 @@ public class EditSelection
     {
         if (_variables.containsKey("player") && _variables.containsKey("time"))
         {
-            if (Configs.Plugin.PLUGIN.getOptionListValue() == Plugins.LOGBLOCK)
+            if (Configs.Plugin.PLUGIN.getValue().equals(Plugins.LOGBLOCK))
             {
                 _calendar.setTimeInMillis((Long) _variables.get("time"));
                 int day = _calendar.get(Calendar.DAY_OF_MONTH);
@@ -219,12 +217,12 @@ public class EditSelection
             }
             else
             {
-                InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.info.no_logblock");
+                MessageDispatcher.generic("watson.message.info.no_logblock");
             }
         }
         else
         {
-            InfoUtils.showInGameMessage(MessageType.INFO, "watson.message.info.no_player_time");
+            MessageDispatcher.generic("watson.message.info.no_player_time");
         }
     }
 
@@ -240,7 +238,7 @@ public class EditSelection
         }
         if (timing == -1)
         {
-            InfoUtils.showInGameMessage(MessageType.ERROR, "watson.message.edits.none_edits", "here");
+            MessageDispatcher.error("watson.message.edits.none_edits", "here");
             return;
         }
 
@@ -297,7 +295,7 @@ public class EditSelection
         }
         else
         {
-            InfoUtils.showInGameMessage(MessageType.ERROR, "watson.message.edits.none_world");
+            MessageDispatcher.error("watson.message.edits.none_world");
         }
     }
 }
