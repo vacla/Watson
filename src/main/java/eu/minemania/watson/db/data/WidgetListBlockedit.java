@@ -1,18 +1,18 @@
 package eu.minemania.watson.db.data;
 
-import java.util.Collection;
+/*import java.util.Collection;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.gui.GuiBlockeditData;
 import eu.minemania.watson.selection.PlayereditUtils;
-import fi.dy.masa.malilib.gui.widgets.WidgetListBase;
-import net.minecraft.client.util.math.MatrixStack;
+import malilib.gui.widgets.WidgetListBase;
+import net.minecraft.client.util.math.MatrixStack;*/
 
-public class WidgetListBlockedit extends WidgetListBase<BlockeditEntry, WidgetBlockeditEntry>
+public class WidgetListBlockedit /*extends WidgetListBase<BlockeditEntry, WidgetBlockeditEntry>*/
 {
-    private static int lastScrollbarPosition;
+    /*private static int lastScrollbarPosition;
 
     private final GuiBlockeditData gui;
     private boolean scrollbarRestored;
@@ -143,5 +143,5 @@ public class WidgetListBlockedit extends WidgetListBase<BlockeditEntry, WidgetBl
     protected WidgetBlockeditEntry createListEntryWidget(int x, int y, int listIndex, boolean isOdd, BlockeditEntry entry)
     {
         return new WidgetBlockeditEntry(x, y, this.browserEntryWidth, this.getBrowserEntryHeightFor(entry), isOdd, entry, listIndex);
-    }
+    }*/
 }

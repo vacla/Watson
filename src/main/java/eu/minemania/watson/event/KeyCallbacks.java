@@ -16,18 +16,19 @@ import eu.minemania.watson.db.WatsonBlockRegistery;
 import eu.minemania.watson.gui.ConfigScreen;
 import eu.minemania.watson.gui.GuiMainMenu;
 import eu.minemania.watson.selection.EditSelection;
-import fi.dy.masa.malilib.gui.BaseScreen;
-import fi.dy.masa.malilib.input.ActionResult;
-import fi.dy.masa.malilib.input.KeyAction;
-import fi.dy.masa.malilib.input.KeyBind;
-import fi.dy.masa.malilib.input.callback.HotkeyCallback;
+import malilib.gui.BaseScreen;
+import malilib.input.ActionResult;
+import malilib.input.KeyAction;
+import malilib.input.KeyBind;
+import malilib.input.callback.HotkeyCallback;
+import malilib.util.game.wrap.GameUtils;
 import net.minecraft.client.MinecraftClient;
 
 public class KeyCallbacks
 {
-    public static void init(MinecraftClient mc)
+    public static void init()
     {
-        KeyCallbackHotkeys callbackHotkeys = new KeyCallbackHotkeys(mc);
+        KeyCallbackHotkeys callbackHotkeys = new KeyCallbackHotkeys();
 
         Configs.Generic.WATSON_PREFIX.setValueChangeCallback(Command::reregisterWatsonCommand);
         Configs.Lists.HIGHLIGHT.setValueChangeCallback(((newValue, oldValue) -> Highlight.setHighlightList(newValue)));
@@ -88,17 +89,11 @@ public class KeyCallbacks
 
     private static class KeyCallbackHotkeys implements HotkeyCallback
     {
-        private final MinecraftClient mc;
-
-        public KeyCallbackHotkeys(MinecraftClient mc)
-        {
-            this.mc = mc;
-        }
-
         @Override
         public ActionResult onKeyAction(KeyAction action, KeyBind key)
         {
-            if (this.mc.player == null || this.mc.world == null)
+            MinecraftClient mc = GameUtils.getClient();
+            if (mc.player == null || mc.world == null)
             {
                 return ActionResult.FAIL;
             }
@@ -127,7 +122,7 @@ public class KeyCallbacks
                 {
                     if (Configs.Plugin.PLUGIN.getValue().equals(Plugins.COREPROTECT))
                     {
-                        ChatMessage.sendToServerChat(String.format("/%s i", Configs.Plugin.COREPROTECT_COMMAND.getValue().getName()));
+                        ChatMessage.sendCommand(String.format("%s i", Configs.Plugin.COREPROTECT_COMMAND.getValue().getName()));
                         return ActionResult.SUCCESS;
                     }
                 }

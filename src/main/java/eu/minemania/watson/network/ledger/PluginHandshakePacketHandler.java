@@ -27,10 +27,22 @@ public class PluginHandshakePacketHandler implements IPluginChannelHandlerExtend
     public void reset()
     {
         registered = false;
-        if (Configs.Plugin.PLUGIN.getOptionListValue() == Plugins.LEDGER)
+        if (Configs.Plugin.PLUGIN.getValue() == Plugins.LEDGER)
         {
             Configs.Plugin.PLUGIN.resetToDefault();
         }
+    }
+
+    @Override
+    public boolean registerToServer()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean usePacketSplitter()
+    {
+        return false;
     }
 
     @Override
@@ -72,7 +84,7 @@ public class PluginHandshakePacketHandler implements IPluginChannelHandlerExtend
 
             DataManager.setLedgerVersion(ledgerVersion);
             DataManager.setLedgerActions(actionsList);
-            Configs.Plugin.PLUGIN.setOptionListValue(Plugins.LEDGER);
+            Configs.Plugin.PLUGIN.setValue(Plugins.LEDGER);
         }
     }
 

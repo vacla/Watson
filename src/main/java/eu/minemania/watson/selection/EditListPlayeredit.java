@@ -2,7 +2,7 @@ package eu.minemania.watson.selection;
 
 import com.google.common.collect.ImmutableList;
 import eu.minemania.watson.db.PlayereditSet;
-import fi.dy.masa.malilib.util.StringUtils;
+import malilib.util.StringUtils;
 
 public class EditListPlayeredit extends PlayereditBase
 {

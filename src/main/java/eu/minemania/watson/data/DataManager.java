@@ -3,6 +3,8 @@ package eu.minemania.watson.data;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,13 +23,13 @@ import eu.minemania.watson.db.LedgerInfo;
 import eu.minemania.watson.db.TimeStamp;
 import eu.minemania.watson.gui.ConfigScreen;
 import eu.minemania.watson.selection.EditSelection;
-import fi.dy.masa.malilib.config.util.ConfigUtils;
-import fi.dy.masa.malilib.gui.config.ConfigTab;
-import fi.dy.masa.malilib.gui.tab.ScreenTab;
-import fi.dy.masa.malilib.overlay.message.MessageDispatcher;
-import fi.dy.masa.malilib.util.FileUtils;
-import fi.dy.masa.malilib.util.StringUtils;
-import fi.dy.masa.malilib.util.data.json.JsonUtils;
+import malilib.config.util.ConfigUtils;
+import malilib.gui.config.ConfigTab;
+import malilib.gui.tab.ScreenTab;
+import malilib.overlay.message.MessageDispatcher;
+import malilib.util.FileUtils;
+import malilib.util.StringUtils;
+import malilib.util.data.json.JsonUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.entity.player.PlayerEntity;
@@ -40,7 +42,6 @@ public class DataManager
 
     protected static final Pattern DATE_PATTERN = Pattern.compile("^(\\d{4})-(\\d{1,2})-(\\d{1,2})$");
     protected static final Pattern ABSOLUTE_TIME = Pattern.compile("(\\d{1,2})-(\\d{1,2}) (\\d{1,2}):(\\d{1,2}):(\\d{1,2})");
-    private static final ArrayList<String> setNames = new ArrayList<>();
 
     private static ScreenTab configGuiTab = ConfigScreen.GENERIC;
     private static boolean canSave;
@@ -53,11 +54,6 @@ public class DataManager
     private final EditSelection editselection = new EditSelection();
 
     protected Filters filters = new Filters();
-
-    private DataManager()
-    {
-
-    }
 
     private static DataManager getInstance()
     {
@@ -131,7 +127,7 @@ public class DataManager
 
     public static void load()
     {
-        File file = getCurrentStorageFile();
+        Path file = getCurrentStorageFile();
 
         JsonElement element = JsonUtils.parseJsonFile(file);
 
@@ -160,39 +156,39 @@ public class DataManager
 
         root.add("config_gui_tab", new JsonPrimitive(configGuiTab.getName()));
 
-        File file = getCurrentStorageFile();
+        Path file = getCurrentStorageFile();
         JsonUtils.writeJsonToFile(root, file);
 
         canSave = false;
     }
 
-    public static File getCurrentConfigDirectory()
+    public static Path getCurrentConfigDirectory()
     {
-        return ConfigUtils.getConfigDirectoryPath().resolve(Reference.MOD_ID).toFile();
+        return ConfigUtils.getConfigDirectory().resolve(Reference.MOD_ID);
     }
 
-    public static File getPlayereditsBaseDirectory()
+    public static Path getPlayereditsBaseDirectory()
     {
-        File dir = FileUtils.getCanonicalFileIfPossible(new File(FileUtils.getMinecraftDirectory(), "playeredits"));
+        Path dir = FileUtils.getMinecraftDirectory().resolve("playeredits");
 
-        if (!dir.exists() && !dir.mkdirs())
+        if (!FileUtils.createDirectoriesIfMissing(dir))
         {
-            Watson.logger.warn("Failed to create the playeredit directory '{}'", dir.getAbsolutePath());
+            Watson.logger.warn("Failed to create the playeredit directory '{}'", dir.toAbsolutePath().toString());
         }
 
         return dir;
     }
 
-    private static File getCurrentStorageFile()
+    private static Path getCurrentStorageFile()
     {
-        File dir = getCurrentConfigDirectory();
+        Path dir = getCurrentConfigDirectory();
 
-        if (!dir.exists() && !dir.mkdirs())
+        if (!FileUtils.createDirectoriesIfMissing(dir))
         {
-            Watson.logger.warn("Failed to create the config directory '{}'", dir.getAbsolutePath());
+            Watson.logger.warn("Failed to create the config directory '{}'", dir.toAbsolutePath().toString());
         }
 
-        return new File(dir, getStorageFileName());
+        return dir.resolve(getStorageFileName());
     }
 
     private static String getStorageFileName()
@@ -244,9 +240,11 @@ public class DataManager
             }
         }
 
-        File file = new File(getPlayereditsBaseDirectory(), fileName + ".txt");
+        Path file = getPlayereditsBaseDirectory().resolve(fileName + ".txt");
+
         try
         {
+            Files.createFile(file);
             BlockEditSet edits = DataManager.getEditSelection().getBlockEditSet();
             int editCount = edits.save(file);
             int annoCount = edits.getAnnotations().size();
@@ -262,7 +260,7 @@ public class DataManager
 
     public static void loadBlockEditFile(String fileName)
     {
-        File file = new File(getPlayereditsBaseDirectory(), fileName + ".txt");
+        File file = new File(getPlayereditsBaseDirectory().toFile(), fileName + ".txt");
         if (!file.canRead())
         {
             File[] files = getInstance().getBlockEditFileList(fileName);
@@ -439,7 +437,7 @@ public class DataManager
 
     public File[] getBlockEditFileList(String prefix)
     {
-        File[] files = getPlayereditsBaseDirectory().listFiles(new CaseInsensitivePrefixFileFilter(prefix));
+        File[] files = getPlayereditsBaseDirectory().toFile().listFiles(new CaseInsensitivePrefixFileFilter(prefix));
         if (files != null)
         {
             Arrays.sort(files);
@@ -496,73 +494,6 @@ public class DataManager
             return message + " -extended";
         }
         return message;
-    }
-
-    public static ArrayList<String> getAllItemEntitiesStringIdentifiers()
-    {
-        if (!setNames.isEmpty())
-        {
-            return setNames;
-        }
-
-        setNames.addAll(getBlocks());
-        setNames.addAll(getItems());
-        setNames.addAll(getEntityTypes());
-
-        return setNames;
-    }
-
-    public static ArrayList<String> getBlocks()
-    {
-        ArrayList<String> blocks = new ArrayList<>();
-
-        Registry.BLOCK.forEach(block -> blocks.add(Registry.BLOCK.getId(block).toString()));
-
-        blocks.sort(String::compareTo);
-
-        return blocks;
-    }
-
-    public static ArrayList<String> getItems()
-    {
-        ArrayList<String> items = new ArrayList<>();
-
-        Registry.ITEM.forEach(item -> items.add(Registry.ITEM.getId(item).toString()));
-
-        items.sort(String::compareTo);
-
-        return items;
-    }
-
-    public static ArrayList<String> getEntityTypes()
-    {
-        ArrayList<String> entityTypes = new ArrayList<>();
-
-        Registry.ENTITY_TYPE.forEach(entityType -> entityTypes.add(Registry.ENTITY_TYPE.getId(entityType).toString()));
-
-        entityTypes.sort(String::compareTo);
-
-        return entityTypes;
-    }
-
-    public static ArrayList<String> getTags()
-    {
-        ArrayList<String> tags = new ArrayList<>();
-        ArrayList<String> deDupTags = new ArrayList<>();
-
-        Registry.BLOCK.streamTags().forEach((block) -> tags.add("#"+block.id().toString()));
-        Registry.ENTITY_TYPE.streamTags().forEach((entity) -> tags.add("#"+entity.id().toString()));
-        Registry.ITEM.streamTags().forEach((item) -> tags.add("#"+item.id().toString()));
-
-        for (String tag : tags) {
-            if (!deDupTags.contains(tag)) {
-                deDupTags.add(tag);
-            }
-        }
-
-        deDupTags.sort(String::compareTo);
-
-        return deDupTags;
     }
 
     public static void setLedgerInfo(LedgerInfo ledgerInfo)

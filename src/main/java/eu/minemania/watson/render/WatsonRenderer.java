@@ -6,7 +6,7 @@ import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.BlockEditSet;
 import eu.minemania.watson.selection.EditSelection;
-import fi.dy.masa.malilib.render.RenderUtils;
+import malilib.render.RenderUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.util.math.MatrixStack;

@@ -3,9 +3,9 @@ package eu.minemania.watson.input;
 import com.google.common.collect.ImmutableList;
 import eu.minemania.watson.Reference;
 import eu.minemania.watson.config.Hotkeys;
-import fi.dy.masa.malilib.input.Hotkey;
-import fi.dy.masa.malilib.input.HotkeyCategory;
-import fi.dy.masa.malilib.input.HotkeyProvider;
+import malilib.input.Hotkey;
+import malilib.input.HotkeyCategory;
+import malilib.input.HotkeyProvider;
 
 import java.util.List;
 

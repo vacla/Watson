@@ -13,7 +13,7 @@ import eu.minemania.watson.db.WatsonBlockRegistery;
 import eu.minemania.watson.scheduler.SyncTaskQueue;
 import eu.minemania.watson.scheduler.tasks.AddBlockEditTask;
 import eu.minemania.watson.selection.EditSelection;
-import fi.dy.masa.malilib.overlay.message.MessageDispatcher;
+import malilib.overlay.message.MessageDispatcher;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.MutableText;
 

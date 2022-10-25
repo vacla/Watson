@@ -35,6 +35,18 @@ public class PluginActionPacketHandler implements IPluginChannelHandlerExtended
     }
 
     @Override
+    public boolean registerToServer()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean usePacketSplitter()
+    {
+        return false;
+    }
+
+    @Override
     public List<Identifier> getChannels()
     {
         return CHANNELS;

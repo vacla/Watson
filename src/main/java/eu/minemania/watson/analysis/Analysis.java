@@ -10,7 +10,7 @@ import eu.minemania.watson.Watson;
 import eu.minemania.watson.chat.IChatHandler;
 import eu.minemania.watson.chat.IMatchedChatHandler;
 import eu.minemania.watson.config.Configs;
-import fi.dy.masa.malilib.config.option.StringConfig;
+import malilib.config.option.StringConfig;
 import net.minecraft.text.MutableText;
 
 public class Analysis implements IChatHandler

@@ -1,144 +1,124 @@
 package eu.minemania.watson.gui.widgets;
 
-import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.systems.RenderSystem;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.PlayereditSet;
 import eu.minemania.watson.gui.GuiEdits;
 import eu.minemania.watson.selection.EditListPlayeredit;
-import fi.dy.masa.malilib.gui.GuiBase;
-import fi.dy.masa.malilib.gui.button.ButtonBase;
-import fi.dy.masa.malilib.gui.button.ButtonGeneric;
-import fi.dy.masa.malilib.gui.button.IButtonActionListener;
-import fi.dy.masa.malilib.gui.widgets.WidgetListEntryBase;
-import fi.dy.masa.malilib.render.RenderUtils;
-import fi.dy.masa.malilib.util.StringUtils;
-import net.minecraft.client.util.math.MatrixStack;
+import malilib.gui.BaseScreen;
+import malilib.gui.util.GuiUtils;
+import malilib.gui.widget.button.GenericButton;
+import malilib.gui.widget.list.entry.BaseDataListEntryWidget;
+import malilib.gui.widget.list.entry.DataListEntryWidgetData;
+import malilib.render.text.StyledTextLine;
+import malilib.util.StringUtils;
 
-public class WidgetPlayereditEntry extends WidgetListEntryBase<PlayereditSet>
+import java.util.List;
+import java.util.Locale;
+
+public class WidgetPlayereditEntry extends BaseDataListEntryWidget<PlayereditSet>
 {
-    private final WidgetListLoadedPlayeredits parent;
-    private final PlayereditSet playeredit;
-    private final boolean isOdd;
-    private final int buttonsStartX;
+    protected final GenericButton openBlockListButton;
+    protected final GenericButton toggleVisibilityButton;
+    protected final GenericButton removeEntryButton;
+    protected int buttonsStartX;
 
-    public WidgetPlayereditEntry(int x, int y, int width, int height, boolean isOdd,
-                                 PlayereditSet playeredit, int listIndex, WidgetListLoadedPlayeredits parent)
+    public WidgetPlayereditEntry(PlayereditSet playeredit, DataListEntryWidgetData constructData)
     {
-        super(x, y, width, height, playeredit, listIndex);
+        super(playeredit, constructData);
 
-        this.parent = parent;
-        this.playeredit = playeredit;
-        this.isOdd = isOdd;
-        y += 1;
+        this.removeEntryButton = GenericButton.create("watson.gui.button.playeredit.remove", this::removeEntry);
+        this.toggleVisibilityButton = GenericButton.create(this.getVibilityKey(), this::toggleVisibility);
+        this.openBlockListButton = GenericButton.create("watson.gui.button.playeredit.edit_list", this::openBlockList);
 
-        int posX = x + width;
-        int len;
-        ButtonListener listener;
-        String text;
+        this.textOffset.setXOffset(20);
 
-        text = StringUtils.translate("watson.gui.button.playeredit.remove");
-        len = this.getStringWidth(text) + 10;
-        posX -= (len + 2);
-        listener = new ButtonListener(ButtonListener.Type.REMOVE, this);
-        this.addButton(new ButtonGeneric(posX, y, len, 20, text), listener);
+        this.getBackgroundRenderer().getNormalSettings().setEnabledAndColor(true, this.isOdd ? 0x20FFFFFF : 0x50FFFFFF);
+        this.getBackgroundRenderer().getHoverSettings().setEnabledAndColor(true, 0x70FFFFFF);
+        this.setText(StyledTextLine.of(playeredit.getPlayer()));
+        this.addHoverInfo();
+    }
 
-        boolean enabled = this.playeredit.isVisible();
-        String pre = enabled ? GuiBase.TXT_GREEN : GuiBase.TXT_RED;
-        text = pre + StringUtils.translate("watson.message.setting." + (enabled ? "shown" : "hidden")) + GuiBase.TXT_RST;
-        len = this.getStringWidth(text) + 10;
-        posX -= (len + 2);
-        listener = new ButtonListener(ButtonListener.Type.VISIBLE, this);
-        this.addButton(new ButtonGeneric(posX, y, len, 20, text), listener);
+    protected void addHoverInfo()
+    {
+        String text = StringUtils.translate("watson.gui.button.playeredit.hover", this.getData().getBlockEditCount());
 
-        text = StringUtils.translate("watson.gui.button.playeredit.edit_list");
-        len = this.getStringWidth(text) + 10;
-        posX -= (len + 2);
-        listener = new ButtonListener(ButtonListener.Type.OPEN_BLOCKLIST, this);
-        this.addButton(new ButtonGeneric(posX, y, len, 20, text), listener);
+        this.getHoverInfoFactory().addStrings(text);
+    }
 
-        this.buttonsStartX = posX;
+    protected String getVibilityKey()
+    {
+        return this.getData().isVisible() ? "watson.message.setting.shown" : "watson.message.setting.hidden";
     }
 
     @Override
-    public void render(int mouseX, int mouseY, boolean selected, MatrixStack matrixStack)
+    public void reAddSubWidgets()
     {
-        RenderUtils.color(1f, 1f, 1f, 1f);
+        super.reAddSubWidgets();
 
-        if (selected || this.isMouseOver(mouseX, mouseY))
-        {
-            RenderUtils.drawRect(this.x, this.y, this.width, this.height, 0x70FFFFFF);
-        }
-        else if (this.isOdd)
-        {
-            RenderUtils.drawRect(this.x, this.y, this.width, this.height, 0x20FFFFFF);
-        }
-        else
-        {
-            RenderUtils.drawRect(this.x, this.y, this.width, this.height, 0x50FFFFFF);
-        }
-
-        String playerName = this.entry.getPlayer();
-        this.drawString(this.x + 20, this.y + 7, 0xFFFFFFFF, playerName, matrixStack);
-
-        RenderUtils.color(1f, 1f, 1f, 1f);
-        RenderSystem.disableBlend();
-
-        String text = StringUtils.translate("watson.gui.button.playeredit.hover", this.entry.getBlockEditCount());
-
-        this.drawSubWidgets(mouseX, mouseY, matrixStack);
-
-        if (GuiBase.isMouseOver(mouseX, mouseY, this.x, this.y, this.buttonsStartX - 12, this.height))
-        {
-            RenderUtils.drawHoverText(mouseX, mouseY, ImmutableList.of(text), matrixStack);
-        }
-
-        RenderUtils.disableDiffuseLighting();
-        //RenderSystem.disableLighting();
+        this.addWidget(this.removeEntryButton);
+        this.addWidget(this.toggleVisibilityButton);
+        this.addWidget(this.openBlockListButton);
     }
 
-    private static class ButtonListener implements IButtonActionListener
+    @Override
+    public void updateSubWidgetPositions()
     {
-        private final Type type;
-        private final WidgetPlayereditEntry widget;
+        super.updateSubWidgetPositions();
 
-        public ButtonListener(Type type, WidgetPlayereditEntry widget)
+        this.removeEntryButton.centerVerticallyInside(this);
+        this.toggleVisibilityButton.centerVerticallyInside(this);
+        this.openBlockListButton.centerVerticallyInside(this);
+
+        this.removeEntryButton.setRight(this.getRight() - 2);
+        this.toggleVisibilityButton.setRight(this.removeEntryButton.getX() - 1);
+        this.openBlockListButton.setRight(this.toggleVisibilityButton.getX() - 1);
+
+        this.buttonsStartX = this.openBlockListButton.getX() - 1;
+    }
+
+    @Override
+    public boolean canHoverAt(int mouseX, int mouseY, int mouseButton)
+    {
+        return mouseX <= this.buttonsStartX - 12 && super.canHoverAt(mouseX, mouseY, mouseButton);
+    }
+
+    public static boolean searchFilter(PlayereditSet entry, List<String> searchTerms)
+    {
+        String name = entry.getPlayer().toLowerCase(Locale.ROOT);
+
+        for (String searchTerm : searchTerms)
         {
-            this.type = type;
-            this.widget = widget;
-        }
-
-        @Override
-        public void actionPerformedWithButton(ButtonBase button, int mouseButton)
-        {
-            if (this.type == Type.OPEN_BLOCKLIST)
+            if (name.contains(searchTerm))
             {
-                EditListPlayeredit editList = new EditListPlayeredit(this.widget.playeredit, true);
-                GuiEdits gui = new GuiEdits(editList, this.widget.parent.getGuiParent());
-                GuiBase.openGui(gui);
-            }
-            else if (this.type == Type.REMOVE)
-            {
-                PlayereditSet entry = this.widget.entry;
-
-                DataManager.getEditSelection().getBlockEditSet().removeEdits(entry.getPlayer());
-                this.widget.parent.refreshEntries();
-            }
-            else if (this.type == Type.VISIBLE)
-            {
-                PlayereditSet entry = this.widget.playeredit;
-
-                entry.setVisible(!entry.isVisible());
-                this.widget.parent.refreshEntries();
+                return true;
             }
         }
 
-        public enum Type
-        {
-            OPEN_BLOCKLIST,
-            REMOVE,
-            VISIBLE
-        }
+        return false;
+    }
+
+    public void openBlockList()
+    {
+        EditListPlayeredit editList = new EditListPlayeredit(this.getData(), true);
+        GuiEdits screen = new GuiEdits(editList);
+        screen.setParent(GuiUtils.getCurrentScreen());
+        BaseScreen.openScreen(screen);
+    }
+
+    public void removeEntry()
+    {
+        PlayereditSet entry = this.getData();
+
+        DataManager.getEditSelection().getBlockEditSet().removeEdits(entry.getPlayer());
+        this.listWidget.refreshEntries();
+    }
+
+    public void toggleVisibility()
+    {
+        PlayereditSet entry = this.getData();
+
+        entry.setVisible(!entry.isVisible());
+        this.listWidget.refreshEntries();
     }
 
 }

@@ -3,7 +3,7 @@ package eu.minemania.watson.selection;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
-import fi.dy.masa.malilib.listener.TaskCompletionListener;
+import malilib.listener.TaskCompletionListener;
 
 public abstract class PlayereditBase implements IPlayeredit
 {

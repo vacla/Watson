@@ -41,6 +41,6 @@ public class Teleport
         {
             Watson.logger.info(format);
         }
-        ChatMessage.sendToServerChat(format);
+        ChatMessage.sendCommand(format);
     }
 }

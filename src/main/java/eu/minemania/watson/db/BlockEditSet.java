@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -24,7 +25,7 @@ import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.render.OverlayRenderer;
 import eu.minemania.watson.selection.EditSelection;
-import fi.dy.masa.malilib.util.StringUtils;
+import malilib.util.StringUtils;
 
 public class BlockEditSet
 {
@@ -114,10 +115,10 @@ public class BlockEditSet
         }
     }
 
-    public synchronized int save(File file) throws IOException
+    public synchronized int save(Path file) throws IOException
     {
 
-        try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(file))))
+        try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(file.toFile()))))
         {
             int editCount = 0;
             for (PlayereditSet editsForPlayer : playerEdits.values())

@@ -1,333 +1,193 @@
 package eu.minemania.watson.db.data;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import javax.annotation.Nullable;
-
-import com.mojang.blaze3d.systems.RenderSystem;
+import com.google.common.collect.ImmutableList;
 import eu.minemania.watson.client.Teleport;
+import eu.minemania.watson.db.BlockEdit;
+import eu.minemania.watson.gui.widgets.BlockeditEntryHoverInfoWidget;
 import eu.minemania.watson.selection.PlayereditUtils;
-import fi.dy.masa.malilib.gui.GuiBase;
-import fi.dy.masa.malilib.gui.button.ButtonBase;
-import fi.dy.masa.malilib.gui.button.ButtonGeneric;
-import fi.dy.masa.malilib.gui.button.IButtonActionListener;
-import fi.dy.masa.malilib.gui.widgets.WidgetListEntrySortable;
-import fi.dy.masa.malilib.render.RenderUtils;
-import fi.dy.masa.malilib.util.StringUtils;
-import net.minecraft.client.util.math.MatrixStack;
+import malilib.gui.util.ElementOffset;
+import malilib.gui.util.ScreenContext;
+import malilib.gui.widget.InteractableWidget;
+import malilib.gui.widget.button.GenericButton;
+import malilib.gui.widget.list.DataListWidget;
+import malilib.gui.widget.list.ListEntryWidgetInitializer;
+import malilib.gui.widget.list.entry.BaseDataListEntryWidget;
+import malilib.gui.widget.list.entry.DataListEntryWidgetData;
+import malilib.gui.widget.list.header.DataColumn;
+import malilib.render.text.StyledTextLine;
+import malilib.util.StringUtils;
 
-public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry>
+import java.util.Optional;
+
+public class WidgetBlockeditEntry extends BaseDataListEntryWidget<BlockeditEntry>
 {
-    private static final String[] HEADERS = new String[]{
-            "watson.gui.label.blockedit.title.action",
-            "watson.gui.label.blockedit.title.time",
-            "watson.gui.label.blockedit.title.coords",
-            "watson.gui.label.blockedit.title.world",
-            "watson.gui.label.blockedit.title.amount",
-            "watson.gui.label.blockedit.title.description"
-    };
-    private static int maxActionLength;
-    private static int maxTimeLength;
-    private static int maxCoordsLength;
-    private static int maxWorldLength;
-    private static int maxAmountLength;
-    private static int maxDescriptionLength;
+    public static final DataColumn<BlockeditEntry> ACTION_COLUMN = new DataColumn<>("watson.gui.label.blockedit.title.action", null);
+    public static final DataColumn<BlockeditEntry> TIME_COLUMN = new DataColumn<>("watson.gui.label.blockedit.title.time", null);
+    public static final DataColumn<BlockeditEntry> COORDS_COLUMN = new DataColumn<>("watson.gui.label.blockedit.title.coords", null);
+    public static final DataColumn<BlockeditEntry> WORLD_COLUMN = new DataColumn<>("watson.gui.label.blockedit.title.world", null);
+    public static final DataColumn<BlockeditEntry> AMOUNT_COLUMN = new DataColumn<>("watson.gui.label.blockedit.title.amount", null);
+    public static final DataColumn<BlockeditEntry> DESCRIPTION_COLUMN = new DataColumn<>("watson.gui.label.blockedit.title.description", null);
+    public static final ImmutableList<DataColumn<BlockeditEntry>> COLUMNS = ImmutableList.of(ACTION_COLUMN, TIME_COLUMN, COORDS_COLUMN, WORLD_COLUMN, AMOUNT_COLUMN, DESCRIPTION_COLUMN);
+    protected final StyledTextLine actionText;
+    protected final StyledTextLine timeText;
+    protected final StyledTextLine coordsText;
+    protected final StyledTextLine worldText;
+    protected final StyledTextLine amountText;
+    protected final StyledTextLine descriptionText;
+    protected int actionColumnRight;
+    protected int timeColumnRight;
+    protected int coordsColumnRight;
+    protected int worldColumnRight;
+    protected int amountColumnRight;
+    protected int descriptionColumnRight;
+    private final GenericButton teleportButton;
 
-    @Nullable
-    private final BlockeditEntry entry;
-    @Nullable
-    private final String header1;
-    @Nullable
-    private final String header2;
-    @Nullable
-    private final String header3;
-    @Nullable
-    private final String header4;
-    @Nullable
-    private final String header5;
-    @Nullable
-    private final String header6;
-    private final boolean isOdd;
-
-    public WidgetBlockeditEntry(int x, int y, int width, int height, boolean isOdd,
-                                @Nullable BlockeditEntry entry, int listIndex)
+    public WidgetBlockeditEntry(BlockeditEntry entry, DataListEntryWidgetData constructData)
     {
-        super(x, y, width, height, entry, listIndex);
+        super(entry, constructData);
 
-        this.columnCount = 1;
-        this.entry = entry;
-        this.isOdd = isOdd;
-        int posX = x + width;
-        int posY = y + 1;
+        this.teleportButton = GenericButton.create("watson.gui.label.blockedit.list.teleport", this::teleport);
+        this.hoverInfoWidget = new BlockeditEntryHoverInfoWidget();
 
-        if (this.entry != null)
-        {
-            this.header1 = null;
-            this.header2 = null;
-            this.header3 = null;
-            this.header4 = null;
-            this.header5 = null;
-            this.header6 = null;
-            this.entry.setButton(this.createButtonGeneric(posX, posY, WidgetBlockeditEntry.ButtonListenerTeleport.ButtonType.TELEPORT));
-        }
-        else
-        {
-            this.header1 = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[0]) + GuiBase.TXT_RST;
-            this.header2 = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[1]) + GuiBase.TXT_RST;
-            this.header3 = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[2]) + GuiBase.TXT_RST;
-            this.header4 = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[3]) + GuiBase.TXT_RST;
-            this.header5 = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[4]) + GuiBase.TXT_RST;
-            this.header6 = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[5]) + GuiBase.TXT_RST;
-        }
-    }
+        BlockEdit edit = entry.getEdit();
+        this.actionText = StyledTextLine.of(PlayereditUtils.blockString(edit, PlayereditUtils.Edit.ACTION));
+        this.timeText = StyledTextLine.of(PlayereditUtils.blockString(edit, PlayereditUtils.Edit.TIME));
+        this.coordsText = StyledTextLine.of(PlayereditUtils.blockString(edit, PlayereditUtils.Edit.COORDS));
+        this.worldText = StyledTextLine.of(PlayereditUtils.blockString(edit, PlayereditUtils.Edit.WORLD));
+        this.amountText = StyledTextLine.of(PlayereditUtils.blockString(edit, PlayereditUtils.Edit.AMOUNT));
+        this.descriptionText = StyledTextLine.of(PlayereditUtils.blockString(edit, PlayereditUtils.Edit.DESCRIPTION));
 
-    private ButtonBase createButtonGeneric(int xRight, int y, WidgetBlockeditEntry.ButtonListenerTeleport.ButtonType type)
-    {
-        String label = type.getDisplayName();
-        WidgetBlockeditEntry.ButtonListenerTeleport listener = new WidgetBlockeditEntry.ButtonListenerTeleport(type, this.entry);
-        return this.addButton(new ButtonGeneric(xRight, y, -1, true, label), listener);
-    }
-
-    public static void setMaxNameLength(List<BlockeditEntry> edits)
-    {
-        maxActionLength = StringUtils.getStringWidth(GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[0]) + GuiBase.TXT_RST);
-        maxTimeLength = StringUtils.getStringWidth(GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[1]) + GuiBase.TXT_RST);
-        maxCoordsLength = StringUtils.getStringWidth(GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[2]) + GuiBase.TXT_RST);
-        maxWorldLength = StringUtils.getStringWidth(GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[3]) + GuiBase.TXT_RST);
-        maxAmountLength = StringUtils.getStringWidth(GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[4]) + GuiBase.TXT_RST);
-        maxDescriptionLength = StringUtils.getStringWidth(GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[5]) + GuiBase.TXT_RST);
-
-        for (BlockeditEntry entry : edits)
-        {
-            maxActionLength = Math.max(maxActionLength, StringUtils.getStringWidth(PlayereditUtils.blockString(entry.getEdit(), PlayereditUtils.Edit.ACTION)));
-            maxTimeLength = Math.max(maxTimeLength, StringUtils.getStringWidth(PlayereditUtils.blockString(entry.getEdit(), PlayereditUtils.Edit.TIME)));
-            maxCoordsLength = Math.max(maxCoordsLength, StringUtils.getStringWidth(PlayereditUtils.blockString(entry.getEdit(), PlayereditUtils.Edit.COORDS)));
-            maxWorldLength = Math.max(maxWorldLength, StringUtils.getStringWidth(PlayereditUtils.blockString(entry.getEdit(), PlayereditUtils.Edit.WORLD)));
-            maxAmountLength = Math.max(maxAmountLength, StringUtils.getStringWidth(PlayereditUtils.blockString(entry.getEdit(), PlayereditUtils.Edit.AMOUNT)));
-            maxDescriptionLength = Math.max(maxDescriptionLength, StringUtils.getStringWidth(PlayereditUtils.blockString(entry.getEdit(), PlayereditUtils.Edit.DESCRIPTION)));
-        }
+        this.getBackgroundRenderer().getHoverSettings().setColor(0x70FFFFFF);
+        this.getBackgroundRenderer().getNormalSettings().setColor(this.isOdd ? 0x20FFFFFF : 0x50FFFFFF);
     }
 
     @Override
-    public boolean canSelectAt(int mouseX, int mouseY, int mouseButton)
+    public void renderAt(int x, int y, float z, ScreenContext ctx)
     {
-        return false;
-    }
+        super.renderAt(x, y, z, ctx);
 
-    @Override
-    public void render(int mouseX, int mouseY, boolean selected, MatrixStack matrixStack)
-    {
-        RenderUtils.color(1f, 1f, 1f, 1f);
-
-        if (this.header1 == null && (selected || this.isMouseOver(mouseX, mouseY)))
-        {
-            RenderUtils.drawRect(this.x, this.y, this.width, this.height, 0x70FFFFFF);
-        }
-        else if (this.isOdd)
-        {
-            RenderUtils.drawRect(this.x, this.y, this.width, this.height, 0x20FFFFFF);
-        }
-        else
-        {
-            RenderUtils.drawRect(this.x, this.y, this.width, this.height, 0x50FFFFFF);
-        }
-
-        int x1 = this.getColumnPosX(0);
-        int x2 = this.getColumnPosX(1);
-        int x3 = this.getColumnPosX(2);
-        int x4 = this.getColumnPosX(3);
-        int x5 = this.getColumnPosX(4);
-        int x6 = this.getColumnPosX(5);
-        int y = this.y + 7;
+        int textY = y + ElementOffset.getCenteredElementOffset(this.getHeight(), 8);
         int color = 0xFFFFFFFF;
+        z += 0.0125f;
+        this.renderTextLineRightAligned(x + this.actionColumnRight, textY, z, color, true, this.actionText, ctx);
+        this.renderTextLineRightAligned(x + this.timeColumnRight, textY, z, color, true, this.timeText, ctx);
+        this.renderTextLineRightAligned(x + this.coordsColumnRight, textY, z, color, true, this.coordsText, ctx);
+        this.renderTextLineRightAligned(x + this.worldColumnRight, textY, z, color, true, this.worldText, ctx);
+        this.renderTextLineRightAligned(x + this.amountColumnRight, textY, z, color, true, this.amountText, ctx);
+        this.renderTextLineRightAligned(x + this.descriptionColumnRight, textY, z, color, true, this.descriptionText, ctx);
+    }
 
-        if (this.header1 != null)
-        {
-            this.drawString(x1, y, color, this.header1, matrixStack);
-            this.drawString(x2, y, color, this.header2, matrixStack);
-            this.drawString(x3, y, color, this.header3, matrixStack);
-            this.drawString(x4, y, color, this.header4, matrixStack);
-            this.drawString(x5, y, color, this.header5, matrixStack);
-            this.drawString(x6, y, color, this.header6, matrixStack);
-        }
-        else if (this.entry != null)
-        {
-            String action = PlayereditUtils.blockString(this.entry.getEdit(), PlayereditUtils.Edit.ACTION);
-            String time = PlayereditUtils.blockString(this.entry.getEdit(), PlayereditUtils.Edit.TIME);
-            String coords = PlayereditUtils.blockString(this.entry.getEdit(), PlayereditUtils.Edit.COORDS);
-            String world = PlayereditUtils.blockString(this.entry.getEdit(), PlayereditUtils.Edit.WORLD);
-            String amount = PlayereditUtils.blockString(this.entry.getEdit(), PlayereditUtils.Edit.AMOUNT);
-            String description = PlayereditUtils.blockString(this.entry.getEdit(), PlayereditUtils.Edit.DESCRIPTION);
-            if (x6 + StringUtils.getStringWidth(description) > width - this.entry.getButton().getWidth() + 15)
-            {
-                description = this.textRenderer.trimToWidth(description, width - x6 - this.entry.getButton().getWidth() + 5).concat("...");
-            }
-            this.drawString(x1, y, 0xFFFFFFFF, action, matrixStack);
-            this.drawString(x2, y, 0xFFFFFFFF, time, matrixStack);
-            this.drawString(x3, y, 0xFFFFFFFF, coords, matrixStack);
-            this.drawString(x4, y, 0xFFFFFFFF, world, matrixStack);
-            this.drawString(x5, y, 0xFFFFFFFF, amount, matrixStack);
-            this.drawString(x6, y, 0xFFFFFFFF, description, matrixStack);
-
-            super.render(mouseX, mouseY, selected, matrixStack);
-        }
+    private void teleport()
+    {
+        Teleport.teleport(getData().getEdit().x, getData().getEdit().y, getData().getEdit().z, getData().getEdit().world);
     }
 
     @Override
-    public void postRenderHovered(int mouseX, int mouseY, boolean selected, MatrixStack matrixStack)
+    public void reAddSubWidgets()
     {
-        if (this.entry != null)
-        {
-            String descriptionText = PlayereditUtils.blockString(this.entry.getEdit(), PlayereditUtils.Edit.DESCRIPTION);
-            if (mouseX > this.getColumnPosX(5) && this.getColumnPosX(5) + StringUtils.getStringWidth(descriptionText) > width - this.entry.getButton().getWidth() + 15)
-            {
-                matrixStack.push();
-                matrixStack.translate(0, 0, 200);
-                RenderSystem.applyModelViewMatrix();
-                String header = GuiBase.TXT_BOLD + StringUtils.translate(HEADERS[5]);
-                int w1 = this.getStringWidth(header);
-                int w2 = this.width - 100;
-                int totalWidth = Math.max(w1, w2);
-                List<String> descriptions = new ArrayList<>();
-                StringUtils.splitTextToLines(descriptions, descriptionText, totalWidth);
-                for (String description : descriptions)
-                {
-                    w1 = Math.max(w1, StringUtils.getStringWidth(description));
-                }
-                int x = mouseX + 10;
-                int y = mouseY - 10;
-                if (x + w1 - 20 >= this.width)
-                {
-                    x -= w1 + 40;
-                }
+        super.reAddSubWidgets();
 
-                int x1 = x + 10;
-
-                RenderUtils.drawOutlinedBox(x, y, w1 + 20, 60, 0xFF000000, GuiBase.COLOR_HORIZONTAL_BAR);
-                y += 6;
-                y += 4;
-
-                this.drawString(x1, y, 0xFFFFFFFF, header, matrixStack);
-                y += 16;
-
-                for (int i = 0; i < descriptions.size(); i++)
-                {
-                    this.drawString(x1, y + (i * 8) - 7, 0xFFFFFFFF, descriptions.get(i), matrixStack);
-                }
-                matrixStack.pop();
-            }
-            if (mouseX < this.getColumnPosX(5))
-            {
-                if (this.entry.getEdit().getAdditional() == null || this.entry.getEdit().getAdditional().isEmpty())
-                {
-                    return;
-                }
-                matrixStack.push();
-                matrixStack.translate(0, 0, 200);
-                RenderSystem.applyModelViewMatrix();
-                int w1 = 0;
-                int w2 = 0;
-                for (Map.Entry<?,?> entry : this.entry.getEdit().getAdditional().entrySet())
-                {
-                    w1 = Math.max(w1, this.getStringWidth(String.valueOf(entry.getKey())));
-                    w2 = Math.max(w2, this.getStringWidth(String.valueOf(entry.getValue())));
-                }
-
-                int totalWidth = w1 + w2 + 60;
-                int x = mouseX + 10;
-                int y = mouseY - 10;
-                if (x + totalWidth - 20 >= this.width)
-                {
-                    x -= totalWidth + 40;
-                }
-
-                int x1 = x + 10;
-                int x2 = x1 + w1 + 20;
-
-                RenderUtils.drawOutlinedBox(x, y, totalWidth, 60, 0xFF000000, GuiBase.COLOR_HORIZONTAL_BAR);
-                y += 10;
-
-                for (Map.Entry<?,?> entry : this.entry.getEdit().getAdditional().entrySet())
-                {
-                    this.drawString(x1, y, 0xFFFFFFFF, String.valueOf(entry.getKey()), matrixStack);
-                    this.drawString(x2, y, 0xFFFFFFFF, String.valueOf(entry.getValue()), matrixStack);
-                    y += 16;
-                }
-                matrixStack.pop();
-            }
-        }
+        this.addWidget(this.teleportButton);
     }
 
-    static class ButtonListenerTeleport implements IButtonActionListener
+    @Override
+    public void updateSubWidgetPositions()
     {
-        private final WidgetBlockeditEntry.ButtonListenerTeleport.ButtonType type;
-        private final BlockeditEntry entry;
+        super.updateSubWidgetPositions();
 
-        public ButtonListenerTeleport(WidgetBlockeditEntry.ButtonListenerTeleport.ButtonType type, BlockeditEntry entry)
+        this.teleportButton.setRight(this.getRight() - 2);
+        this.teleportButton.centerVerticallyInside(this);
+    }
+
+    public static class WidgetInitializer implements ListEntryWidgetInitializer<BlockeditEntry>
+    {
+        @Override
+        public void onListContentsRefreshed(DataListWidget<BlockeditEntry> dataListWidget, int entryWidgetWidth)
         {
-            this.type = type;
-            this.entry = entry;
+            int actionColumnLength = getRenderWidth(ACTION_COLUMN.getName(), 40);
+            int timeColumnLength = getRenderWidth(TIME_COLUMN.getName(), 40);
+            int coordsColumnLength = getRenderWidth(COORDS_COLUMN.getName(), 40);
+            int worldColumnLength = getRenderWidth(WORLD_COLUMN.getName(), 40);
+            int amountColumnLength = getRenderWidth(AMOUNT_COLUMN.getName(), 40);
+            int descriptionColumnLength = getRenderWidth(DESCRIPTION_COLUMN.getName(), 40);
+
+            for (BlockeditEntry entry : dataListWidget.getNonFilteredDataList())
+            {
+                BlockEdit edit = entry.getEdit();
+                actionColumnLength = Math.max(actionColumnLength, getEditRenderWidth(edit, PlayereditUtils.Edit.ACTION));
+                timeColumnLength = Math.max(timeColumnLength, getEditRenderWidth(edit, PlayereditUtils.Edit.TIME));
+                coordsColumnLength = Math.max(coordsColumnLength, getEditRenderWidth(edit, PlayereditUtils.Edit.COORDS));
+                worldColumnLength = Math.max(worldColumnLength, getEditRenderWidth(edit, PlayereditUtils.Edit.WORLD));
+                amountColumnLength = Math.max(amountColumnLength, getEditRenderWidth(edit, PlayereditUtils.Edit.AMOUNT));
+                descriptionColumnLength = Math.max(descriptionColumnLength, getEditRenderWidth(edit, PlayereditUtils.Edit.DESCRIPTION));
+            }
+
+            int extra = 24;
+            actionColumnLength += extra;
+            timeColumnLength += extra;
+            coordsColumnLength += extra;
+            worldColumnLength += extra;
+            amountColumnLength += extra;
+            descriptionColumnLength += extra;
+            int relativeStartX = 2;
+
+            ACTION_COLUMN.setRelativeStartX(relativeStartX);
+            ACTION_COLUMN.setWidth(actionColumnLength);
+            relativeStartX += actionColumnLength + 2;
+
+            TIME_COLUMN.setRelativeStartX(relativeStartX);
+            TIME_COLUMN.setWidth(timeColumnLength);
+            relativeStartX += timeColumnLength + 2;
+
+            COORDS_COLUMN.setRelativeStartX(relativeStartX);
+            COORDS_COLUMN.setWidth(coordsColumnLength);
+            relativeStartX += coordsColumnLength + 2;
+
+            WORLD_COLUMN.setRelativeStartX(relativeStartX);
+            WORLD_COLUMN.setWidth(worldColumnLength);
+            relativeStartX += worldColumnLength + 2;
+
+            AMOUNT_COLUMN.setRelativeStartX(relativeStartX);
+            AMOUNT_COLUMN.setWidth(amountColumnLength);
+            relativeStartX += amountColumnLength + 2;
+
+            DESCRIPTION_COLUMN.setRelativeStartX(relativeStartX);
+            DESCRIPTION_COLUMN.setWidth(descriptionColumnLength);
         }
 
         @Override
-        public void actionPerformedWithButton(ButtonBase button, int mouseButton)
+        public void applyToEntryWidgets(DataListWidget<BlockeditEntry> dataListWidget)
         {
-            if (this.type == WidgetBlockeditEntry.ButtonListenerTeleport.ButtonType.TELEPORT)
+            int actionColumnRight = ACTION_COLUMN.getRelativeRight() - 3;
+            int timeColumnRight = TIME_COLUMN.getRelativeRight() - 3;
+            int coordsColumnRight = COORDS_COLUMN.getRelativeRight() - 3;
+            int worldColumnRight = WORLD_COLUMN.getRelativeRight() - 3;
+            int amountColumnRight = AMOUNT_COLUMN.getRelativeRight() - 3;
+            int descriptionColumnRight = DESCRIPTION_COLUMN.getRelativeRight() - 3;
+
+            for (InteractableWidget w : dataListWidget.getEntryWidgetList())
             {
-                Teleport.teleport(entry.getEdit().x, entry.getEdit().y, entry.getEdit().z, entry.getEdit().world);
-            }
-        }
-
-        public enum ButtonType
-        {
-            TELEPORT("watson.gui.label.blockedit.list.teleport");
-
-            private final String translationKey;
-
-            ButtonType(String translationKey)
-            {
-                this.translationKey = translationKey;
-            }
-
-            public String getDisplayName()
-            {
-                return StringUtils.translate(this.translationKey);
-            }
-        }
-    }
-
-    @Override
-    protected int getColumnPosX(int column)
-    {
-        int x1 = this.x + 4;
-        int x2 = x1 + maxActionLength + 20;
-        int x3 = x2 + maxTimeLength + 20;
-        int x4 = x3 + maxCoordsLength + 20;
-        int x5 = x4 + maxWorldLength + 20;
-        int x6 = x5 + maxAmountLength + 20;
-
-        return switch (column)
+                if (w instanceof WidgetBlockeditEntry widget)
                 {
-                    case 0 -> x1;
-                    case 1 -> x2;
-                    case 2 -> x3;
-                    case 3 -> x4;
-                    case 4 -> x5;
-                    case 5 -> x6;
-                    default -> x1;
-                };
-    }
+                    widget.actionColumnRight = actionColumnRight;
+                    widget.timeColumnRight = timeColumnRight;
+                    widget.coordsColumnRight = coordsColumnRight;
+                    widget.worldColumnRight = worldColumnRight;
+                    widget.amountColumnRight = amountColumnRight;
+                    widget.descriptionColumnRight = descriptionColumnRight;
+                }
+            }
+        }
 
-    @Override
-    protected int getCurrentSortColumn()
-    {
-        return 0;
-    }
+        protected int getRenderWidth(Optional<StyledTextLine> optional, int minWidth)
+        {
+            int width = optional.map(styledTextLine -> styledTextLine.renderWidth).orElse(minWidth);
+            return Math.max(width, minWidth);
+        }
 
-    @Override
-    protected boolean getSortInReverse()
-    {
-        return false;
+        protected static int getEditRenderWidth(BlockEdit edit, PlayereditUtils.Edit type)
+        {
+            return StringUtils.getStringWidth(PlayereditUtils.blockString(edit, type));
+        }
     }
 }

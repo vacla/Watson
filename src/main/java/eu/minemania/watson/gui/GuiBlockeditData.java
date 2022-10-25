@@ -2,124 +2,193 @@ package eu.minemania.watson.gui;
 
 import javax.annotation.Nullable;
 import com.google.common.collect.ImmutableList;
+import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.TimeStamp;
 import eu.minemania.watson.db.data.BlockeditBase;
 import eu.minemania.watson.db.data.BlockeditEntry;
 import eu.minemania.watson.db.data.WidgetBlockeditEntry;
-import eu.minemania.watson.db.data.WidgetListBlockedit;
-import fi.dy.masa.malilib.gui.GuiBase;
-import fi.dy.masa.malilib.gui.GuiListBase;
-import fi.dy.masa.malilib.gui.GuiTextFieldGeneric;
-import fi.dy.masa.malilib.gui.button.ButtonBase;
-import fi.dy.masa.malilib.gui.button.ButtonGeneric;
-import fi.dy.masa.malilib.gui.button.IButtonActionListener;
-import fi.dy.masa.malilib.gui.interfaces.ISelectionListener;
-import fi.dy.masa.malilib.gui.interfaces.ITextFieldListener;
-import fi.dy.masa.malilib.gui.widgets.WidgetDropDownList;
-import fi.dy.masa.malilib.gui.widgets.WidgetInfoIcon;
-import fi.dy.masa.malilib.interfaces.ICompletionListener;
-import fi.dy.masa.malilib.interfaces.IStringRetriever;
-import fi.dy.masa.malilib.util.GuiUtils;
-import fi.dy.masa.malilib.util.StringUtils;
-import net.minecraft.client.gui.screen.Screen;
+import eu.minemania.watson.selection.PlayereditUtils;
+import malilib.gui.BaseListScreen;
+import malilib.gui.BaseScreen;
+import malilib.gui.util.GuiUtils;
+import malilib.gui.widget.*;
+import malilib.gui.widget.button.GenericButton;
+import malilib.gui.widget.list.DataListWidget;
+import malilib.gui.widget.list.header.ColumnizedDataListHeaderWidget;
+import malilib.gui.widget.list.header.DataListHeaderWidget;
+import malilib.util.StringUtils;
 
 import java.util.List;
+import java.util.function.Supplier;
 
-public class GuiBlockeditData extends GuiListBase<BlockeditEntry, WidgetBlockeditEntry, WidgetListBlockedit>
-        implements ICompletionListener, ISelectionListener<GuiBlockeditData.YHeightFilter>
+public class GuiBlockeditData extends BaseListScreen<DataListWidget<BlockeditEntry>>
 {
     protected final BlockeditBase display;
     protected long time = 0;
     protected int yHeight = 0;
-    protected YHeightDropdown<YHeightFilter> yHeightDropDown;
-    protected GuiTextFieldGeneric textFieldTimeAgo;
-    protected GuiTextFieldGeneric textFieldYHeight;
+    protected DropDownListWidget<YHeightFilter> yHeightDropDown;
+    protected final GenericButton closeButton;
+    protected final LabelWidget labelTimeAgo;
+    protected final InfoIconWidget infoIconTimeAgo;
+    protected final BaseTextFieldWidget textFieldTimeAgo;
+    protected final BaseTextFieldWidget textFieldYHeight;
     private YHeightFilter yHeightDropDownSelection;
 
-    public GuiBlockeditData(BlockeditBase display, String titleKey, @Nullable Screen parent)
+    public GuiBlockeditData(BlockeditBase display, String titleKey)
     {
-        super(12, 40);
+        super(12, 40, 20, 80);
 
-        this.setParent(parent);
         this.display = display;
-        this.title = StringUtils.translate(titleKey);
+        this.setTitle(titleKey);
         this.useTitleHierarchy = false;
+        this.shouldRestoreScrollbarPosition = true;
         this.setZOffset(1);
 
-        WidgetBlockeditEntry.setMaxNameLength(display.getBlockeditAll());
-    }
-
-    @Override
-    protected WidgetListBlockedit createListWidget(int listX, int listY)
-    {
-        return new WidgetListBlockedit(listX, listY, this.getBrowserWidth(), this.getBrowserHeight(), this);
-    }
-
-    @Override
-    protected int getBrowserWidth()
-    {
-        return this.width - 20;
-    }
-
-    @Override
-    protected int getBrowserHeight()
-    {
-        return this.height - 80;
-    }
-
-    @Override
-    public void initGui()
-    {
-        super.initGui();
-
-        int x = 12;
-        int y = this.height - 26;
-        int buttonWidth = getButtonWidth();
-
-        this.createTimeInput(x, 22, 70);
-        this.createButton(x, y, buttonWidth, ButtonType.CLOSE);
+        this.labelTimeAgo = new LabelWidget("watson.gui.label.blockedit.info.time");
+        this.infoIconTimeAgo = new InfoIconWidget(Icons.INFO_11, "watson.gui.label.blockedit.info.format");
+        this.textFieldTimeAgo = new BaseTextFieldWidget(100, 14, "0-0 0:0:0");
+        this.textFieldTimeAgo.setListener(this::timeAgoTextChange);
+        this.textFieldYHeight = new IntegerTextFieldWidget(70, 14, 0);
+        this.textFieldYHeight.setListener(this::yHeightTextChange);
+        this.yHeightDropDown = new DropDownListWidget<>(14, 3, YHeightFilter.VALUES, YHeightFilter::getDisplayName);
+        this.yHeightDropDown.setZ(this.getZOffset() + 100);
+        this.yHeightDropDown.setSelectionListener(this::onSelectionChange);
+        this.closeButton = GenericButton.create("watson.gui.button.change_menu.close");
+        this.closeButton.setClickListener(() -> BaseScreen.openScreen(this.getParent()));
         this.reloadInput();
     }
 
-    private void createTimeInput(int x, int y, int width)
+    @Override
+    protected void reAddActiveWidgets()
     {
-        String label = StringUtils.translate("watson.gui.label.blockedit.info.time");
-        this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
-        int offset = this.getStringWidth(label) + 4;
-        this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.blockedit.info.format"));
+        super.reAddActiveWidgets();
 
-        this.textFieldTimeAgo = new GuiTextFieldGeneric(x + offset + 20, y + 2, width, 14, this.textRenderer);
-        this.textFieldTimeAgo.setText("0-0 0:0:0");
-        this.addTextField(this.textFieldTimeAgo, new TimeAgoTextFieldListener(this));
-
-        this.textFieldYHeight = new GuiTextFieldGeneric(this.textFieldTimeAgo.getX() + this.textFieldTimeAgo.getWidth() + 20, y + 2, width, 14, this.textRenderer);
-        this.textFieldYHeight.setText("0");
-        this.addTextField(this.textFieldYHeight, new YHeightTextFieldListener(this));
-
-        this.yHeightDropDown = new YHeightDropdown<>(this.textFieldYHeight.getX() + this.textFieldYHeight.getWidth() + 20, y + 2, width, 14, 100, 3, ImmutableList.copyOf(YHeightFilter.values()), YHeightFilter::getDisplayName);
-        this.yHeightDropDown.setZLevel(this.getZOffset() + 100);
-        this.yHeightDropDown.setSelectionListener(this);
-
+        this.addWidget(this.labelTimeAgo);
+        this.addWidget(this.infoIconTimeAgo);
+        this.addWidget(this.textFieldTimeAgo);
+        this.addWidget(this.textFieldYHeight);
         this.addWidget(this.yHeightDropDown);
+        this.addWidget(this.closeButton);
     }
 
-    protected int getButtonWidth()
+    @Override
+    protected void updateWidgetPositions()
     {
-        int width = 0;
+        super.updateWidgetPositions();
 
-        for (ButtonType type : ButtonType.values())
+        int x = this.titleX;
+        int y = this.titleY + 15;
+
+        this.labelTimeAgo.setPosition(x, y);
+        this.infoIconTimeAgo.setPosition(this.labelTimeAgo.getRight() + 5, y);
+        this.textFieldTimeAgo.setPosition(this.infoIconTimeAgo.getRight() + 5, y);
+        this.textFieldYHeight.setPosition(this.textFieldTimeAgo.getRight() + 5, y);
+        this.yHeightDropDown.setPosition(this.textFieldYHeight.getRight() + 5, y);
+        this.closeButton.setRight(this.getRight() - 10);
+        this.closeButton.setBottom(this.getBottom() - 3);
+    }
+
+    private void yHeightTextChange(String yHeightString)
+    {
+        try
         {
-            width = Math.max(width, this.getStringWidth(type.getDisplayName()) + 10);
+            yHeight = Integer.parseInt(yHeightString);
+        }
+        catch (Exception e)
+        {
+            yHeight = 0;
         }
 
-        return width;
+        this.getListWidget().refreshEntries();
     }
 
-    protected void createButton(int x, int y, int buttonWidth, ButtonType type)
+    private void timeAgoTextChange(String textValue)
     {
-        ButtonGeneric button = new ButtonGeneric(x, y, buttonWidth, 20, type.getDisplayName());
-        this.addButton(button, this.createActionListener(type));
+        try
+        {
+            long timeDiff = DataManager.getTimeDiff(textValue);
+            if (timeDiff != -1)
+            {
+                time = timeDiff;
+            }
+        }
+        catch (Exception e)
+        {
+            time = 0;
+        }
+
+        this.getListWidget().refreshEntries();
+    }
+
+    @Override
+    protected DataListWidget<BlockeditEntry> createListWidget()
+    {
+        Supplier<List<BlockeditEntry>> supplier = this::getBlockeditEntry;
+        DataListWidget<BlockeditEntry> listWidget = new DataListWidget<>(supplier, true);
+
+        listWidget.setListEntryWidgetFixedHeight(26);
+        listWidget.getBackgroundRenderer().getNormalSettings().setEnabledAndColor(true, 0x80101010);
+        listWidget.setHeaderWidgetFactory(this::createListHeaderWidget);
+        listWidget.setEntryFilterStringFunction(this::filterEntry);
+        listWidget.setDataListEntryWidgetFactory(WidgetBlockeditEntry::new);
+        listWidget.setWidgetInitializer(new WidgetBlockeditEntry.WidgetInitializer());
+
+        listWidget.setColumnSupplier(() -> WidgetBlockeditEntry.COLUMNS);
+        listWidget.setDefaultSortColumn(WidgetBlockeditEntry.ACTION_COLUMN);
+        listWidget.setHasDataColumns(true);
+        listWidget.setShouldSortList(true);
+        listWidget.updateActiveColumns();
+        listWidget.setParentScreen(this);
+        return listWidget;
+    }
+
+    private List<String> filterEntry(BlockeditEntry blockeditEntry)
+    {
+        if (this.getYHeight() != 0 && this.getYHeightDropDownSelection() != null)
+        {
+            switch (this.getYHeightDropDownSelection()) {
+                case ABOVE:
+                    if (blockeditEntry.getEdit().y > this.getYHeight())
+                    {
+                        return ImmutableList.of(PlayereditUtils.blockString(blockeditEntry.getEdit(), PlayereditUtils.Edit.DESCRIPTION));
+                    }
+                    break;
+                case BELOW:
+                    if (blockeditEntry.getEdit().y < this.getYHeight())
+                    {
+                        return ImmutableList.of(PlayereditUtils.blockString(blockeditEntry.getEdit(), PlayereditUtils.Edit.DESCRIPTION));
+                    }
+                    break;
+                case EQUAL:
+                    if (blockeditEntry.getEdit().y == this.getYHeight())
+                    {
+                        return ImmutableList.of(PlayereditUtils.blockString(blockeditEntry.getEdit(), PlayereditUtils.Edit.DESCRIPTION));
+                    }
+                    break;
+            }
+        }
+        if (this.getTime() != 0 && blockeditEntry.getEdit().time >= this.getTime())
+        {
+            return ImmutableList.of(PlayereditUtils.blockString(blockeditEntry.getEdit(), PlayereditUtils.Edit.DESCRIPTION));
+        }
+        if (Configs.Generic.ACTION_REVERSE.getBooleanValue())
+        {
+            return (List<String>) PlayereditUtils.getInstance().getRevertAction(blockeditEntry.getEdit(), ImmutableList.of(), ImmutableList.of(PlayereditUtils.blockString(blockeditEntry.getEdit(), PlayereditUtils.Edit.DESCRIPTION)));
+        }
+        return ImmutableList.of();
+    }
+
+    private DataListHeaderWidget<BlockeditEntry> createListHeaderWidget(DataListWidget<BlockeditEntry> blockeditEntryDataListWidget)
+    {
+        ColumnizedDataListHeaderWidget<BlockeditEntry> widget = new ColumnizedDataListHeaderWidget<>(this.getListWidget().getWidth() - 10, 16, this.getListWidget(), WidgetBlockeditEntry.COLUMNS);
+        widget.getMargin().setAll(2, 0, 0, 1);
+        return widget;
+    }
+
+    private List<BlockeditEntry> getBlockeditEntry()
+    {
+        return this.display.getBlockeditAll();
     }
 
     @Override
@@ -164,155 +233,11 @@ public class GuiBlockeditData extends GuiListBase<BlockeditEntry, WidgetBlockedi
         }
     }
 
-    protected ButtonListener createActionListener(ButtonType type)
-    {
-        return new ButtonListener(type, this);
-    }
-
-    @Override
     public void onSelectionChange(@Nullable GuiBlockeditData.YHeightFilter entry)
     {
         this.yHeightDropDownSelection = entry;
         this.getListWidget().refreshEntries();
     }
-
-    protected static class ButtonListener implements IButtonActionListener
-    {
-        private final GuiBlockeditData gui;
-        private final ButtonType type;
-
-        public ButtonListener(ButtonType type, GuiBlockeditData gui)
-        {
-            this.type = type;
-            this.gui = gui;
-        }
-
-        @Override
-        public void actionPerformedWithButton(ButtonBase button, int mouseButton)
-        {
-            if (this.type == ButtonType.CLOSE)
-            {
-                GuiBase.openGui(this.gui.getParent());
-            }
-
-        }
-    }
-
-    public static class TimeAgoTextFieldListener implements ITextFieldListener<GuiTextFieldGeneric>
-    {
-        private final GuiBlockeditData parent;
-
-        public TimeAgoTextFieldListener(GuiBlockeditData parent)
-        {
-            this.parent = parent;
-        }
-
-        @Override
-        public boolean onTextChange(GuiTextFieldGeneric textField)
-        {
-            try
-            {
-                String textValue = textField.getText();
-                long time = DataManager.getTimeDiff(textValue);
-                if (time != -1)
-                {
-                    parent.time = time;
-                }
-            }
-            catch (Exception e)
-            {
-                parent.time = 0;
-            }
-
-            this.parent.getListWidget().refreshEntries();
-            return false;
-        }
-    }
-
-    public static class YHeightDropdown<T> extends WidgetDropDownList<T>
-    {
-        @Nullable protected ISelectionListener<T> selectionListener;
-
-        public YHeightDropdown(int x, int y, int width, int height, int maxHeight, int maxVisibleEntries, List<T> entries, @Nullable IStringRetriever<T> stringRetriever)
-        {
-            super(x, y, width, height, maxHeight, maxVisibleEntries, entries, stringRetriever);
-        }
-
-        public void setSelectionListener(@Nullable ISelectionListener<T> selectionListener)
-        {
-            this.selectionListener = selectionListener;
-        }
-
-        @Override
-        public YHeightDropdown<T> setSelectedEntry(T entry)
-        {
-            if (this.entries.contains(entry))
-            {
-                this.selectedEntry = entry;
-
-                if (this.selectionListener != null)
-                {
-                    this.selectionListener.onSelectionChange(this.selectedEntry);
-                }
-            }
-
-            return this;
-        }
-
-        @Override
-        protected void setSelectedEntry(int index)
-        {
-            if (index >= 0 && index < this.filteredEntries.size())
-            {
-                this.setSelectedEntry(this.filteredEntries.get(index));
-            }
-        }
-    }
-
-    public static class YHeightTextFieldListener implements ITextFieldListener<GuiTextFieldGeneric>
-    {
-        private final GuiBlockeditData parent;
-
-        public YHeightTextFieldListener(GuiBlockeditData parent)
-        {
-            this.parent = parent;
-        }
-
-        @Override
-        public boolean onTextChange(GuiTextFieldGeneric textField)
-        {
-            try
-            {
-                String yHeightString = textField.getText();
-                parent.yHeight = Integer.parseInt(yHeightString);
-            }
-            catch (Exception e)
-            {
-                parent.yHeight = 0;
-            }
-
-            this.parent.getListWidget().refreshEntries();
-            return false;
-        }
-    }
-
-    protected enum ButtonType
-    {
-        CLOSE("watson.gui.button.change_menu.close");
-
-        private final String labelKey;
-
-        ButtonType(String labelKey)
-        {
-            this.labelKey = labelKey;
-        }
-
-        public String getDisplayName()
-        {
-            return StringUtils.translate(this.labelKey);
-        }
-    }
-
     public enum YHeightFilter
     {
         ABOVE("watson.gui.dropdown.y_height.above"),
@@ -320,6 +245,7 @@ public class GuiBlockeditData extends GuiListBase<BlockeditEntry, WidgetBlockedi
         EQUAL("watson.gui.dropdown.y_height.equal");
 
         private final String labelKey;
+        public static final ImmutableList<YHeightFilter> VALUES = ImmutableList.copyOf(values());
 
         YHeightFilter(String labelKey)
         {
@@ -332,13 +258,11 @@ public class GuiBlockeditData extends GuiListBase<BlockeditEntry, WidgetBlockedi
         }
     }
 
-    @Override
-    public void onTaskCompleted()
+    protected void onRefreshFinished()
     {
         if (GuiUtils.getCurrentScreen() == this)
         {
-            WidgetBlockeditEntry.setMaxNameLength(this.display.getBlockeditAll());
-            this.initGui();
+            this.getListWidget().refreshEntries();
         }
     }
 }

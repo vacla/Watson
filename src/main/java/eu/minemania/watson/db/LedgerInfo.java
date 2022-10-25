@@ -1,17 +1,17 @@
 package eu.minemania.watson.db;
 
-import eu.minemania.watson.gui.GuiLedger.ButtonListenerCycleTypePacket.LedgerMode;
+import eu.minemania.watson.gui.GuiLedger.LedgerMode;
 
-import java.util.List;
+import java.util.Collection;
 
 public class LedgerInfo
 {
-    private List<String> actions;
-    private List<String> blocks;
-    private List<String> dimensions;
-    private List<String> entityTypes;
-    private List<String> items;
-    private List<String> tags;
+    private Collection<String> actions;
+    private Collection<String> blocks;
+    private Collection<String> dimensions;
+    private Collection<String> entityTypes;
+    private Collection<String> items;
+    private Collection<String> tags;
     private String sources;
     private String timeBefore;
     private String timeAfter;
@@ -22,7 +22,7 @@ public class LedgerInfo
     private LedgerMode ledgerMode;
     private int pages;
 
-    public LedgerInfo(List<String> actions, List<String> blocks, List<String> dimensions, List<String> entityTypes, List<String> items, List<String> tags, String sources, String timeBefore, String timeAfter, int range, int x, int y, int z, LedgerMode ledgerMode, int pages)
+    public LedgerInfo(Collection<String> actions, Collection<String> blocks, Collection<String> dimensions, Collection<String> entityTypes, Collection<String> items, Collection<String> tags, String sources, String timeBefore, String timeAfter, int range, int x, int y, int z, LedgerMode ledgerMode, int pages)
     {
         this.actions = actions;
         this.blocks = blocks;
@@ -41,62 +41,62 @@ public class LedgerInfo
         this.pages = pages;
     }
 
-    public List<String> getActions()
+    public Collection<String> getActions()
     {
         return actions;
     }
 
-    public void setActions(List<String> actions)
+    public void setActions(Collection<String> actions)
     {
         this.actions = actions;
     }
 
-    public List<String> getBlocks()
+    public Collection<String> getBlocks()
     {
         return blocks;
     }
 
-    public void setBlocks(List<String> blocks)
+    public void setBlocks(Collection<String> blocks)
     {
         this.blocks = blocks;
     }
 
-    public List<String> getDimensions()
+    public Collection<String> getDimensions()
     {
         return dimensions;
     }
 
-    public void setDimensions(List<String> dimensions)
+    public void setDimensions(Collection<String> dimensions)
     {
         this.dimensions = dimensions;
     }
 
-    public List<String> getEntityTypes()
+    public Collection<String> getEntityTypes()
     {
         return entityTypes;
     }
 
-    public void setEntityTypes(List<String> entityTypes)
+    public void setEntityTypes(Collection<String> entityTypes)
     {
         this.entityTypes = entityTypes;
     }
 
-    public List<String> getItems()
+    public Collection<String> getItems()
     {
         return items;
     }
 
-    public void setItems(List<String> items)
+    public void setItems(Collection<String> items)
     {
         this.items = items;
     }
 
-    public List<String> getTags()
+    public Collection<String> getTags()
     {
         return tags;
     }
 
-    public void setTags(List<String> tags)
+    public void setTags(Collection<String> tags)
     {
         this.tags = tags;
     }

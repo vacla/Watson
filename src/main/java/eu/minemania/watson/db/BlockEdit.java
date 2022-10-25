@@ -6,7 +6,7 @@ import java.util.Optional;
 import com.mojang.blaze3d.systems.RenderSystem;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.render.RenderUtils;
-import fi.dy.masa.malilib.util.data.Color4f;
+import malilib.util.data.Color4f;
 import net.minecraft.block.*;
 import net.minecraft.block.OreBlock;
 import net.minecraft.client.MinecraftClient;

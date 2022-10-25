@@ -3,20 +3,19 @@ package eu.minemania.watson.gui;
 import com.google.common.collect.ImmutableList;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.LedgerInfo;
-import eu.minemania.watson.gui.GuiLedger.ButtonListenerCycleTypePacket.LedgerMode;
 import eu.minemania.watson.network.ledger.PluginInspectPacketHandler;
 import eu.minemania.watson.network.ledger.PluginPurgePacketHandler;
 import eu.minemania.watson.network.ledger.PluginRollbackPacketHandler;
 import eu.minemania.watson.network.ledger.PluginSearchPacketHandler;
-import fi.dy.masa.malilib.gui.*;
-import fi.dy.masa.malilib.gui.button.ButtonBase;
-import fi.dy.masa.malilib.gui.button.ButtonGeneric;
-import fi.dy.masa.malilib.gui.button.IButtonActionListener;
-import fi.dy.masa.malilib.gui.interfaces.IStringListConsumer;
-import fi.dy.masa.malilib.gui.interfaces.ITextFieldListener;
-import fi.dy.masa.malilib.gui.widget.IntegerEditWidget;
-import fi.dy.masa.malilib.gui.widgets.WidgetInfoIcon;
-import fi.dy.masa.malilib.util.StringUtils;
+import eu.minemania.watson.util.DataUtils;
+import malilib.gui.*;
+import malilib.gui.listener.IntegerTextFieldListener;
+import malilib.gui.util.GuiUtils;
+import malilib.gui.widget.*;
+import malilib.gui.widget.button.GenericButton;
+import malilib.gui.widget.list.entry.StringListEntryWidget;
+import malilib.overlay.message.MessageDispatcher;
+import malilib.util.StringUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.util.registry.RegistryKey;
@@ -29,26 +28,200 @@ import java.util.Set;
 
 public class GuiLedger extends BaseScreen
 {
+    protected LabelWidget labelRange;
+    protected LabelWidget labelSource;
+    protected LabelWidget labelTimeBefore;
+    protected LabelWidget labelTimeAfter;
+    protected LabelWidget labelX;
+    protected LabelWidget labelY;
+    protected LabelWidget labelZ;
+    protected LabelWidget labelPages;
+    protected LabelWidget labelActionList;
+    protected LabelWidget labelDimensionList;
+    protected LabelWidget labelBlockList;
+    protected LabelWidget labelEntityTypeList;
+    protected LabelWidget labelItemList;
+    protected LabelWidget labelTagList;
+    protected InfoIconWidget infoRange;
+    protected InfoIconWidget infoSource;
+    protected InfoIconWidget infoTimeBefore;
+    protected InfoIconWidget infoTimeAfter;
+    protected InfoIconWidget infoX;
+    protected InfoIconWidget infoY;
+    protected InfoIconWidget infoZ;
+    protected InfoIconWidget infoPages;
+    protected InfoIconWidget infoActionList;
+    protected InfoIconWidget infoDimensionList;
+    protected InfoIconWidget infoBlockList;
+    protected InfoIconWidget infoEntityTypeList;
+    protected InfoIconWidget infoItemList;
+    protected InfoIconWidget infoTagList;
     protected IntegerEditWidget textFieldRange;
-    protected GuiTextFieldGeneric textFieldSource;
-    protected GuiTextFieldGeneric textFieldTimeBefore;
-    protected GuiTextFieldGeneric textFieldTimeAfter;
-    protected GuiTextFieldInteger textFieldX;
-    protected GuiTextFieldInteger textFieldY;
-    protected GuiTextFieldInteger textFieldZ;
-    protected GuiTextFieldInteger textFieldPages;
+    protected BaseTextFieldWidget textFieldSource;
+    protected BaseTextFieldWidget textFieldTimeBefore;
+    protected BaseTextFieldWidget textFieldTimeAfter;
+    protected IntegerTextFieldWidget textFieldX;
+    protected IntegerTextFieldWidget textFieldY;
+    protected IntegerTextFieldWidget textFieldZ;
+    protected IntegerTextFieldWidget textFieldPages;
+    protected GenericButton mainMenuButton;
+    protected GenericButton cyclePacketButton;
+    protected GenericButton submitButton;
+    protected GenericButton clearButton;
+    protected GenericButton actionListButton;
+    protected GenericButton dimensionListButton;
+    protected GenericButton blockListButton;
+    protected GenericButton entityTypeListButton;
+    protected GenericButton itemListButton;
+    protected GenericButton tagListButton;
     protected LedgerInfo ledgerInfo = new LedgerInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", "", 0, 0, 0, 0, LedgerMode.INSPECT, 10);
 
     protected GuiLedger()
     {
         this.ledgerInfo = DataManager.getLedgerInfo() == null ? this.ledgerInfo : DataManager.getLedgerInfo();
+
+        this.labelRange = new LabelWidget("watson.gui.label.ledger.title.range");
+        this.infoRange = new InfoIconWidget(Icons.INFO_11, "watson.gui.label.ledger.info.range");
+        this.textFieldRange = new IntegerEditWidget(70, 14, this::setRange);
+        this.textFieldRange.setIntegerValue(ledgerInfo.getRange());
+        this.labelSource = new LabelWidget("watson.gui.label.ledger.title.source");
+        this.infoSource = new InfoIconWidget(Icons.INFO_11, "watson.gui.label.ledger.info.source");
+        this.textFieldSource = new BaseTextFieldWidget(70, 14);
+        this.textFieldSource.setListener(this::setSource);
+        this.textFieldSource.setText(ledgerInfo.getSources());
+        this.labelTimeBefore = new LabelWidget("watson.gui.label.ledger.title.time.before");
+        this.infoTimeBefore = new InfoIconWidget(Icons.INFO_11, "watson.gui.label.ledger.info.time");
+        this.textFieldTimeBefore = new BaseTextFieldWidget(70, 14);
+        this.textFieldTimeBefore.setListener(this::setTextFieldTimeBefore);
+        this.textFieldTimeBefore.setText(ledgerInfo.getTimeBefore());
+        this.labelTimeAfter = new LabelWidget("watson.gui.label.ledger.title.time.after");
+        this.infoTimeAfter = new InfoIconWidget(Icons.INFO_11, "watson.gui.label.ledger.info.time");
+        this.textFieldTimeAfter = new BaseTextFieldWidget(70, 14);
+        this.textFieldTimeAfter.setListener(this::setTextFieldTimeAfter);
+        this.textFieldTimeAfter.setText(ledgerInfo.getTimeAfter());
+        this.labelX = new LabelWidget("watson.gui.label.ledger.title.x");
+        this.infoX = new InfoIconWidget(Icons.INFO_11, "watson.gui.label.ledger.info.coords");
+        this.textFieldX = new IntegerTextFieldWidget(70, 14);
+        this.textFieldX.setListener(new IntegerTextFieldListener(this::setTextFieldX));
+        this.textFieldX.setText(String.valueOf(ledgerInfo.getX()));
+        this.labelY = new LabelWidget("watson.gui.label.ledger.title.y");
+        this.infoY = new InfoIconWidget(Icons.INFO_11, "watson.gui.label.ledger.info.coords");
+        this.textFieldY = new IntegerTextFieldWidget(70, 14);
+        this.textFieldY.setListener(new IntegerTextFieldListener(this::setTextFieldY));
+        this.textFieldY.setText(String.valueOf(ledgerInfo.getY()));
+        this.labelZ = new LabelWidget("watson.gui.label.ledger.title.z");
+        this.infoZ = new InfoIconWidget(Icons.INFO_11, "watson.gui.label.ledger.info.coords");
+        this.textFieldZ = new IntegerTextFieldWidget(70, 14);
+        this.textFieldZ.setListener(new IntegerTextFieldListener(this::setTextFieldZ));
+        this.textFieldZ.setText(String.valueOf(ledgerInfo.getZ()));
+        this.labelPages = new LabelWidget("watson.gui.label.ledger.title.pages");
+        this.infoPages = new InfoIconWidget(Icons.INFO_11, "watson.gui.label.ledger.info.pages");
+        this.textFieldPages = new IntegerTextFieldWidget(70, 14);
+        this.textFieldPages.setListener(new IntegerTextFieldListener(this::setTextFieldPages));
+        this.textFieldPages.setText(String.valueOf(ledgerInfo.getPages()));
+
+        String translationLabel = "watson.gui.label.ledger.title.action";
+        this.labelActionList = new LabelWidget(translationLabel);
+        this.infoActionList = setInfoIconList(translationLabel);
+        this.actionListButton = GenericButton.create("watson.gui.button.ledger.action", this::openActionList);
+        translationLabel = "watson.gui.label.ledger.title.dimension";
+        this.labelDimensionList = new LabelWidget(translationLabel);
+        this.infoDimensionList = setInfoIconList(translationLabel);
+        this.dimensionListButton = GenericButton.create("watson.gui.button.ledger.dimension", this::openDimensionList);
+        translationLabel = "watson.gui.label.ledger.title.block";
+        this.labelBlockList = new LabelWidget(translationLabel);
+        this.infoBlockList = setInfoIconList(translationLabel);
+        this.blockListButton = GenericButton.create("watson.gui.button.ledger.block", this::openBlockList);
+        translationLabel = "watson.gui.label.ledger.title.entitytype";
+        this.labelEntityTypeList = new LabelWidget(translationLabel);
+        this.infoEntityTypeList = setInfoIconList(translationLabel);
+        this.entityTypeListButton = GenericButton.create("watson.gui.button.ledger.entitytype", this::openEntityTypeList);
+        translationLabel = "watson.gui.label.ledger.title.item";
+        this.labelItemList = new LabelWidget(translationLabel);
+        this.infoItemList = setInfoIconList(translationLabel);
+        this.itemListButton = GenericButton.create("watson.gui.button.ledger.item", this::openItemList);
+        translationLabel = "watson.gui.label.ledger.title.tag";
+        this.labelTagList = new LabelWidget(translationLabel);
+        this.infoTagList = setInfoIconList(translationLabel);
+        this.tagListButton = GenericButton.create("watson.gui.button.ledger.tag", this::openTagList);
+        this.mainMenuButton = GenericButton.create("watson.gui.button.change_menu.to_main_menu", GuiMainMenu::openMainMenu);
+        this.cyclePacketButton = GenericButton.create(this::getCyclePacketButtonLabel);
+        this.cyclePacketButton.setActionListener((mouseButton) -> {
+            ledgerInfo.setLedgerMode(ledgerInfo.getLedgerMode().cycle(mouseButton == 0));
+            this.cyclePacketButton.updateButtonState();
+            this.initScreen();
+            return true;
+        });
+        this.submitButton = GenericButton.create("watson.gui.button.ledger.submit");
+        this.submitButton.setActionListener(this::submit);
+        this.clearButton = GenericButton.create("watson.gui.button.ledger.clear");
+        this.clearButton.setActionListener(() -> {
+            this.clearLedgerInfo();
+            this.initScreen();
+        });
         this.setTitle("watson.gui.title.ledger", DataManager.getLedgerVersion());
+        this.screenCloseListener = this::setLedgerInfo;
     }
 
     @Override
     public void reAddActiveWidgets()
     {
         super.reAddActiveWidgets();
+        if (ledgerInfo.getLedgerMode() != LedgerMode.INSPECT)
+        {
+            this.addWidget(this.labelActionList);
+            this.addWidget(this.infoActionList);
+            this.addWidget(this.actionListButton);
+            this.addWidget(this.labelDimensionList);
+            this.addWidget(this.infoDimensionList);
+            this.addWidget(this.dimensionListButton);
+            this.addWidget(this.labelBlockList);
+            this.addWidget(this.infoBlockList);
+            this.addWidget(this.blockListButton);
+            this.addWidget(this.labelEntityTypeList);
+            this.addWidget(this.infoEntityTypeList);
+            this.addWidget(this.entityTypeListButton);
+            this.addWidget(this.labelItemList);
+            this.addWidget(this.infoItemList);
+            this.addWidget(this.itemListButton);
+            this.addWidget(this.labelTagList);
+            this.addWidget(this.infoTagList);
+            this.addWidget(this.tagListButton);
+            this.addWidget(this.labelRange);
+            this.addWidget(this.infoRange);
+            this.addWidget(this.textFieldRange);
+            this.addWidget(this.labelSource);
+            this.addWidget(this.infoSource);
+            this.addWidget(this.textFieldSource);
+            this.addWidget(this.labelTimeBefore);
+            this.addWidget(this.infoTimeBefore);
+            this.addWidget(this.textFieldTimeBefore);
+            this.addWidget(this.labelTimeAfter);
+            this.addWidget(this.infoTimeAfter);
+            this.addWidget(this.textFieldTimeAfter);
+        }
+        if (ledgerInfo.getLedgerMode() == LedgerMode.INSPECT)
+        {
+            this.addWidget(this.labelX);
+            this.addWidget(this.infoX);
+            this.addWidget(this.textFieldX);
+            this.addWidget(this.labelY);
+            this.addWidget(this.infoY);
+            this.addWidget(this.textFieldY);
+            this.addWidget(this.labelZ);
+            this.addWidget(this.infoZ);
+            this.addWidget(this.textFieldZ);
+        }
+        if (ledgerInfo.getLedgerMode() == LedgerMode.INSPECT || ledgerInfo.getLedgerMode() == LedgerMode.SEARCH)
+        {
+            this.addWidget(this.labelPages);
+            this.addWidget(this.infoPages);
+            this.addWidget(this.textFieldPages);
+        }
+        this.addWidget(this.cyclePacketButton);
+        this.addWidget(this.submitButton);
+        this.addWidget(this.clearButton);
+        this.addWidget(this.mainMenuButton);
         /*
         int y = this.height - 26;
         int buttonWidth;
@@ -115,7 +288,6 @@ public class GuiLedger extends BaseScreen
             offset = this.getStringWidth(label) + 4;
             this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.range"));
 */
-            this.textFieldRange = new IntegerEditWidget(width, 14, this::setRange);
             /*this.textFieldRange.setText(String.valueOf(ledgerInfo.getRange()));
             this.addTextField(this.textFieldRange, new RangeTextFieldListener(this));
 
@@ -215,12 +387,226 @@ public class GuiLedger extends BaseScreen
         this.addButton(button, new ButtonListener(type, this));*/
     }
 
+    @Override
+    protected void updateWidgetPositions()
+    {
+        super.updateWidgetPositions();
+
+        int y = this.titleY + 20;
+        int x = this.titleX;
+
+        if (ledgerInfo.getLedgerMode() != LedgerMode.INSPECT)
+        {
+            this.labelActionList.setPosition(x, y);
+            this.infoActionList.setPosition(this.labelActionList.getRight() + 10, y);
+            this.actionListButton.setPosition(this.infoActionList.getRight() + 10, y);
+            this.labelDimensionList.setPosition(this.actionListButton.getRight() + 10, y);
+            this.infoDimensionList.setPosition(this.labelDimensionList.getRight() + 10, y);
+            this.dimensionListButton.setPosition(this.infoDimensionList.getRight() + 10, y);
+            this.labelBlockList.setPosition(this.dimensionListButton.getRight() + 10, y);
+            this.infoBlockList.setPosition(this.labelBlockList.getRight() + 10, y);
+            this.blockListButton.setPosition(this.infoBlockList.getRight() + 10, y);
+            y += 40;
+            this.labelEntityTypeList.setPosition(x, y);
+            this.infoEntityTypeList.setPosition(this.labelEntityTypeList.getRight() + 10, y);
+            this.entityTypeListButton.setPosition(this.infoEntityTypeList.getRight() + 10, y);
+            this.labelItemList.setPosition(this.entityTypeListButton.getRight() + 10, y);
+            this.infoItemList.setPosition(this.labelItemList.getRight() + 10, y);
+            this.itemListButton.setPosition(this.infoItemList.getRight() + 10, y);
+            this.labelTagList.setPosition(this.itemListButton.getRight() + 10, y);
+            this.infoTagList.setPosition(this.labelTagList.getRight() + 10, y);
+            this.tagListButton.setPosition(this.infoTagList.getRight() + 10, y);
+            y += 40;
+            this.labelRange.setPosition(x, y);
+            this.infoRange.setPosition(this.labelRange.getRight() + 10, y);
+            this.textFieldRange.setPosition(this.infoRange.getRight() + 10, y);
+            this.labelSource.setPosition(this.textFieldRange.getRight() + 10, y);
+            this.infoSource.setPosition(this.labelSource.getRight() + 10, y);
+            this.textFieldSource.setPosition(this.infoSource.getRight() + 10, y);
+            y += 40;
+            this.labelTimeBefore.setPosition(x, y);
+            this.infoTimeBefore.setPosition(this.labelTimeBefore.getRight() + 10, y);
+            this.textFieldTimeBefore.setPosition(this.infoTimeBefore.getRight() + 10, y);
+            this.labelTimeAfter.setPosition(this.textFieldTimeBefore.getRight() + 10, y);
+            this.infoTimeAfter.setPosition(this.labelTimeAfter.getRight() + 10, y);
+            this.textFieldTimeAfter.setPosition(this.infoTimeAfter.getRight() + 10, y);
+        }
+        if (ledgerInfo.getLedgerMode() == LedgerMode.INSPECT)
+        {
+            this.labelX.setPosition(x, y);
+            this.infoX.setPosition(this.labelX.getRight() + 10, y);
+            this.textFieldX.setPosition(this.infoX.getRight() + 10, y);
+            this.labelY.setPosition(this.textFieldX.getRight() + 10, y);
+            this.infoY.setPosition(this.labelY.getRight() + 10, y);
+            this.textFieldY.setPosition(this.infoY.getRight() + 10, y);
+            this.labelZ.setPosition(this.textFieldY.getRight() + 10, y);
+            this.infoZ.setPosition(this.labelZ.getRight() + 10, y);
+            this.textFieldZ.setPosition(this.infoZ.getRight() + 10, y);
+        }
+        if (ledgerInfo.getLedgerMode() == LedgerMode.INSPECT || ledgerInfo.getLedgerMode() == LedgerMode.SEARCH)
+        {
+            y += 40;
+            this.labelPages.setPosition(x, y);
+            this.infoPages.setPosition(this.labelPages.getRight() + 10, y);
+            this.textFieldPages.setPosition(this.infoPages.getRight() + 10, y);
+        }
+        y = this.getBottom() - 30;
+        this.cyclePacketButton.setPosition(x, y);
+        this.submitButton.setPosition(this.cyclePacketButton.getRight() + 10, y);
+        this.clearButton.setPosition(this.submitButton.getRight() + 10, y);
+        this.mainMenuButton.setPosition(this.getRight() - this.mainMenuButton.getWidth() - 30, y);
+    }
+
+    private InfoIconWidget setInfoIconList(String translation)
+    {
+        String label = StringUtils.translate(translation);
+        return new InfoIconWidget(Icons.INFO_11, "watson.gui.label.ledger.info.button", label);
+    }
+
+    private void submit()
+    {
+        if (!ledgerInfo.getLedgerMode().equals(LedgerMode.INSPECT) && validate())
+        {
+            return;
+        }
+
+        List<String> action = ledgerInfo.getActions().stream().toList();
+        List<String> dimension = ledgerInfo.getDimensions().stream().toList();
+        List<String> block = ledgerInfo.getBlocks().stream().toList();
+        List<String> entityType = ledgerInfo.getEntityTypes().stream().toList();
+        List<String> item = ledgerInfo.getItems().stream().toList();
+        List<String> tag = ledgerInfo.getTags().stream().toList();
+        int range = ledgerInfo.getRange();
+        String source = ledgerInfo.getSources();
+        String timeBefore = ledgerInfo.getTimeBefore();
+        String timeAfter = ledgerInfo.getTimeAfter();
+        int x = ledgerInfo.getX();
+        int y = ledgerInfo.getY();
+        int z = ledgerInfo.getZ();
+        int pages = ledgerInfo.getPages();
+
+        switch (ledgerInfo.getLedgerMode())
+        {
+            case INSPECT -> new PluginInspectPacketHandler().sendPacket(x, y, z, pages, mc);
+            case PURGE -> new PluginPurgePacketHandler().sendPacket(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter, mc);
+            case ROLLBACK -> new PluginRollbackPacketHandler().sendPacket(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter, false, mc);
+            case RESTORE -> new PluginRollbackPacketHandler().sendPacket(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter, true, mc);
+            case SEARCH -> new PluginSearchPacketHandler().sendPacket(action, dimension, block, entityType, item, tag, range, source, timeBefore, timeAfter, pages, mc);
+        }
+    }
+
+    public String getCyclePacketButtonLabel()
+    {
+        return ledgerInfo.getLedgerMode().getDisplayName();
+    }
+
+    private void openTagList()
+    {
+        ArrayList<String> tags = getTotalList(DataUtils.getTags());
+        StringListSelectionScreen gui = new StringListSelectionScreen(tags, (tagConsumer) -> { ledgerInfo.setTags(tagConsumer); BaseScreen.openScreen(this); });
+        gui.setHasSearch(true);
+        gui.getListWidget().getEntrySelectionHandler().setEntriesOnCreate(ledgerInfo.getTags());
+        gui.setTitle("watson.gui.button.ledger.tag");
+        gui.setParent(GuiUtils.getCurrentScreen());
+        BaseScreen.openScreen(gui);
+    }
+
+    private void openItemList()
+    {
+        ArrayList<String> items = getTotalList(DataUtils.getItems());
+        StringListSelectionScreen gui = new StringListSelectionScreen(items, (itemConsumer) -> {ledgerInfo.setItems(itemConsumer); BaseScreen.openScreen(this);});
+        gui.setHasSearch(true);
+        gui.getListWidget().getEntrySelectionHandler().setEntriesOnCreate(ledgerInfo.getItems());
+        gui.setTitle("watson.gui.button.ledger.item");
+        gui.setParent(GuiUtils.getCurrentScreen());
+        BaseScreen.openScreen(gui);
+    }
+
+    private void openEntityTypeList()
+    {
+        ArrayList<String> entityTypes = getTotalList(DataUtils.getEntityTypes());
+        StringListSelectionScreen gui = new StringListSelectionScreen(entityTypes, (entityTypeConsumer) -> {ledgerInfo.setEntityTypes(entityTypeConsumer); BaseScreen.openScreen(this);});
+        gui.setHasSearch(true);
+        gui.getListWidget().getEntrySelectionHandler().setEntriesOnCreate(ledgerInfo.getEntityTypes());
+        gui.setTitle("watson.gui.button.ledger.entitytype");
+        gui.setParent(GuiUtils.getCurrentScreen());
+        BaseScreen.openScreen(gui);
+    }
+
+    private void openBlockList()
+    {
+        ArrayList<String> blocks = getTotalList(DataUtils.getBlocks());
+        StringListSelectionScreen gui = new StringListSelectionScreen(blocks, (blockConsumer) -> {ledgerInfo.setBlocks(blockConsumer); BaseScreen.openScreen(this);});
+        gui.setHasSearch(true);
+        gui.getListWidget().getEntrySelectionHandler().setEntriesOnCreate(ledgerInfo.getBlocks());
+        gui.setTitle("watson.gui.button.ledger.block");
+        gui.setParent(GuiUtils.getCurrentScreen());
+        BaseScreen.openScreen(gui);
+    }
+
+    private void openDimensionList()
+    {
+        ArrayList<String> dimensions = getTotalList(getDimensions(""));
+        StringListSelectionScreen gui = new StringListSelectionScreen(dimensions, (dimensionConsumer) -> {ledgerInfo.setDimensions(dimensionConsumer); BaseScreen.openScreen(this);});
+        gui.setHasSearch(true);
+        gui.getListWidget().getEntrySelectionHandler().setEntriesOnCreate(ledgerInfo.getDimensions());
+        gui.setTitle("watson.gui.button.ledger.dimension");
+        gui.setParent(GuiUtils.getCurrentScreen());
+        BaseScreen.openScreen(gui);
+    }
+
+    private void openActionList()
+    {
+        ArrayList<String> actions = getTotalList(DataManager.getLedgerActions());
+        StringListSelectionScreen gui = new StringListSelectionScreen(actions, (actionConsumer) -> {ledgerInfo.setActions(actionConsumer); BaseScreen.openScreen(this);});
+        gui.setHasSearch(true);
+        gui.getListWidget().getEntrySelectionHandler().setEntriesOnCreate(ledgerInfo.getActions());
+        gui.setTitle("watson.gui.button.ledger.action");
+        gui.setParent(GuiUtils.getCurrentScreen());
+        BaseScreen.openScreen(gui);
+    }
+
+    private void setTextFieldPages(int textFieldPages)
+    {
+        ledgerInfo.setPages(textFieldPages);
+    }
+
+    private void setTextFieldZ(int textFieldZ)
+    {
+        ledgerInfo.setZ(textFieldZ);
+    }
+
+    private void setTextFieldY(int textFieldY)
+    {
+        ledgerInfo.setY(textFieldY);
+    }
+
+    private void setTextFieldX(int textFieldX)
+    {
+        ledgerInfo.setX(textFieldX);
+    }
+
+    private void setTextFieldTimeAfter(String timeAfter)
+    {
+        ledgerInfo.setTimeAfter(timeAfter);
+    }
+
+    private void setTextFieldTimeBefore(String timeBefore)
+    {
+        ledgerInfo.setTimeBefore(timeBefore);
+    }
+
+    private void setSource(String source)
+    {
+        ledgerInfo.setSources(source);
+    }
+
     protected void setRange(int range)
     {
         ledgerInfo.setRange(range);
     }
 
-    private ButtonGeneric createButton(int x, int y, int width, ConsumerButtonListener.ButtonType type)
+    /*private GenericButton createButton(int x, int y, int width, ConsumerButtonListener.ButtonType type)
     {
         ConsumerButtonListener listener = new ConsumerButtonListener(type, this);
         String label = type.getDisplayName();
@@ -230,12 +616,12 @@ public class GuiLedger extends BaseScreen
             width = this.getStringWidth(label) + 10;
         }
 
-        ButtonGeneric button = new ButtonGeneric(x, y, width, 20, label);
+        GenericButton button = new GenericButton(x, y, width, 20, label);
 
         this.addButton(button, listener);
 
         return button;
-    }
+    }*/
 
     private ArrayList<String> getDimensions(String dimensionText)
     {
@@ -289,7 +675,7 @@ public class GuiLedger extends BaseScreen
         {
             if (!action.contains("-"))
             {
-                addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.action"), action);
+                MessageDispatcher.warning("watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.action"), action);
                 error = true;
                 break;
             }
@@ -300,7 +686,7 @@ public class GuiLedger extends BaseScreen
         }
         if (!listActionError.isEmpty())
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.action"), String.join(",", listActionError));
+            MessageDispatcher.warning( "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.action"), String.join(",", listActionError));
             error = true;
         }
 
@@ -313,7 +699,7 @@ public class GuiLedger extends BaseScreen
             }
             if (!dimensionText.contains(":"))
             {
-                addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.dimension"), dimensionText);
+                MessageDispatcher.warning( "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.dimension"), dimensionText);
                 error = true;
                 break;
             }
@@ -325,12 +711,12 @@ public class GuiLedger extends BaseScreen
         }
         if (!listDimensionError.isEmpty())
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.dimension"), String.join(",", listDimensionError));
+            MessageDispatcher.warning( "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.dimension"), String.join(",", listDimensionError));
             error = true;
         }
 
         ArrayList<String> listBlockError = new ArrayList<>();
-        ArrayList<String> ledgerBlocks = getTotalList(DataManager.getBlocks());
+        ArrayList<String> ledgerBlocks = getTotalList(DataUtils.getBlocks());
         for (String blockText : ledgerInfo.getBlocks())
         {
             if (blockText.isEmpty())
@@ -339,7 +725,7 @@ public class GuiLedger extends BaseScreen
             }
             if (!blockText.contains(":"))
             {
-                addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.block"), blockText);
+                MessageDispatcher.warning( "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.block"), blockText);
                 error = true;
                 break;
             }
@@ -350,12 +736,12 @@ public class GuiLedger extends BaseScreen
         }
         if (!listBlockError.isEmpty())
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.block"), String.join(",", listBlockError));
+            MessageDispatcher.warning( "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.block"), String.join(",", listBlockError));
             error = true;
         }
 
         ArrayList<String> listEntityTypeError = new ArrayList<>();
-        ArrayList<String> ledgerEntityTypes = getTotalList(DataManager.getEntityTypes());
+        ArrayList<String> ledgerEntityTypes = getTotalList(DataUtils.getEntityTypes());
         for (String entityTypeText : ledgerInfo.getEntityTypes())
         {
             if (entityTypeText.isEmpty())
@@ -364,7 +750,7 @@ public class GuiLedger extends BaseScreen
             }
             if (!entityTypeText.contains(":"))
             {
-                addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.entitytype"), entityTypeText);
+                MessageDispatcher.warning( "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.entitytype"), entityTypeText);
                 error = true;
                 break;
             }
@@ -375,12 +761,12 @@ public class GuiLedger extends BaseScreen
         }
         if (!listEntityTypeError.isEmpty())
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.entitytype"), String.join(",", listEntityTypeError));
+            MessageDispatcher.warning( "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.entitytype"), String.join(",", listEntityTypeError));
             error = true;
         }
 
         ArrayList<String> listItemError = new ArrayList<>();
-        ArrayList<String> ledgerItems = getTotalList(DataManager.getItems());
+        ArrayList<String> ledgerItems = getTotalList(DataUtils.getItems());
         for (String itemText : ledgerInfo.getItems())
         {
             if (itemText.isEmpty())
@@ -389,7 +775,7 @@ public class GuiLedger extends BaseScreen
             }
             if (!itemText.contains(":"))
             {
-                addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.item"), itemText);
+                MessageDispatcher.warning( "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.item"), itemText);
                 error = true;
                 break;
             }
@@ -400,12 +786,12 @@ public class GuiLedger extends BaseScreen
         }
         if (!listItemError.isEmpty())
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.item"), String.join(",", listItemError));
+            MessageDispatcher.warning( "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.item"), String.join(",", listItemError));
             error = true;
         }
 
         ArrayList<String> listTagError = new ArrayList<>();
-        ArrayList<String> ledgerTags = getTotalList(DataManager.getTags());
+        ArrayList<String> ledgerTags = getTotalList(DataUtils.getTags());
         for (String tagText : ledgerInfo.getTags())
         {
             if (tagText.isEmpty())
@@ -414,7 +800,7 @@ public class GuiLedger extends BaseScreen
             }
             if (!tagText.contains(":") || !tagText.contains("#"))
             {
-                addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.tag"), tagText);
+                MessageDispatcher.warning( "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.tag"), tagText);
                 error = true;
                 break;
             }
@@ -425,14 +811,14 @@ public class GuiLedger extends BaseScreen
         }
         if (!listTagError.isEmpty())
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.tag"), String.join(",", listTagError));
+            MessageDispatcher.warning( "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.tag"), String.join(",", listTagError));
             error = true;
         }
 
         int textRange = ledgerInfo.getRange();
         if (textRange <= 1 && textRange != 0)
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.range"), textRange);
+            MessageDispatcher.warning( "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.range"), textRange);
             error = true;
         }
         String textSource = ledgerInfo.getSources();
@@ -447,13 +833,13 @@ public class GuiLedger extends BaseScreen
         String textTimeBefore = ledgerInfo.getTimeBefore();
         if (!textTimeBefore.matches("^([0-9]+[smhdw])+$") && !textTimeBefore.isEmpty())
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.time.before"), textTimeBefore);
+            MessageDispatcher.warning( "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.time.before"), textTimeBefore);
             error = true;
         }
         String textTimeAfter = ledgerInfo.getTimeAfter();
         if (!textTimeAfter.matches("^([0-9]+[smhdw])+$") && !textTimeAfter.isEmpty())
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.time.after"), textTimeAfter);
+            MessageDispatcher.warning( "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.time.after"), textTimeAfter);
             error = true;
         }
 
@@ -462,12 +848,12 @@ public class GuiLedger extends BaseScreen
 
     private void setLedgerInfo()
     {
-        List<String> actions = this.ledgerInfo.getActions();
-        List<String> blocks = this.ledgerInfo.getBlocks();
-        List<String> dimension = this.ledgerInfo.getDimensions();
-        List<String> entityTypes = this.ledgerInfo.getEntityTypes();
-        List<String> items = this.ledgerInfo.getItems();
-        List<String> tags = this.ledgerInfo.getTags();
+        Collection<String> actions = this.ledgerInfo.getActions();
+        Collection<String> blocks = this.ledgerInfo.getBlocks();
+        Collection<String> dimension = this.ledgerInfo.getDimensions();
+        Collection<String> entityTypes = this.ledgerInfo.getEntityTypes();
+        Collection<String> items = this.ledgerInfo.getItems();
+        Collection<String> tags = this.ledgerInfo.getTags();
         String source = this.ledgerInfo.getSources();
         String timeBefore = this.ledgerInfo.getTimeBefore();
         String timeAfter = this.ledgerInfo.getTimeAfter();
@@ -489,387 +875,7 @@ public class GuiLedger extends BaseScreen
         DataManager.setLedgerInfo(ledgerInfo);
     }
 
-    @Override
-    protected void closeGui(boolean showParent)
-    {
-        setLedgerInfo();
-        super.closeGui(showParent);
-    }
-
-    public static class SourceTextFieldListener implements ITextFieldListener<GuiTextFieldGeneric>
-    {
-        private final GuiLedger parent;
-
-        public SourceTextFieldListener(GuiLedger parent)
-        {
-            this.parent = parent;
-        }
-
-        @Override
-        public boolean onTextChange(GuiTextFieldGeneric textField)
-        {
-            try
-            {
-                parent.ledgerInfo.setSources(textField.getText());
-            }
-            catch (Exception e)
-            {
-                parent.ledgerInfo.setSources("");
-            }
-
-            return false;
-        }
-    }
-
-    public static class TimeBeforeTextFieldListener implements ITextFieldListener<GuiTextFieldGeneric>
-    {
-        private final GuiLedger parent;
-
-        public TimeBeforeTextFieldListener(GuiLedger parent)
-        {
-            this.parent = parent;
-        }
-
-        @Override
-        public boolean onTextChange(GuiTextFieldGeneric textField)
-        {
-            try
-            {
-                parent.ledgerInfo.setTimeBefore(textField.getText());
-            }
-            catch (Exception e)
-            {
-                parent.ledgerInfo.setTimeBefore("");
-            }
-
-            return false;
-        }
-    }
-
-    public static class TimeAfterTextFieldListener implements ITextFieldListener<GuiTextFieldGeneric>
-    {
-        private final GuiLedger parent;
-
-        public TimeAfterTextFieldListener(GuiLedger parent)
-        {
-            this.parent = parent;
-        }
-
-        @Override
-        public boolean onTextChange(GuiTextFieldGeneric textField)
-        {
-            try
-            {
-                parent.ledgerInfo.setTimeAfter(textField.getText());
-            }
-            catch (Exception e)
-            {
-                parent.ledgerInfo.setTimeAfter("");
-            }
-
-            return false;
-        }
-    }
-
-    public static class XTextFieldListener implements ITextFieldListener<GuiTextFieldInteger>
-    {
-        private final GuiLedger parent;
-
-        public XTextFieldListener(GuiLedger parent)
-        {
-            this.parent = parent;
-        }
-
-        @Override
-        public boolean onTextChange(GuiTextFieldInteger textField)
-        {
-            try
-            {
-                parent.ledgerInfo.setX(Integer.parseInt(textField.getText()));
-            }
-            catch (Exception ignored)
-            {}
-
-            return false;
-        }
-    }
-
-    public static class YTextFieldListener implements ITextFieldListener<GuiTextFieldInteger>
-    {
-        private final GuiLedger parent;
-
-        public YTextFieldListener(GuiLedger parent)
-        {
-            this.parent = parent;
-        }
-
-        @Override
-        public boolean onTextChange(GuiTextFieldInteger textField)
-        {
-            try
-            {
-                parent.ledgerInfo.setY(Integer.parseInt(textField.getText()));
-            }
-            catch (Exception ignored)
-            {}
-
-            return false;
-        }
-    }
-
-    public static class ZTextFieldListener implements ITextFieldListener<GuiTextFieldInteger>
-    {
-        private final GuiLedger parent;
-
-        public ZTextFieldListener(GuiLedger parent)
-        {
-            this.parent = parent;
-        }
-
-        @Override
-        public boolean onTextChange(GuiTextFieldInteger textField)
-        {
-            try
-            {
-                parent.ledgerInfo.setZ(Integer.parseInt(textField.getText()));
-            }
-            catch (Exception ignored)
-            {}
-
-            return false;
-        }
-    }
-
-    public static class PagesTextFieldListener implements ITextFieldListener<GuiTextFieldInteger>
-    {
-        private final GuiLedger parent;
-
-        public PagesTextFieldListener(GuiLedger parent)
-        {
-            this.parent = parent;
-        }
-
-        @Override
-        public boolean onTextChange(GuiTextFieldInteger textField)
-        {
-            try
-            {
-                parent.ledgerInfo.setPages(Integer.parseInt(textField.getText()));
-            }
-            catch (Exception ignored)
-            {}
-
-            return false;
-        }
-    }
-
-    private static class ActionListCreator implements IStringListConsumer
-    {
-        GuiLedger parent;
-
-        public ActionListCreator(GuiLedger parent)
-        {
-            this.parent = parent;
-        }
-
-        @Override
-        public boolean consume(Collection<String> strings)
-        {
-            parent.ledgerInfo.setActions(ImmutableList.copyOf(strings));
-            GuiBase.openGui(parent);
-            return true;
-        }
-    }
-
-    private static class DimensionListCreator implements IStringListConsumer
-    {
-        GuiLedger parent;
-
-        public DimensionListCreator(GuiLedger parent)
-        {
-            this.parent = parent;
-        }
-
-        @Override
-        public boolean consume(Collection<String> strings)
-        {
-            parent.ledgerInfo.setDimensions(ImmutableList.copyOf(strings));
-            GuiBase.openGui(parent);
-            return true;
-        }
-    }
-
-    private static class BlockListCreator implements IStringListConsumer
-    {
-        GuiLedger parent;
-
-        public BlockListCreator(GuiLedger parent)
-        {
-            this.parent = parent;
-        }
-
-        @Override
-        public boolean consume(Collection<String> strings)
-        {
-            parent.ledgerInfo.setBlocks(ImmutableList.copyOf(strings));
-            GuiBase.openGui(parent);
-            return true;
-        }
-    }
-
-    private static class EntityTypeListCreator implements IStringListConsumer
-    {
-        GuiLedger parent;
-
-        public EntityTypeListCreator(GuiLedger parent)
-        {
-            this.parent = parent;
-        }
-
-        @Override
-        public boolean consume(Collection<String> strings)
-        {
-            parent.ledgerInfo.setEntityTypes(ImmutableList.copyOf(strings));
-            GuiBase.openGui(parent);
-            return true;
-        }
-    }
-
-    private static class ItemListCreator implements IStringListConsumer
-    {
-        GuiLedger parent;
-
-        public ItemListCreator(GuiLedger parent)
-        {
-            this.parent = parent;
-        }
-
-        @Override
-        public boolean consume(Collection<String> strings)
-        {
-            parent.ledgerInfo.setItems(ImmutableList.copyOf(strings));
-            GuiBase.openGui(parent);
-            return true;
-        }
-    }
-
-    private static class TagListCreator implements IStringListConsumer
-    {
-        GuiLedger parent;
-
-        public TagListCreator(GuiLedger parent)
-        {
-            this.parent = parent;
-        }
-
-        @Override
-        public boolean consume(Collection<String> strings)
-        {
-            parent.ledgerInfo.setTags(ImmutableList.copyOf(strings));
-            GuiBase.openGui(parent);
-            return true;
-        }
-    }
-
-    public static class ConsumerButtonListener implements IButtonActionListener
-    {
-        private final ButtonType type;
-        private final GuiLedger parent;
-
-        public ConsumerButtonListener(ButtonType type, GuiLedger parent)
-        {
-            this.type = type;
-            this.parent = parent;
-        }
-
-        @Override
-        public void actionPerformedWithButton(ButtonBase button, int mouseButton)
-        {
-            if (this.type == ButtonType.ACTION)
-            {
-                ActionListCreator actionCreator = new ActionListCreator(parent);
-                ArrayList<String> actions = parent.getTotalList(DataManager.getLedgerActions());
-                GuiStringListSelection gui = new GuiStringListSelectionWithSearch(actions, actionCreator, false, parent.ledgerInfo.getActions());
-                gui.setTitle(type.getDisplayName());
-                gui.setParent(parent);
-                GuiBase.openGui(gui);
-            }
-            if (this.type == ButtonType.DIMENSION)
-            {
-                DimensionListCreator dimensionCreator = new DimensionListCreator(parent);
-                ArrayList<String> dimensions = parent.getTotalList(parent.getDimensions(""));
-                GuiStringListSelection gui = new GuiStringListSelectionWithSearch(dimensions, dimensionCreator, false, parent.ledgerInfo.getDimensions());
-                gui.setTitle(type.getDisplayName());
-                gui.setParent(parent);
-                GuiBase.openGui(gui);
-            }
-            if (this.type == ButtonType.BLOCK)
-            {
-                BlockListCreator blockCreator = new BlockListCreator(parent);
-                ArrayList<String> blocks = parent.getTotalList(DataManager.getBlocks());
-                GuiStringListSelection gui = new GuiStringListSelectionWithSearch(blocks, blockCreator, true, parent.ledgerInfo.getBlocks());
-                gui.setTitle(type.getDisplayName());
-                gui.setParent(parent);
-                GuiBase.openGui(gui);
-            }
-            if (this.type == ButtonType.ENTITYTYPE)
-            {
-                EntityTypeListCreator entityTypeCreator = new EntityTypeListCreator(parent);
-                ArrayList<String> entityTypes = parent.getTotalList(DataManager.getEntityTypes());
-                GuiStringListSelection gui = new GuiStringListSelectionWithSearch(entityTypes, entityTypeCreator, true, parent.ledgerInfo.getEntityTypes());
-                gui.setTitle(type.getDisplayName());
-                gui.setParent(parent);
-                GuiBase.openGui(gui);
-            }
-            if (this.type == ButtonType.ITEM)
-            {
-                ItemListCreator itemCreator = new ItemListCreator(parent);
-                ArrayList<String> items = parent.getTotalList(DataManager.getItems());
-                GuiStringListSelection gui = new GuiStringListSelectionWithSearch(items, itemCreator, true, parent.ledgerInfo.getItems());
-                gui.setTitle(type.getDisplayName());
-                gui.setParent(parent);
-                GuiBase.openGui(gui);
-            }
-            if (this.type == ButtonType.TAG)
-            {
-                TagListCreator tagCreator = new TagListCreator(parent);
-                ArrayList<String> tags = parent.getTotalList(DataManager.getTags());
-                GuiStringListSelection gui = new GuiStringListSelectionWithSearch(tags, tagCreator, true, parent.ledgerInfo.getTags());
-                gui.setTitle(type.getDisplayName());
-                gui.setParent(parent);
-                GuiBase.openGui(gui);
-            }
-        }
-
-        public enum ButtonType
-        {
-            ACTION("watson.gui.button.ledger.action"),
-            BLOCK("watson.gui.button.ledger.block"),
-            DIMENSION("watson.gui.button.ledger.dimension"),
-            ENTITYTYPE("watson.gui.button.ledger.entitytype"),
-            ITEM("watson.gui.button.ledger.item"),
-            TAG("watson.gui.button.ledger.tag");
-
-            private final String labelKey;
-
-            ButtonType(String labelKey)
-            {
-                this.labelKey = labelKey;
-            }
-
-            public String getLabelKey()
-            {
-                return this.labelKey;
-            }
-
-            public String getDisplayName()
-            {
-                return StringUtils.translate(this.getLabelKey());
-            }
-        }
-    }
-
-    public static class ButtonListener implements IButtonActionListener
+    /*public static class ButtonListener implements IButtonActionListener
     {
         private final ButtonType type;
         private final GuiLedger parent;
@@ -907,12 +913,12 @@ public class GuiLedger extends BaseScreen
                     return;
                 }
 
-                List<String> action = ledgerInfo.getActions();
-                List<String> dimension = ledgerInfo.getDimensions();
-                List<String> block = ledgerInfo.getBlocks();
-                List<String> entityType = ledgerInfo.getEntityTypes();
-                List<String> item = ledgerInfo.getItems();
-                List<String> tag = ledgerInfo.getTags();
+                List<String> action = ledgerInfo.getActions().stream().toList();
+                List<String> dimension = ledgerInfo.getDimensions().stream().toList();
+                List<String> block = ledgerInfo.getBlocks().stream().toList();
+                List<String> entityType = ledgerInfo.getEntityTypes().stream().toList();
+                List<String> item = ledgerInfo.getItems().stream().toList();
+                List<String> tag = ledgerInfo.getTags().stream().toList();
                 int range = ledgerInfo.getRange();
                 String source = ledgerInfo.getSources();
                 String timeBefore = ledgerInfo.getTimeBefore();
@@ -957,71 +963,52 @@ public class GuiLedger extends BaseScreen
                 return StringUtils.translate(this.getLabelKey());
             }
         }
-    }
-
-    public static class ButtonListenerCycleTypePacket implements IButtonActionListener
+    }*/
+    public enum LedgerMode
     {
-        private final GuiLedger parent;
+        INSPECT("watson.gui.button.ledger.inspect"),
+        PURGE("watson.gui.button.ledger.purge"),
+        RESTORE("watson.gui.button.ledger.restore"),
+        ROLLBACK("watson.gui.button.ledger.rollback"),
+        SEARCH("watson.gui.button.ledger.search");
 
-        public ButtonListenerCycleTypePacket(GuiLedger parent)
+        private final String labelKey;
+
+        LedgerMode(String labelKey)
         {
-            this.parent = parent;
+            this.labelKey = labelKey;
         }
 
-        @Override
-        public void actionPerformedWithButton(ButtonBase button, int mouseButton)
+        public String getLabelKey()
         {
-            LedgerMode mode = parent.ledgerInfo.getLedgerMode().cycle(mouseButton == 0);
-            parent.ledgerInfo.setLedgerMode(mode);
-            parent.initGui();
+            return this.labelKey;
         }
 
-        public enum LedgerMode
+        public String getDisplayName()
         {
-            INSPECT("watson.gui.button.ledger.inspect"),
-            PURGE("watson.gui.button.ledger.purge"),
-            RESTORE("watson.gui.button.ledger.restore"),
-            ROLLBACK("watson.gui.button.ledger.rollback"),
-            SEARCH("watson.gui.button.ledger.search");
+            return StringUtils.translate(this.getLabelKey());
+        }
 
-            private final String labelKey;
+        public LedgerMode cycle(boolean forward)
+        {
+            int id = this.ordinal();
 
-            LedgerMode(String labelKey)
+            if (forward)
             {
-                this.labelKey = labelKey;
-            }
-
-            public String getLabelKey()
-            {
-                return this.labelKey;
-            }
-
-            public String getDisplayName()
-            {
-                return StringUtils.translate(this.getLabelKey());
-            }
-
-            public LedgerMode cycle(boolean forward)
-            {
-                int id = this.ordinal();
-
-                if (forward)
+                if (++id >= values().length)
                 {
-                    if (++id >= values().length)
-                    {
-                        id = 0;
-                    }
+                    id = 0;
                 }
-                else
-                {
-                    if (--id < 0)
-                    {
-                        id = values().length - 1;
-                    }
-                }
-
-                return values()[id % values().length];
             }
+            else
+            {
+                if (--id < 0)
+                {
+                    id = values().length - 1;
+                }
+            }
+
+            return values()[id % values().length];
         }
     }
 }

@@ -1,7 +1,7 @@
 package eu.minemania.watson.data;
 
 import eu.minemania.watson.db.BlockEdit;
-import fi.dy.masa.malilib.overlay.message.MessageDispatcher;
+import malilib.overlay.message.MessageDispatcher;
 import org.apache.commons.lang3.tuple.MutablePair;
 
 import java.util.HashSet;

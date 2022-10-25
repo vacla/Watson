@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
-import fi.dy.masa.malilib.overlay.message.MessageDispatcher;
+import malilib.overlay.message.MessageDispatcher;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.MutableText;

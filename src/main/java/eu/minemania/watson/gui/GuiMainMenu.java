@@ -1,15 +1,11 @@
 package eu.minemania.watson.gui;
 
-import javax.annotation.Nullable;
-
 import eu.minemania.watson.Reference;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.config.Plugins;
-import fi.dy.masa.malilib.gui.BaseScreen;
-import fi.dy.masa.malilib.gui.widget.InteractableWidget;
-import fi.dy.masa.malilib.gui.widget.button.GenericButton;
-import fi.dy.masa.malilib.util.StringUtils;
-import net.minecraft.client.gui.screen.Screen;
+import malilib.gui.BaseScreen;
+import malilib.gui.widget.InteractableWidget;
+import malilib.gui.widget.button.GenericButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +47,7 @@ public class GuiMainMenu extends BaseScreen
             this.addEqualWidthWidget(this.playereditLoadedScreenButton, list);
             if (Configs.Plugin.PLUGIN.getValue().equals(Plugins.LEDGER))
             {
+                isInitial = true;
                 this.addEqualWidthWidget(this.ledgerScreenButton, list);
             }
         }

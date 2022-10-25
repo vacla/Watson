@@ -4,12 +4,9 @@
   "compatibilityLevel": "JAVA_16",
   "client": [
     "MixinChatHud",
-    "MixinClientPlayerEntity",
     "MixinClientPlayNetworkHandler",
-    "MixinCommandSuggestor",
     "MixinPlayerEntity",
-    "MixinScreen",
-    "MixinTextFieldWidget"
+    "MixinScreen"
   ],
   "injectors": {
     "defaultRequire": 1

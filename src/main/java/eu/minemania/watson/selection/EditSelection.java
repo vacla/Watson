@@ -8,8 +8,9 @@ import eu.minemania.watson.db.BlockEditComparator;
 import eu.minemania.watson.db.BlockEditSet;
 import eu.minemania.watson.db.PlayereditSet;
 import eu.minemania.watson.render.RenderUtils;
-import fi.dy.masa.malilib.overlay.message.MessageDispatcher;
-import fi.dy.masa.malilib.util.WorldUtils;
+import malilib.overlay.message.MessageDispatcher;
+import malilib.util.game.WorldUtils;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.command.argument.EntityAnchorArgumentType;
 import net.minecraft.entity.Entity;
@@ -175,12 +176,12 @@ public class EditSelection
                 int second = _calendar.get(Calendar.SECOND);
                 String player = (String) _variables.get("player");
 
-                String query = String.format("/lb before %d.%d.%d %02d:%02d:%02d player %s coords limit %d", day, month, year, hour, minute, second, player, count);
+                String query = String.format("lb before %d.%d.%d %02d:%02d:%02d player %s coords limit %d", day, month, year, hour, minute, second, player, count);
                 if (Configs.Generic.DEBUG.getBooleanValue())
                 {
                     Watson.logger.info(query);
                 }
-                ChatMessage.sendToServerChat(query);
+                ChatMessage.sendCommand(query);
             }
             else
             {
@@ -208,12 +209,12 @@ public class EditSelection
                 int second = _calendar.get(Calendar.SECOND);
                 String player = (String) _variables.get("player");
 
-                String query = String.format("/lb since %d.%d.%d %02d:%02d:%02d player %s coords limit %d asc", day, month, year, hour, minute, second, player, count);
+                String query = String.format("lb since %d.%d.%d %02d:%02d:%02d player %s coords limit %d asc", day, month, year, hour, minute, second, player, count);
                 if (Configs.Generic.DEBUG.getBooleanValue())
                 {
                     Watson.logger.info(query);
                 }
-                ChatMessage.sendToServerChat(query);
+                ChatMessage.sendCommand(query);
             }
             else
             {
@@ -226,7 +227,7 @@ public class EditSelection
         }
     }
 
-    public void replay(String since, double speed, int radius, ServerCommandSource source)
+    public void replay(String since, double speed, int radius, FabricClientCommandSource source)
     {
         TreeSet<BlockEdit> edits = new TreeSet<>(new BlockEditComparator());
         long timing = DataManager.getTimeDiff(since);

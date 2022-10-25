@@ -20,7 +20,7 @@ import eu.minemania.watson.db.WatsonBlockRegistery;
 import eu.minemania.watson.scheduler.SyncTaskQueue;
 import eu.minemania.watson.scheduler.tasks.AddBlockEditTask;
 import eu.minemania.watson.selection.EditSelection;
-import fi.dy.masa.malilib.util.StringUtils;
+import malilib.util.StringUtils;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 

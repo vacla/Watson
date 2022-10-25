@@ -1,6 +1,6 @@
 package eu.minemania.watson.gui.widgets;
 
-import java.util.Collection;
+/*import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
@@ -9,17 +9,17 @@ import eu.minemania.watson.gui.GuiEdits;
 import eu.minemania.watson.gui.Icons;
 import eu.minemania.watson.selection.PlayereditEntry;
 import eu.minemania.watson.selection.PlayereditSorter;
-import fi.dy.masa.malilib.gui.LeftRight;
-import fi.dy.masa.malilib.gui.widgets.WidgetListBase;
-import fi.dy.masa.malilib.gui.widgets.WidgetSearchBar;
+import malilib.gui.LeftRight;
+import malilib.gui.widgets.WidgetListBase;
+import malilib.gui.widgets.WidgetSearchBar;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.Registry;*/
 
-public class WidgetListEdits extends WidgetListBase<PlayereditEntry, WidgetEditsEntry>
+public class WidgetListEdits /*extends WidgetListBase<PlayereditEntry, WidgetEditsEntry>*/
 {
-    private static int lastScrollbarPosition;
+    /*private static int lastScrollbarPosition;
     private final GuiEdits gui;
     private final PlayereditSorter sorter;
     private boolean scrollbarRestored;
@@ -113,6 +113,6 @@ public class WidgetListEdits extends WidgetListBase<PlayereditEntry, WidgetEdits
     protected WidgetEditsEntry createListEntryWidget(int x, int y, int listIndex, boolean isOdd, PlayereditEntry entry)
     {
         return new WidgetEditsEntry(x, y, this.browserEntryWidth, this.getBrowserEntryHeightFor(entry), isOdd, this.gui.getEdits(), entry, listIndex, this);
-    }
+    }*/
 
 }

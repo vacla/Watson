@@ -1,7 +1,7 @@
 package eu.minemania.watson.config;
 
 import com.google.common.collect.ImmutableList;
-import fi.dy.masa.malilib.config.value.BaseOptionListConfigValue;
+import malilib.config.value.BaseOptionListConfigValue;
 
 public class CoreprotectCommand extends BaseOptionListConfigValue
 {

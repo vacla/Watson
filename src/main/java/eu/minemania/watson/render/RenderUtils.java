@@ -3,8 +3,8 @@ package eu.minemania.watson.render;
 import java.util.List;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import fi.dy.masa.malilib.util.PositionUtils;
-import fi.dy.masa.malilib.util.data.Color4f;
+import malilib.util.data.Color4f;
+import malilib.util.position.PositionUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.model.BakedModel;

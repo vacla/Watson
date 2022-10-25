@@ -1,11 +1,11 @@
 package eu.minemania.watson.config;
 
-import fi.dy.masa.malilib.config.option.HotkeyConfig;
+import malilib.config.option.HotkeyConfig;
 
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import fi.dy.masa.malilib.input.KeyBindSettings;
+import malilib.input.KeyBindSettings;
 
 /**
  * Default hotkeys configuration.

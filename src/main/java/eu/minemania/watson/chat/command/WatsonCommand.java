@@ -1,7 +1,6 @@
 package eu.minemania.watson.chat.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
@@ -15,23 +14,18 @@ import eu.minemania.watson.db.WatsonBlock;
 import eu.minemania.watson.db.WatsonBlockRegistery;
 import eu.minemania.watson.scheduler.SyncTaskQueue;
 import eu.minemania.watson.scheduler.tasks.AddBlockEditTask;
-import fi.dy.masa.malilib.overlay.message.MessageDispatcher;
-import fi.dy.masa.malilib.util.StringUtils;
-import fi.dy.masa.malilib.util.data.Color4f;
-import net.minecraft.server.command.ServerCommandSource;
+import malilib.overlay.message.MessageDispatcher;
+import malilib.util.StringUtils;
+import malilib.util.data.Color4f;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
-import static net.minecraft.command.argument.BlockPosArgumentType.blockPos;
-import static net.minecraft.command.argument.BlockPosArgumentType.getBlockPos;
-import static net.minecraft.server.command.CommandManager.literal;
-import static net.minecraft.server.command.CommandManager.argument;
+import static dev.xpple.clientarguments.arguments.CBlockPosArgumentType.*;
+import static net.fabricmc.fabric.api.client.command.v2.ClientCommandManager.*;
 import static com.mojang.brigadier.arguments.StringArgumentType.word;
 import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
@@ -47,11 +41,10 @@ import static com.mojang.brigadier.arguments.DoubleArgumentType.getDouble;
 
 public class WatsonCommand extends WatsonCommandBase
 {
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher)
+    public static void register(CommandDispatcher<FabricClientCommandSource> dispatcher)
     {
-        ClientCommandManager.addClientSideCommand(Configs.Generic.WATSON_PREFIX.getValue());
-        LiteralArgumentBuilder<ServerCommandSource> watson = literal(Configs.Generic.WATSON_PREFIX.getValue()).executes(WatsonCommand::help)
-                .then(literal("help").executes(WatsonCommand::help))
+        dispatcher.register(literal(Configs.Generic.WATSON_PREFIX.getValue()));
+        dispatcher.register(literal(Configs.Generic.WATSON_PREFIX.getValue())
                 .then(literal("clear").executes(WatsonCommand::clear))
                 .then(literal("ratio").executes(WatsonCommand::ratio))
                 .then(literal("servertime").executes(WatsonCommand::servertime))
@@ -113,7 +106,7 @@ public class WatsonCommand extends WatsonCommandBase
                                 .then(argument("filename", greedyString()).executes(WatsonCommand::file_load)))
                         .then(literal("save").executes(WatsonCommand::file_save)
                                 .then(argument("filename", greedyString()).executes(WatsonCommand::file_save))))
-                .then(literal("config").executes(WatsonCommand::help)
+                .then(literal("config")
                         .then(literal("watson").executes(WatsonCommand::config_watson)
                                 .then(argument("enabled", bool()).executes(WatsonCommand::config_watson)))
                         .then(literal("debug").executes(WatsonCommand::config_debug)
@@ -155,8 +148,7 @@ public class WatsonCommand extends WatsonCommandBase
                         .then(literal("vector_length").executes(WatsonCommand::config_vector_length)
                                 .then(argument("length", floatArg(0)).executes(WatsonCommand::config_vector_length)))
                         .then(literal("chat_highlights").executes(WatsonCommand::config_chat_highlights)
-                                .then(argument("enabled", bool()).executes(WatsonCommand::config_chat_highlights)))
-                        .then(literal("help").executes(WatsonCommand::help)))
+                                .then(argument("enabled", bool()).executes(WatsonCommand::config_chat_highlights))))
                 .then(literal("replay")
                         .then(argument("radius", integer(1))
                                 .then(argument("speed", doubleArg(1))
@@ -166,30 +158,29 @@ public class WatsonCommand extends WatsonCommandBase
                                 .then(argument("block", string())
                                         .then(argument("color", string())
                                                 .then(argument("world", word()).executes(WatsonCommand::set_edit)))))
-                        .then(literal("ledgerActions").executes(WatsonCommand::setLedgerActions)));
-        dispatcher.register(watson);
+                        .then(literal("ledgerActions").executes(WatsonCommand::setLedgerActions))));
     }
 
-    private static int clear(CommandContext<ServerCommandSource> context)
+    private static int clear(CommandContext<FabricClientCommandSource> context)
     {
         DataManager.getEditSelection().clearBlockEditSet();
         CoreProtectAnalysis.reset();
         return 1;
     }
 
-    private static int ratio(CommandContext<ServerCommandSource> context)
+    private static int ratio(CommandContext<FabricClientCommandSource> context)
     {
         DataManager.getEditSelection().getBlockEditSet().getOreDB().showRatios();
         return 1;
     }
 
-    private static int servertime(CommandContext<ServerCommandSource> context)
+    private static int servertime(CommandContext<FabricClientCommandSource> context)
     {
         ServerTime.getInstance().queryServerTime(true);
         return 1;
     }
 
-    private static int orePage(CommandContext<ServerCommandSource> context)
+    private static int orePage(CommandContext<FabricClientCommandSource> context)
     {
         int page;
         try
@@ -204,7 +195,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int preCount(CommandContext<ServerCommandSource> context)
+    private static int preCount(CommandContext<FabricClientCommandSource> context)
     {
         int count;
         try
@@ -219,7 +210,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int postCount(CommandContext<ServerCommandSource> context)
+    private static int postCount(CommandContext<FabricClientCommandSource> context)
     {
         int count;
         try
@@ -234,7 +225,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int display(CommandContext<ServerCommandSource> context)
+    private static int display(CommandContext<FabricClientCommandSource> context)
     {
         boolean displayed;
         try
@@ -252,7 +243,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int outline(CommandContext<ServerCommandSource> context)
+    private static int outline(CommandContext<FabricClientCommandSource> context)
     {
         boolean displayed;
         try
@@ -270,7 +261,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int anno(CommandContext<ServerCommandSource> context)
+    private static int anno(CommandContext<FabricClientCommandSource> context)
     {
         boolean displayed;
         try
@@ -288,7 +279,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int vector(CommandContext<ServerCommandSource> context)
+    private static int vector(CommandContext<FabricClientCommandSource> context)
     {
         boolean displayed;
         try
@@ -306,7 +297,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int vector_creat(CommandContext<ServerCommandSource> context)
+    private static int vector_creat(CommandContext<FabricClientCommandSource> context)
     {
         boolean displayed;
         try
@@ -324,7 +315,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int vector_destruct(CommandContext<ServerCommandSource> context)
+    private static int vector_destruct(CommandContext<FabricClientCommandSource> context)
     {
         boolean displayed;
         try
@@ -342,7 +333,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int vector_length(CommandContext<ServerCommandSource> context)
+    private static int vector_length(CommandContext<FabricClientCommandSource> context)
     {
         float length = getFloat(context, "length");
         Configs.Edits.VECTOR_LENGTH.setDoubleValue(length);
@@ -350,7 +341,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int label(CommandContext<ServerCommandSource> context)
+    private static int label(CommandContext<FabricClientCommandSource> context)
     {
         boolean displayed;
         try
@@ -368,32 +359,32 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int teleport_next(CommandContext<ServerCommandSource> context)
+    private static int teleport_next(CommandContext<FabricClientCommandSource> context)
     {
         DataManager.getEditSelection().getBlockEditSet().getOreDB().tpNext();
         return 1;
     }
 
-    private static int teleport_prev(CommandContext<ServerCommandSource> context)
+    private static int teleport_prev(CommandContext<FabricClientCommandSource> context)
     {
         DataManager.getEditSelection().getBlockEditSet().getOreDB().tpPrev();
         return 1;
     }
 
-    private static int teleport(CommandContext<ServerCommandSource> context)
+    private static int teleport(CommandContext<FabricClientCommandSource> context)
     {
         int index = getInteger(context, "index");
         DataManager.getEditSelection().getBlockEditSet().getOreDB().tpIndex(index);
         return 1;
     }
 
-    private static int edits_list(CommandContext<ServerCommandSource> context)
+    private static int edits_list(CommandContext<FabricClientCommandSource> context)
     {
         DataManager.getEditSelection().getBlockEditSet().listEdits();
         return 1;
     }
 
-    private static int edits_hide(CommandContext<ServerCommandSource> context)
+    private static int edits_hide(CommandContext<FabricClientCommandSource> context)
     {
         String players = getString(context, "player(s)");
         String[] playerList = players.split(" ");
@@ -404,7 +395,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int edits_show(CommandContext<ServerCommandSource> context)
+    private static int edits_show(CommandContext<FabricClientCommandSource> context)
     {
         String players = getString(context, "player(s)");
         String[] playerList = players.split(" ");
@@ -415,7 +406,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int edits_remove(CommandContext<ServerCommandSource> context)
+    private static int edits_remove(CommandContext<FabricClientCommandSource> context)
     {
         String players = getString(context, "player(s)");
         String[] playerList = players.split(" ");
@@ -426,9 +417,9 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int set_edit(CommandContext<ServerCommandSource> context) throws CommandSyntaxException
+    private static int set_edit(CommandContext<FabricClientCommandSource> context) throws CommandSyntaxException
     {
-        BlockPos pos = getBlockPos(context, "pos");
+        BlockPos pos = getCBlockPos(context, "pos");
         String block = getString(context, "block");
         String colorstr = getString(context, "color");
         String world = getString(context, "world");
@@ -440,18 +431,18 @@ public class WatsonCommand extends WatsonCommandBase
             Color4f color = Color4f.fromColor(colorTemp);
             watsonblock.setOverrideColor(color);
         }
-        BlockEdit edit = new BlockEdit(1, "test edits", "test", pos.getX(), pos.getY(), pos.getZ(), watsonblock, world, 1);
+        BlockEdit edit = new BlockEdit(Calendar.getInstance().getTimeInMillis(), "test edits", "test", pos.getX(), pos.getY(), pos.getZ(), watsonblock, world, 1);
         SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, true));
 
         return 1;
     }
 
-    private static int setLedgerActions(CommandContext<ServerCommandSource> context)
+    private static int setLedgerActions(CommandContext<FabricClientCommandSource> context)
     {
-        if (!DataManager.getLedgerActions().isEmpty())
-        {
-            return 1;
-        }
+        //if (!DataManager.getLedgerActions().isEmpty())
+        //{
+            //return 1;
+        //}
         List<String> ledgerActions = new ArrayList<>();
         ledgerActions.add("block-break");
         ledgerActions.add("block-place");
@@ -462,19 +453,19 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int filter_list(CommandContext<ServerCommandSource> context)
+    private static int filter_list(CommandContext<FabricClientCommandSource> context)
     {
         DataManager.getFilters().list();
         return 1;
     }
 
-    private static int filter_clear(CommandContext<ServerCommandSource> context)
+    private static int filter_clear(CommandContext<FabricClientCommandSource> context)
     {
         DataManager.getFilters().clear();
         return 1;
     }
 
-    private static int filter_add(CommandContext<ServerCommandSource> context)
+    private static int filter_add(CommandContext<FabricClientCommandSource> context)
     {
         String players = getString(context, "player(s)");
         String[] playerList = players.split(" ");
@@ -485,7 +476,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int filter_remove(CommandContext<ServerCommandSource> context)
+    private static int filter_remove(CommandContext<FabricClientCommandSource> context)
     {
         String players = getString(context, "player(s)");
         String[] playerList = players.split(" ");
@@ -496,7 +487,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int file_list(CommandContext<ServerCommandSource> context)
+    private static int file_list(CommandContext<FabricClientCommandSource> context)
     {
         String player;
         int page;
@@ -520,7 +511,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int file_delete(CommandContext<ServerCommandSource> context)
+    private static int file_delete(CommandContext<FabricClientCommandSource> context)
     {
         String player, filename;
         try
@@ -551,14 +542,14 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int file_expire(CommandContext<ServerCommandSource> context)
+    private static int file_expire(CommandContext<FabricClientCommandSource> context)
     {
         String date = getString(context, "YYYY-MM-DD");
         DataManager.expireBlockEditFiles(date);
         return 1;
     }
 
-    private static int file_load(CommandContext<ServerCommandSource> context)
+    private static int file_load(CommandContext<FabricClientCommandSource> context)
     {
         String player, filename;
         try
@@ -589,7 +580,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int file_save(CommandContext<ServerCommandSource> context)
+    private static int file_save(CommandContext<FabricClientCommandSource> context)
     {
         String filename;
         try
@@ -605,7 +596,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int config_watson(CommandContext<ServerCommandSource> context)
+    private static int config_watson(CommandContext<FabricClientCommandSource> context)
     {
         boolean displayed;
         try
@@ -629,7 +620,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int config_debug(CommandContext<ServerCommandSource> context)
+    private static int config_debug(CommandContext<FabricClientCommandSource> context)
     {
         boolean displayed;
         try
@@ -647,7 +638,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int config_auto_page(CommandContext<ServerCommandSource> context)
+    private static int config_auto_page(CommandContext<FabricClientCommandSource> context)
     {
         boolean displayed;
         try
@@ -665,7 +656,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int config_region_info_timeout(CommandContext<ServerCommandSource> context)
+    private static int config_region_info_timeout(CommandContext<FabricClientCommandSource> context)
     {
         double seconds;
         try
@@ -686,7 +677,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int config_billb_background(CommandContext<ServerCommandSource> context)
+    private static int config_billb_background(CommandContext<FabricClientCommandSource> context)
     {
         int color;
         try
@@ -702,7 +693,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int config_billb_foreground(CommandContext<ServerCommandSource> context)
+    private static int config_billb_foreground(CommandContext<FabricClientCommandSource> context)
     {
         int color;
         try
@@ -718,7 +709,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int config_group_ores_creative(CommandContext<ServerCommandSource> context)
+    private static int config_group_ores_creative(CommandContext<FabricClientCommandSource> context)
     {
         boolean displayed;
         try
@@ -736,7 +727,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int config_teleport_command(CommandContext<ServerCommandSource> context)
+    private static int config_teleport_command(CommandContext<FabricClientCommandSource> context)
     {
         String command;
         try
@@ -752,7 +743,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int config_chat_timeout(CommandContext<ServerCommandSource> context)
+    private static int config_chat_timeout(CommandContext<FabricClientCommandSource> context)
     {
         double seconds;
         try
@@ -773,7 +764,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int config_max_auto_page(CommandContext<ServerCommandSource> context)
+    private static int config_max_auto_page(CommandContext<FabricClientCommandSource> context)
     {
         int pages;
         try
@@ -789,7 +780,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int config_pre_count(CommandContext<ServerCommandSource> context)
+    private static int config_pre_count(CommandContext<FabricClientCommandSource> context)
     {
         int count;
         try
@@ -805,7 +796,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int config_post_count(CommandContext<ServerCommandSource> context)
+    private static int config_post_count(CommandContext<FabricClientCommandSource> context)
     {
         int count;
         try
@@ -821,7 +812,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int config_watson_prefix(CommandContext<ServerCommandSource> context)
+    private static int config_watson_prefix(CommandContext<FabricClientCommandSource> context)
     {
         String prefix;
         try
@@ -837,7 +828,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int config_ss_player_directory(CommandContext<ServerCommandSource> context)
+    private static int config_ss_player_directory(CommandContext<FabricClientCommandSource> context)
     {
         boolean displayed;
         try
@@ -855,7 +846,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int config_ss_player_suffix(CommandContext<ServerCommandSource> context)
+    private static int config_ss_player_suffix(CommandContext<FabricClientCommandSource> context)
     {
         boolean displayed;
         try
@@ -873,7 +864,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int config_ss_date_directory(CommandContext<ServerCommandSource> context)
+    private static int config_ss_date_directory(CommandContext<FabricClientCommandSource> context)
     {
         String date_directory;
         try
@@ -889,7 +880,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int config_reformat_query(CommandContext<ServerCommandSource> context)
+    private static int config_reformat_query(CommandContext<FabricClientCommandSource> context)
     {
         boolean displayed;
         try
@@ -907,7 +898,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int config_recolor_query(CommandContext<ServerCommandSource> context)
+    private static int config_recolor_query(CommandContext<FabricClientCommandSource> context)
     {
         boolean displayed;
         try
@@ -925,7 +916,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int config_time_ordered(CommandContext<ServerCommandSource> context)
+    private static int config_time_ordered(CommandContext<FabricClientCommandSource> context)
     {
         boolean displayed;
         try
@@ -942,7 +933,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int config_vector_length(CommandContext<ServerCommandSource> context)
+    private static int config_vector_length(CommandContext<FabricClientCommandSource> context)
     {
         float length;
         try
@@ -959,7 +950,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int config_chat_highlights(CommandContext<ServerCommandSource> context)
+    private static int config_chat_highlights(CommandContext<FabricClientCommandSource> context)
     {
         boolean displayed;
         try
@@ -977,32 +968,7 @@ public class WatsonCommand extends WatsonCommandBase
         return 1;
     }
 
-    private static int help(CommandContext<ServerCommandSource> context)
-    {
-        int cmdCount = 0;
-        CommandDispatcher<ServerCommandSource> dispatcher = Command.commandDispatcher;
-        for (CommandNode<ServerCommandSource> command : dispatcher.getRoot().getChildren())
-        {
-            String cmdName = command.getName();
-            if (ClientCommandManager.isClientSideCommand(cmdName))
-            {
-                Map<CommandNode<ServerCommandSource>, String> usage = dispatcher.getSmartUsage(command, context.getSource());
-                for (String u : usage.values())
-                {
-                    ClientCommandManager.sendFeedback(Text.literal("/" + cmdName + " " + u));
-                }
-                cmdCount += usage.size();
-                if (usage.size() == 0)
-                {
-                    ClientCommandManager.sendFeedback(Text.literal("/" + cmdName));
-                    cmdCount++;
-                }
-            }
-        }
-        return cmdCount;
-    }
-
-    private static int replay(CommandContext<ServerCommandSource> context)
+    private static int replay(CommandContext<FabricClientCommandSource> context)
     {
         String since = "";
         double speed = 0;

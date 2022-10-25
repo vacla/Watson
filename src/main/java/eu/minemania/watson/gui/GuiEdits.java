@@ -1,106 +1,98 @@
 package eu.minemania.watson.gui;
 
 import eu.minemania.watson.gui.widgets.WidgetEditsEntry;
-import eu.minemania.watson.gui.widgets.WidgetListEdits;
 import eu.minemania.watson.selection.PlayereditBase;
 import eu.minemania.watson.selection.PlayereditEntry;
-import fi.dy.masa.malilib.gui.GuiBase;
-import fi.dy.masa.malilib.gui.GuiListBase;
-import fi.dy.masa.malilib.gui.button.ButtonBase;
-import fi.dy.masa.malilib.gui.button.ButtonGeneric;
-import fi.dy.masa.malilib.gui.button.IButtonActionListener;
-import fi.dy.masa.malilib.interfaces.ICompletionListener;
-import fi.dy.masa.malilib.listener.TaskCompletionListener;
-import fi.dy.masa.malilib.util.GuiUtils;
-import fi.dy.masa.malilib.util.StringUtils;
-import net.minecraft.client.gui.screen.Screen;
+import malilib.gui.BaseListScreen;
+import malilib.gui.BaseScreen;
+import malilib.gui.util.GuiUtils;
+import malilib.gui.widget.button.GenericButton;
+import malilib.gui.widget.list.DataListWidget;
+import malilib.gui.widget.list.header.ColumnizedDataListHeaderWidget;
+import malilib.gui.widget.list.header.DataListHeaderWidget;
 
-public class GuiEdits extends GuiListBase<PlayereditEntry, WidgetEditsEntry, WidgetListEdits>
-        implements TaskCompletionListener
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Supplier;
+
+public class GuiEdits extends BaseListScreen<DataListWidget<PlayereditEntry>>
 {
-    private final PlayereditBase edits;
+    protected final PlayereditBase edits;
+    protected final GenericButton refreshButton;
+    protected final GenericButton closeButton;
 
-    public GuiEdits(PlayereditBase edits, Screen parent)
+    public GuiEdits(PlayereditBase edits)
     {
-        super(10, 44);
+        super(10, 44, 20, 80);
 
         this.edits = edits;
-        this.edits.setCompletionListener(this);
-        this.title = this.edits.getTitle();
+        this.edits.setCompletionListener(this::onRefreshFinished);
+        this.shouldRestoreScrollbarPosition = true;
+        this.setTitle(this.edits.getTitle());
         this.useTitleHierarchy = false;
-        this.setParent(parent);
 
-        WidgetEditsEntry.setMaxNameLength(edits.getPlayereditsAll());
+        this.refreshButton = GenericButton.create("watson.gui.button.edits.refresh_list");
+        this.refreshButton.setClickListener(edits::reCreatePlayeredits);
+        this.closeButton = GenericButton.create("watson.gui.button.change_menu.close");
+        this.closeButton.setClickListener(() -> BaseScreen.openScreen(this.getParent()));
     }
 
     @Override
-    protected WidgetListEdits createListWidget(int listX, int listY)
+    protected void reAddActiveWidgets()
     {
-        return new WidgetListEdits(listX, listY, this.getBrowserWidth(), this.getBrowserHeight(), this);
+        super.reAddActiveWidgets();
+
+        this.addWidget(this.refreshButton);
+        this.addWidget(this.closeButton);
     }
 
     @Override
-    protected int getBrowserWidth()
+    protected void updateWidgetPositions()
     {
-        return this.width - 20;
+        super.updateWidgetPositions();
+
+        int x = this.titleX;
+        int y = this.titleY;
+
+        this.refreshButton.setPosition(x, y + 15);
+
+        this.closeButton.setRight(this.getRight() - 10);
+        this.closeButton.setBottom(this.getBottom() - 3);
     }
 
     @Override
-    protected int getBrowserHeight()
+    protected DataListWidget<PlayereditEntry> createListWidget()
     {
-        return this.height - 80;
+        Supplier<List<PlayereditEntry>> supplier = this::getPlayereditEntry;
+        DataListWidget<PlayereditEntry> listWidget = new DataListWidget<>(supplier, true);
+
+        listWidget.setListEntryWidgetFixedHeight(20);
+        listWidget.getBackgroundRenderer().getNormalSettings().setEnabledAndColor(true, 0x80101010);
+        listWidget.addDefaultSearchBar();
+        listWidget.setHeaderWidgetFactory(this::createListHeaderWidget);
+        listWidget.setEntryFilterStringFunction((e) -> Collections.singletonList(e.getStack().getName().getString()));
+        listWidget.setDataListEntryWidgetFactory(WidgetEditsEntry::new);
+        listWidget.setWidgetInitializer(new WidgetEditsEntry.WidgetInitializer());
+
+        listWidget.setColumnSupplier(() -> WidgetEditsEntry.COLUMNS);
+        listWidget.setDefaultSortColumn(WidgetEditsEntry.TOTAL_COLUMN);
+        listWidget.setHasDataColumns(true);
+        listWidget.setShouldSortList(true);
+        listWidget.updateActiveColumns();
+        listWidget.setParentScreen(this);
+        return listWidget;
     }
 
-    @Override
-    public void initGui()
+    protected DataListHeaderWidget<PlayereditEntry> createListHeaderWidget(DataListWidget<PlayereditEntry> listWidget)
     {
-        super.initGui();
-
-        boolean isNarrow = this.width < this.getElementTotalWidth();
-
-        int x = 12;
-        int y = 24;
-        int buttonWidth;
-        String label;
-        ButtonGeneric button;
-
-        int gap = 1;
-        x += this.createButton(x, y, -1, ButtonListener.Type.REFRESH_LIST) + gap;
-
-        if (isNarrow)
-        {
-            x = 12;
-            y = this.height - 22;
-        }
-
-        y = this.height - 36;
-        ButtonListener.Type type = ButtonListener.Type.CLOSE;
-        buttonWidth = this.getStringWidth(type.getDisplayName()) + 10;
-        this.createButton(12, y, buttonWidth, type);
+        ColumnizedDataListHeaderWidget<PlayereditEntry> widget = new ColumnizedDataListHeaderWidget<>(this.getListWidget().getWidth() - 10, 16, this.getListWidget(), WidgetEditsEntry.COLUMNS);
+        widget.getMargin().setAll(2, 0, 0, 1);
+        return widget;
     }
 
-    private int createButton(int x, int y, int width, ButtonListener.Type type)
+    private List<PlayereditEntry> getPlayereditEntry()
     {
-        ButtonListener listener = new ButtonListener(type, this);
-        String label;
-
-        label = type.getDisplayName();
-
-        ButtonGeneric button = new ButtonGeneric(x, y, width, 20, label);
-
-        this.addButton(button, listener);
-
-        return button.getWidth();
-    }
-
-    private int getElementTotalWidth()
-    {
-        int width = 0;
-
-        width += this.getStringWidth(ButtonListener.Type.REFRESH_LIST.getDisplayName());
-        width += 130;
-
-        return width;
+        return this.edits.getPlayereditsAll();
     }
 
     public PlayereditBase getEdits()
@@ -108,61 +100,11 @@ public class GuiEdits extends GuiListBase<PlayereditEntry, WidgetEditsEntry, Wid
         return this.edits;
     }
 
-    @Override
-    public void onTaskCompleted()
+    protected void onRefreshFinished()
     {
         if (GuiUtils.getCurrentScreen() == this)
         {
-            WidgetEditsEntry.setMaxNameLength(this.edits.getPlayereditsAll());
-            this.initGui();
-        }
-    }
-
-    private static class ButtonListener implements IButtonActionListener
-    {
-        private final GuiEdits parent;
-        private final Type type;
-
-        public ButtonListener(Type type, GuiEdits parent)
-        {
-            this.parent = parent;
-            this.type = type;
-        }
-
-        @Override
-        public void actionPerformedWithButton(ButtonBase button, int mouseButton)
-        {
-            PlayereditBase edits = this.parent.edits;
-
-            switch (this.type)
-            {
-                case CLOSE:
-                    GuiBase.openGui(this.parent.getParent());
-                    break;
-                case REFRESH_LIST:
-                    edits.reCreatePlayeredits();
-                    break;
-            }
-
-            this.parent.initGui();
-        }
-
-        public enum Type
-        {
-            CLOSE("watson.gui.button.change_menu.close"),
-            REFRESH_LIST("watson.gui.button.edits.refresh_list");
-
-            private final String translationKey;
-
-            Type(String translationKey)
-            {
-                this.translationKey = translationKey;
-            }
-
-            public String getDisplayName(Object... args)
-            {
-                return StringUtils.translate(this.translationKey, args);
-            }
+            this.getListWidget().refreshEntries();
         }
     }
 }

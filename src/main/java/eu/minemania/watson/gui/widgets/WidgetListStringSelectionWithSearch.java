@@ -2,15 +2,15 @@ package eu.minemania.watson.gui.widgets;
 
 import com.google.common.collect.ImmutableList;
 import eu.minemania.watson.gui.Icons;
-import fi.dy.masa.malilib.gui.LeftRight;
-import fi.dy.masa.malilib.gui.widgets.WidgetListStringSelection;
-import fi.dy.masa.malilib.gui.widgets.WidgetSearchBar;
-import fi.dy.masa.malilib.interfaces.IStringListProvider;
+/*import malilib.gui.LeftRight;
+import malilib.gui.widgets.WidgetListStringSelection;
+import malilib.gui.widgets.WidgetSearchBar;
+import malilib.interfaces.IStringListProvider;*/
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class WidgetListStringSelectionWithSearch extends WidgetListStringSelection
+/*public class WidgetListStringSelectionWithSearch extends WidgetListStringSelection
 {
     public WidgetListStringSelectionWithSearch(int x, int y, int width, int height, IStringListProvider stringProvider, boolean hasSearch, List<String> entries)
     {
@@ -30,4 +30,4 @@ public class WidgetListStringSelectionWithSearch extends WidgetListStringSelecti
 
         return ImmutableList.of(name);
     }
-}
+}*/

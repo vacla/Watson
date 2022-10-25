@@ -29,7 +29,7 @@ public class RegionInfoAnalysis extends Analysis
             Matcher names = _regionNames.matcher(m.group(1));
             while (names.find())
             {
-                ChatMessage.sendToServerChat("/region info " + names.group());
+                ChatMessage.sendCommand("region info " + names.group());
                 ++regionCount;
             }
 

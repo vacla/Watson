@@ -11,13 +11,13 @@ import eu.minemania.watson.network.ledger.PluginActionPacketHandler;
 import eu.minemania.watson.network.ledger.PluginHandshakePacketHandler;
 import eu.minemania.watson.network.ledger.PluginResponsePacketHandler;
 import eu.minemania.watson.render.OverlayRenderer;
-import net.minecraft.client.MinecraftClient;
+import malilib.util.game.wrap.GameUtils;
 import net.minecraft.client.world.ClientWorld;
 
-public class ClientWorldChangeHandler implements fi.dy.masa.malilib.event.ClientWorldChangeHandler
+public class ClientWorldChangeHandler implements malilib.event.ClientWorldChangeHandler
 {
     @Override
-    public void onPreClientWorldChange(@Nullable ClientWorld worldBefore, @Nullable ClientWorld worldAfter, MinecraftClient mc)
+    public void onPreClientWorldChange(@Nullable ClientWorld worldBefore, @Nullable ClientWorld worldAfter)
     {
         // Save the settings before the integrated server gets shut down
         if (worldBefore != null)
@@ -54,7 +54,7 @@ public class ClientWorldChangeHandler implements fi.dy.masa.malilib.event.Client
     }
 
     @Override
-    public void onPostClientWorldChange(@Nullable ClientWorld worldBefore, @Nullable ClientWorld worldAfter, MinecraftClient mc)
+    public void onPostClientWorldChange(@Nullable ClientWorld worldBefore, @Nullable ClientWorld worldAfter)
     {
         if (worldBefore == null && worldAfter != null && Configs.Generic.ENABLED.getBooleanValue())
         {
@@ -63,7 +63,7 @@ public class ClientWorldChangeHandler implements fi.dy.masa.malilib.event.Client
             ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginHandshakePacketHandler.INSTANCE);
             ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginActionPacketHandler.INSTANCE);
             ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginResponsePacketHandler.INSTANCE);
-            ((ClientPacketChannelHandler) ClientPacketChannelHandler.getInstance()).processPacketFromClient(mc.getNetworkHandler());
+            ((ClientPacketChannelHandler) ClientPacketChannelHandler.getInstance()).processPacketFromClient(GameUtils.getClient().getNetworkHandler());
         }
         if (worldAfter != null)
         {

@@ -1,4 +1,4 @@
-package eu.minemania.watson.selection;
+/*package eu.minemania.watson.selection;
 
 import java.util.Comparator;
 
@@ -15,7 +15,7 @@ public class LoadedPlayereditSorter implements Comparator<PlayereditSet>
     }
 
     @Override
-    public int compare(PlayereditSet entry1, PlayereditSet entry2)
+    public static int compare(PlayereditSet entry1, PlayereditSet entry2)
     {
         int nameCompare = entry1.getPlayer().compareTo(entry2.getPlayer());
 
@@ -26,4 +26,4 @@ public class LoadedPlayereditSorter implements Comparator<PlayereditSet>
 
         return nameCompare * -1;
     }
-}
+}*/

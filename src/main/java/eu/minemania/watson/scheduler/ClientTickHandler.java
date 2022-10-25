@@ -5,10 +5,10 @@ import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.config.Plugins;
 import eu.minemania.watson.data.DataManager;
-import fi.dy.masa.malilib.util.GameUtils;
+import malilib.util.game.wrap.GameUtils;
 import net.minecraft.client.MinecraftClient;
 
-public class ClientTickHandler implements fi.dy.masa.malilib.event.ClientTickHandler
+public class ClientTickHandler implements malilib.event.ClientTickHandler
 {
     @Override
     public void onClientTick()

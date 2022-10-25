@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
-import fi.dy.masa.malilib.util.data.Color4f;
+import malilib.util.data.Color4f;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;

@@ -2,17 +2,18 @@ package eu.minemania.watson;
 
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
+import eu.minemania.watson.event.Actions;
 import eu.minemania.watson.event.KeyCallbacks;
 import eu.minemania.watson.event.RenderHandler;
 import eu.minemania.watson.event.ClientWorldChangeHandler;
 import eu.minemania.watson.gui.ConfigScreen;
 import eu.minemania.watson.input.WatsonHotkeyProvider;
 import eu.minemania.watson.scheduler.ClientTickHandler;
-import fi.dy.masa.malilib.config.JsonModConfig;
-import fi.dy.masa.malilib.config.JsonModConfig.ConfigDataUpdater;
-import fi.dy.masa.malilib.config.util.ConfigUpdateUtils.KeyBindSettingsResetter;
-import fi.dy.masa.malilib.event.InitializationHandler;
-import fi.dy.masa.malilib.registry.Registry;
+import malilib.config.JsonModConfig;
+import malilib.config.JsonModConfig.ConfigDataUpdater;
+import malilib.config.util.ConfigUpdateUtils.KeyBindSettingsResetter;
+import malilib.event.InitializationHandler;
+import malilib.registry.Registry;
 import net.minecraft.client.MinecraftClient;
 
 public class InitHandler implements InitializationHandler
@@ -36,7 +37,8 @@ public class InitHandler implements InitializationHandler
 
         Registry.CLIENT_WORLD_CHANGE_EVENT_DISPATCHER.registerClientWorldChangeHandler(new ClientWorldChangeHandler());
 
-        KeyCallbacks.init(MinecraftClient.getInstance());
+        KeyCallbacks.init();
+        Actions.init();
 
         DataManager.getPlayereditsBaseDirectory();
     }

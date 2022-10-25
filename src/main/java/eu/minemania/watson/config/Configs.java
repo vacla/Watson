@@ -1,13 +1,13 @@
 package eu.minemania.watson.config;
 
-import eu.minemania.watson.data.DataManager;
 import java.util.*;
 import com.google.common.collect.ImmutableList;
 import eu.minemania.watson.Reference;
-import fi.dy.masa.malilib.config.category.BaseConfigOptionCategory;
-import fi.dy.masa.malilib.config.category.ConfigOptionCategory;
-import fi.dy.masa.malilib.config.option.*;
-import fi.dy.masa.malilib.config.option.list.StringListConfig;
+import eu.minemania.watson.util.DataUtils;
+import malilib.config.category.BaseConfigOptionCategory;
+import malilib.config.category.ConfigOptionCategory;
+import malilib.config.option.*;
+import malilib.config.option.list.StringListConfig;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
@@ -180,39 +180,39 @@ public class Configs
 
     public static class Analysis
     {
-        public static final ConfigStringExt CP_BUSY = new ConfigStringExt("cpbusy", "^CoreProtect - Database busy. Please try again later.$", "watson.config.comment.analysis").setCommentArguments("cp busy");
-        public static final ConfigStringExt CP_DETAILS = new ConfigStringExt("cpdetails", "^(?:\\s+)?(\\d+[.,]\\d+\\/[mhd] ago|\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}) - #?(\\w+) ((?!.*logged).*?) ((?:x(\\d+) )?\\w+(?::\\w+)?)\\.$", "watson.config.comment.analysis").setCommentArguments("cp details");
-        public static final ConfigStringExt CP_DETAILS_SESSION = new ConfigStringExt("cpdetailssession", "^(\\d+[.,]\\d+\\/[mhd] ago|\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}) - (\\w+) (logged \\w+)\\.$", "watson.config.comment.analysis").setCommentArguments("cp details session");
-        public static final ConfigStringExt CP_DETAILS_SIGN = new ConfigStringExt("cpdetailssign", "^(\\d+[.,]\\d+\\/[mhd] ago|\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}) - (\\w+): ([\\s\\w+\\W]+)", "watson.config.comment.analysis").setCommentArguments("cp details sign");
-        public static final ConfigStringExt CP_INSPECTOR_COORDS = new ConfigStringExt("cpinspectorcoords", "^-{5} \\w+(?:\\s\\w+)* -{5} \\(x(-?\\d+)\\/y(-?\\d+)\\/z(-?\\d+)\\)$", "watson.config.comment.analysis").setCommentArguments("cp inspector coords");
-        public static final ConfigStringExt CP_LOOKUP_COORDS = new ConfigStringExt("cplookupcoords", "^ +\\^ \\(x(-?\\d+)\\/y(-?\\d+)\\/z(-?\\d+)\\/([^\\)]+)\\)(?: \\(.+\\))?$", "watson.config.comment.analysis").setCommentArguments("cp lookup coords");
-        public static final ConfigStringExt CP_LOOKUP_HEADER = new ConfigStringExt("cplookupheader", "^----- CoreProtect Lookup Results -----$", "watson.config.comment.analysis").setCommentArguments("cp lookup header");
-        public static final ConfigStringExt CP_NO_RESULT = new ConfigStringExt("cpnoresult", "^CoreProtect - No results found.$", "watson.config.comment.analysis").setCommentArguments("cp no result");
-        public static final ConfigStringExt CP_PAGE = new ConfigStringExt("cppage", "^(?:.\\s)*Page (\\d+)\\/(\\d+) (?:.\\s)*\\| To view a page, type \"\\/co l <page>\"\\.$", "watson.config.comment.analysis").setCommentArguments("cp page");
-        public static final ConfigStringExt CP_SEARCH = new ConfigStringExt("cpsearch", "^CoreProtect - Lookup searching. Please wait...$", "watson.config.comment.analysis").setCommentArguments("cp search");
-        public static final ConfigStringExt DUTYMODE_DISABLE = new ConfigStringExt("dutymodedisable", "^\\[Duties\\] Duty mode disabled.*", "watson.config.comment.analysis").setCommentArguments("duty mode disable");
-        public static final ConfigStringExt DUTYMODE_ENABLE = new ConfigStringExt("dutymodeenable", "^\\[Duties\\] Duty mode enabled.*", "watson.config.comment.analysis").setCommentArguments("duty mode enable");
-        public static final ConfigStringExt LB_POSITION = new ConfigStringExt("lbposition", "^(?:[\\w ]+) in the last \\d+ \\w+ (?:at (-?\\d+):(-?\\d+):(-?\\d+) |within .+ blocks of location )?in (.+):$", "watson.config.comment.analysis").setCommentArguments("lb position");
-        public static final ConfigStringExt LB_DATA = new ConfigStringExt("lbdata", "(?:\\((\\d+)\\) )?\\[((?:\\d{2,4}-)?\\d{2}-\\d{2} \\d{2}:\\d{2})] (\\w+) (\\w+\\s?\\w) ((?:(\\d+)x )?[A-Z_]+)(?:(?: with)? (\\w+[A-Z]))?(?:(?: to )? \\[(.*[^\\[\\]])] \\[(.*[^\\[\\]])] \\[(.*[^\\[\\]])] \\[(.*[^\\[\\]])])?(?: at (-?\\d+), (\\d+), (-?\\d+)| (?:from|into) \\w+)?(?: with (\\w+))?", "watson.config.comment.analysis").setCommentArguments("lb data");
-        public static final ConfigStringExt LB_TP = new ConfigStringExt("lbtp", "^Teleported to (-?\\d+):(\\d+):(-?\\d+)$", "watson.config.comment.analysis").setCommentArguments("lb tp");
-        public static final ConfigStringExt LB_PAGE = new ConfigStringExt("lbpage", "^Page (\\d+)/(\\d+)$", "watson.config.comment.analysis").setCommentArguments("lb page");
-        public static final ConfigStringExt LB_HEADER_NO_RESULTS = new ConfigStringExt("lbheadernoresults", "^No results found\\.$", "watson.config.comment.analysis").setCommentArguments("lb header no results");
-        public static final ConfigStringExt LB_HEADER_CHANGES = new ConfigStringExt("lbheaderchanges", "^\\d+ changes? found\\.$", "watson.config.comment.analysis").setCommentArguments("lb header changes");
-        public static final ConfigStringExt LB_HEADER_BLOCKS = new ConfigStringExt("lbheaderblocks", "^\\d+ blocks? found\\.$", "watson.config.comment.analysis").setCommentArguments("lb header blocks");
-        public static final ConfigStringExt LB_HEADER_SUM_BLOCKS = new ConfigStringExt("lbheadersumblocks", "^Created - Destroyed - Block$", "watson.config.comment.analysis").setCommentArguments("lb header sum blocks");
-        public static final ConfigStringExt LB_HEADER_SUM_PLAYERS = new ConfigStringExt("lbheadersumplayers", "^Created - Destroyed - Player$", "watson.config.comment.analysis").setCommentArguments("lb header sum players");
-        public static final ConfigStringExt LB_HEADER_SEARCHING = new ConfigStringExt("lbheadersearching", "^Searching Block changes from player \\w+ in the last \\d+ minutes (?:within \\d+ blocks of you )?in .+:$", "watson.config.comment.analysis").setCommentArguments("lb header searching");
-        public static final ConfigStringExt LB_HEADER_RATIO = new ConfigStringExt("lbheaderratio", "^STONE and DIAMOND_ORE changes from player \\w+ between (\\d+) and (\\d+) minutes ago in .+ summed up by blocks:$", "watson.config.comment.analysis").setCommentArguments("lb header ratio");
-        public static final ConfigStringExt LB_HEADER_RATIO_CURRENT = new ConfigStringExt("lbheaderratiocurrent", "^Stone and diamond ore changes from player \\w+ in the last (\\d+) minutes in .+ summed up by blocks:$", "watson.config.comment.analysis").setCommentArguments("lb header ratio current");
-        public static final ConfigStringExt LB_HEADER_TIME_CHECK = new ConfigStringExt("lbheadertimecheck", "Block changes from player \\w+ between (\\d+) and \\d+ minutes ago in .+:", "watson.config.comment.analysis").setCommentArguments("lb header time check");
-        public static final ConfigStringExt LB_HEADER_BLOCK = new ConfigStringExt("lbheaderblock", "^(?!STONE and DIAMOND_ORE)(?: |,|\\w)+ from player \\w+ (?:in the last \\d+ minutes |between \\d+ and \\d+ minutes ago |more than -?\\d+ minutes ago )?(?:within \\d+ blocks of you )?in .+ summed up by (?:players|blocks):$", "watson.config.comment.analysis").setCommentArguments("lb header block");
-        public static final ConfigStringExt LB_SUM = new ConfigStringExt("lbsum", "^(\\d+)[ ]{6,}(\\d+)[ ]{6,}((?:\\w| )+)$", "watson.config.comment.analysis").setCommentArguments("lb sum");
-        public static final ConfigStringExt MODMODE_DISABLE = new ConfigStringExt("modmodedisable", "^You are no longer in ModMode!$", "watson.config.comment.analysis").setCommentArguments("modmode disable");
-        public static final ConfigStringExt MODMODE_ENABLE = new ConfigStringExt("modmodeenable", "^You are now in ModMode!$", "watson.config.comment.analysis").setCommentArguments("modmode enable");
-        public static final ConfigStringExt PRISM_DATA = new ConfigStringExt("prismdata", ".*?[-+] \\[([0-9]+)\\]\\s+(?<instigator>.*) (?<cause>grew|killed|picked up|placed|grew|ignited|set a fire|used|threw potion|sheared|dispensed|blew up|formed|poured|broke|filled a|accessed|ate|(?:un)?leashed|launched|hung|wrote|entered|exited|removed|dropped|inserted|ran command|said|spawned|quit|joined)\\s+(?<target>.*)\\s+(?<when>just now|(?:\\d+d)?(?:\\d+h)?(?:\\d+m)?\\sago) \\(a:(?<action>.*)\\)\\s-\\d+- (?<date>\\d+\\/\\d+\\/\\d+) (?<time>\\d+:\\d+:\\d+\\w+) - (?<world>\\w+) @ (?<x>-?\\d+) (?<y>-?\\d+) (?<z>-?\\d+).*?", "watson.config.comment.analysis").setCommentArguments("prism data");
-        public static final ConfigStringExt PRISM_PAGE = new ConfigStringExt("prismpage", "Showing\\s+\\d+ results\\. Page\\s+(?<current>\\d+) of\\s+(?<max>\\d+)", "watson.config.comment.analysis").setCommentArguments("prism page");
-        public static final ConfigStringExt PRISM_PAGINATION = new ConfigStringExt("prismpagination", "(?:\\s+\\[<< Prev] \\|)?\\s+\\[Next >>\\]", "watson.config.comment.analysis").setCommentArguments("prism pagination");
-        public static final ConfigStringExt WG_REGIONS = new ConfigStringExt("wgregions", "^Applicable regions: ([a-zA-Z0-9_-]+(?:, [a-zA-Z0-9_-]+)*)$", "watson.config.comment.analysis").setCommentArguments("wg regions");
+        public static final StringConfig CP_BUSY = new StringConfig("cpbusy", "^CoreProtect - Database busy. Please try again later.$", "watson.config.comment.analysis", "cp busy");
+        public static final StringConfig CP_DETAILS = new StringConfig("cpdetails", "^(?:\\s+)?(\\d+[.,]\\d+\\/[mhd] ago|\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}) - #?(\\w+) ((?!.*logged).*?) ((?:x(\\d+) )?\\w+(?::\\w+)?)\\.$", "watson.config.comment.analysis", "cp details");
+        public static final StringConfig CP_DETAILS_SESSION = new StringConfig("cpdetailssession", "^(\\d+[.,]\\d+\\/[mhd] ago|\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}) - (\\w+) (logged \\w+)\\.$", "watson.config.comment.analysis", "cp details session");
+        public static final StringConfig CP_DETAILS_SIGN = new StringConfig("cpdetailssign", "^(\\d+[.,]\\d+\\/[mhd] ago|\\d{1,2}-\\d{1,2} \\d{1,2}:\\d{2}:\\d{2}) - (\\w+): ([\\s\\w+\\W]+)", "watson.config.comment.analysis", "cp details sign");
+        public static final StringConfig CP_INSPECTOR_COORDS = new StringConfig("cpinspectorcoords", "^-{5} \\w+(?:\\s\\w+)* -{5} \\(x(-?\\d+)\\/y(-?\\d+)\\/z(-?\\d+)\\)$", "watson.config.comment.analysis", "cp inspector coords");
+        public static final StringConfig CP_LOOKUP_COORDS = new StringConfig("cplookupcoords", "^ +\\^ \\(x(-?\\d+)\\/y(-?\\d+)\\/z(-?\\d+)\\/([^\\)]+)\\)(?: \\(.+\\))?$", "watson.config.comment.analysis", "cp lookup coords");
+        public static final StringConfig CP_LOOKUP_HEADER = new StringConfig("cplookupheader", "^----- CoreProtect Lookup Results -----$", "watson.config.comment.analysis", "cp lookup header");
+        public static final StringConfig CP_NO_RESULT = new StringConfig("cpnoresult", "^CoreProtect - No results found.$", "watson.config.comment.analysis", "cp no result");
+        public static final StringConfig CP_PAGE = new StringConfig("cppage", "^(?:.\\s)*Page (\\d+)\\/(\\d+) (?:.\\s)*\\| To view a page, type \"\\/co l <page>\"\\.$", "watson.config.comment.analysis", "cp page");
+        public static final StringConfig CP_SEARCH = new StringConfig("cpsearch", "^CoreProtect - Lookup searching. Please wait...$", "watson.config.comment.analysis", "cp search");
+        public static final StringConfig DUTYMODE_DISABLE = new StringConfig("dutymodedisable", "^\\[Duties\\] Duty mode disabled.*", "watson.config.comment.analysis", "duty mode disable");
+        public static final StringConfig DUTYMODE_ENABLE = new StringConfig("dutymodeenable", "^\\[Duties\\] Duty mode enabled.*", "watson.config.comment.analysis", "duty mode enable");
+        public static final StringConfig LB_POSITION = new StringConfig("lbposition", "^(?:[\\w ]+) in the last \\d+ \\w+ (?:at (-?\\d+):(-?\\d+):(-?\\d+) |within .+ blocks of location )?in (.+):$", "watson.config.comment.analysis", "lb position");
+        public static final StringConfig LB_DATA = new StringConfig("lbdata", "(?:\\((\\d+)\\) )?\\[((?:\\d{2,4}-)?\\d{2}-\\d{2} \\d{2}:\\d{2})] (\\w+) (\\w+\\s?\\w) ((?:(\\d+)x )?[A-Z_]+)(?:(?: with)? (\\w+[A-Z]))?(?:(?: to )? \\[(.*[^\\[\\]])] \\[(.*[^\\[\\]])] \\[(.*[^\\[\\]])] \\[(.*[^\\[\\]])])?(?: at (-?\\d+), (\\d+), (-?\\d+)| (?:from|into) \\w+)?(?: with (\\w+))?", "watson.config.comment.analysis", "lb data");
+        public static final StringConfig LB_TP = new StringConfig("lbtp", "^Teleported to (-?\\d+):(\\d+):(-?\\d+)$", "watson.config.comment.analysis", "lb tp");
+        public static final StringConfig LB_PAGE = new StringConfig("lbpage", "^Page (\\d+)/(\\d+)$", "watson.config.comment.analysis", "lb page");
+        public static final StringConfig LB_HEADER_NO_RESULTS = new StringConfig("lbheadernoresults", "^No results found\\.$", "watson.config.comment.analysis", "lb header no results");
+        public static final StringConfig LB_HEADER_CHANGES = new StringConfig("lbheaderchanges", "^\\d+ changes? found\\.$", "watson.config.comment.analysis", "lb header changes");
+        public static final StringConfig LB_HEADER_BLOCKS = new StringConfig("lbheaderblocks", "^\\d+ blocks? found\\.$", "watson.config.comment.analysis", "lb header blocks");
+        public static final StringConfig LB_HEADER_SUM_BLOCKS = new StringConfig("lbheadersumblocks", "^Created - Destroyed - Block$", "watson.config.comment.analysis", "lb header sum blocks");
+        public static final StringConfig LB_HEADER_SUM_PLAYERS = new StringConfig("lbheadersumplayers", "^Created - Destroyed - Player$", "watson.config.comment.analysis", "lb header sum players");
+        public static final StringConfig LB_HEADER_SEARCHING = new StringConfig("lbheadersearching", "^Searching Block changes from player \\w+ in the last \\d+ minutes (?:within \\d+ blocks of you )?in .+:$", "watson.config.comment.analysis", "lb header searching");
+        public static final StringConfig LB_HEADER_RATIO = new StringConfig("lbheaderratio", "^STONE and DIAMOND_ORE changes from player \\w+ between (\\d+) and (\\d+) minutes ago in .+ summed up by blocks:$", "watson.config.comment.analysis", "lb header ratio");
+        public static final StringConfig LB_HEADER_RATIO_CURRENT = new StringConfig("lbheaderratiocurrent", "^Stone and diamond ore changes from player \\w+ in the last (\\d+) minutes in .+ summed up by blocks:$", "watson.config.comment.analysis", "lb header ratio current");
+        public static final StringConfig LB_HEADER_TIME_CHECK = new StringConfig("lbheadertimecheck", "Block changes from player \\w+ between (\\d+) and \\d+ minutes ago in .+:", "watson.config.comment.analysis", "lb header time check");
+        public static final StringConfig LB_HEADER_BLOCK = new StringConfig("lbheaderblock", "^(?!STONE and DIAMOND_ORE)(?: |,|\\w)+ from player \\w+ (?:in the last \\d+ minutes |between \\d+ and \\d+ minutes ago |more than -?\\d+ minutes ago )?(?:within \\d+ blocks of you )?in .+ summed up by (?:players|blocks):$", "watson.config.comment.analysis", "lb header block");
+        public static final StringConfig LB_SUM = new StringConfig("lbsum", "^(\\d+)[ ]{6,}(\\d+)[ ]{6,}((?:\\w| )+)$", "watson.config.comment.analysis", "lb sum");
+        public static final StringConfig MODMODE_DISABLE = new StringConfig("modmodedisable", "^You are no longer in ModMode!$", "watson.config.comment.analysis", "modmode disable");
+        public static final StringConfig MODMODE_ENABLE = new StringConfig("modmodeenable", "^You are now in ModMode!$", "watson.config.comment.analysis", "modmode enable");
+        public static final StringConfig PRISM_DATA = new StringConfig("prismdata", ".*?[-+] \\[([0-9]+)\\]\\s+(?<instigator>.*) (?<cause>grew|killed|picked up|placed|grew|ignited|set a fire|used|threw potion|sheared|dispensed|blew up|formed|poured|broke|filled a|accessed|ate|(?:un)?leashed|launched|hung|wrote|entered|exited|removed|dropped|inserted|ran command|said|spawned|quit|joined)\\s+(?<target>.*)\\s+(?<when>just now|(?:\\d+d)?(?:\\d+h)?(?:\\d+m)?\\sago) \\(a:(?<action>.*)\\)\\s-\\d+- (?<date>\\d+\\/\\d+\\/\\d+) (?<time>\\d+:\\d+:\\d+\\w+) - (?<world>\\w+) @ (?<x>-?\\d+) (?<y>-?\\d+) (?<z>-?\\d+).*?", "watson.config.comment.analysis", "prism data");
+        public static final StringConfig PRISM_PAGE = new StringConfig("prismpage", "Showing\\s+\\d+ results\\. Page\\s+(?<current>\\d+) of\\s+(?<max>\\d+)", "watson.config.comment.analysis", "prism page");
+        public static final StringConfig PRISM_PAGINATION = new StringConfig("prismpagination", "(?:\\s+\\[<< Prev] \\|)?\\s+\\[Next >>\\]", "watson.config.comment.analysis", "prism pagination");
+        public static final StringConfig WG_REGIONS = new StringConfig("wgregions", "^Applicable regions: ([a-zA-Z0-9_-]+(?:, [a-zA-Z0-9_-]+)*)$", "watson.config.comment.analysis", "wg regions");
 
         public static final ImmutableList<ConfigOption<?>> OPTIONS = ImmutableList.of(
                 CP_BUSY,
@@ -257,7 +257,7 @@ public class Configs
         ArrayList<String> list = new ArrayList<>();
         String color = "";
 
-        for (String name : DataManager.getAllItemEntitiesStringIdentifiers())
+        for (String name : DataUtils.getAllItemEntitiesStringIdentifiers())
         {
             Optional<Block> optionalBlock = Registry.BLOCK.getOrEmpty(new Identifier(name));
             Optional<Item> optionalItem = Registry.ITEM.getOrEmpty(optionalBlock.map(block -> Registry.ITEM.getId(block.asItem())).orElseGet(() -> new Identifier(name)));

@@ -26,7 +26,7 @@ public class Paginator
                     ChatMessage.localOutputT("watson.message.autopage.finished");
                     return;
                 }
-                ChatMessage.sendToServerChat("/pr page n");
+                ChatMessage.sendCommand("pr page n");
 
                 reset();
             }
@@ -44,7 +44,7 @@ public class Paginator
                     ChatMessage.localOutputT("watson.message.autopage.finished");
                     return;
                 }
-                ChatMessage.sendToServerChat(String.format("/lb page %d", currentPage + 1));
+                ChatMessage.sendCommand(String.format("lb page %d", currentPage + 1));
 
                 reset();
             }
@@ -62,11 +62,11 @@ public class Paginator
             }
             if (currentPage == 1 && firstPageLoop)
             {
-                ChatMessage.getInstance().serverChat(String.format("/%s l %d:%d", Configs.Plugin.COREPROTECT_COMMAND.getValue(), 1, Configs.Plugin.AMOUNT_ROWS.getIntegerValue()), currentPage == 1);
+                ChatMessage.getInstance().serverChat(String.format("%s l %d:%d", Configs.Plugin.COREPROTECT_COMMAND.getValue(), 1, Configs.Plugin.AMOUNT_ROWS.getIntegerValue()), currentPage == 1);
                 firstPageLoop = false;
                 return;
             }
-            ChatMessage.getInstance().serverChat(String.format("/%s l %d:%d", Configs.Plugin.COREPROTECT_COMMAND.getValue(), currentPage + 1, Configs.Plugin.AMOUNT_ROWS.getIntegerValue()), currentPage == 1);
+            ChatMessage.getInstance().serverChat(String.format("%s l %d:%d", Configs.Plugin.COREPROTECT_COMMAND.getValue(), currentPage + 1, Configs.Plugin.AMOUNT_ROWS.getIntegerValue()), currentPage == 1);
         }
     }
 

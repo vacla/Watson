@@ -1,9 +1,10 @@
 package eu.minemania.watson.network;
 
-import fi.dy.masa.malilib.network.message.BasePacketHandler;
+import malilib.network.PluginChannelHandler;
+import malilib.network.message.BasePacketHandler;
 import net.minecraft.network.PacketByteBuf;
 
-public interface IPluginChannelHandlerExtended extends BasePacketHandler
+public interface IPluginChannelHandlerExtended extends PluginChannelHandler
 {
     PacketByteBuf onPacketSend();
 }

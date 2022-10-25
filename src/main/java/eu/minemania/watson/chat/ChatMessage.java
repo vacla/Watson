@@ -5,9 +5,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 
 public class ChatMessage
@@ -28,7 +27,7 @@ public class ChatMessage
 
     public static void localOutputT(String translationKey, Object... args)
     {
-        sendToLocalChat(Formatting.AQUA, new TranslatableText(translationKey, args), true);
+        sendToLocalChat(Formatting.AQUA, Text.translatable(translationKey, args), true);
     }
 
     public static void localError(String message, boolean watsonMessage)
@@ -38,7 +37,7 @@ public class ChatMessage
 
     public static void localErrorT(String translationKey, Object... args)
     {
-        sendToLocalChat(Formatting.DARK_RED, new TranslatableText(translationKey, args), true);
+        sendToLocalChat(Formatting.DARK_RED, Text.translatable(translationKey, args), true);
     }
 
     public void serverChat(String message, boolean firstMessage)
@@ -54,13 +53,13 @@ public class ChatMessage
     {
         if (message != null)
         {
-            sendToServerChat(message);
+            sendCommand(message);
         }
     }
 
     public static void sendToLocalChat(String message, boolean watsonMessage)
     {
-        sendToLocalChat(new LiteralText(message), watsonMessage);
+        sendToLocalChat(Text.literal(message), watsonMessage);
     }
 
     public static void sendToLocalChat(MutableText inputmessage, boolean watsonMessage)
@@ -71,7 +70,7 @@ public class ChatMessage
 
     public static void sendToLocalChat(Formatting color, Formatting style, String message, boolean watsonMessage)
     {
-        LiteralText chat = new LiteralText(message);
+        MutableText chat = Text.literal(message);
         if (color != null && style == null)
         {
             chat.formatted(color);
@@ -89,12 +88,12 @@ public class ChatMessage
         sendToLocalChat(message, watsonMessage);
     }
 
-    public static void sendToServerChat(String message)
+    public static void sendCommand(String command)
     {
         try
         {
             MinecraftClient mc = MinecraftClient.getInstance();
-            mc.player.sendChatMessage(message);
+            mc.player.sendCommand(command);
         }
         catch (Exception e)
         {

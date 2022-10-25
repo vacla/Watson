@@ -7,7 +7,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.render.RenderUtils;
 import eu.minemania.watson.selection.PlayereditUtils;
-import fi.dy.masa.malilib.util.data.Color4f;
+import malilib.util.data.Color4f;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import eu.minemania.watson.config.Configs;

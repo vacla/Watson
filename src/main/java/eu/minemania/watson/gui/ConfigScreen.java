@@ -7,14 +7,14 @@ import eu.minemania.watson.Reference;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.config.Hotkeys;
 import eu.minemania.watson.data.DataManager;
-import fi.dy.masa.malilib.config.option.ConfigInfo;
-import fi.dy.masa.malilib.config.util.ConfigUtils;
-import fi.dy.masa.malilib.gui.BaseScreen;
-import fi.dy.masa.malilib.gui.config.BaseConfigScreen;
-import fi.dy.masa.malilib.gui.config.BaseConfigTab;
-import fi.dy.masa.malilib.gui.config.ConfigTab;
-import fi.dy.masa.malilib.gui.tab.ScreenTab;
-import fi.dy.masa.malilib.util.data.ModInfo;
+import malilib.config.option.ConfigInfo;
+import malilib.config.util.ConfigUtils;
+import malilib.gui.BaseScreen;
+import malilib.gui.config.BaseConfigScreen;
+import malilib.gui.config.BaseConfigTab;
+import malilib.gui.config.ConfigTab;
+import malilib.gui.tab.ScreenTab;
+import malilib.util.data.ModInfo;
 import net.minecraft.client.gui.screen.Screen;
 
 import javax.annotation.Nullable;
@@ -64,12 +64,12 @@ public class ConfigScreen
 
     public static BaseConfigScreen create()
     {
-        return new BaseConfigScreen(MOD_INFO, null, ALL_TABS, GENERIC, "watson.title.screen.configs", Reference.MOD_VERSION);
+        return new BaseConfigScreen(MOD_INFO, ALL_TABS, GENERIC, "watson.title.screen.configs", Reference.MOD_VERSION);
     }
 
     public static BaseConfigScreen create(@Nullable Screen currentScreen)
     {
-        return new BaseConfigScreen(MOD_INFO, null, ALL_TABS, GENERIC, "watson.title.screen.configs", Reference.MOD_VERSION);
+        return new BaseConfigScreen(MOD_INFO, ALL_TABS, GENERIC, "watson.title.screen.configs", Reference.MOD_VERSION);
     }
 
     public static BaseConfigScreen createOnTab(ConfigTab tab)
@@ -82,7 +82,7 @@ public class ConfigScreen
 
     public static void openConfigScreen()
     {
-        BaseScreen.openScreen(create());
+        BaseScreen.openScreenWithParent(create());
     }
 
     private static ImmutableList<ConfigInfo> getHotkeys()

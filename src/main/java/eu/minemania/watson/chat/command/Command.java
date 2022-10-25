@@ -1,16 +1,15 @@
 package eu.minemania.watson.chat.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.server.command.ServerCommandSource;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.minecraft.command.CommandRegistryAccess;
 
 public class Command
 {
-    public static CommandDispatcher<ServerCommandSource> commandDispatcher;
+    public static CommandDispatcher<FabricClientCommandSource> commandDispatcher;
 
-    public static void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher)
+    public static void registerCommands(CommandDispatcher<FabricClientCommandSource> dispatcher, CommandRegistryAccess registryAccess)
     {
-        ClientCommandManager.clearClientSideCommands();
         WatsonCommand.register(dispatcher);
         AnnoCommand.register(dispatcher);
         CalcCommand.register(dispatcher);
@@ -21,8 +20,7 @@ public class Command
 
     public static void reregisterWatsonCommand(String newValue, String oldValue)
     {
-        CommandDispatcher<ServerCommandSource> dispatcher = Command.commandDispatcher;
-        ClientCommandManager.getClientSideCommands().remove(oldValue);
+        CommandDispatcher<FabricClientCommandSource> dispatcher = Command.commandDispatcher;
         CommandRemoval.removeCommand(dispatcher.getRoot(), oldValue);
         WatsonCommand.register(dispatcher);
     }

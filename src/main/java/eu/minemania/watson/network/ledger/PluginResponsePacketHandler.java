@@ -3,8 +3,7 @@ package eu.minemania.watson.network.ledger;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import eu.minemania.watson.network.IPluginChannelHandlerExtended;
-import fi.dy.masa.malilib.gui.Message;
-import fi.dy.masa.malilib.util.InfoUtils;
+import malilib.overlay.message.MessageDispatcher;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
@@ -21,6 +20,18 @@ public class PluginResponsePacketHandler implements IPluginChannelHandlerExtende
     public void reset()
     {
         registered = false;
+    }
+
+    @Override
+    public boolean registerToServer()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean usePacketSplitter()
+    {
+        return false;
     }
 
     @Override
@@ -41,38 +52,28 @@ public class PluginResponsePacketHandler implements IPluginChannelHandlerExtende
         {
             Identifier identifier = buf.readIdentifier();
             int responseCode = buf.readInt();
-            String response;
-            Message.MessageType messageType;
 
             switch (responseCode)
             {
                 case 0 -> {
-                    response = "watson.message.ledger.no_permission";
-                    messageType = Message.MessageType.ERROR;
+                    MessageDispatcher.error("watson.message.ledger.no_permission", identifier.getPath());
                 }
                 case 1 -> {
-                    response = "watson.message.ledger.executing";
-                    messageType = Message.MessageType.INFO;
+                    MessageDispatcher.generic("watson.message.ledger.executing", identifier.getPath());
                 }
                 case 2 -> {
-                    response = "watson.message.ledger.completed";
-                    messageType = Message.MessageType.SUCCESS;
+                    MessageDispatcher.success("watson.message.ledger.completed", identifier.getPath());
                 }
                 case 3 -> {
-                    response = "watson.message.ledger.error_executing";
-                    messageType = Message.MessageType.ERROR;
+                    MessageDispatcher.error("watson.message.ledger.error_executing", identifier.getPath());
                 }
                 case 4 -> {
-                    response = "watson.message.ledger.cannot_execute";
-                    messageType = Message.MessageType.WARNING;
+                    MessageDispatcher.warning("watson.message.ledger.cannot_execute", identifier.getPath());
                 }
                 default -> {
-                    response = "watson.message.ledger.unknown";
-                    messageType = Message.MessageType.ERROR;
+                    MessageDispatcher.error("watson.message.ledger.unknown", identifier.getPath());
                 }
             }
-
-            InfoUtils.showGuiOrInGameMessage(messageType, response, identifier.getPath());
         }
     }
 
