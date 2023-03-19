@@ -4,6 +4,7 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
+import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.network.IPluginChannelHandlerExtended;
 import fi.dy.masa.malilib.gui.Message;
 import fi.dy.masa.malilib.util.InfoUtils;
@@ -54,6 +55,19 @@ public class PluginCoreProtectResponsePacketHandler implements IPluginChannelHan
                 {
                     Watson.logger.info("type: " + type);
                     Watson.logger.info("message: " + message);
+                }
+
+                if (type.equals("coreprotect:lookupPage")) {
+                    String[] pages = message.split("/");
+                    int nextPage = Integer.parseInt(pages[0]);
+                    int lastPage = Integer.parseInt(pages[1]);
+                    if (nextPage <= DataManager.getCoreProtectInfo().getPages() &&
+                            nextPage < Configs.Plugin.MAX_AUTO_PAGES_LOOP.getIntegerValue() &&
+                            Configs.Plugin.AUTO_PAGE.getBooleanValue() &&
+                            lastPage <= Configs.Plugin.MAX_AUTO_PAGES.getIntegerValue()
+                    ) {
+                        PluginCoreProtectInputPacketHandler.INSTANCE.sendLookupPagePacket(Integer.parseInt(message));
+                    }
                 }
 
                 InfoUtils.showGuiOrInGameMessage(Message.MessageType.INFO, message);

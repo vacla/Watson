@@ -789,17 +789,16 @@ public class GuiCoreProtect extends GuiBase
                 int x = coreProtectInfo.getX();
                 int y = coreProtectInfo.getY();
                 int z = coreProtectInfo.getZ();
-                int pages = coreProtectInfo.getPages();
                 boolean optimize = coreProtectInfo.getOptimize();
                 boolean silentChat = coreProtectInfo.getSilentChat();
                 MinecraftClient mc = parent.mc;
 
                 switch (coreProtectInfo.getCoreProtectMode())
                 {
-                    case PURGE -> new PluginCoreProtectInputPacketHandler().sendPacket("purge", action, dimension, null, null, null, range, "", time, 1, x, y, z, optimize, silentChat, mc);
-                    case RESTORE -> new PluginCoreProtectInputPacketHandler().sendPacket("restore", action, dimension, block, entityType, item, range, source, time, pages, x, y, z, false, silentChat, mc);
-                    case ROLLBACK -> new PluginCoreProtectInputPacketHandler().sendPacket("rollback", action, dimension, block, entityType, item, range, source, time, pages, x, y, z, false, silentChat, mc);
-                    case SEARCH -> new PluginCoreProtectInputPacketHandler().sendPacket("lookup", action, dimension, block, entityType, item, range, source, time, pages, x, y, z, false, silentChat, mc);
+                    case PURGE -> new PluginCoreProtectInputPacketHandler().sendPacket("purge", action, dimension, null, null, null, range, "", time, x, y, z, optimize, silentChat, mc);
+                    case RESTORE -> new PluginCoreProtectInputPacketHandler().sendPacket("restore", action, dimension, block, entityType, item, range, source, time, x, y, z, false, silentChat, mc);
+                    case ROLLBACK -> new PluginCoreProtectInputPacketHandler().sendPacket("rollback", action, dimension, block, entityType, item, range, source, time, x, y, z, false, silentChat, mc);
+                    case SEARCH -> new PluginCoreProtectInputPacketHandler().sendPacket("lookup", action, dimension, block, entityType, item, range, source, time, x, y, z, false, silentChat, mc);
                 }
             }
         }

@@ -1,7 +1,5 @@
 package eu.minemania.watson.data;
 
-import eu.minemania.watson.config.Configs;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,10 +14,12 @@ public class CoreProtectInput
     private final String included;
     private final String excluded;
     private final String type;
+    private final String amountRows;
+    private final int page;
     private final boolean optimize;
     private final boolean silentChat;
 
-    public CoreProtectInput(String type, List<String> actions, List<String> dimension, List<String> block, List<String> entityType, List<String> item, int range, int x, int y, int z, String source, String time, boolean optimize, boolean silentChat)
+    public CoreProtectInput(String type, List<String> actions, List<String> dimension, List<String> block, List<String> entityType, List<String> item, int range, int x, int y, int z, String source, String time, boolean optimize, boolean silentChat, int page, int amountRows)
     {
         List<String> mergedList = mergeLists(block, entityType, item);
         this.type = type;
@@ -30,9 +30,11 @@ public class CoreProtectInput
         this.range = setTypeInt("r", range);
         this.sources = setTypeString("u", source);
         this.time = setTypeString("t", time);
-        this.coords = setTypeCoords("c", x, y, z);
+        this.coords = setTypeCoords(x, y, z);
         this.optimize = optimize;
         this.silentChat = silentChat;
+        this.page = page;
+        this.amountRows = setTypeInt("rows", amountRows);
     }
 
     private String setTypeString(String type, String parameterContent)
@@ -95,14 +97,14 @@ public class CoreProtectInput
         return type+":"+parameterContent;
     }
 
-    private String setTypeCoords(String type, int x, int y, int z)
+    private String setTypeCoords(int x, int y, int z)
     {
         if (x == 0 || y == 0 || z == 0)
         {
             return "";
         }
 
-        return type+":"+x+","+y+","+z;
+        return "c:"+x+","+y+","+z;
     }
 
     public String getActions()
@@ -160,6 +162,16 @@ public class CoreProtectInput
         return silentChat;
     }
 
+    public int getPage()
+    {
+        return page;
+    }
+
+    public String getAmountRows()
+    {
+        return amountRows;
+    }
+
     public String getSearchData()
     {
         StringBuilder search = new StringBuilder();
@@ -201,15 +213,18 @@ public class CoreProtectInput
         }
         if (optimize)
         {
-            search.append(" ").append("#optimize");
-        }
-        if (silentChat)
-        {
-            search.append(" ").append("#silentchat");
+            search.append(" #optimize");
         }
         if (type.equals("lookup"))
         {
-            search.append(" ").append("rows:").append(Configs.Plugin.AMOUNT_ROWS.getIntegerValue());
+            if (page != 0)
+            {
+                search.append(" ").append(page);
+            }
+            if (!amountRows.isEmpty())
+            {
+                search.append(" ").append(amountRows);
+            }
         }
         return search.toString().strip();
     }
