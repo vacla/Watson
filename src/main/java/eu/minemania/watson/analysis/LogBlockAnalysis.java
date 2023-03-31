@@ -158,7 +158,7 @@ public class LogBlockAnalysis extends Analysis
             int coordX = 0;
             int coordY = 0;
             int coordZ = 0;
-            MutableText teleportText = new TranslatableText("watson.gui.label.blockedit.list.teleport");
+            MutableText teleportText = Text.translatable("watson.gui.label.blockedit.list.teleport");
             if (m.group(12) != null)
             {
                 AtomicBoolean coordTeleport = new AtomicBoolean(false);
@@ -205,7 +205,7 @@ public class LogBlockAnalysis extends Analysis
             {
                 if (!type.getName().equals("minecraft:stone"))
                 {
-                    MutableText output = new LiteralText("");
+                    MutableText output = Text.literal("");
                     if (action.equals("killed"))
                     {
                         output.append(String.format("(%2d) %s (%d,%d,%d) %s %s %s > %s ", index, dateTime, coordX, coordY, coordZ, _world, player, weapon, totalItemBlockName));

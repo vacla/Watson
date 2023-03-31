@@ -563,15 +563,6 @@ public class DataManager implements IDirectoryCache
         }
     }
 
-    public static String onSendChatMessage(String message)
-    {
-        if((message.contains("/pr l") || message.contains("/pr i")) && !message.contains("-extended"))
-        {
-            return message + " -extended";
-        }
-        return message;
-    }
-
     public static ArrayList<String> getAllItemEntitiesStringIdentifiers()
     {
         if (!setNames.isEmpty())

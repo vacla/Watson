@@ -41,12 +41,12 @@ public class ClientCommandManager
 
     public static void sendError(Text error)
     {
-        sendFeedback(new LiteralText("").append(error).formatted(Formatting.RED));
+        sendFeedback(Text.literal("").append(error).formatted(Formatting.RED));
     }
 
     public static void sendFeedback(String message)
     {
-        sendFeedback(new TranslatableText(message));
+        sendFeedback(Text.translatable(message));
     }
 
     public static void sendFeedback(Text message)
@@ -72,7 +72,7 @@ public class ClientCommandManager
             if (e.getInput() != null && e.getCursor() >= 0)
             {
                 int cursor = Math.min(e.getCursor(), e.getInput().length());
-                MutableText text = new LiteralText("").formatted(Formatting.GRAY).styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, command)));
+                MutableText text = Text.literal("").formatted(Formatting.GRAY).styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, command)));
                 if (cursor > 10)
                 {
                     text.append("...");
@@ -80,17 +80,17 @@ public class ClientCommandManager
                 text.append(e.getInput().substring(Math.max(0, cursor - 10), cursor));
                 if (cursor < e.getInput().length())
                 {
-                    text.append((new LiteralText(e.getInput().substring(cursor)).formatted(Formatting.RED, Formatting.UNDERLINE)));
+                    text.append((Text.literal(e.getInput().substring(cursor)).formatted(Formatting.RED, Formatting.UNDERLINE)));
                 }
 
-                text.append((new TranslatableText("command.context.here").formatted(Formatting.RED, Formatting.ITALIC)));
+                text.append((Text.translatable("command.context.here").formatted(Formatting.RED, Formatting.ITALIC)));
                 ClientCommandManager.sendError(text);
             }
         }
         catch (Exception e)
         {
-            LiteralText error = new LiteralText(e.getMessage() == null ? e.getClass().getName() : e.getMessage());
-            ClientCommandManager.sendError(new TranslatableText("command.failed").styled(style -> style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, error))));
+            MutableText error = Text.literal(e.getMessage() == null ? e.getClass().getName() : e.getMessage());
+            ClientCommandManager.sendError(Text.translatable("command.failed").styled(style -> style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, error))));
             e.printStackTrace();
         }
         return 1;

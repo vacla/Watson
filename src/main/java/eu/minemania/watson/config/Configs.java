@@ -58,7 +58,7 @@ public class Configs implements IConfigHandler
         public static final ConfigBoolean SS_KEY_CUSTOM = new ConfigBoolean("ssKeyCustom", false, "watson.description.config.ss_key_custom");
         public static final ConfigBoolean SS_PLAYER_DIRECTORY = new ConfigBoolean("ssPlayerDirectory", true, "watson.description.config.ss_player_directory");
         public static final ConfigBoolean SS_PLAYER_SUFFIX = new ConfigBoolean("ssPlayerSuffix", true, "watson.description.config.ss_player_suffix");
-        public static final ConfigString TELEPORT_COMMAND = new ConfigString("teleportCommand", "/tppos {x:d} {y:d} {z:d} {world}", "watson.description.config.teleport_command");
+        public static final ConfigString TELEPORT_COMMAND = new ConfigString("teleportCommand", "tppos {x:d} {y:d} {z:d} {world}", "watson.description.config.teleport_command");
         public static final ConfigString WATSON_PREFIX = new ConfigString("watsonPrefix", "watson", "watson.description.config.watson_prefix");
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
@@ -208,12 +208,12 @@ public class Configs implements IConfigHandler
         public static final ConfigStringExt CP_LOOKUP_COORDS = new ConfigStringExt("cp lookup coords", "^ +\\^ \\(x(-?\\d+)\\/y(-?\\d+)\\/z(-?\\d+)\\/([^\\)]+)\\)(?: \\(.+\\))?$", "watson.description.config.analysis").setCommentArgs("cp lookup coords");
         public static final ConfigStringExt CP_LOOKUP_HEADER = new ConfigStringExt("cp lookup header", "^----- CoreProtect Lookup Results -----$", "watson.description.config.analysis").setCommentArgs("cp lookup header");
         public static final ConfigStringExt CP_NO_RESULT = new ConfigStringExt("cp no result", "^CoreProtect - No results found.$", "watson.description.config.analysis").setCommentArgs("cp no result");
-        public static final ConfigStringExt CP_PAGE = new ConfigStringExt("cp page", "^(?:.\\s)*Page (\\d+)\\/(\\d+) (?:.\\s)*\\| To view a page, type \"\\/co l <page>\"\\.$", "watson.description.config.analysis").setCommentArgs("cp page");
+        public static final ConfigStringExt CP_PAGE = new ConfigStringExt("cp page", "^(?:.\\s)*Page (\\d+)\\/(\\d+) (?:.\\s)*", "watson.description.config.analysis").setCommentArgs("cp page");
         public static final ConfigStringExt CP_SEARCH = new ConfigStringExt("cp search", "^CoreProtect - Lookup searching. Please wait...$", "watson.description.config.analysis").setCommentArgs("cp search");
         public static final ConfigStringExt DUTYMODE_DISABLE = new ConfigStringExt("duty mode disable", "^\\[Duties\\] Duty mode disabled.*", "watson.description.config.analysis").setCommentArgs("duty mode disable");
         public static final ConfigStringExt DUTYMODE_ENABLE = new ConfigStringExt("duty mode enable", "^\\[Duties\\] Duty mode enabled.*", "watson.description.config.analysis").setCommentArgs("duty mode enable");
         public static final ConfigStringExt LB_POSITION = new ConfigStringExt("lb position", "^(?:[\\w ]+) in the last \\d+ \\w+ (?:at (-?\\d+):(-?\\d+):(-?\\d+) |within .+ blocks of location )?in (.+):$", "watson.description.config.analysis").setCommentArgs("lb position");
-        public static final ConfigStringExt LB_DATA = new ConfigStringExt("lb data", "(?:\\((\\d+)\\) )?\\[((?:\\d{2,4}-)?\\d{2}-\\d{2} \\d{2}:\\d{2})] (\\w+) (\\w+\\s?\\w) ((?:(\\d+)x )?[A-Z_]+)(?:(?: with)? (\\w+[A-Z]))?(?:(?: to )? \\[(.*[^\\[\\]])] \\[(.*[^\\[\\]])] \\[(.*[^\\[\\]])] \\[(.*[^\\[\\]])])?(?: at (-?\\d+), (\\d+), (-?\\d+)| (?:from|into) \\w+)?(?: with (\\w+))?", "watson.description.config.analysis").setCommentArgs("lb data");
+        public static final ConfigStringExt LB_DATA = new ConfigStringExt("lb data", "(?:\\((\\d+)\\) )?\\[((?:\\d{2,4}-)?\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2})?] (\\w+) (\\w+\\s?\\w) ((?:(\\d+)x )?[A-Z_]+)(?:(?: with)? (\\w+[A-Z]))?(?:(?: to )? \\[(.*[^\\[\\]])] \\[(.*[^\\[\\]])] \\[(.*[^\\[\\]])] \\[(.*[^\\[\\]])])?(?: at (-?\\d+), (-?\\d+), (-?\\d+)| (?:from|into) \\w+)?(?: with (\\w+))?", "watson.description.config.analysis").setCommentArgs("lb data");
         public static final ConfigStringExt LB_TP = new ConfigStringExt("lb tp", "^Teleported to (-?\\d+):(\\d+):(-?\\d+)$", "watson.description.config.analysis").setCommentArgs("lb tp");
         public static final ConfigStringExt LB_PAGE = new ConfigStringExt("lb page", "^Page (\\d+)/(\\d+)$", "watson.description.config.analysis").setCommentArgs("lb page");
         public static final ConfigStringExt LB_HEADER_NO_RESULTS = new ConfigStringExt("lb header no results", "^No results found\\.$", "watson.description.config.analysis").setCommentArgs("lb header no results");
