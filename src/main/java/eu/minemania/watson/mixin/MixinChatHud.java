@@ -35,9 +35,9 @@ public abstract class MixinChatHud
             {
                 if (componentln.getContent() instanceof TranslatableTextContent)
                 {
-                    if (((TranslatableTextContent)componentln).getKey().contains("chat.type.text"))
+                    if (((TranslatableTextContent)componentln.getContent()).getKey().contains("chat.type.text"))
                     {
-                        return Highlight.setHighlightChatMessage(((TranslatableTextContent) componentln).getKey(), (MutableText) componentln, false);
+                        return Highlight.setHighlightChatMessage(((TranslatableTextContent) componentln.getContent()).getKey(), (MutableText) componentln, false);
                     }
                 }
                 else
