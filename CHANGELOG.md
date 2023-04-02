@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.4+1.19.0] - 2023-04-02
+
+### Fixed
+
+- Crash using highlighter
+
 ## [1.4.3+1.19.0] - 2023-04-01
 
 ### Added
