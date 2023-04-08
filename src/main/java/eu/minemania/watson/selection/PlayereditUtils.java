@@ -26,11 +26,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
 
 public class PlayereditUtils
 {
-    private static PlayereditUtils INSTANCE = new PlayereditUtils();
+    private static final PlayereditUtils INSTANCE = new PlayereditUtils();
 
     public static PlayereditUtils getInstance()
     {
@@ -143,7 +143,7 @@ public class PlayereditUtils
 
     public static ItemStack getItemStack(String blocks)
     {
-        Block block = Registry.BLOCK.get(Identifier.tryParse(blocks));
+        Block block = Registries.BLOCK.get(Identifier.tryParse(blocks));
         if (block != Blocks.AIR)
         {
             if (block.equals(Blocks.WATER))
@@ -161,7 +161,7 @@ public class PlayereditUtils
         }
         else
         {
-            Item item = Registry.ITEM.get(Identifier.tryParse(blocks));
+            Item item = Registries.ITEM.get(Identifier.tryParse(blocks));
             if (item != Items.AIR)
             {
                 return new ItemStack(item);

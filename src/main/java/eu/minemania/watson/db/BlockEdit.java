@@ -8,7 +8,6 @@ import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.render.RenderUtils;
 import fi.dy.masa.malilib.util.Color4f;
 import net.minecraft.block.*;
-import net.minecraft.block.OreBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.model.BakedModel;
@@ -17,7 +16,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
 
 public class BlockEdit
 {
@@ -63,11 +62,11 @@ public class BlockEdit
 
     public Object drawOutline(BufferBuilder buffer, MatrixStack matrices)
     {
-        Block blocks = Registry.BLOCK.get(Identifier.tryParse(block.getName()));
+        Block blocks = Registries.BLOCK.get(Identifier.tryParse(block.getName()));
         float lineWidth = block.getLineWidth();
         if (!blocks.getName().getString().toLowerCase().contains("air"))
         {
-            if (Configs.Outlines.ORE_OUTLINE_THICKER.getBooleanValue() && blocks instanceof OreBlock)
+            if (Configs.Outlines.ORE_OUTLINE_THICKER.getBooleanValue() && isOreBlock(blocks))
             {
                 lineWidth = Configs.Outlines.ORE_LINEWIDTH.getIntegerValue();
             }
@@ -116,7 +115,7 @@ public class BlockEdit
                     }
                 }
             }
-            if (!drawn && (blocks instanceof OreBlock || blocks.equals(Blocks.ANCIENT_DEBRIS) || blocks.equals(Blocks.GILDED_BLACKSTONE)))
+            if (!drawn && this.isOreBlock(blocks))
             {
                 drawn = true;
             }
@@ -182,5 +181,10 @@ public class BlockEdit
     public boolean isContRemoved()
     {
         return this.action.equals("removed") || this.action.equals("took") || this.action.equals("remove") || this.action.equals("item-remove");
+    }
+
+    private boolean isOreBlock(Block block)
+    {
+        return block instanceof ExperienceDroppingBlock || block instanceof RedstoneOreBlock || block instanceof AmethystBlock || block.equals(Blocks.ANCIENT_DEBRIS) || block.equals(Blocks.GILDED_BLACKSTONE);
     }
 }

@@ -5,10 +5,9 @@ import eu.minemania.watson.render.OverlayRenderer;
 import eu.minemania.watson.render.WatsonRenderer;
 import fi.dy.masa.malilib.interfaces.IRenderer;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.OutlineVertexConsumerProvider;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Matrix4f;
+import org.joml.Matrix4f;
 
 public class RenderHandler implements IRenderer
 {

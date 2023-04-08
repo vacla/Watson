@@ -10,7 +10,7 @@ import javax.annotation.Nullable;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.*;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
 import org.apache.commons.lang3.tuple.MutablePair;
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
@@ -100,11 +100,11 @@ public class Highlight
         MutableText prefix = Text.literal("");
         final Style[] prefixStyle = {null};
         final Style[] dividerStyle = {null};
-        String divineDivider = "\u00BB";
+        String divineDivider = "»";
         final int[] i = {0};
         ClientPlayerEntity player = mc.player;
         String serverBrand;
-        if (player != null && !player.getServerBrand().isEmpty())
+        if (player != null && player.getServerBrand() != null && !player.getServerBrand().isEmpty())
         {
             serverBrand = player.getServerBrand().toLowerCase();
         }
@@ -347,7 +347,7 @@ public class Highlight
                     String sound = Configs.Highlights.HIGHLIGHT_SOUND.getStringValue();
                     try
                     {
-                        SoundEvent soundEvent = Registry.SOUND_EVENT.get(new Identifier(sound));
+                        SoundEvent soundEvent = Registries.SOUND_EVENT.get(new Identifier(sound));
                         float soundVolume = (float) Configs.Highlights.HIGHLIGHT_SOUND_VOLUME.getDoubleValue();
                         player.playSound(soundEvent, soundVolume, 1f);
                     }
@@ -371,7 +371,7 @@ public class Highlight
                     }
                     else
                     {
-                        chatText = matcher.replaceAll(item_highlight.getRight().getLeft() + "" + item_highlight.getRight().getRight() + chatText.substring(start, stop) + Formatting.RESET);
+                        chatText = matcher.replaceAll(item_highlight.getRight().getLeft() + String.valueOf(item_highlight.getRight().getRight()) + chatText.substring(start, stop) + Formatting.RESET);
                     }
                 }
             }

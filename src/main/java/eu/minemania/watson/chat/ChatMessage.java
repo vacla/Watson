@@ -93,7 +93,7 @@ public class ChatMessage
         try
         {
             MinecraftClient mc = MinecraftClient.getInstance();
-            mc.player.sendCommand(message);
+            mc.player.networkHandler.sendChatCommand(message);
         }
         catch (Exception e)
         {

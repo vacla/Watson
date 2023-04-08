@@ -16,13 +16,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
 
 public final class WatsonBlockRegistery
 {
     private static final WatsonBlockRegistery INSTANCE = new WatsonBlockRegistery();
     public static final Map<String, WatsonBlock> _byName = new HashMap<>();
-    protected Color4f color;
 
     public static WatsonBlockRegistery getInstance()
     {
@@ -55,11 +54,11 @@ public final class WatsonBlockRegistery
                     String[] watsonBlockData = entry.split(";");
                     if (watsonBlockData.length == 3)
                     {
-                        Block block = Registry.BLOCK.get(Identifier.tryParse(watsonBlockData[0]));
+                        Block block = Registries.BLOCK.get(Identifier.tryParse(watsonBlockData[0]));
                         WatsonBlock watsonBlock = new WatsonBlock();
                         if (block != Blocks.AIR)
                         {
-                            String blockName = Registry.BLOCK.getId(block).toString();
+                            String blockName = Registries.BLOCK.getId(block).toString();
                             watsonBlock.setName(blockName);
                             float lineWidth = Float.parseFloat(watsonBlockData[1]);
                             if (lineWidth != 0)
@@ -77,7 +76,7 @@ public final class WatsonBlockRegistery
                         }
                         else
                         {
-                            Item item = Registry.ITEM.get(Identifier.tryParse(watsonBlockData[0]));
+                            Item item = Registries.ITEM.get(Identifier.tryParse(watsonBlockData[0]));
                             if (item != Items.AIR)
                             {
                                 watsonBlock.setName(watsonBlockData[0]);
@@ -154,7 +153,7 @@ public final class WatsonBlockRegistery
 
     public WatsonBlock getWatsonBlockByBlock(Block block)
     {
-        return getWatsonBlockByName(Registry.BLOCK.getId(block).toString());
+        return getWatsonBlockByName(Registries.BLOCK.getId(block).toString());
     }
 
     public WatsonBlock getWatsonBlockByName(String name)

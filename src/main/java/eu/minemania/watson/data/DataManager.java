@@ -33,7 +33,7 @@ import fi.dy.masa.malilib.util.WorldUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
 import net.minecraft.world.World;
 
 public class DataManager implements IDirectoryCache
@@ -581,7 +581,7 @@ public class DataManager implements IDirectoryCache
     {
         ArrayList<String> blocks = new ArrayList<>();
 
-        Registry.BLOCK.forEach(block -> blocks.add(Registry.BLOCK.getId(block).toString()));
+        Registries.BLOCK.forEach(block -> blocks.add(Registries.BLOCK.getId(block).toString()));
 
         blocks.sort(String::compareTo);
 
@@ -592,7 +592,7 @@ public class DataManager implements IDirectoryCache
     {
         ArrayList<String> items = new ArrayList<>();
 
-        Registry.ITEM.forEach(item -> items.add(Registry.ITEM.getId(item).toString()));
+        Registries.ITEM.forEach(item -> items.add(Registries.ITEM.getId(item).toString()));
 
         items.sort(String::compareTo);
 
@@ -603,7 +603,7 @@ public class DataManager implements IDirectoryCache
     {
         ArrayList<String> entityTypes = new ArrayList<>();
 
-        Registry.ENTITY_TYPE.forEach(entityType -> entityTypes.add(Registry.ENTITY_TYPE.getId(entityType).toString()));
+        Registries.ENTITY_TYPE.forEach(entityType -> entityTypes.add(Registries.ENTITY_TYPE.getId(entityType).toString()));
 
         entityTypes.sort(String::compareTo);
 
@@ -615,9 +615,9 @@ public class DataManager implements IDirectoryCache
         ArrayList<String> tags = new ArrayList<>();
         ArrayList<String> deDupTags = new ArrayList<>();
 
-        Registry.BLOCK.streamTags().forEach((block) -> tags.add("#"+block.id().toString()));
-        Registry.ENTITY_TYPE.streamTags().forEach((entity) -> tags.add("#"+entity.id().toString()));
-        Registry.ITEM.streamTags().forEach((item) -> tags.add("#"+item.id().toString()));
+        Registries.BLOCK.streamTags().forEach((block) -> tags.add("#"+block.id().toString()));
+        Registries.ENTITY_TYPE.streamTags().forEach((entity) -> tags.add("#"+entity.id().toString()));
+        Registries.ITEM.streamTags().forEach((item) -> tags.add("#"+item.id().toString()));
 
         for (String tag : tags) {
             if (!deDupTags.contains(tag)) {

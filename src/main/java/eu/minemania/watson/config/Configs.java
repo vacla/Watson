@@ -30,7 +30,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
 
 public class Configs implements IConfigHandler
 {
@@ -311,12 +311,12 @@ public class Configs implements IConfigHandler
 
         for (String name : DataManager.getAllItemEntitiesStringIdentifiers())
         {
-            Optional<Block> optionalBlock = Registry.BLOCK.getOrEmpty(new Identifier(name));
-            Optional<Item> optionalItem = Registry.ITEM.getOrEmpty(optionalBlock.map(block -> Registry.ITEM.getId(block.asItem())).orElseGet(() -> new Identifier(name)));
+            Optional<Block> optionalBlock = Registries.BLOCK.getOrEmpty(new Identifier(name));
+            Optional<Item> optionalItem = Registries.ITEM.getOrEmpty(optionalBlock.map(block -> Registries.ITEM.getId(block.asItem())).orElseGet(() -> new Identifier(name)));
 
             if (optionalItem.isEmpty())
             {
-                color = setCustomColorOres(Registry.ENTITY_TYPE.get(new Identifier(name)));
+                color = setCustomColorOres(Registries.ENTITY_TYPE.get(new Identifier(name)));
             }
             if (color.isEmpty() && optionalItem.isPresent())
             {
