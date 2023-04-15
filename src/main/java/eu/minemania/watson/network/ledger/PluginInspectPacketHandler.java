@@ -27,7 +27,7 @@ public class PluginInspectPacketHandler
                 return;
             }
             PacketByteBuf packetByteBuf = new PacketByteBuf(Unpooled.buffer());
-            BlockPos blockPos = new BlockPos(x, y, z);
+            BlockPos blockPos = BlockPos.ofFloored(x, y, z);
             packetByteBuf.writeBlockPos(blockPos);
             packetByteBuf.writeInt(pages);
             if(Configs.Generic.DEBUG.getBooleanValue())

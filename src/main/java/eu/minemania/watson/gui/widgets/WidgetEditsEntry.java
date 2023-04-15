@@ -245,7 +245,7 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
 
             y = this.y + 3;
             RenderUtils.drawRect(x1, y, 16, 16, 0x20FFFFFF);
-            this.mc.getItemRenderer().renderInGuiWithOverrides(this.entry.getStack(), x1, y);
+            this.mc.getItemRenderer().renderInGuiWithOverrides(matrixStack, this.entry.getStack(), x1, y);
 
             RenderSystem.disableBlend();
             RenderUtils.disableDiffuseLighting();
@@ -303,7 +303,7 @@ public class WidgetEditsEntry extends WidgetListEntrySortable<PlayereditEntry>
 
             RenderUtils.enableDiffuseLightingGui3D();
 
-            this.mc.getItemRenderer().renderInGuiWithOverrides(stack, x2, y1);
+            this.mc.getItemRenderer().renderInGuiWithOverrides(matrixStack, stack, x2, y1);
 
             RenderUtils.disableDiffuseLighting();
             matrixStack.pop();

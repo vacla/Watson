@@ -45,7 +45,6 @@ public class GuiBlockeditData extends GuiListBase<BlockeditEntry, WidgetBlockedi
         this.display = display;
         this.title = StringUtils.translate(titleKey);
         this.useTitleHierarchy = false;
-        this.setZOffset(1);
 
         WidgetBlockeditEntry.setMaxNameLength(display.getBlockeditAll());
     }
@@ -98,7 +97,7 @@ public class GuiBlockeditData extends GuiListBase<BlockeditEntry, WidgetBlockedi
         this.addTextField(this.textFieldYHeight, new YHeightTextFieldListener(this));
 
         this.yHeightDropDown = new YHeightDropdown<>(this.textFieldYHeight.getX() + this.textFieldYHeight.getWidth() + 20, y + 2, width, 14, 100, 3, ImmutableList.copyOf(YHeightFilter.values()), YHeightFilter::getDisplayName);
-        this.yHeightDropDown.setZLevel(this.getZOffset() + 100);
+        this.yHeightDropDown.setZLevel(1 + 100);
         this.yHeightDropDown.setSelectionListener(this);
 
         this.addWidget(this.yHeightDropDown);

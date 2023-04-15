@@ -15,7 +15,6 @@ import java.util.Map;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
 
 import eu.minemania.watson.data.DataManager;
@@ -238,7 +237,7 @@ public class AnnoCommand extends WatsonCommandBase
             blockPos = getBlockPos(context, "pos");
             world = getString(context, "world");
         }
-        catch (CommandSyntaxException ignored)
+        catch (IllegalArgumentException ignored)
         {
         }
 
