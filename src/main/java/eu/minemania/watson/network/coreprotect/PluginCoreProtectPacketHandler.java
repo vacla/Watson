@@ -134,12 +134,15 @@ public class PluginCoreProtectPacketHandler implements IPluginChannelHandlerExte
                 {
                     boolean isContainer = dis.readBoolean();
                     boolean added = dis.readBoolean();
+                    String tooltip = dis.readUTF();
                     addition.put("isContainer", isContainer);
                     addition.put("added", added);
+                    addition.put("tooltip", tooltip);
                     if (Configs.Generic.DEBUG.getBooleanValue())
                     {
                         Watson.logger.info("isContainer: " + isContainer);
                         Watson.logger.info("added: " + added);
+                        Watson.logger.info("tooltip: " + tooltip);
                     }
                 }
                 edit.setAdditional(addition);
