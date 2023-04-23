@@ -15,7 +15,6 @@ import java.util.Map;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
 
 import eu.minemania.watson.data.DataManager;
@@ -25,7 +24,7 @@ import eu.minemania.watson.db.LocalAnnotation;
 import fi.dy.masa.malilib.gui.Message.MessageType;
 import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 
 public class AnnoCommand extends WatsonCommandBase
@@ -70,12 +69,12 @@ public class AnnoCommand extends WatsonCommandBase
                 Map<CommandNode<ServerCommandSource>, String> usage = dispatcher.getSmartUsage(command, context.getSource());
                 for (String u : usage.values())
                 {
-                    ClientCommandManager.sendFeedback(new LiteralText("/" + cmdName + " " + u));
+                    ClientCommandManager.sendFeedback(Text.literal("/" + cmdName + " " + u));
                 }
                 cmdCount += usage.size();
                 if (usage.size() == 0)
                 {
-                    ClientCommandManager.sendFeedback(new LiteralText("/" + cmdName));
+                    ClientCommandManager.sendFeedback(Text.literal("/" + cmdName));
                     cmdCount++;
                 }
             }
@@ -238,7 +237,7 @@ public class AnnoCommand extends WatsonCommandBase
             blockPos = getBlockPos(context, "pos");
             world = getString(context, "world");
         }
-        catch (CommandSyntaxException ignored)
+        catch (IllegalArgumentException ignored)
         {
         }
 

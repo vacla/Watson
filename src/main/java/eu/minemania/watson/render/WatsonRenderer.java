@@ -24,7 +24,7 @@ public class WatsonRenderer
         return INSTANCE;
     }
 
-    public void piecewiseRenderEntities(MinecraftClient mc, MatrixStack matrices, VertexConsumerProvider.Immediate vertexConsumers)
+    public void piecewiseRenderEntities(MinecraftClient mc, MatrixStack matrices)
     {
         if (this.mc == null)
         {
@@ -43,7 +43,6 @@ public class WatsonRenderer
 
             RenderUtils.setupBlend();
 
-            RenderSystem.disableTexture();
             RenderUtils.color(1f, 1f, 1f, 1f);
             RenderSystem.depthMask(false);
 
@@ -59,14 +58,12 @@ public class WatsonRenderer
 
             RenderSystem.enableDepthTest();
             RenderSystem.depthMask(true);
-            RenderSystem.enableTexture();
 
             RenderSystem.disableBlend();
 
             RenderSystem.enableCull();
 
             matrixStack.pop();
-            RenderSystem.applyModelViewMatrix();
             RenderSystem.setShaderFogStart(fogStart);
             this.mc.getProfiler().pop();
         }

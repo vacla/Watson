@@ -1,7 +1,6 @@
 package eu.minemania.watson.render;
 
 import java.util.List;
-import java.util.Random;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import fi.dy.masa.malilib.util.Color4f;
@@ -11,14 +10,16 @@ import net.minecraft.client.render.*;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.util.math.*;
+import net.minecraft.util.math.random.Random;
+import org.joml.Vector3f;
 
 public class RenderUtils
 {
-    private static final Random RAND = new Random();
+    private static final Random RAND = Random.create();
 
     public static void startDrawingLines(BufferBuilder buffer)
     {
-        RenderSystem.setShader(GameRenderer::getRenderTypeLinesShader);
+        RenderSystem.setShader(GameRenderer::getRenderTypeLinesProgram);
         buffer.begin(VertexFormat.DrawMode.LINES, VertexFormats.LINES);
     }
 
@@ -314,7 +315,7 @@ public class RenderUtils
         final int z = pos.getZ();
         int[] vertexData = quad.getVertexData();
         Vec3i vec3i = quad.getFace().getVector();
-        Vec3f vec3f = new Vec3f(vec3i.getX(), vec3i.getY(), vec3i.getZ());
+        Vector3f vec3f = new Vector3f(vec3i.getX(), vec3i.getY(), vec3i.getZ());
         final int vertexSize = vertexData.length / 4;
         float[] fx = new float[4];
         float[] fy = new float[4];
@@ -327,16 +328,16 @@ public class RenderUtils
             fz[index] = z + Float.intBitsToFloat(vertexData[index * vertexSize + 2]);
         }
 
-        buffer.vertex(fx[0], fy[0], fz[0]).color(color.r, color.g, color.b, color.a).normal(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next();
-        buffer.vertex(fx[1], fy[1], fz[1]).color(color.r, color.g, color.b, color.a).normal(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next();
+        buffer.vertex(fx[0], fy[0], fz[0]).color(color.r, color.g, color.b, color.a).normal(vec3f.x, vec3f.y, vec3f.z).next();
+        buffer.vertex(fx[1], fy[1], fz[1]).color(color.r, color.g, color.b, color.a).normal(vec3f.x, vec3f.y, vec3f.z).next();
 
-        buffer.vertex(fx[1], fy[1], fz[1]).color(color.r, color.g, color.b, color.a).normal(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next();
-        buffer.vertex(fx[2], fy[2], fz[2]).color(color.r, color.g, color.b, color.a).normal(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next();
+        buffer.vertex(fx[1], fy[1], fz[1]).color(color.r, color.g, color.b, color.a).normal(vec3f.x, vec3f.y, vec3f.z).next();
+        buffer.vertex(fx[2], fy[2], fz[2]).color(color.r, color.g, color.b, color.a).normal(vec3f.x, vec3f.y, vec3f.z).next();
 
-        buffer.vertex(fx[2], fy[2], fz[2]).color(color.r, color.g, color.b, color.a).normal(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next();
-        buffer.vertex(fx[3], fy[3], fz[3]).color(color.r, color.g, color.b, color.a).normal(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next();
+        buffer.vertex(fx[2], fy[2], fz[2]).color(color.r, color.g, color.b, color.a).normal(vec3f.x, vec3f.y, vec3f.z).next();
+        buffer.vertex(fx[3], fy[3], fz[3]).color(color.r, color.g, color.b, color.a).normal(vec3f.x, vec3f.y, vec3f.z).next();
 
-        buffer.vertex(fx[3], fy[3], fz[3]).color(color.r, color.g, color.b, color.a).normal(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next();
-        buffer.vertex(fx[0], fy[0], fz[0]).color(color.r, color.g, color.b, color.a).normal(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next();
+        buffer.vertex(fx[3], fy[3], fz[3]).color(color.r, color.g, color.b, color.a).normal(vec3f.x, vec3f.y, vec3f.z).next();
+        buffer.vertex(fx[0], fy[0], fz[0]).color(color.r, color.g, color.b, color.a).normal(vec3f.x, vec3f.y, vec3f.z).next();
     }
 }

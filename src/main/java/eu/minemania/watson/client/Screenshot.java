@@ -41,12 +41,12 @@ public class Screenshot
         Util.getIoWorkerExecutor().execute(() -> {
             try {
                 nativeImage.writeTo(file);
-                MutableText text = new LiteralText(file.getName()).formatted(Formatting.UNDERLINE).styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, file.getAbsolutePath())));
-                mc.inGameHud.getChatHud().addMessage(new TranslatableText("screenshot.success", text));
+                MutableText text = Text.literal(file.getName()).formatted(Formatting.UNDERLINE).styled(style -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, file.getAbsolutePath())));
+                mc.inGameHud.getChatHud().addMessage(Text.translatable("screenshot.success", text));
             }
             catch (Exception text) {
                 Watson.logger.warn("Couldn't save screenshot", (Throwable)text);
-                mc.inGameHud.getChatHud().addMessage(new TranslatableText("screenshot.failure", text.getMessage()));
+                mc.inGameHud.getChatHud().addMessage(Text.translatable("screenshot.failure", text.getMessage()));
             }
             finally {
                 nativeImage.close();

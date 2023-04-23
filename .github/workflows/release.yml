@@ -1,0 +1,41 @@
+name: Release
+on:
+  workflow_dispatch: # Manual trigger
+    inputs:
+      loaders:
+        description: 'Loaders'
+        required: true
+        default: '["fabric","quilt"]'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    container:
+      image: eclipse-temurin:18-jdk
+      options: --user root
+    steps:
+      - name: Get version from tag
+        id: tag_name
+        run: |
+          echo "current_version=$GITHUB_REF_NAME" >> $GITHUB_OUTPUT
+        shell: bash
+      - run: apt update && apt install git nodejs -y && git --version
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Get Changelog Entry
+        id: changelog_reader
+        uses: mindsers/changelog-reader-action@v2
+        with:
+          validation_level: warn
+          version: ${{ steps.tag_name.outputs.current_version }}
+          path: ./CHANGELOG.md
+      - uses: gradle/wrapper-validation-action@v1
+      - run: ./gradlew build publishMod --stacktrace
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          CHANGELOG: ${{ steps.changelog_reader.outputs.changes }}
+          LOADERS: ${{ inputs.loaders }}

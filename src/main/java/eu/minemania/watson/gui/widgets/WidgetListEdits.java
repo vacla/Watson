@@ -15,7 +15,7 @@ import fi.dy.masa.malilib.gui.widgets.WidgetSearchBar;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
 
 public class WidgetListEdits extends WidgetListBase<PlayereditEntry, WidgetEditsEntry>
 {
@@ -84,7 +84,7 @@ public class WidgetListEdits extends WidgetListBase<PlayereditEntry, WidgetEdits
     protected List<String> getEntryStringsForFilter(PlayereditEntry entry)
     {
         ItemStack stack = entry.getStack();
-        Identifier rl = Registry.ITEM.getId(stack.getItem());
+        Identifier rl = Registries.ITEM.getId(stack.getItem());
 
         if (rl != null)
         {

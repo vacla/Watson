@@ -13,11 +13,11 @@ import com.mojang.brigadier.StringReader;
 
 import eu.minemania.watson.chat.command.ClientCommandManager;
 import eu.minemania.watson.interfaces.ITextFieldWidget;
-import net.minecraft.client.gui.screen.CommandSuggestor;
+import net.minecraft.client.gui.screen.ChatInputSuggestor;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.command.CommandSource;
 
-@Mixin(CommandSuggestor.class)
+@Mixin(ChatInputSuggestor.class)
 public abstract class MixinCommandSuggestor
 {
     @Accessor("textField")

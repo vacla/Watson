@@ -1,12 +1,16 @@
 package eu.minemania.watson.mixin;
 
+import com.mojang.brigadier.StringReader;
+import eu.minemania.watson.chat.command.ClientCommandManager;
 import eu.minemania.watson.network.ClientPacketChannelHandler;
-import net.minecraft.client.util.telemetry.TelemetrySender;
+import net.minecraft.client.network.ServerInfo;
+import net.minecraft.client.util.telemetry.WorldSession;
 import net.minecraft.network.packet.s2c.play.CustomPayloadS2CPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
@@ -26,7 +30,7 @@ public abstract class MixinClientPlayNetworkHandler
 
     @SuppressWarnings("unchecked")
     @Inject(method = "<init>", at = @At("RETURN"))
-    public void onInit(MinecraftClient client, Screen screen, ClientConnection connection, GameProfile profile, TelemetrySender telemetrySender, CallbackInfo ci)
+    public void onInit(MinecraftClient client, Screen screen, ClientConnection connection, ServerInfo serverInfo, GameProfile profile, WorldSession worldSession, CallbackInfo ci)
     {
         Command.registerCommands((CommandDispatcher<ServerCommandSource>) (Object) commandDispatcher);
     }
@@ -45,6 +49,31 @@ public abstract class MixinClientPlayNetworkHandler
     {
         if (((ClientPacketChannelHandler) ClientPacketChannelHandler.getInstance()).processPacketFromServer(packet, (ClientPlayNetworkHandler) (Object) this))
         {
+            ci.cancel();
+        }
+    }
+
+    @ModifyVariable(method = "sendChatCommand", at = @At("HEAD"), argsOnly = true)
+    private String onSendCommand(String message)
+    {
+        if ((message.startsWith("pr l") || message.startsWith("pr i")) && !message.contains("-extended"))
+        {
+            return message + " -extended";
+        }
+
+        return message;
+    }
+
+    @Inject(method = "sendChatCommand", at = @At("HEAD"), cancellable = true)
+    private void sendCommand(String message, CallbackInfo ci)
+    {
+        StringReader reader = new StringReader(message);
+        int cursor = reader.getCursor();
+        String commandName = reader.canRead() ? reader.readUnquotedString() : "";
+        reader.setCursor(cursor);
+        if (ClientCommandManager.isClientSideCommand(commandName))
+        {
+            ClientCommandManager.executeCommand(reader, message);
             ci.cancel();
         }
     }

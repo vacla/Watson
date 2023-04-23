@@ -12,7 +12,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.scoreboard.AbstractTeam;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 
@@ -45,7 +44,7 @@ public abstract class MixinPlayerEntity extends LivingEntity
     {
         if (Highlight.changeUsername)
         {
-            return new LiteralText(Highlight.getUsername());
+            return Text.literal(Highlight.getUsername());
         }
         else
         {

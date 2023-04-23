@@ -1,6 +1,16 @@
+import groovy.json.JsonSlurper
+
 plugins {
-	id 'fabric-loom' version '0.11-SNAPSHOT'
+	id 'fabric-loom' version '1.1-SNAPSHOT'
 	id 'maven-publish'
+	id 'com.modrinth.minotaur' version '2.+'
+}
+
+def ENV = System.getenv()
+Object loadersResult = []
+if (ENV.LOADERS) {
+	def jsonSlurper = new JsonSlurper()
+	loadersResult = jsonSlurper.parseText(ENV.LOADERS)
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -12,43 +22,64 @@ repositories {
 	maven { url 'https://maven.terraformersmc.com/releases/' }
 }
 
-ext.configFile = file "build.properties"
-
-configFile.withReader {
-	def prop = new Properties()
-	prop.load(it)
-	project.ext.config = new ConfigSlurper().parse prop
-}
-
 dependencies {
-	minecraft "com.mojang:minecraft:${config.minecraft_version}"
-	mappings "net.fabricmc:yarn:${config.mappings_version}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${config.fabric_loader_version}"
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.mappings_version}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
 	implementation "com.google.code.findbugs:jsr305:3+"
 
-	modImplementation "fi.dy.masa.malilib:malilib-fabric-${config.minecraft_version_malilib}:${config.malilib_version}"
-	modImplementation "com.terraformersmc:modmenu:${config.mod_menu_version}"
+	modImplementation "fi.dy.masa.malilib:malilib-fabric-${project.minecraft_version_malilib}:${project.malilib_version}"
+	modImplementation "com.terraformersmc:modmenu:${project.mod_menu_version}"
 }
 
-group = config.group + "." +config.mod_id // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = config.mod_file_name + '-' + config.minecraft_version_watson
-version = config.mod_version
+group = project.group + "." + project.mod_id // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = project.mod_file_name
+version = project.mod_version + '+' + project.minecraft_version_mod
+def CHANGELOG = ENV.CHANGELOG ?: "No changelog provided"
+def VERSION = project.mod_name + " " + project.version
+def mainFile = null
 
 processResources {
-
 	exclude '**/*.xcf'
 	exclude '**/xcf'
 
 	// this will ensure that this task is redone when the versions change.
-	inputs.property "mod_version", config.mod_version
+	inputs.property "mod_version", project.version
+	inputs.property "malilib_mod_version", project.malilib_mod_version
+	inputs.property "minecraft_version_dependency", project.minecraft_version_dependency
 
 	filesMatching("fabric.mod.json") {
-		expand "mod_version": config.mod_version
+		expand inputs.properties
 	}
+}
+
+jar {
+	from "LICENSE.md"
 }
 
 tasks.withType(JavaCompile).configureEach {
 	it.options.encoding = "UTF-8"
 	// Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
 	it.options.release = 17
+}
+
+modrinth {
+	projectId = project.project_slug
+	versionName = VERSION
+	versionType = "release"
+	changelog = CHANGELOG
+	gameVersions = [project.minecraft_version]
+	loaders = loadersResult
+	uploadFile = remapJar
+	debugMode = project.modrinth_debug.toBoolean()
+}
+
+tasks.modrinth.doLast {
+	if (tasks.modrinth.wasUploadSuccessful()) {
+		println "Modrinth Download = https://modrinth.com/mod/" + project.project_slug + "/version/" + project.version
+	}
+}
+
+task publishMod {
+	dependsOn 'modrinth'
 }

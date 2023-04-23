@@ -299,7 +299,7 @@ public class KeyCallbacks
                 {
                     if (Configs.Plugin.PLUGIN.getOptionListValue() == Plugins.COREPROTECT)
                     {
-                        ChatMessage.sendToServerChat(String.format("/%s i", Configs.Plugin.COREPROTECT_COMMAND.getStringValue()));
+                        ChatMessage.sendToServerChat(String.format("%s i", Configs.Plugin.COREPROTECT_COMMAND.getStringValue()));
                         return true;
                     }
                 }

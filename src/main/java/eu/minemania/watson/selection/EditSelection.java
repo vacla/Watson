@@ -177,7 +177,7 @@ public class EditSelection
                 int second = _calendar.get(Calendar.SECOND);
                 String player = (String) _variables.get("player");
 
-                String query = String.format("/lb before %d.%d.%d %02d:%02d:%02d player %s coords limit %d", day, month, year, hour, minute, second, player, count);
+                String query = String.format("lb before %d.%d.%d %02d:%02d:%02d player %s coords limit %d", day, month, year, hour, minute, second, player, count);
                 if (Configs.Generic.DEBUG.getBooleanValue())
                 {
                     Watson.logger.info(query);
@@ -210,7 +210,7 @@ public class EditSelection
                 int second = _calendar.get(Calendar.SECOND);
                 String player = (String) _variables.get("player");
 
-                String query = String.format("/lb since %d.%d.%d %02d:%02d:%02d player %s coords limit %d asc", day, month, year, hour, minute, second, player, count);
+                String query = String.format("lb since %d.%d.%d %02d:%02d:%02d player %s coords limit %d asc", day, month, year, hour, minute, second, player, count);
                 if (Configs.Generic.DEBUG.getBooleanValue())
                 {
                     Watson.logger.info(query);
