@@ -4,7 +4,6 @@ plugins {
 	id 'fabric-loom' version '1.1-SNAPSHOT'
 	id 'maven-publish'
 	id 'com.modrinth.minotaur' version '2.+'
-	id 'net.darkhax.curseforgegradle' version '1.0.11'
 }
 
 def ENV = System.getenv()
@@ -45,7 +44,7 @@ processResources {
 	exclude '**/xcf'
 
 	// this will ensure that this task is redone when the versions change.
-	inputs.property "mod_version", project.mod_version
+	inputs.property "mod_version", project.version
 	inputs.property "malilib_mod_version", project.malilib_mod_version
 	inputs.property "minecraft_version_dependency", project.minecraft_version_dependency
 
@@ -62,28 +61,6 @@ tasks.withType(JavaCompile).configureEach {
 	it.options.encoding = "UTF-8"
 	// Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
 	it.options.release = 17
-}
-
-task publishCurseForge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
-	if (ENV.CURSEFORGE_API_KEY != null) {
-		apiToken = ENV.CURSEFORGE_API_KEY
-	}
-
-	mainFile = upload(project.curseforge_id, remapJar)
-	mainFile.releaseType = "release"
-	mainFile.displayName = VERSION
-	mainFile.changelogType = "markdown"
-	mainFile.changelog = CHANGELOG
-	mainFile.addRequirement(project.curseforge_required_dep)
-	mainFile.addGameVersion(project.minecraft_version)
-	for (loader in loadersResult) {
-		mainFile.addModLoader(loader.capitalize())
-	}
-}
-
-tasks.getByName("publishCurseForge").doLast {
-	def fileId = mainFile.curseFileId
-	println "https://www.curseforge.com/minecraft/mc-mods/" + project.project_slug + "/files/" + fileId
 }
 
 modrinth {
@@ -104,6 +81,5 @@ tasks.modrinth.doLast {
 }
 
 task publishMod {
-	dependsOn 'publishCurseForge'
 	dependsOn 'modrinth'
 }
