@@ -58,16 +58,29 @@ public class PluginCoreProtectResponsePacketHandler implements IPluginChannelHan
                 }
 
                 if (type.equals("coreprotect:lookupPage")) {
-                    String[] pages = message.split("/");
+                    String[] info = message.split(",");
+                    String[] pages = info[0].split("/");
                     int nextPage = Integer.parseInt(pages[0]);
                     int lastPage = Integer.parseInt(pages[1]);
-                    if (nextPage <= DataManager.getCoreProtectInfo().getPages() &&
-                            nextPage < Configs.Plugin.MAX_AUTO_PAGES_LOOP.getIntegerValue() &&
+                    if (((DataManager.getCoreProtectInfo() != null && nextPage <= DataManager.getCoreProtectInfo().getPages()) || !Boolean.parseBoolean(info[1])) &&
+                            nextPage <= Configs.Plugin.MAX_AUTO_PAGES_LOOP.getIntegerValue() &&
                             Configs.Plugin.AUTO_PAGE.getBooleanValue() &&
                             lastPage <= Configs.Plugin.MAX_AUTO_PAGES.getIntegerValue()
                     ) {
-                        PluginCoreProtectInputPacketHandler.INSTANCE.sendLookupPagePacket(Integer.parseInt(message));
+                        InfoUtils.showGuiOrInGameMessage(Message.MessageType.INFO, String.format("Going to next page %s.", nextPage));
+                        PluginCoreProtectInputPacketHandler.INSTANCE.sendLookupPagePacket(nextPage);
+                    } else {
+                        InfoUtils.showGuiOrInGameMessage(Message.MessageType.INFO, "More pages are available but not shown due to settings."); //todo change translation key
                     }
+
+                    return;
+                }
+
+                if (type.equals("coreprotect:lookupBusy")) {
+                    InfoUtils.showGuiOrInGameMessage(Message.MessageType.INFO, String.format("Retrying command: %s", message));
+                    PluginCoreProtectInputPacketHandler.INSTANCE.sendCommandPacket(message);
+
+                    return;
                 }
 
                 InfoUtils.showGuiOrInGameMessage(Message.MessageType.INFO, message);

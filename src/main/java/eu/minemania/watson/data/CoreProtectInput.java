@@ -219,7 +219,7 @@ public class CoreProtectInput
         {
             if (page != 0)
             {
-                search.append(" ").append(page);
+                search.append(" page:").append(page);
             }
             if (!amountRows.isEmpty())
             {

@@ -31,7 +31,7 @@ public class GuiCoreProtect extends GuiBase
     protected GuiTextFieldInteger textFieldY;
     protected GuiTextFieldInteger textFieldZ;
     protected GuiTextFieldInteger textFieldPages;
-    protected CoreProtectInfo coreProtectInfo = new CoreProtectInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", 0, 0, 0, 0, CoreProtectMode.SEARCH, 1, true, true);
+    protected CoreProtectInfo coreProtectInfo = new CoreProtectInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", 0, 0, 0, 0, CoreProtectMode.SEARCH, 1, true, false);
 
     protected GuiCoreProtect()
     {
@@ -373,13 +373,6 @@ public class GuiCoreProtect extends GuiBase
         boolean silentChat = this.coreProtectInfo.getSilentChat();
 
         CoreProtectInfo coreProtectInfo = new CoreProtectInfo(actions, blocks, dimension, entityTypes, items, source, time, range, x, y, z, coreProtectMode, pages, optimize, silentChat);
-        DataManager.setCoreProtectInfo(coreProtectInfo);
-    }
-
-    private void clearCoreProtectInfo()
-    {
-        CoreProtectInfo coreProtectInfo = new CoreProtectInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", 0, 0, 0, 0, CoreProtectMode.SEARCH, 1, true, true);
-        this.coreProtectInfo = coreProtectInfo;
         DataManager.setCoreProtectInfo(coreProtectInfo);
     }
 
@@ -765,7 +758,8 @@ public class GuiCoreProtect extends GuiBase
 
             if (this.type == ButtonType.CLEAR)
             {
-                this.parent.clearCoreProtectInfo();
+                DataManager.clearCoreProtectInfo();
+                this.parent.coreProtectInfo = DataManager.getCoreProtectInfo();
                 this.parent.initGui();
                 return;
             }
@@ -792,6 +786,7 @@ public class GuiCoreProtect extends GuiBase
                 boolean optimize = coreProtectInfo.getOptimize();
                 boolean silentChat = coreProtectInfo.getSilentChat();
                 MinecraftClient mc = parent.mc;
+                parent.setCoreProtectInfo();
 
                 switch (coreProtectInfo.getCoreProtectMode())
                 {

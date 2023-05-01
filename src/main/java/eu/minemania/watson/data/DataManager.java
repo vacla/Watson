@@ -19,6 +19,7 @@ import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.db.*;
 import eu.minemania.watson.gui.GuiConfigs.ConfigGuiTab;
+import eu.minemania.watson.gui.GuiCoreProtect;
 import eu.minemania.watson.selection.EditSelection;
 import fi.dy.masa.malilib.gui.Message;
 import fi.dy.masa.malilib.gui.interfaces.IDirectoryCache;
@@ -659,5 +660,11 @@ public class DataManager implements IDirectoryCache
     public static CoreProtectInfo getCoreProtectInfo()
     {
         return coreProtectInfo;
+    }
+
+    public static void clearCoreProtectInfo()
+    {
+        CoreProtectInfo coreProtectInfo = new CoreProtectInfo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", "", 0, 0, 0, 0, GuiCoreProtect.ButtonListenerCycleTypePacket.CoreProtectMode.SEARCH, 1, true, false);
+        DataManager.setCoreProtectInfo(coreProtectInfo);
     }
 }

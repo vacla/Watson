@@ -31,19 +31,24 @@ public class PluginCoreProtectInputPacketHandler
             CoreProtectInput coreProtectInput = new CoreProtectInput(type, action, dimension, block, entityType, item, range, x, y, z, source, time, optimize, silentChat, page, amountRows);
             sendPacketData(coreProtectInput, mc);
         }
-        catch (Exception ignored)
-        {}
+        catch (Exception exception)
+        {
+            Watson.logger.error(exception.getStackTrace());
+        }
     }
 
     public void sendLookupPagePacket(int page)
     {
         try
         {
-            CoreProtectInput coreProtectInput = new CoreProtectInput("lookup", List.of(), List.of(), List.of(), List.of(), List.of(), 0, 0, 0, 0, "", "", false, DataManager.getCoreProtectInfo().getSilentChat(), page, 0);
+            boolean silentChat = DataManager.getCoreProtectInfo() != null && DataManager.getCoreProtectInfo().getSilentChat();
+            CoreProtectInput coreProtectInput = new CoreProtectInput("lookup", List.of(), List.of(), List.of(), List.of(), List.of(), 0, 0, 0, 0, "", "", false, silentChat, page, 0);
             sendPacketData(coreProtectInput, MinecraftClient.getInstance());
         }
-        catch (Exception ignored)
-        {}
+        catch (Exception exception)
+        {
+            Watson.logger.error(exception.getStackTrace());
+        }
     }
 
     private void sendPacketData(CoreProtectInput coreProtectInput, MinecraftClient mc)
@@ -81,6 +86,36 @@ public class PluginCoreProtectInputPacketHandler
             Watson.logger.info("optimize: "+coreProtectInput.getOptimize());
             Watson.logger.info("silent chat: "+coreProtectInput.getSilentChat());
             Watson.logger.info("page: "+coreProtectInput.getPage());
+            Watson.logger.info(CHANNEL);
+        }
+        packetHandler.sendPacket(new CustomPayloadC2SPacket(CHANNEL, packetByteBuf));
+    }
+
+    public void sendCommandPacket(String command)
+    {
+        MinecraftClient mc = MinecraftClient.getInstance();
+        ClientPlayNetworkHandler packetHandler = mc.getNetworkHandler();
+        if (packetHandler == null)
+        {
+            return;
+        }
+        PacketByteBuf packetByteBuf = new PacketByteBuf(Unpooled.buffer());
+        ByteArrayOutputStream msgBytes = new ByteArrayOutputStream();
+        DataOutputStream msgOut = new DataOutputStream(msgBytes);
+        boolean silentChat = DataManager.getCoreProtectInfo() != null && DataManager.getCoreProtectInfo().getSilentChat();
+
+        try
+        {
+            msgOut.writeUTF(command);
+            msgOut.writeBoolean(silentChat);
+            packetByteBuf.writeBytes(msgBytes.toByteArray());
+        } catch (Exception ignored) {
+        }
+        if(Configs.Generic.DEBUG.getBooleanValue())
+        {
+            Watson.logger.info(packetByteBuf.toString(Charsets.UTF_8));
+            Watson.logger.info("command: "+command);
+            Watson.logger.info("silent chat: "+silentChat);
             Watson.logger.info(CHANNEL);
         }
         packetHandler.sendPacket(new CustomPayloadC2SPacket(CHANNEL, packetByteBuf));

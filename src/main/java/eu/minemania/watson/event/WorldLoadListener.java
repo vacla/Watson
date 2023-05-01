@@ -42,6 +42,7 @@ public class WorldLoadListener implements IWorldLoadListener
                 PluginCoreProtectPacketRegisteredHandler.INSTANCE.reset();
                 PluginCoreProtectPacketHandler.INSTANCE.reset();
                 PluginCoreProtectResponsePacketHandler.INSTANCE.reset();
+                DataManager.clearCoreProtectInfo();
                 if (DataManager.getEditSelection().getSelection() != null)
                 {
                     DataManager.getEditSelection().clearBlockEditSet();

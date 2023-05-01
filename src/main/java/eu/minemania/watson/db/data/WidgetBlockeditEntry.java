@@ -228,10 +228,12 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
                 RenderSystem.applyModelViewMatrix();
                 int w1 = 0;
                 int w2 = 0;
+                int yHeight = 10;
                 for (Map.Entry<?,?> entry : this.entry.getEdit().getAdditional().entrySet())
                 {
                     w1 = Math.max(w1, this.getStringWidth(String.valueOf(entry.getKey())));
-                    w2 = Math.max(w2, this.getStringWidth(String.valueOf(entry.getValue())));
+                    w2 = Math.max(w2, this.getStringWidth(this.getSanitizedData(String.valueOf(entry.getValue()))));
+                    yHeight += 16;
                 }
 
                 int totalWidth = w1 + w2 + 60;
@@ -245,18 +247,23 @@ public class WidgetBlockeditEntry extends WidgetListEntrySortable<BlockeditEntry
                 int x1 = x + 10;
                 int x2 = x1 + w1 + 20;
 
-                RenderUtils.drawOutlinedBox(x, y, totalWidth, 60, 0xFF000000, GuiBase.COLOR_HORIZONTAL_BAR);
+                RenderUtils.drawOutlinedBox(x, y, totalWidth, yHeight, 0xFF000000, GuiBase.COLOR_HORIZONTAL_BAR);
                 y += 10;
 
                 for (Map.Entry<?,?> entry : this.entry.getEdit().getAdditional().entrySet())
                 {
                     this.drawString(x1, y, 0xFFFFFFFF, String.valueOf(entry.getKey()), matrixStack);
-                    this.drawString(x2, y, 0xFFFFFFFF, String.valueOf(entry.getValue()), matrixStack);
+                    this.drawString(x2, y, 0xFFFFFFFF, this.getSanitizedData(String.valueOf(entry.getValue())), matrixStack);
                     y += 16;
                 }
                 matrixStack.pop();
             }
         }
+    }
+
+    private String getSanitizedData(String data)
+    {
+        return data.replaceAll("\n", " & ");
     }
 
     static class ButtonListenerTeleport implements IButtonActionListener
