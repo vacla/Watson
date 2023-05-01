@@ -61,18 +61,34 @@ public class GuiCoreProtect extends GuiBase
         y = button.getHeight() / 2 + 30;
         int width = 70;
         int offset;
+        int xButton = x;
+        int xLabel = x;
+        int widthButton = 4;
 
-        label = StringUtils.translate("watson.gui.label.ledger.title.action"); //Action
-        this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
-        offset = this.getStringWidth(label) + 4;
-        this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
-        button = createButton(x + offset + 20, y, width, ConsumerButtonListener.ButtonType.ACTION);
+        if (coreProtectInfo.getCoreProtectMode() != CoreProtectMode.PURGE) {
+            label = StringUtils.translate("watson.gui.label.ledger.title.action"); //Action
+            this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
+            offset = this.getStringWidth(label) + 4;
+            this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
+            button = createButton(x + offset + 20, y, width, ConsumerButtonListener.ButtonType.ACTION);
+            xButton = button.getX();
+            xLabel = xButton + button.getWidth() + 5;
+            widthButton = 10 + button.getWidth();
+        }
 
         label = StringUtils.translate("watson.gui.label.ledger.title.dimension"); //Dimension
-        this.addLabel(button.getX() + button.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
-        offset = this.getStringWidth(label) + 10 + button.getWidth();
-        this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
-        button = createButton(button.getX() + offset + 20, y, width, ConsumerButtonListener.ButtonType.DIMENSION);
+        this.addLabel(xLabel, y, width, 20, 0xFFFFFFFF, label);
+        offset = this.getStringWidth(label) + widthButton;
+        this.addWidget(new WidgetInfoIcon(xButton + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
+        button = createButton(xButton + offset + 20, y, width, ConsumerButtonListener.ButtonType.DIMENSION);
+
+        if (coreProtectInfo.getCoreProtectMode() == CoreProtectMode.PURGE) {
+            label = StringUtils.translate("watson.gui.label.coreprotect.optimize");
+            WidgetCheckBox cb = new WidgetCheckBox(button.getX() + button.getWidth() + 5, y, Icons.CHECKBOX_UNSELECTED, Icons.CHECKBOX_SELECTED, label);
+            cb.setChecked(coreProtectInfo.getOptimize(), false);
+            cb.setListener(new CheckBoxOptimizeListener(this));
+            this.addWidget(cb);
+        }
 
         if (coreProtectInfo.getCoreProtectMode() != CoreProtectMode.PURGE)
         {
@@ -95,30 +111,18 @@ public class GuiCoreProtect extends GuiBase
             offset = this.getStringWidth(label) + 10 + button.getWidth();
             this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
             createButton(button.getX() + offset + 20, y, width, ConsumerButtonListener.ButtonType.ITEM);
-        }
 
-        y += 30;
+            y += 30;
 
-        label = StringUtils.translate("watson.gui.label.ledger.title.range"); //Range
-        this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
-        offset = this.getStringWidth(label) + 4;
-        this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.range"));
+            label = StringUtils.translate("watson.gui.label.ledger.title.range"); //Range
+            this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
+            offset = this.getStringWidth(label) + 4;
+            this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.range"));
 
-        this.textFieldRange = new GuiTextFieldInteger(x + offset + 20, y + 2, width, 14, this.textRenderer);
-        this.textFieldRange.setText(String.valueOf(coreProtectInfo.getRange()));
-        this.addTextField(this.textFieldRange, new RangeTextFieldListener(this));
+            this.textFieldRange = new GuiTextFieldInteger(x + offset + 20, y + 2, width, 14, this.textRenderer);
+            this.textFieldRange.setText(String.valueOf(coreProtectInfo.getRange()));
+            this.addTextField(this.textFieldRange, new RangeTextFieldListener(this));
 
-        if (coreProtectInfo.getCoreProtectMode() == CoreProtectMode.PURGE)
-        {
-            label = StringUtils.translate("watson.gui.label.coreprotect.optimize");
-            WidgetCheckBox cb = new WidgetCheckBox(textFieldRange.getX() + textFieldRange.getWidth() + 5, y, Icons.CHECKBOX_UNSELECTED, Icons.CHECKBOX_SELECTED, label);
-            cb.setChecked(coreProtectInfo.getOptimize(), false);
-            cb.setListener(new CheckBoxOptimizeListener(this));
-            this.addWidget(cb);
-        }
-
-        if (coreProtectInfo.getCoreProtectMode() != CoreProtectMode.PURGE)
-        {
             label = StringUtils.translate("watson.gui.label.ledger.title.source"); //Source
             this.addLabel(textFieldRange.getX() + textFieldRange.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
             offset = this.getStringWidth(label) + 10 + textFieldRange.getWidth();

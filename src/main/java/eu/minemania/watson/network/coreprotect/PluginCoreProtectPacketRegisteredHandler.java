@@ -54,8 +54,8 @@ public class PluginCoreProtectPacketRegisteredHandler implements IPluginChannelH
             try
             {
                 boolean coreprotectRegistered = dis.readBoolean();
-                List<String> actions = readList(dis);
-                List<String> worlds = readList(dis);
+                List<String> actions = readList(dis, false);
+                List<String> worlds = readList(dis, true);
                 String version = dis.readUTF();
 
                 DataManager.setPluginActions(actions);
@@ -93,12 +93,16 @@ public class PluginCoreProtectPacketRegisteredHandler implements IPluginChannelH
         return packetByteBuf;
     }
 
-    private List<String> readList(DataInputStream dis) throws IOException
+    private List<String> readList(DataInputStream dis, boolean worlds) throws IOException
     {
         int total = dis.readInt();
         List<String> list = new ArrayList<>();
         for (int i = 0; i < total; i++)
         {
+            if (worlds) {
+                list.add('#' + dis.readUTF());
+                continue;
+            }
             list.add(dis.readUTF());
         }
         return list;
