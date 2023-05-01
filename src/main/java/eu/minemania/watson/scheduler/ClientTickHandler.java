@@ -28,7 +28,7 @@ public class ClientTickHandler implements IClientTickHandler
                     }
                     else if (Configs.Plugin.PLUGIN.getOptionListValue() == Plugins.COREPROTECT)
                     {
-                        ChatMessage.localOutputT("watson.message.join.plugin.watson");
+                        ChatMessage.localOutputT("watson.message.join.plugin.coreprotect");
                     }
                     else
                     {

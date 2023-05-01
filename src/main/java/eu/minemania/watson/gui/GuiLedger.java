@@ -70,47 +70,47 @@ public class GuiLedger extends GuiBase
 
         if (ledgerInfo.getLedgerMode() != LedgerMode.INSPECT)
         {
-            label = StringUtils.translate("watson.gui.label.ledger.title.action"); //Action
+            label = StringUtils.translate("watson.gui.label.plugin.title.action"); //Action
             this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
             offset = this.getStringWidth(label) + 4;
-            this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
+            this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.plugin.info.button", label));
             button = createButton(x + offset + 20, y, width, ConsumerButtonListener.ButtonType.ACTION);
 
-            label = StringUtils.translate("watson.gui.label.ledger.title.dimension"); //Dimension
+            label = StringUtils.translate("watson.gui.label.plugin.title.dimension"); //Dimension
             this.addLabel(button.getX() + button.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
             offset = this.getStringWidth(label) + 10 + button.getWidth();
-            this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
+            this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.plugin.info.button", label));
             button = createButton(button.getX() + offset + 20, y, width, ConsumerButtonListener.ButtonType.DIMENSION);
 
-            label = StringUtils.translate("watson.gui.label.ledger.title.block"); //Block
+            label = StringUtils.translate("watson.gui.label.plugin.title.block"); //Block
             this.addLabel(button.getX() + button.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
             offset = this.getStringWidth(label) + 10 + button.getWidth();
-            this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
+            this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.plugin.info.button", label));
             createButton(button.getX() + offset + 20, y, width, ConsumerButtonListener.ButtonType.BLOCK);
 
             y += 30;
 
-            label = StringUtils.translate("watson.gui.label.ledger.title.entitytype"); //EntityType
+            label = StringUtils.translate("watson.gui.label.plugin.title.entitytype"); //EntityType
             this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
             offset = this.getStringWidth(label) + 4;
-            this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
+            this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.plugin.info.button", label));
             button = createButton(x + offset + 20, y, width, ConsumerButtonListener.ButtonType.ENTITYTYPE);
 
-            label = StringUtils.translate("watson.gui.label.ledger.title.item"); //Item
+            label = StringUtils.translate("watson.gui.label.plugin.title.item"); //Item
             this.addLabel(button.getX() + button.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
             offset = this.getStringWidth(label) + 10 + button.getWidth();
-            this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
+            this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.plugin.info.button", label));
             button = createButton(button.getX() + offset + 20, y, width, ConsumerButtonListener.ButtonType.ITEM);
 
             label = StringUtils.translate("watson.gui.label.ledger.title.tag"); //Tag
             this.addLabel(button.getX() + button.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
             offset = this.getStringWidth(label) + 10 + button.getWidth();
-            this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.button", label));
+            this.addWidget(new WidgetInfoIcon(button.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.plugin.info.button", label));
             createButton(button.getX() + offset + 20, y, width, ConsumerButtonListener.ButtonType.TAG);
 
             y += 30;
 
-            label = StringUtils.translate("watson.gui.label.ledger.title.range"); //Range
+            label = StringUtils.translate("watson.gui.label.plugin.title.range"); //Range
             this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
             offset = this.getStringWidth(label) + 4;
             this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.range"));
@@ -119,7 +119,7 @@ public class GuiLedger extends GuiBase
             this.textFieldRange.setText(String.valueOf(ledgerInfo.getRange()));
             this.addTextField(this.textFieldRange, new RangeTextFieldListener(this));
 
-            label = StringUtils.translate("watson.gui.label.ledger.title.source"); //Source
+            label = StringUtils.translate("watson.gui.label.plugin.title.source"); //Source
             this.addLabel(textFieldRange.getX() + textFieldRange.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
             offset = this.getStringWidth(label) + 10 + textFieldRange.getWidth();
             this.addWidget(new WidgetInfoIcon(textFieldRange.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.source"));
@@ -133,7 +133,7 @@ public class GuiLedger extends GuiBase
             label = StringUtils.translate("watson.gui.label.ledger.title.time.before"); //Time before
             this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
             offset = this.getStringWidth(label) + 4;
-            this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.time"));
+            this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.plugin.info.time"));
 
             this.textFieldTimeBefore = new GuiTextFieldGeneric(x + offset + 20, y + 2, width, 14, this.textRenderer);
             this.textFieldTimeBefore.setText(ledgerInfo.getTimeBefore());
@@ -142,7 +142,7 @@ public class GuiLedger extends GuiBase
             label = StringUtils.translate("watson.gui.label.ledger.title.time.after"); //Time after
             this.addLabel(textFieldTimeBefore.getX() + textFieldTimeBefore.getWidth() + 5, y, width, 20, 0xFFFFFFFF, label);
             offset = this.getStringWidth(label) + 10 + textFieldTimeBefore.getWidth();
-            this.addWidget(new WidgetInfoIcon(textFieldTimeBefore.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.time"));
+            this.addWidget(new WidgetInfoIcon(textFieldTimeBefore.getX() + offset, y + 4, Icons.INFO_11, "watson.gui.label.plugin.info.time"));
 
             this.textFieldTimeAfter = new GuiTextFieldGeneric(textFieldTimeBefore.getX() + offset + 20, y + 2, width, 14, this.textRenderer);
             this.textFieldTimeAfter.setText(ledgerInfo.getTimeAfter());
@@ -180,10 +180,10 @@ public class GuiLedger extends GuiBase
         {
             y += 30;
 
-            label = StringUtils.translate("watson.gui.label.ledger.title.pages"); //Pages
+            label = StringUtils.translate("watson.gui.label.plugin.title.pages"); //Pages
             this.addLabel(x, y, width, 20, 0xFFFFFFFF, label);
             offset = this.getStringWidth(label) + 4;
-            this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.ledger.info.pages"));
+            this.addWidget(new WidgetInfoIcon(x + offset, y + 4, Icons.INFO_11, "watson.gui.label.plugin.info.pages", Configs.Plugin.PLUGIN.getOptionListValue().getDisplayName()));
 
             this.textFieldPages = new GuiTextFieldInteger(x + offset + 20, y + 2, width, 14, this.textRenderer);
             this.textFieldPages.setText(String.valueOf(ledgerInfo.getPages()));
@@ -281,7 +281,7 @@ public class GuiLedger extends GuiBase
         {
             if (!action.contains("-"))
             {
-                addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.action"), action);
+                addMessage(Message.MessageType.WARNING, "watson.error.plugin.invalid_format", StringUtils.translate("watson.gui.label.plugin.title.action"), action);
                 error = true;
                 break;
             }
@@ -292,7 +292,7 @@ public class GuiLedger extends GuiBase
         }
         if (!listActionError.isEmpty())
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.action"), String.join(",", listActionError));
+            addMessage(Message.MessageType.WARNING, "watson.error.plugin.not_exist", StringUtils.translate("watson.gui.label.plugin.title.action"), String.join(",", listActionError));
             error = true;
         }
 
@@ -305,7 +305,7 @@ public class GuiLedger extends GuiBase
             }
             if (!dimensionText.contains(":"))
             {
-                addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.dimension"), dimensionText);
+                addMessage(Message.MessageType.WARNING, "watson.error.plugin.invalid_format", StringUtils.translate("watson.gui.label.plugin.title.dimension"), dimensionText);
                 error = true;
                 break;
             }
@@ -317,7 +317,7 @@ public class GuiLedger extends GuiBase
         }
         if (!listDimensionError.isEmpty())
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.dimension"), String.join(",", listDimensionError));
+            addMessage(Message.MessageType.WARNING, "watson.error.plugin.not_exist", StringUtils.translate("watson.gui.label.plugin.title.dimension"), String.join(",", listDimensionError));
             error = true;
         }
 
@@ -331,7 +331,7 @@ public class GuiLedger extends GuiBase
             }
             if (!blockText.contains(":"))
             {
-                addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.block"), blockText);
+                addMessage(Message.MessageType.WARNING, "watson.error.plugin.invalid_format", StringUtils.translate("watson.gui.label.plugin.title.block"), blockText);
                 error = true;
                 break;
             }
@@ -342,7 +342,7 @@ public class GuiLedger extends GuiBase
         }
         if (!listBlockError.isEmpty())
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.block"), String.join(",", listBlockError));
+            addMessage(Message.MessageType.WARNING, "watson.error.plugin.not_exist", StringUtils.translate("watson.gui.label.plugin.title.block"), String.join(",", listBlockError));
             error = true;
         }
 
@@ -356,7 +356,7 @@ public class GuiLedger extends GuiBase
             }
             if (!entityTypeText.contains(":"))
             {
-                addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.entitytype"), entityTypeText);
+                addMessage(Message.MessageType.WARNING, "watson.error.plugin.invalid_format", StringUtils.translate("watson.gui.label.plugin.title.entitytype"), entityTypeText);
                 error = true;
                 break;
             }
@@ -367,7 +367,7 @@ public class GuiLedger extends GuiBase
         }
         if (!listEntityTypeError.isEmpty())
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.entitytype"), String.join(",", listEntityTypeError));
+            addMessage(Message.MessageType.WARNING, "watson.error.plugin.not_exist", StringUtils.translate("watson.gui.label.plugin.title.entitytype"), String.join(",", listEntityTypeError));
             error = true;
         }
 
@@ -381,7 +381,7 @@ public class GuiLedger extends GuiBase
             }
             if (!itemText.contains(":"))
             {
-                addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.item"), itemText);
+                addMessage(Message.MessageType.WARNING, "watson.error.plugin.invalid_format", StringUtils.translate("watson.gui.label.plugin.title.item"), itemText);
                 error = true;
                 break;
             }
@@ -392,7 +392,7 @@ public class GuiLedger extends GuiBase
         }
         if (!listItemError.isEmpty())
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.item"), String.join(",", listItemError));
+            addMessage(Message.MessageType.WARNING, "watson.error.plugin.not_exist", StringUtils.translate("watson.gui.label.plugin.title.item"), String.join(",", listItemError));
             error = true;
         }
 
@@ -406,7 +406,7 @@ public class GuiLedger extends GuiBase
             }
             if (!tagText.contains(":") || !tagText.contains("#"))
             {
-                addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.tag"), tagText);
+                addMessage(Message.MessageType.WARNING, "watson.error.plugin.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.tag"), tagText);
                 error = true;
                 break;
             }
@@ -417,14 +417,14 @@ public class GuiLedger extends GuiBase
         }
         if (!listTagError.isEmpty())
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.not_exist", StringUtils.translate("watson.gui.label.ledger.title.tag"), String.join(",", listTagError));
+            addMessage(Message.MessageType.WARNING, "watson.error.plugin.not_exist", StringUtils.translate("watson.gui.label.ledger.title.tag"), String.join(",", listTagError));
             error = true;
         }
 
         int textRange = ledgerInfo.getRange();
         if (textRange <= 1 && textRange != 0)
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.range"), textRange);
+            addMessage(Message.MessageType.WARNING, "watson.error.plugin.invalid_format", StringUtils.translate("watson.gui.label.plugin.title.range"), textRange);
             error = true;
         }
         String textSource = ledgerInfo.getSources();
@@ -439,13 +439,13 @@ public class GuiLedger extends GuiBase
         String textTimeBefore = ledgerInfo.getTimeBefore();
         if (!textTimeBefore.matches("^([0-9]+[smhdw])+$") && !textTimeBefore.isEmpty())
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.time.before"), textTimeBefore);
+            addMessage(Message.MessageType.WARNING, "watson.error.plugin.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.time.before"), textTimeBefore);
             error = true;
         }
         String textTimeAfter = ledgerInfo.getTimeAfter();
         if (!textTimeAfter.matches("^([0-9]+[smhdw])+$") && !textTimeAfter.isEmpty())
         {
-            addMessage(Message.MessageType.WARNING, "watson.error.ledger.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.time.after"), textTimeAfter);
+            addMessage(Message.MessageType.WARNING, "watson.error.plugin.invalid_format", StringUtils.translate("watson.gui.label.ledger.title.time.after"), textTimeAfter);
             error = true;
         }
 
@@ -858,11 +858,11 @@ public class GuiLedger extends GuiBase
 
         public enum ButtonType
         {
-            ACTION("watson.gui.button.ledger.action"),
-            BLOCK("watson.gui.button.ledger.block"),
-            DIMENSION("watson.gui.button.ledger.dimension"),
-            ENTITYTYPE("watson.gui.button.ledger.entitytype"),
-            ITEM("watson.gui.button.ledger.item"),
+            ACTION("watson.gui.button.plugin.action"),
+            BLOCK("watson.gui.button.plugin.block"),
+            DIMENSION("watson.gui.button.plugin.dimension"),
+            ENTITYTYPE("watson.gui.button.plugin.entitytype"),
+            ITEM("watson.gui.button.plugin.item"),
             TAG("watson.gui.button.ledger.tag");
 
             private final String labelKey;
@@ -951,9 +951,9 @@ public class GuiLedger extends GuiBase
 
         public enum ButtonType
         {
-            CLEAR("watson.gui.button.ledger.clear"),
+            CLEAR("watson.gui.button.plugin.clear"),
             MAIN_MENU("watson.gui.button.change_menu.to_main_menu"),
-            SUBMIT("watson.gui.button.ledger.submit");
+            SUBMIT("watson.gui.button.plugin.submit");
 
             private final String labelKey;
 
@@ -994,10 +994,10 @@ public class GuiLedger extends GuiBase
         public enum LedgerMode
         {
             INSPECT("watson.gui.button.ledger.inspect"),
-            PURGE("watson.gui.button.ledger.purge"),
-            RESTORE("watson.gui.button.ledger.restore"),
-            ROLLBACK("watson.gui.button.ledger.rollback"),
-            SEARCH("watson.gui.button.ledger.search");
+            PURGE("watson.gui.button.plugin.purge"),
+            RESTORE("watson.gui.button.plugin.restore"),
+            ROLLBACK("watson.gui.button.plugin.rollback"),
+            SEARCH("watson.gui.button.plugin.search");
 
             private final String labelKey;
 
