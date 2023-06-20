@@ -370,7 +370,7 @@ The various controls are described in the table below:
 
 ### Built-In Calculator
 
-Watson contains a simple calculator that understands +, -, *, / and parentheses ().  Currently, the calculator considers '-' to bind to any digits that immediately follow (making a negative number), so when subtracting, use spaces.  Example:
+Watson contains a simple calculator that understands +, -, *, /, % and parentheses ().  Currently, the calculator considers '-' to bind to any digits that immediately follow (making a negative number), so when subtracting, use spaces.  Example:
 
     /calc 800/(57 - 32)
 

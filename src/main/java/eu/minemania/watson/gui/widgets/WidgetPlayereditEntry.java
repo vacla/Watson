@@ -13,7 +13,7 @@ import fi.dy.masa.malilib.gui.button.IButtonActionListener;
 import fi.dy.masa.malilib.gui.widgets.WidgetListEntryBase;
 import fi.dy.masa.malilib.render.RenderUtils;
 import fi.dy.masa.malilib.util.StringUtils;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 
 public class WidgetPlayereditEntry extends WidgetListEntryBase<PlayereditSet>
 {
@@ -61,7 +61,7 @@ public class WidgetPlayereditEntry extends WidgetListEntryBase<PlayereditSet>
     }
 
     @Override
-    public void render(int mouseX, int mouseY, boolean selected, MatrixStack matrixStack)
+    public void render(int mouseX, int mouseY, boolean selected, DrawContext drawContext)
     {
         RenderUtils.color(1f, 1f, 1f, 1f);
 
@@ -79,18 +79,18 @@ public class WidgetPlayereditEntry extends WidgetListEntryBase<PlayereditSet>
         }
 
         String playerName = this.entry.getPlayer();
-        this.drawString(this.x + 20, this.y + 7, 0xFFFFFFFF, playerName, matrixStack);
+        this.drawString(this.x + 20, this.y + 7, 0xFFFFFFFF, playerName, drawContext);
 
         RenderUtils.color(1f, 1f, 1f, 1f);
         RenderSystem.disableBlend();
 
         String text = StringUtils.translate("watson.gui.button.playeredit.hover", this.entry.getBlockEditCount());
 
-        this.drawSubWidgets(mouseX, mouseY, matrixStack);
+        this.drawSubWidgets(mouseX, mouseY, drawContext);
 
         if (GuiBase.isMouseOver(mouseX, mouseY, this.x, this.y, this.buttonsStartX - 12, this.height))
         {
-            RenderUtils.drawHoverText(mouseX, mouseY, ImmutableList.of(text), matrixStack);
+            RenderUtils.drawHoverText(mouseX, mouseY, ImmutableList.of(text), drawContext);
         }
 
         RenderUtils.disableDiffuseLighting();

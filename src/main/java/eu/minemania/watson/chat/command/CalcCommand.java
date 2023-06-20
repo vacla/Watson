@@ -82,6 +82,7 @@ public class CalcCommand extends WatsonCommandBase
         // introducers. >.<
         tokenizer.ordinaryChar('*');
         tokenizer.ordinaryChar('/');
+        tokenizer.ordinaryChar('%');
         return tokenizer;
     }
 
@@ -131,6 +132,10 @@ public class CalcCommand extends WatsonCommandBase
             else if (token == '/')
             {
                 result /= factor(tokenizer);
+            }
+            else if (token == '%')
+            {
+                result %= factor(tokenizer);
             }
             else
             {

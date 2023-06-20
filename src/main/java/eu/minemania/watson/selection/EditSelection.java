@@ -114,7 +114,7 @@ public class EditSelection
             idBuilder.append(serverIP);
         }
         idBuilder.append('/');
-        idBuilder.append(WorldUtils.getDimensionId(player.world));
+        idBuilder.append(WorldUtils.getDimensionId(player.getWorld()));
         String id = idBuilder.toString();
 
         BlockEditSet edits = _edits.get(id);

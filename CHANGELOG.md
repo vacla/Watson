@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.15.0+1.20.1] - 2023-06-18
+
+### Added
+
+- Support Minecraft 1.20.1
+- Added Modulus divide to calc command
+
 ## [1.14.6+1.19.4] - 2023-04-15
 
 ### Added
