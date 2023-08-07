@@ -21,14 +21,15 @@ public class ClientTickHandler implements IClientTickHandler
             {
                 if (!Configs.Messages.DISABLE_JOIN_MESSAGES.getBooleanValue())
                 {
-                    ChatMessage.localOutputT("watson.message.join.watson", Reference.MOD_VERSION, Configs.Generic.WATSON_PREFIX.getStringValue(), true);
+                    ChatMessage.localOutputT("watson.message.join.watson.info", Reference.MOD_VERSION, Configs.Generic.WATSON_PREFIX.getStringValue(), true);
                     if (Configs.Plugin.PLUGIN.getOptionListValue() == Plugins.LEDGER)
                     {
-                        ChatMessage.localOutputT("watson.message.join.ledger");
+                        ChatMessage.localOutputT("watson.message.join.ledger.info");
+                        ChatMessage.localOutputT("watson.message.join.ledger.nomessage");
                     }
                     else
                     {
-                        ChatMessage.localOutputT("watson.message.join.plugin");
+                        ChatMessage.localOutputT("watson.message.join.plugin.info");
                     }
                 }
                 DataManager.setClientTick(0);
