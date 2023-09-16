@@ -26,7 +26,7 @@ public class Paginator
                     ChatMessage.localOutputT("watson.message.autopage.finished");
                     return;
                 }
-                ChatMessage.sendToServerChat("pr page n");
+                ChatMessage.getInstance().serverChat("pr page n", currentPage == 1);
 
                 reset();
             }
@@ -44,7 +44,7 @@ public class Paginator
                     ChatMessage.localOutputT("watson.message.autopage.finished");
                     return;
                 }
-                ChatMessage.sendToServerChat(String.format("lb page %d", currentPage + 1));
+                ChatMessage.getInstance().serverChat(String.format("lb page %d", currentPage + 1), currentPage == 1);
 
                 reset();
             }
