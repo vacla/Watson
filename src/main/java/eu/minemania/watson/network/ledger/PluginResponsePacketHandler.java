@@ -1,18 +1,15 @@
 package eu.minemania.watson.network.ledger;
 
 import com.google.common.base.Charsets;
-import com.google.common.collect.ImmutableList;
 import eu.minemania.watson.network.IPluginChannelHandlerExtended;
 import fi.dy.masa.malilib.gui.Message;
 import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
-import java.util.List;
-
 public class PluginResponsePacketHandler implements IPluginChannelHandlerExtended
 {
-    public static final List<Identifier> CHANNELS = ImmutableList.of(new Identifier("ledger:reponse"));
+    public static final Identifier CHANNEL = new Identifier("ledger:reponse");
 
     public static final PluginResponsePacketHandler INSTANCE = new PluginResponsePacketHandler();
 
@@ -24,9 +21,9 @@ public class PluginResponsePacketHandler implements IPluginChannelHandlerExtende
     }
 
     @Override
-    public List<Identifier> getChannels()
+    public Identifier getChannel()
     {
-        return CHANNELS;
+        return CHANNEL;
     }
 
     @Override

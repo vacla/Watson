@@ -4,10 +4,10 @@ import com.google.common.base.Charsets;
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
 import io.netty.buffer.Unpooled;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.packet.c2s.play.CustomPayloadC2SPacket;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
@@ -37,7 +37,7 @@ public class PluginInspectPacketHandler
                 Watson.logger.info("pages: "+pages);
                 Watson.logger.info(CHANNEL);
             }
-            packetHandler.sendPacket(new CustomPayloadC2SPacket(CHANNEL, packetByteBuf));
+            ClientPlayNetworking.send(CHANNEL, packetByteBuf);
         }
         catch (Exception ignored)
         {}

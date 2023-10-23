@@ -64,7 +64,7 @@ public class WorldLoadListener implements IWorldLoadListener
             ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginHandshakePacketHandler.INSTANCE);
             ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginActionPacketHandler.INSTANCE);
             ClientPacketChannelHandler.getInstance().registerClientChannelHandler(PluginResponsePacketHandler.INSTANCE);
-            ((ClientPacketChannelHandler) ClientPacketChannelHandler.getInstance()).processPacketFromClient(mc.getNetworkHandler());
+            ((ClientPacketChannelHandler) ClientPacketChannelHandler.getInstance()).processPacketFromClient();
         }
         if (worldAfter != null)
         {

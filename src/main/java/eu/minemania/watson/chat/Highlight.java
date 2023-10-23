@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.*;
 import net.minecraft.util.Identifier;
@@ -102,11 +103,11 @@ public class Highlight
         final Style[] dividerStyle = {null};
         String divineDivider = "»";
         final int[] i = {0};
-        ClientPlayerEntity player = mc.player;
+        ClientPlayNetworkHandler networkHandler = mc.getNetworkHandler();
         String serverBrand;
-        if (player != null && player.getServerBrand() != null && !player.getServerBrand().isEmpty())
+        if (networkHandler != null && networkHandler.getBrand() != null && !networkHandler.getBrand().isEmpty())
         {
-            serverBrand = player.getServerBrand().toLowerCase();
+            serverBrand = networkHandler.getBrand().toLowerCase();
         }
         else
         {

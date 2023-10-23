@@ -1,18 +1,15 @@
 package eu.minemania.watson.network;
 
 import com.google.common.base.Charsets;
-import com.google.common.collect.ImmutableList;
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
-import java.util.List;
-
 public class PluginWorldPacketHandler implements IPluginChannelHandlerExtended
 {
-    public static final List<Identifier> CHANNELS = ImmutableList.of(new Identifier("watson:world"));
+    public static final Identifier CHANNEL = new Identifier("watson:world");
 
     public static final PluginWorldPacketHandler INSTANCE = new PluginWorldPacketHandler();
 
@@ -25,9 +22,9 @@ public class PluginWorldPacketHandler implements IPluginChannelHandlerExtended
     }
 
     @Override
-    public List<Identifier> getChannels()
+    public Identifier getChannel()
     {
-        return CHANNELS;
+        return CHANNEL;
     }
 
     @Override

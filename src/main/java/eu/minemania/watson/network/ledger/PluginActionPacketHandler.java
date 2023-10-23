@@ -1,7 +1,6 @@
 package eu.minemania.watson.network.ledger;
 
 import com.google.common.base.Charsets;
-import com.google.common.collect.ImmutableList;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.config.Configs;
@@ -19,11 +18,10 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class PluginActionPacketHandler implements IPluginChannelHandlerExtended
 {
-    public static final List<Identifier> CHANNELS = ImmutableList.of(new Identifier("ledger:action"));
+    public static final Identifier CHANNEL = new Identifier("ledger:action");
 
     public static final PluginActionPacketHandler INSTANCE = new PluginActionPacketHandler();
 
@@ -35,9 +33,9 @@ public class PluginActionPacketHandler implements IPluginChannelHandlerExtended
     }
 
     @Override
-    public List<Identifier> getChannels()
+    public Identifier getChannel()
     {
-        return CHANNELS;
+        return CHANNEL;
     }
 
     @Override
@@ -66,7 +64,7 @@ public class PluginActionPacketHandler implements IPluginChannelHandlerExtended
 
                 WatsonBlock watsonBlock = WatsonBlockRegistery.getInstance().getWatsonBlockByName(!type.contains("break") ? newObj.toString() : oldObj.toString());
 
-                if (!additional.equals(""))
+                if (!additional.isEmpty())
                 {
                     NbtCompound nbtCompound = StringNbtReader.parse(additional);
                     if (nbtCompound.contains("Count", NbtElement.BYTE_TYPE))
