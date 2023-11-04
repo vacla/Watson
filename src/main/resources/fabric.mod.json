@@ -5,7 +5,7 @@
   "version": "${mod_version}",
   "description": "Updated Watson that displays LogBlock and CoreProtect query results in 3D.",
   "authors": [
-    "Arnevdl29"
+    "Annevdl29"
   ],
   "contact": {
     "homepage": "",
@@ -28,6 +28,7 @@
     "mixins.watson.json"
   ],
   "depends": {
-    "malilib": ">=0.10.0-dev.21"
+    "minecraft": "${minecraft_version_dependency}",
+    "malilib": "${malilib_mod_version}"
   }
 }

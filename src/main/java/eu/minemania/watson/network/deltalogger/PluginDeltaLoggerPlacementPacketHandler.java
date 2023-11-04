@@ -76,8 +76,6 @@ public class PluginDeltaLoggerPlacementPacketHandler implements IPluginChannelHa
 
             BlockEdit edit = new BlockEdit(correctTime, player, action, x, y, z, block, world, 1);
             SyncTaskQueue.getInstance().addTask(new AddBlockEditTask(edit, false));
-
-            //DataManager.setWorldPlugin(buf.read);
         }
     }
 }

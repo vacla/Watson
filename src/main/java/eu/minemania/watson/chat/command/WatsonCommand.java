@@ -5,6 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.CommandNode;
 
+import eu.minemania.watson.analysis.CoreProtectAnalysis;
 import eu.minemania.watson.analysis.ServerTime;
 import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
@@ -145,13 +146,15 @@ public class WatsonCommand extends WatsonCommandBase
                 .then(literal("replay")
                         .then(argument("radius", integer(1))
                                 .then(argument("speed", doubleArg(1))
-                                        .then(argument("since", greedyString()).executes(WatsonCommand::replay)))));
+                                        .then(argument("since", greedyString()).executes(WatsonCommand::replay))))
+                        .then(literal("cancel").executes(WatsonCommand::cancelReplay)));
         dispatcher.register(watson);
     }
 
     private static int clear(CommandContext<ServerCommandSource> context)
     {
         DataManager.getEditSelection().clearBlockEditSet();
+        CoreProtectAnalysis.reset();
         return 1;
     }
 
@@ -990,9 +993,16 @@ public class WatsonCommand extends WatsonCommandBase
                 error = "radius";
             }
             localErrorT(context.getSource(), "watson.error.command.replay." + error);
+            return 0;
         }
 
         DataManager.getEditSelection().replay(since, speed, radius, context.getSource());
+        return 1;
+    }
+
+    private static int cancelReplay(CommandContext<ServerCommandSource> context)
+    {
+        DataManager.getEditSelection().cancelReplay();
         return 1;
     }
 }

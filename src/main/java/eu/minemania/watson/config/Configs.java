@@ -304,9 +304,9 @@ public class Configs implements IConfigHandler
         ImmutableList.Builder<String> builder = ImmutableList.builder();
         final HashSet<String> set = new HashSet<>();
 
-        Registry.BLOCK.forEach((block) -> set.add(Registry.BLOCK.getId(block).toString() + ";1;" + setCustomColorOres(block.asItem())));
-        Registry.ITEM.forEach((item) -> set.add(Registry.ITEM.getId(item).toString() + ";1;" + setCustomColorOres(item)));
-        Registry.ENTITY_TYPE.forEach((type) -> set.add(Registry.ENTITY_TYPE.getId(type).toString() + ";1;#CC780E22"));
+        Registry.BLOCK.forEach((block) -> set.add(Registry.BLOCK.getId(block) + ";2;" + setCustomColorOres(block.asItem())));
+        Registry.ITEM.forEach((item) -> set.add(Registry.ITEM.getId(item) + ";2;" + setCustomColorOres(item)));
+        Registry.ENTITY_TYPE.forEach((type) -> set.add(Registry.ENTITY_TYPE.getId(type) + ";2;#CC780E22"));
 
         ArrayList<String> list = new ArrayList<>(set);
         list.sort(String::compareTo);
@@ -328,6 +328,9 @@ public class Configs implements IConfigHandler
             DEFAULT_COLORS.put(Items.COAL_ORE, "#CC191611");
             DEFAULT_COLORS.put(Items.EMERALD_ORE, "#CC17DD62");
             DEFAULT_COLORS.put(Items.NETHER_QUARTZ_ORE, "#CCEBE9E3");
+            DEFAULT_COLORS.put(Items.ANCIENT_DEBRIS, "#CC332120");
+            DEFAULT_COLORS.put(Items.GILDED_BLACKSTONE, "#CCFCEE4B");
+            DEFAULT_COLORS.put(Items.NETHER_GOLD_ORE, "#CCFCEE4B");
         }
         return DEFAULT_COLORS.getOrDefault(block, "#CC737373");
     }

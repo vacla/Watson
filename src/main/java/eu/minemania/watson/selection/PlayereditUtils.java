@@ -73,11 +73,11 @@ public class PlayereditUtils
                     {
                         String typeName = type.getStack().getItem().toString();
                         String blockName = getItemStack(edit.block.getName()).getItem().toString();
-                        if (!typeName.contains("minecraft:"))
+                        if (!typeName.contains(":"))
                         {
                             typeName = "minecraft:" + typeName;
                         }
-                        if (!blockName.contains("minecraft:"))
+                        if (!blockName.contains(":"))
                         {
                             blockName = "minecraft:" + blockName;
                         }

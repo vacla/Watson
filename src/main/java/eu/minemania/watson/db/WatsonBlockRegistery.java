@@ -152,6 +152,11 @@ public final class WatsonBlockRegistery
         _byName.putIfAbsent(name, watsonBlock);
     }
 
+    public WatsonBlock getWatsonBlockByBlock(Block block)
+    {
+        return getWatsonBlockByName(Registry.BLOCK.getId(block).toString());
+    }
+
     public WatsonBlock getWatsonBlockByName(String name)
     {
         WatsonBlock result = _byName.get("minecraft:" + name.toLowerCase());

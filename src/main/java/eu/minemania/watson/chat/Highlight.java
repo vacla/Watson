@@ -45,6 +45,11 @@ public class Highlight
      */
     public static MutableText setHighlightChatMessage(String key, MutableText message, boolean watsonMessage)
     {
+        ClientPlayerEntity player = mc.player;
+        if (player == null)
+        {
+            return message;
+        }
         final String[] user = {""};
         StringBuilder textChat = new StringBuilder();
         final int[] i = {0};
@@ -67,7 +72,7 @@ public class Highlight
             }, Style.EMPTY);
 
             setUsername(user[0], null);
-            endMessage = new TranslatableText(key, mc.player.getDisplayName(), Configs.Highlights.USE_CHAT_HIGHLIGHTS.getBooleanValue() ? highlight(textChat.toString()) : textChat.toString());
+            endMessage = new TranslatableText(key, player.getDisplayName(), Configs.Highlights.USE_CHAT_HIGHLIGHTS.getBooleanValue() ? highlight(textChat.toString()) : textChat.toString());
         }
         else
         {
@@ -99,7 +104,7 @@ public class Highlight
         final int[] i = {0};
         ClientPlayerEntity player = mc.player;
         String serverBrand;
-        if (player != null)
+        if (player != null && !player.getServerBrand().isEmpty())
         {
             serverBrand = player.getServerBrand().toLowerCase();
         }
@@ -323,6 +328,11 @@ public class Highlight
      */
     private static String highlight(String chatText)
     {
+        ClientPlayerEntity player = mc.player;
+        if (player == null)
+        {
+            return chatText;
+        }
         boolean madeSound = false;
         for (MutablePair<String, MutablePair<Formatting, Formatting>> item_highlight : highlights)
         {
@@ -339,7 +349,7 @@ public class Highlight
                     {
                         SoundEvent soundEvent = Registry.SOUND_EVENT.get(new Identifier(sound));
                         float soundVolume = (float) Configs.Highlights.HIGHLIGHT_SOUND_VOLUME.getDoubleValue();
-                        mc.player.playSound(soundEvent, soundVolume, 1f);
+                        player.playSound(soundEvent, soundVolume, 1f);
                     }
                     catch (Exception e)
                     {

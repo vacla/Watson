@@ -6,11 +6,13 @@ import java.util.HashMap;
 import eu.minemania.watson.Watson;
 import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.config.Configs;
+import eu.minemania.watson.config.Plugins;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.db.TimeStamp;
 import fi.dy.masa.malilib.gui.Message.MessageType;
 import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.player.PlayerEntity;
 
 public class ServerTime extends Analysis
 {
@@ -61,15 +63,16 @@ public class ServerTime extends Analysis
     public void queryServerTime(boolean showServerTime)
     {
         String serverIP = DataManager.getServerIP();
-        if (serverIP != null)
+        PlayerEntity player = MinecraftClient.getInstance().player;
+        if (serverIP != null && player != null)
         {
             if (_localMinusServerMinutes.get(serverIP) == null)
             {
-                if (Configs.Plugin.PLUGIN.getOptionListValue().getStringValue().equals("LogBlock"))
+                if (Configs.Plugin.PLUGIN.getOptionListValue() == Plugins.LOGBLOCK)
                 {
                     Calendar pastTime = getPastTime();
                     String date = String.format("%d.%d.%d", pastTime.get(Calendar.DAY_OF_MONTH), pastTime.get(Calendar.MONTH) + 1, pastTime.get(Calendar.YEAR));
-                    String query = String.format("/lb player %s since %s 00:00:00 before %s 00:00:01 limit 1", MinecraftClient.getInstance().player.getName().getString(), date, date);
+                    String query = String.format("/lb player %s since %s 00:00:00 before %s 00:00:01 limit 1", player.getName().getString(), date, date);
                     if (Configs.Generic.DEBUG.getBooleanValue())
                     {
                         Watson.logger.info("Server time query for " + serverIP + ": " + query);

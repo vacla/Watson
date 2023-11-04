@@ -13,6 +13,7 @@ import eu.minemania.watson.config.Configs;
 import eu.minemania.watson.data.DataManager;
 import eu.minemania.watson.render.OverlayRenderer;
 import eu.minemania.watson.selection.EditSelection;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.Formatting;
 
 public class OreDB
@@ -29,27 +30,29 @@ public class OreDB
         WatsonBlockRegistery types = WatsonBlockRegistery.getInstance();
 
         //TODO add list malilib custom color
-        _db.put(types.getWatsonBlockByName("minecraft:diamond_ore"), new TypedOreDB(200));
-        _db.put(types.getWatsonBlockByName("minecraft:emerald_ore"), new TypedOreDB(200));
-        _db.put(types.getWatsonBlockByName("minecraft:iron_ore"), new TypedOreDB(400));
-        _db.put(types.getWatsonBlockByName("minecraft:gold_ore"), new TypedOreDB(200));
-        _db.put(types.getWatsonBlockByName("minecraft:lapis_ore"), new TypedOreDB(200));
-        _db.put(types.getWatsonBlockByName("minecraft:redstone_ore"), new TypedOreDB(200));
-        _db.put(types.getWatsonBlockByName("minecraft:coal_ore"), new TypedOreDB(800));
-        _db.put(types.getWatsonBlockByName("minecraft:nether_quartz_ore"), new TypedOreDB(400));
-        _db.put(types.getWatsonBlockByName("minecraft:ancient_debris"), new TypedOreDB(200));
-        _db.put(types.getWatsonBlockByName("minecraft:gilded_blackstone"), new TypedOreDB(200));
+        _db.put(types.getWatsonBlockByBlock(Blocks.DIAMOND_ORE), new TypedOreDB(200));
+        _db.put(types.getWatsonBlockByBlock(Blocks.EMERALD_ORE), new TypedOreDB(200));
+        _db.put(types.getWatsonBlockByBlock(Blocks.IRON_ORE), new TypedOreDB(400));
+        _db.put(types.getWatsonBlockByBlock(Blocks.GOLD_ORE), new TypedOreDB(200));
+        _db.put(types.getWatsonBlockByBlock(Blocks.LAPIS_ORE), new TypedOreDB(200));
+        _db.put(types.getWatsonBlockByBlock(Blocks.REDSTONE_ORE), new TypedOreDB(200));
+        _db.put(types.getWatsonBlockByBlock(Blocks.COAL_ORE), new TypedOreDB(800));
+        _db.put(types.getWatsonBlockByBlock(Blocks.NETHER_QUARTZ_ORE), new TypedOreDB(400));
+        _db.put(types.getWatsonBlockByBlock(Blocks.ANCIENT_DEBRIS), new TypedOreDB(200));
+        _db.put(types.getWatsonBlockByBlock(Blocks.GILDED_BLACKSTONE), new TypedOreDB(200));
+        _db.put(types.getWatsonBlockByBlock(Blocks.NETHER_GOLD_ORE), new TypedOreDB(200));
 
-        _chatColors.put(types.getWatsonBlockByName("minecraft:diamond_ore"), Color.aqua);
-        _chatColors.put(types.getWatsonBlockByName("minecraft:emerald_ore"), Color.green);
-        _chatColors.put(types.getWatsonBlockByName("minecraft:iron_ore"), Color.gold);
-        _chatColors.put(types.getWatsonBlockByName("minecraft:gold_ore"), Color.yellow);
-        _chatColors.put(types.getWatsonBlockByName("minecraft:lapis_ore"), Color.blue);
-        _chatColors.put(types.getWatsonBlockByName("minecraft:redstone_ore"), Color.darkred);
-        _chatColors.put(types.getWatsonBlockByName("minecraft:coal_ore"), Color.darkgray);
-        _chatColors.put(types.getWatsonBlockByName("minecraft:nether_quartz_ore"), Color.white);
-        _chatColors.put(types.getWatsonBlockByName("minecraft:ancient_debris"), Color.gray);
-        _chatColors.put(types.getWatsonBlockByName("minecraft:gilded_blackstone"), Color.yellow);
+        _chatColors.put(types.getWatsonBlockByBlock(Blocks.DIAMOND_ORE), Color.aqua);
+        _chatColors.put(types.getWatsonBlockByBlock(Blocks.EMERALD_ORE), Color.green);
+        _chatColors.put(types.getWatsonBlockByBlock(Blocks.IRON_ORE), Color.gold);
+        _chatColors.put(types.getWatsonBlockByBlock(Blocks.GOLD_ORE), Color.yellow);
+        _chatColors.put(types.getWatsonBlockByBlock(Blocks.LAPIS_ORE), Color.blue);
+        _chatColors.put(types.getWatsonBlockByBlock(Blocks.REDSTONE_ORE), Color.darkred);
+        _chatColors.put(types.getWatsonBlockByBlock(Blocks.COAL_ORE), Color.darkgray);
+        _chatColors.put(types.getWatsonBlockByBlock(Blocks.NETHER_QUARTZ_ORE), Color.white);
+        _chatColors.put(types.getWatsonBlockByBlock(Blocks.ANCIENT_DEBRIS), Color.gray);
+        _chatColors.put(types.getWatsonBlockByBlock(Blocks.GILDED_BLACKSTONE), Color.yellow);
+        _chatColors.put(types.getWatsonBlockByBlock(Blocks.NETHER_GOLD_ORE), Color.yellow);
     }
 
     public void clear()
