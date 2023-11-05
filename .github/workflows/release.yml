@@ -34,6 +34,8 @@ jobs:
           version: ${{ steps.tag_name.outputs.current_version }}
           path: ./CHANGELOG.md
       - uses: gradle/wrapper-validation-action@v1
+      - name: make gradle wrapper executable
+        run: chmod +x ./gradlew
       - run: ./gradlew build publishMod --stacktrace
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}

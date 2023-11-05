@@ -6,4 +6,9 @@ import net.minecraft.network.PacketByteBuf;
 public interface IPluginChannelHandlerExtended extends IPluginChannelHandler
 {
     PacketByteBuf onPacketSend();
+
+    default boolean usePacketSplitter()
+    {
+        return false;
+    }
 }

@@ -9,7 +9,7 @@ import net.minecraft.util.Identifier;
 
 public class PluginResponsePacketHandler implements IPluginChannelHandlerExtended
 {
-    public static final Identifier CHANNEL = new Identifier("ledger:reponse");
+    public static final Identifier CHANNEL = new Identifier("ledger:response");
 
     public static final PluginResponsePacketHandler INSTANCE = new PluginResponsePacketHandler();
 
