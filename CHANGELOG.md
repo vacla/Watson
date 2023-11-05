@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.15.2+1.20.2] - 2023-11-05
+
+### Added
+
+- Rewrote replay feature
+
+### Fixed
+
+- Network packets crashes/not being read correctly
+
+## [1.10.1+1.16.5] - 2023-11-04
+
+### Added
+
+- Backported some features from 1.20.2
+
 ## [1.15.1+1.20.2] - 2023-10-23
 
 ### Added
