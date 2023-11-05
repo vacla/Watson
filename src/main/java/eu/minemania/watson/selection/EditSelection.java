@@ -10,7 +10,6 @@ import eu.minemania.watson.db.PlayereditSet;
 import eu.minemania.watson.render.RenderUtils;
 import fi.dy.masa.malilib.util.WorldUtils;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.command.argument.EntityAnchorArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -40,8 +39,7 @@ public class EditSelection
     protected HashMap<String, Object> _variables = new HashMap<>();
     protected static HashMap<String, BlockEditSet> _edits = new HashMap<>();
     protected Calendar _calendar = Calendar.getInstance();
-
-    private static Thread thread;
+    private static ReplayThread thread;
 
     public HashMap<String, Object> getVariables()
     {
@@ -128,7 +126,7 @@ public class EditSelection
         return edits;
     }
 
-    public void drawSelection(MatrixStack matrixStack)
+    public void drawSelection()
     {
         if (_selection != null && Configs.Edits.SELECTION_SHOWN.getBooleanValue() && (DataManager.getWorldPlugin().isEmpty() || DataManager.getWorldPlugin().equals(_selection.world)))
         {
@@ -270,33 +268,10 @@ public class EditSelection
             {
                 return;
             }
-            Thread t = new Thread(() -> {
-                for (BlockEdit edit : edits)
-                {
-                    try
-                    {
-                        double randX = MathHelper.clamp(edit.x + player.getRandom().nextDouble() * 16.0D, edit.x - 3, edit.x + 3);
-                        double randY = MathHelper.clamp(edit.y + (double) (player.getRandom().nextInt(16)), edit.y - 3, edit.y + 3);
-                        double randZ = MathHelper.clamp(edit.z + player.getRandom().nextDouble() * 16.0D, edit.z - 3, edit.z + 3);
-                        player.startFallFlying();
-                        networkHandler.sendPacket(new ClientCommandC2SPacket(player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
-                        Teleport.teleport(randX, randY, randZ, edit.world);
-                        Thread.sleep(50L);
-                        player.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, new Vec3d(edit.x, edit.y, edit.z));
-                        networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(player.getYaw(), player.getPitch(), false));
-                        selectPosition(edit.x, edit.y, edit.z, edit.world, edit.amount);
-                        player.stopFallFlying();
-                        networkHandler.sendPacket(new ClientCommandC2SPacket(player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
-                        Thread.sleep((long) (10000L / speed) - 50L);
-                    }
-                    catch (InterruptedException e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            thread = t;
-            thread.start();
+            ReplayThread replayThread = new ReplayThread(edits, mc, this, speed);
+            Thread t = new Thread(replayThread);
+            thread = replayThread;
+            t.start();
         }
         else
         {
@@ -306,6 +281,56 @@ public class EditSelection
 
     public void cancelReplay()
     {
-        thread.stop();
+        thread.cancelReplay();
+    }
+}
+
+class ReplayThread implements Runnable {
+    private volatile boolean exit = false;
+    private final TreeSet<BlockEdit> edits;
+    private final MinecraftClient mc;
+    private final EditSelection editSelection;
+    private final double speed;
+    public ReplayThread(TreeSet<BlockEdit> edits, MinecraftClient mc, EditSelection editSelection, double speed)
+    {
+        this.edits = edits;
+        this.mc = mc;
+        this.editSelection = editSelection;
+        this.speed = speed;
+    }
+    public void run() {
+        for (BlockEdit edit : edits)
+        {
+            if (exit)
+            {
+                return;
+            }
+            try
+            {
+                PlayerEntity player = mc.player;
+                ClientPlayNetworkHandler networkHandler = mc.getNetworkHandler();
+                double randX = MathHelper.clamp(edit.x + player.getRandom().nextDouble() * 16.0D, edit.x - 3, edit.x + 3);
+                double randY = MathHelper.clamp(edit.y + (double) (player.getRandom().nextInt(16)), edit.y - 3, edit.y + 3);
+                double randZ = MathHelper.clamp(edit.z + player.getRandom().nextDouble() * 16.0D, edit.z - 3, edit.z + 3);
+                player.startFallFlying();
+                networkHandler.sendPacket(new ClientCommandC2SPacket(player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
+                Teleport.teleport(randX, randY, randZ, edit.world);
+                Thread.sleep(50L);
+                player.lookAt(EntityAnchorArgumentType.EntityAnchor.EYES, new Vec3d(edit.x, edit.y, edit.z));
+                networkHandler.sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(player.getYaw(), player.getPitch(), false));
+                editSelection.selectPosition(edit.x, edit.y, edit.z, edit.world, edit.amount);
+                player.stopFallFlying();
+                networkHandler.sendPacket(new ClientCommandC2SPacket(player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
+                Thread.sleep((long) (10000L / speed) - 50L);
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+    public void cancelReplay()
+    {
+        exit = true;
     }
 }

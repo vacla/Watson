@@ -24,7 +24,7 @@ public class WatsonRenderer
         return INSTANCE;
     }
 
-    public void piecewiseRenderEntities(MinecraftClient mc, MatrixStack matrices)
+    public void piecewiseRenderEntities(MinecraftClient mc)
     {
         if (this.mc == null)
         {
@@ -54,7 +54,7 @@ public class WatsonRenderer
             RenderSystem.applyModelViewMatrix();
             edits.drawOutlines(matrixStack);
             edits.drawVectors();
-            selection.drawSelection(matrices);
+            selection.drawSelection();
 
             RenderSystem.enableDepthTest();
             RenderSystem.depthMask(true);
