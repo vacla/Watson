@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.15.1+1.20.1] - 2023-11-12
+
+### Added
+
+- Cancel Replay
+- Info about Ledger messages not shown
+
+### Fixes
+
+- Chat Timeout not being taken into account
+- Fixes incompatibility issue with the mod Prometheus (Fixes #43)
+
 ## [1.15.0+1.20.1] - 2023-06-18
 
 ### Added
