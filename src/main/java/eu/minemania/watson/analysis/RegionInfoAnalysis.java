@@ -5,7 +5,6 @@ import java.util.regex.Pattern;
 
 import eu.minemania.watson.chat.ChatMessage;
 import eu.minemania.watson.config.Configs;
-import net.minecraft.text.MutableText;
 
 public class RegionInfoAnalysis extends Analysis
 {
@@ -15,12 +14,12 @@ public class RegionInfoAnalysis extends Analysis
     public RegionInfoAnalysis()
     {
         addMatchedChatHandler(Configs.Analysis.WG_REGIONS, (chat, m) -> {
-            wgRegions(chat, m);
+            wgRegions(m);
             return true;
         });
     }
 
-    void wgRegions(MutableText chat, Matcher m)
+    void wgRegions(Matcher m)
     {
         long now = System.currentTimeMillis();
         if (now - _lastCommandTime > (long) (Configs.Plugin.REGION_INFO_TIMEOUT.getDoubleValue() * 1000))

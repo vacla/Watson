@@ -62,9 +62,9 @@ public class ChatMessage
         sendToLocalChat(Text.translatable(message), watsonMessage);
     }
 
-    public static void sendToLocalChat(MutableText inputmessage, boolean watsonMessage)
+    public static void sendToLocalChat(Text inputmessage, boolean watsonMessage)
     {
-        MutableText message = Configs.Highlights.USE_CHAT_HIGHLIGHTS.getBooleanValue() ? Highlight.setHighlightChatMessage("chat.type.text", inputmessage, watsonMessage) : inputmessage;
+        Text message = Configs.Highlights.USE_CHAT_HIGHLIGHTS.getBooleanValue() ? Highlight.setHighlightChatMessage("chat.type.text", inputmessage, watsonMessage) : inputmessage;
         MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(message);
     }
 
@@ -82,10 +82,12 @@ public class ChatMessage
         sendToLocalChat(chat, watsonMessage);
     }
 
-    public static void sendToLocalChat(Formatting color, MutableText message, boolean watsonMessage)
+    public static void sendToLocalChat(Formatting color, Text message, boolean watsonMessage)
     {
-        message.formatted(color);
-        sendToLocalChat(message, watsonMessage);
+        MutableText newMessage = Text.empty();
+        newMessage.append(message);
+        newMessage.formatted(color);
+        sendToLocalChat(newMessage, watsonMessage);
     }
 
     public static void sendToServerChat(String message)

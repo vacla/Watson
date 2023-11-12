@@ -11,13 +11,13 @@ import eu.minemania.watson.chat.IChatHandler;
 import eu.minemania.watson.chat.IMatchedChatHandler;
 import eu.minemania.watson.config.Configs;
 import fi.dy.masa.malilib.config.options.ConfigString;
-import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 
 public class Analysis implements IChatHandler
 {
     protected static ListMultimap<String, IMatchedChatHandler> m = ArrayListMultimap.create();
 
-    public boolean dispatchMatchedChat(MutableText chat)
+    public boolean dispatchMatchedChat(Text chat)
     {
         String unformatted = chat.getString();
         unformatted = unformatted.replaceAll("\u00A7.", "");
@@ -59,7 +59,7 @@ public class Analysis implements IChatHandler
     }
 
     @Override
-    public boolean onChat(MutableText chat)
+    public boolean onChat(Text chat)
     {
         return dispatchMatchedChat(chat);
     }

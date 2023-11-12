@@ -43,7 +43,7 @@ public class Highlight
      * @param message Chat message to highlight
      * @return Highlighted TextComponent
      */
-    public static MutableText setHighlightChatMessage(String key, MutableText message, boolean watsonMessage)
+    public static Text setHighlightChatMessage(String key, Text message, boolean watsonMessage)
     {
         ClientPlayerEntity player = mc.player;
         if (player == null)
@@ -53,7 +53,7 @@ public class Highlight
         final String[] user = {""};
         StringBuilder textChat = new StringBuilder();
         final int[] i = {0};
-        MutableText endMessage;
+        Text endMessage;
         if (!watsonMessage)
         {
             message.visit((style, string) -> {
@@ -91,11 +91,11 @@ public class Highlight
      * @param message Chat message to highlight
      * @return Highlighted TextComponent
      */
-    public static MutableText setHighlightChatMessage(MutableText message)
+    public static Text setHighlightChatMessage(Text message)
     {
         String textChat;
         StringBuilder chat = new StringBuilder();
-        MutableText endMessage = Text.literal("");
+        MutableText endMessage = Text.empty();
         final MutableText[] playerChatComponent = {null};
         MutableText prefix = Text.literal("");
         final Style[] prefixStyle = {null};
@@ -305,12 +305,12 @@ public class Highlight
             }
             else
             {
-                endMessage = message;
+                endMessage = message.copy();
             }
         }
         else
         {
-            endMessage = message;
+            endMessage = message.copy();
         }
         if (Configs.Generic.DEBUG.getBooleanValue())
         {

@@ -51,7 +51,7 @@ public class LogBlockAnalysis extends Analysis
     public LogBlockAnalysis()
     {
         addMatchedChatHandler(Configs.Analysis.LB_PAGE, (chat, m) -> {
-            lbPage(chat, m);
+            lbPage(m);
             return sendMessage();
         });
         addMatchedChatHandler(Configs.Analysis.LB_DATA, (chat, m) -> {
@@ -59,22 +59,22 @@ public class LogBlockAnalysis extends Analysis
             return false;
         });
         addMatchedChatHandler(Configs.Analysis.LB_POSITION, (chat, m) -> {
-            lbPosition(chat, m);
+            lbPosition(m);
             return sendMessage();
         });
         addMatchedChatHandler(Configs.Analysis.LB_SUM, this::lbSum);
         IMatchedChatHandler headerHandler = (chat, m) -> {
-            lbHeader(chat, m);
+            lbHeader();
             return true;
         };
         addMatchedChatHandler(Configs.Analysis.LB_TP, (chat, m) -> {
-            lbTp(chat, m);
+            lbTp(m);
             return true;
         });
 
         addMatchedChatHandler(Configs.Analysis.LB_HEADER_NO_RESULTS, (chat, m) -> {
-            lbHeader(chat, m);
-            return lbHeaderNoResults(chat, m);
+            lbHeader();
+            return lbHeaderNoResults();
         });
         addMatchedChatHandler(Configs.Analysis.LB_HEADER_CHANGES, headerHandler);
         addMatchedChatHandler(Configs.Analysis.LB_HEADER_BLOCKS, headerHandler);
@@ -82,24 +82,24 @@ public class LogBlockAnalysis extends Analysis
         addMatchedChatHandler(Configs.Analysis.LB_HEADER_SUM_PLAYERS, headerHandler);
         addMatchedChatHandler(Configs.Analysis.LB_HEADER_SEARCHING, headerHandler);
         addMatchedChatHandler(Configs.Analysis.LB_HEADER_RATIO, (chat, m) -> {
-            lbHeader(chat, m);
-            lbHeaderRatio(chat, m);
+            lbHeader();
+            lbHeaderRatio(m);
             return true;
         });
         addMatchedChatHandler(Configs.Analysis.LB_HEADER_RATIO_CURRENT, (chat, m) -> {
-            lbHeader(chat, m);
-            lbHeaderRatioCurrent(chat, m);
+            lbHeader();
+            lbHeaderRatioCurrent(m);
             return true;
         });
         addMatchedChatHandler(Configs.Analysis.LB_HEADER_TIME_CHECK, (chat, m) -> {
-            lbHeader(chat, m);
-            lbHeaderTimeCheck(chat, m);
+            lbHeader();
+            lbHeaderTimeCheck(m);
             return false;
         });
         addMatchedChatHandler(Configs.Analysis.LB_HEADER_BLOCK, headerHandler);
     }
 
-    void lbData(MutableText chat, Matcher m)
+    void lbData(Text chat, Matcher m)
     {
         try
         {
@@ -122,7 +122,7 @@ public class LogBlockAnalysis extends Analysis
             long millis = 0;
             if (hover != null && hover.getValue(hover.getAction()) != null)
             {
-                String text = ((MutableText) hover.getValue(hover.getAction())).getString().replaceAll("\u00A7.", "");
+                String text = ((Text) hover.getValue(hover.getAction())).getString().replaceAll("\u00A7.", "");
                 millis = TimeStamp.parseTimeExpression(text, dateTime);
                 dateTime = text;
             }
@@ -205,20 +205,20 @@ public class LogBlockAnalysis extends Analysis
             {
                 if (!type.getName().equals("minecraft:stone"))
                 {
-                    MutableText output = Text.literal("");
+                    MutableText output;
                     if (action.equals("killed"))
                     {
-                        output.append(String.format("(%2d) %s (%d,%d,%d) %s %s %s > %s ", index, dateTime, coordX, coordY, coordZ, _world, player, weapon, totalItemBlockName));
+                        output = Text.literal(String.format("(%2d) %s (%d,%d,%d) %s %s %s > %s ", index, dateTime, coordX, coordY, coordZ, _world, player, weapon, totalItemBlockName));
                     }
                     else if (action.equals("replaced"))
                     {
                         WatsonBlock newtype = WatsonBlockRegistery.getInstance().getWatsonBlockByName(replacedBlock);
-                        output.append(String.format("(%2d) %s (%d,%d,%d) %s %s %s %s ", index, dateTime, coordX, coordY, coordZ, type.getName(), action, newtype.getName(), player));
+                        output = Text.literal(String.format("(%2d) %s (%d,%d,%d) %s %s %s %s ", index, dateTime, coordX, coordY, coordZ, type.getName(), action, newtype.getName(), player));
                     }
                     else
                     {
                         String signText = (sign1 != null) ? String.format(" [%s] [%s] [%s] [%s]", sign1, sign2, sign3, sign4) : "";
-                        output.append(String.format("(%2d) %s (%d,%d,%d) %s %s %s%s ", index, dateTime, coordX, coordY, coordZ, type.getName(), action, player, signText));
+                        output = Text.literal(String.format("(%2d) %s (%d,%d,%d) %s %s %s%s ", index, dateTime, coordX, coordY, coordZ, type.getName(), action, player, signText));
                     }
                     if (!teleportText.getStyle().isEmpty())
                     {
@@ -239,7 +239,7 @@ public class LogBlockAnalysis extends Analysis
         }
     }
 
-    void lbPosition(MutableText chat, Matcher m)
+    void lbPosition(Matcher m)
     {
         if (m.group(1) != null)
         {
@@ -257,7 +257,7 @@ public class LogBlockAnalysis extends Analysis
         _expectingFirstEdit = true;
     }
 
-    void lbHeaderRatio(MutableText chat, Matcher m)
+    void lbHeaderRatio(Matcher m)
     {
         reset();
         _parsing = true;
@@ -265,7 +265,7 @@ public class LogBlockAnalysis extends Analysis
         _beforeMinutes = Integer.parseInt(m.group(2));
     }
 
-    void lbHeaderRatioCurrent(MutableText chat, Matcher m)
+    void lbHeaderRatioCurrent(Matcher m)
     {
         reset();
         _parsing = true;
@@ -273,7 +273,7 @@ public class LogBlockAnalysis extends Analysis
         _beforeMinutes = 0;
     }
 
-    boolean lbSum(MutableText chat, Matcher m)
+    boolean lbSum(Text chat, Matcher m)
     {
         if (_parsing)
         {
@@ -337,7 +337,7 @@ public class LogBlockAnalysis extends Analysis
         return true;
     }
 
-    void lbHeaderTimeCheck(MutableText chat, Matcher m)
+    void lbHeaderTimeCheck(Matcher m)
     {
         String serverIP = DataManager.getServerIP();
         if (serverIP != null && ServerTime.getServerTime(serverIP) == null)
@@ -362,7 +362,7 @@ public class LogBlockAnalysis extends Analysis
         }
     }
 
-    void lbTp(MutableText chat, Matcher m)
+    void lbTp(Matcher m)
     {
         try
         {
@@ -380,7 +380,7 @@ public class LogBlockAnalysis extends Analysis
         }
     }
 
-    void recolor(MutableText text, Formatting color)
+    void recolor(Text text, Formatting color)
     {
         if (sendMessage())
         {
@@ -397,14 +397,14 @@ public class LogBlockAnalysis extends Analysis
         }
     }
 
-    boolean lbHeaderNoResults(MutableText chat, Matcher m)
+    boolean lbHeaderNoResults()
     {
         boolean echo = _echoNextNoResults;
         _echoNextNoResults = true;
         return echo;
     }
 
-    void lbPage(MutableText chat, Matcher m)
+    void lbPage(Matcher m)
     {
         int currentPage = Integer.parseInt(m.group(1));
         int pageCount = Integer.parseInt(m.group(2));
@@ -420,7 +420,7 @@ public class LogBlockAnalysis extends Analysis
         }
     }
 
-    void lbHeader(MutableText chat, Matcher m)
+    void lbHeader()
     {
         Paginator.getInstance().reset();
     }

@@ -1,8 +1,8 @@
 package eu.minemania.watson.chat;
 
-import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 
 public interface IChatHandler
 {
-    boolean onChat(MutableText chat);
+    boolean onChat(Text chat);
 }

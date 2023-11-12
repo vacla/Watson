@@ -5,14 +5,13 @@ import java.util.regex.Pattern;
 
 import eu.minemania.watson.chat.IMatchedChatHandler;
 import eu.minemania.watson.config.Configs;
-import net.minecraft.text.MutableText;
 
 public class ModModeAnalysis extends Analysis
 {
     public ModModeAnalysis()
     {
         IMatchedChatHandler modmodeHandler = (chat, m) -> {
-            changeModMode(chat, m);
+            changeModMode(m);
             return true;
         };
 
@@ -20,7 +19,7 @@ public class ModModeAnalysis extends Analysis
         addMatchedChatHandler(Configs.Analysis.MODMODE_DISABLE, modmodeHandler);
 
         IMatchedChatHandler dutiesHandler = (chat, m) -> {
-            changeDutyMode(chat, m);
+            changeDutyMode(m);
             return true;
         };
 
@@ -28,12 +27,12 @@ public class ModModeAnalysis extends Analysis
         addMatchedChatHandler(Configs.Analysis.DUTYMODE_DISABLE, dutiesHandler);
     }
 
-    void changeModMode(MutableText chat, Matcher m)
+    void changeModMode(Matcher m)
     {
         Configs.Generic.DISPLAYED.setBooleanValue(m.pattern().pattern().equals(Pattern.compile(Configs.Analysis.MODMODE_ENABLE.getStringValue()).pattern()));
     }
 
-    void changeDutyMode(MutableText chat, Matcher m)
+    void changeDutyMode(Matcher m)
     {
         Configs.Generic.DISPLAYED.setBooleanValue(m.pattern().pattern().equals(Pattern.compile(Configs.Analysis.DUTYMODE_ENABLE.getStringValue()).pattern()));
     }

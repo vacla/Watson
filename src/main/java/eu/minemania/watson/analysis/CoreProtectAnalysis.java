@@ -15,7 +15,7 @@ import eu.minemania.watson.scheduler.tasks.AddBlockEditTask;
 import eu.minemania.watson.selection.EditSelection;
 import fi.dy.masa.malilib.util.InfoUtils;
 import net.minecraft.text.HoverEvent;
-import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 
 //----------------------------------------------------------------------------
 
@@ -61,7 +61,7 @@ public class CoreProtectAnalysis extends Analysis
     public CoreProtectAnalysis()
     {
         addMatchedChatHandler(Configs.Analysis.CP_BUSY, (chat, m) -> {
-            busy(chat, m);
+            busy();
             return sendMessage();
         });
         addMatchedChatHandler(Configs.Analysis.CP_DETAILS, (chat, m) -> {
@@ -77,32 +77,32 @@ public class CoreProtectAnalysis extends Analysis
             return sendMessage();
         });
         addMatchedChatHandler(Configs.Analysis.CP_INSPECTOR_COORDS, (chat, m) -> {
-            inspectorCoords(chat, m);
+            inspectorCoords(m);
             return true;
         });
         addMatchedChatHandler(Configs.Analysis.CP_LOOKUP_COORDS, (chat, m) -> {
-            lookupCoords(chat, m);
+            lookupCoords(m);
             return sendMessage();
         });
         addMatchedChatHandler(Configs.Analysis.CP_LOOKUP_HEADER, (chat, m) -> {
-            lookupHeader(chat, m);
+            lookupHeader();
             return sendMessage();
         });
         addMatchedChatHandler(Configs.Analysis.CP_NO_RESULT, (chat, m) -> {
-            noResult(chat, m);
+            noResult();
             return true;
         });
         addMatchedChatHandler(Configs.Analysis.CP_PAGE, (chat, m) -> {
-            page(chat, m);
+            page(m);
             return sendMessage();
         });
         addMatchedChatHandler(Configs.Analysis.CP_SEARCH, (chat, m) -> {
-            search(chat, m);
+            search();
             return sendMessage();
         });
     }
 
-    void busy(MutableText chat, Matcher m)
+    void busy()
     {
         if (_looping && Configs.Plugin.AUTO_PAGE.getBooleanValue() && Configs.Messages.DISABLE_CP_MESSAGES.getBooleanValue())
         {
@@ -111,13 +111,13 @@ public class CoreProtectAnalysis extends Analysis
         reset();
     }
 
-    void details(MutableText chat, Matcher m)
+    void details(Text chat, Matcher m)
     {
         _lookupDetails = false;
         HoverEvent hover = chat.getSiblings().get(0).getStyle().getHoverEvent();
         if (hover != null && hover.getValue(hover.getAction()) != null)
         {
-            String text = ((MutableText) hover.getValue(hover.getAction())).getString().replaceAll("\u00A7.", "");
+            String text = ((Text) hover.getValue(hover.getAction())).getString().replaceAll("\u00A7.", "");
             _millis = TimeStamp.parseTimeExpression(text, m.group(1));
         }
         else
@@ -155,13 +155,13 @@ public class CoreProtectAnalysis extends Analysis
         }
     }
 
-    void detailsSession(MutableText chat, Matcher m)
+    void detailsSession(Text chat, Matcher m)
     {
         _lookupDetails = false;
         HoverEvent hover = chat.getSiblings().get(0).getStyle().getHoverEvent();
         if (hover != null && hover.getValue(hover.getAction()) != null)
         {
-            String text = ((MutableText) hover.getValue(hover.getAction())).getString().replaceAll("\u00A7.", "");
+            String text = ((Text) hover.getValue(hover.getAction())).getString().replaceAll("\u00A7.", "");
             _millis = TimeStamp.parseTimeExpression(text, m.group(1));
         }
         else
@@ -178,13 +178,13 @@ public class CoreProtectAnalysis extends Analysis
         _lookupDetails = true;
     }
 
-    void detailsSign(MutableText chat, Matcher m)
+    void detailsSign(Text chat, Matcher m)
     {
         _lookupDetails = false;
         HoverEvent hover = chat.getSiblings().get(0).getStyle().getHoverEvent();
         if (hover != null && hover.getValue(hover.getAction()) != null)
         {
-            String text = ((MutableText) hover.getValue(hover.getAction())).getString().replaceAll("\u00A7.", "");
+            String text = ((Text) hover.getValue(hover.getAction())).getString().replaceAll("\u00A7.", "");
             _millis = TimeStamp.parseTimeExpression(text, m.group(1));
         }
         else
@@ -213,7 +213,7 @@ public class CoreProtectAnalysis extends Analysis
         }
     }
 
-    void inspectorCoords(MutableText chat, Matcher m)
+    void inspectorCoords(Matcher m)
     {
         _isLookup = false;
         _x = Integer.parseInt(m.group(1));
@@ -225,7 +225,7 @@ public class CoreProtectAnalysis extends Analysis
         _firstInspectorResult = true;
     }
 
-    void lookupCoords(MutableText chat, Matcher m)
+    void lookupCoords(Matcher m)
     {
         _isLookup = true;
         if (_lookupDetails)
@@ -242,17 +242,17 @@ public class CoreProtectAnalysis extends Analysis
         }
     }
 
-    void lookupHeader(MutableText chat, Matcher m)
+    void lookupHeader()
     {
         _isLookup = true;
     }
 
-    void noResult(MutableText chat, Matcher m)
+    void noResult()
     {
         reset();
     }
 
-    void page(MutableText chat, Matcher m)
+    void page(Matcher m)
     {
         int currentPage = Integer.parseInt(m.group(1));
         int pageCount = Integer.parseInt(m.group(2));
@@ -294,7 +294,7 @@ public class CoreProtectAnalysis extends Analysis
         }
     }
 
-    void search(MutableText chat, Matcher m)
+    void search()
     {
         _looping = true;
     }

@@ -27,29 +27,28 @@ public abstract class MixinChatHud
             Highlight.toggleReturnBoolean();
             return componentln;
         }
-        boolean allowChat = ChatProcessor.getInstance().onChat((MutableText) componentln);
-        if (allowChat)
-        {
-            if (Configs.Highlights.USE_CHAT_HIGHLIGHTS.getBooleanValue())
-            {
-                if (componentln.getContent() instanceof TranslatableTextContent)
-                {
-                    if (((TranslatableTextContent)componentln.getContent()).getKey().contains("chat.type.text"))
-                    {
-                        return Highlight.setHighlightChatMessage(((TranslatableTextContent) componentln.getContent()).getKey(), (MutableText) componentln, false);
-                    }
-                }
-                else
-                {
-                    return Highlight.setHighlightChatMessage((MutableText) componentln);
-                }
-            }
-        }
-        else
+        boolean allowChat = ChatProcessor.getInstance().onChat(componentln);
+        if (!allowChat)
         {
             delete = true;
+
+            return componentln;
         }
-        return componentln;
+        if (!Configs.Highlights.USE_CHAT_HIGHLIGHTS.getBooleanValue())
+        {
+            return componentln;
+        }
+        if (componentln.getContent() instanceof TranslatableTextContent)
+        {
+            if (((TranslatableTextContent)componentln.getContent()).getKey().contains("chat.type.text"))
+            {
+                return Highlight.setHighlightChatMessage(((TranslatableTextContent) componentln.getContent()).getKey(), (MutableText) componentln, false);
+            }
+
+            return componentln;
+        }
+
+        return Highlight.setHighlightChatMessage(componentln);
     }
 
     @Inject(method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;Lnet/minecraft/client/gui/hud/MessageIndicator;)V", at = @At("HEAD"), cancellable = true)

@@ -27,7 +27,7 @@ public class PrismAnalysis extends Analysis
             return sendMessage();
         });
         addMatchedChatHandler(Configs.Analysis.PRISM_PAGE, (chat, m) -> {
-            prPage(chat, m);
+            prPage(m);
             return sendMessage();
         });
         addMatchedChatHandler(Configs.Analysis.PRISM_PAGINATION, (chat, m) -> {
@@ -36,7 +36,7 @@ public class PrismAnalysis extends Analysis
         });
     }
 
-    void prData(MutableText chat, Matcher m)
+    void prData(Text chat, Matcher m)
     {
         try
         {
@@ -187,7 +187,7 @@ public class PrismAnalysis extends Analysis
         }
     }
 
-    void prPage(MutableText chat, Matcher m)
+    void prPage(Matcher m)
     {
         int currentPage = Integer.parseInt(m.group("current"));
         int pageCount = Integer.parseInt(m.group("max"));
