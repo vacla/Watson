@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Chat Timeout not being taken into account
 - Fixes incompatibility issue with the mod Prometheus (Fixes #43)
+- Fixes Ledger packets
 
 ## [1.15.0+1.20.1] - 2023-06-18
 
