@@ -12,7 +12,7 @@ import java.util.List;
 
 public class PluginResponsePacketHandler implements IPluginChannelHandlerExtended
 {
-    public static final List<Identifier> CHANNELS = ImmutableList.of(new Identifier("ledger:reponse"));
+    public static final List<Identifier> CHANNELS = ImmutableList.of(new Identifier("ledger:response"));
 
     public static final PluginResponsePacketHandler INSTANCE = new PluginResponsePacketHandler();
 

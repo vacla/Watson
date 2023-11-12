@@ -39,7 +39,9 @@ public class PluginInspectPacketHandler
             }
             packetHandler.sendPacket(new CustomPayloadC2SPacket(CHANNEL, packetByteBuf));
         }
-        catch (Exception ignored)
-        {}
+        catch (Exception exception)
+        {
+            Watson.logger.error(exception.getMessage());
+        }
     }
 }
