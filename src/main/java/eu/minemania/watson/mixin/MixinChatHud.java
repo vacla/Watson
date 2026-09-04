@@ -6,6 +6,7 @@ import eu.minemania.watson.config.Plugins;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.TranslatableTextContent;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -19,6 +20,7 @@ import net.minecraft.text.Text;
 @Mixin(ChatHud.class)
 public abstract class MixinChatHud
 {
+    @Unique
     private boolean delete;
 
     @ModifyVariable(method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;Lnet/minecraft/client/gui/hud/MessageIndicator;)V", at = @At("HEAD"), argsOnly = true)
